@@ -1,0 +1,6 @@
+
+AuthUserFile "/usr/www/users/bd9w5y//wp-admin/.htpasswd"
+AuthName "konsoleH Wordpress Installation"
+AuthType Basic
+require host dedikonsoleh.your-server.de
+require valid-user
