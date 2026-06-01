@@ -1,0 +1,10 @@
+{
+  "configuration": {
+    "manualSync": "Synchronisation manuelle"
+  },
+  "manualSync": {
+    "description": "Cochez la case ci-dessous si vous souhaitez réduire le nombre d'appels asynchrones et n'exécuter que la mise à jour hebdomadaire des services d'expédition qui se fera de façon de asynchrone.",
+    "title": "Synchronisation manuelle",
+    "enable-manual-sync": "Activer la synchronisation manuelle"
+  }
+}

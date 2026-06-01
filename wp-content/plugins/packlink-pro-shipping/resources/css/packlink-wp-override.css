@@ -1,0 +1,16 @@
+#wpwrap {
+	height: 100%;
+}
+
+#wpbody {
+	height: 100%;
+}
+
+#wpcontent {
+	height: 100%;
+}
+
+#wpbody-content {
+	padding-bottom: 0;
+	height: 100%;
+}

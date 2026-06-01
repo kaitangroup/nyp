@@ -1,0 +1,10 @@
+{
+  "configuration": {
+    "manualSync": "Manual synchronization"
+  },
+  "manualSync": {
+    "description": "Check the box below if you want to reduce the amount of asynchronous calls and only <br> execute weekly update of shipping services asynchronously.",
+    "title": "Manual synchronization",
+    "enable-manual-sync": "Enable manual synchronization"
+  }
+}

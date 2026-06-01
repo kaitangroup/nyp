@@ -1,0 +1,10 @@
+{
+  "configuration": {
+    "manualSync": "Sincronizzazione manuale"
+  },
+  "manualSync": {
+    "description": "Spunta la casella sottostante se desideri ridurre il numero di chiamate asincrone ed eseguire solo un aggiornamento settimanale dei servizi di spedizione.",
+    "title": "Sincronizzazione manuale",
+    "enable-manual-sync": "Attivare la sicronizzazione manuale"
+  }
+}

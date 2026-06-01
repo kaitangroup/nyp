@@ -1,0 +1,5 @@
+.sfw-subsection {
+	&:not(:first-child) {
+		margin-block-start: var(--main-gap);
+	}
+}

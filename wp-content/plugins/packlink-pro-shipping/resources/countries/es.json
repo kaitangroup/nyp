@@ -1,0 +1,10 @@
+{
+  "configuration": {
+    "manualSync": "Sincronización manual"
+  },
+  "manualSync": {
+    "description": "Marque la casilla siguiente si desea reducir la cantidad de llamadas asíncronas y ejecutar únicamente la actualización semanal de los servicios de envío que se hará de forma asíncrona.",
+    "title": "Sincronización manual",
+    "enable-manual-sync": "Activar la sincronización manual"
+  }
+}

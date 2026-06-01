@@ -1,0 +1,10 @@
+{
+  "configuration": {
+    "manualSync": "Manuelle Synchronisierung"
+  },
+  "manualSync": {
+    "description": "Markieren Sie das Kästchen unten, wenn Sie die Anzahl der asynchronen Aufrufe reduzieren und nur die wöchentliche Aktualisierung der Versanddienste asynchron durchführen möchten.",
+    "title": "Manuelle Synchronisierung",
+    "enable-manual-sync": "Manuelle Synchronisierung einschalten"
+  }
+}

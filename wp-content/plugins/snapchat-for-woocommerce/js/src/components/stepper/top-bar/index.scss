@@ -1,0 +1,22 @@
+.sfw-stepper-top-bar {
+	align-items: center;
+	background-color: wpColors.$white;
+	box-shadow: 0 -1px 0 0 wpColors.$gray-400 inset;
+	display: flex;
+	min-block-size: wpVariables.$grid-unit-40 * 2;
+
+	.components-button {
+		align-self: stretch;
+		block-size: auto;
+	}
+
+	&__back-button {
+		padding: 0 calc(var(--main-gap) / 2);
+	}
+
+	&__title {
+		flex: 1;
+		font-size: wpVariables.$editor-font-size;
+		letter-spacing: 0;
+	}
+}

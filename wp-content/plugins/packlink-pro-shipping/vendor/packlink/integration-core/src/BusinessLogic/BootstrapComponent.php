@@ -1,0 +1,315 @@
+<?php
+
+namespace Packlink\BusinessLogic;
+
+use Logeecom\Infrastructure\AutoTest\AutoTestService;
+use Logeecom\Infrastructure\Http\HttpClient;
+use Logeecom\Infrastructure\ORM\RepositoryRegistry;
+use Logeecom\Infrastructure\ServiceRegister;
+use Logeecom\Infrastructure\TaskExecutor\Interfaces\TaskExecutorInterface;
+use Logeecom\Infrastructure\TaskExecutor\Interfaces\TaskStatusProviderInterface;
+use Packlink\BusinessLogic\CashOnDelivery\Interfaces\CashOnDeliveryServiceInterface;
+use Packlink\BusinessLogic\CashOnDelivery\Services\CashOnDeliveryService;
+use Packlink\BusinessLogic\Controllers\DashboardController;
+use Packlink\BusinessLogic\Controllers\DTO\DashboardStatus;
+use Packlink\BusinessLogic\Controllers\ShippingMethodController;
+use Packlink\BusinessLogic\Country\CountryService;
+use Packlink\BusinessLogic\Country\Models\Country;
+use Packlink\BusinessLogic\Country\WarehouseCountryService;
+use Packlink\BusinessLogic\CountryLabels\CountryService as CountryLabelService;
+use Packlink\BusinessLogic\CountryLabels\Interfaces\CountryService as LabelServiceInterface;
+use Packlink\BusinessLogic\Customs\CustomsService;
+use Packlink\BusinessLogic\Customs\Models\CustomsMapping;
+use Packlink\BusinessLogic\DTO\FrontDtoFactory;
+use Packlink\BusinessLogic\DTO\ValidationError;
+use Packlink\BusinessLogic\FileResolver\FileResolverService;
+use Packlink\BusinessLogic\Http\DTO\ParcelInfo;
+use Packlink\BusinessLogic\Http\Proxy;
+use Packlink\BusinessLogic\IntegrationRegistration\IntegrationRegistrationService;
+use Packlink\BusinessLogic\IntegrationRegistration\Interfaces\IntegrationRegistrationDataProviderInterface;
+use Packlink\BusinessLogic\IntegrationRegistration\Interfaces\IntegrationRegistrationServiceInterface;
+use Packlink\BusinessLogic\Location\LocationService;
+use Packlink\BusinessLogic\OAuth\Models\OAuthState;
+use Packlink\BusinessLogic\OAuth\Services\Interfaces\OAuthStateServiceInterface;
+use Packlink\BusinessLogic\OAuth\Services\OAuthStateService;
+use Packlink\BusinessLogic\Order\OrderService;
+use Packlink\BusinessLogic\OrderShipmentDetails\OrderShipmentDetailsService;
+use Packlink\BusinessLogic\Registration\RegistrationLegalPolicy;
+use Packlink\BusinessLogic\Registration\RegistrationRequest;
+use Packlink\BusinessLogic\Registration\RegistrationService;
+use Packlink\BusinessLogic\Scheduler\Interfaces\SchedulerInterface;
+use Packlink\BusinessLogic\ShipmentDraft\Interfaces\ShipmentDraftServiceInterface;
+use Packlink\BusinessLogic\ShipmentDraft\ShipmentDraftService;
+use Packlink\BusinessLogic\ShippingMethod\Models\ShippingPricePolicy;
+use Packlink\BusinessLogic\ShippingMethod\PackageTransformer;
+use Packlink\BusinessLogic\ShippingMethod\ShippingMethodService;
+use Packlink\BusinessLogic\UpdateShippingServices\Interfaces\UpdateShippingServicesOrchestratorInterface;
+use Packlink\BusinessLogic\UpdateShippingServices\Interfaces\UpdateShippingServiceTaskStatusServiceInterface;
+use Packlink\BusinessLogic\UpdateShippingServices\Models\UpdateShippingServiceTaskStatus;
+use Packlink\BusinessLogic\UpdateShippingServices\UpdateShippingServicesOrchestrator;
+use Packlink\BusinessLogic\UpdateShippingServices\UpdateShippingServiceTaskStatusService;
+use Packlink\BusinessLogic\User\UserAccountService;
+use Packlink\BusinessLogic\Warehouse\Interfaces\WarehouseServiceInterface;
+use Packlink\BusinessLogic\Warehouse\Warehouse;
+use Packlink\BusinessLogic\Warehouse\WarehouseService;
+
+/**
+ * Class BootstrapComponent.
+ *
+ * @package Packlink\BusinessLogic
+ */
+class BootstrapComponent extends \Logeecom\Infrastructure\BootstrapComponent
+{
+    /**
+     * Initializes infrastructure components.
+     */
+    public static function init()
+    {
+        parent::init();
+
+        static::initDtoRegistry();
+    }
+
+    /**
+     * Initializes services and utilities.
+     */
+    protected static function initServices()
+    {
+        parent::initServices();
+
+        ServiceRegister::registerService(
+            \Packlink\BusinessLogic\Http\Interfaces\Proxy::CLASS_NAME,
+            function () {
+                /** @var Configuration $config */
+                $config = ServiceRegister::getService(Configuration::CLASS_NAME);
+                /** @var HttpClient $client */
+                $client = ServiceRegister::getService(HttpClient::CLASS_NAME);
+                /** @var IntegrationRegistrationDataProviderInterface $dataProvider */
+                $dataProvider = ServiceRegister::getService(
+                    IntegrationRegistrationDataProviderInterface::CLASS_NAME);
+
+                return new Proxy($config, $client, $dataProvider);
+            }
+        );
+
+        ServiceRegister::registerService(
+            UpdateShippingServiceTaskStatusServiceInterface::class,
+            function () {
+                $repo = RepositoryRegistry::getRepository(UpdateShippingServiceTaskStatus::CLASS_NAME);
+
+                return new UpdateShippingServiceTaskStatusService($repo);
+            }
+        );
+
+
+        ServiceRegister::registerService(
+            UpdateShippingServicesOrchestratorInterface::class,
+            function () {
+                /**
+                 * @var TaskExecutorInterface $taskExecutor
+                 */
+                $taskExecutor = ServiceRegister::getService(TaskExecutorInterface::class);
+
+                /**
+                 * @var UpdateShippingServiceTaskStatusServiceInterface $updateShippingService
+                 */
+                $updateShippingService = ServiceRegister::getService(UpdateShippingServiceTaskStatusServiceInterface::class);
+
+
+                return new UpdateShippingServicesOrchestrator(
+                    $taskExecutor,
+                    $updateShippingService
+                );
+            }
+        );
+
+        ServiceRegister::registerService(
+            UserAccountService::CLASS_NAME,
+            function () {
+                /** @var SchedulerInterface $scheduler */
+                $scheduler = ServiceRegister::getService(SchedulerInterface::class);
+
+                /** @var UpdateShippingServicesOrchestratorInterface $orchestrator */
+                $orchestrator = ServiceRegister::getService(UpdateShippingServicesOrchestratorInterface::class);
+
+                return new UserAccountService($orchestrator, $scheduler);
+            }
+        );
+
+        ServiceRegister::registerService(
+            ShippingMethodService::CLASS_NAME,
+            function () {
+                return ShippingMethodService::getInstance();
+            }
+        );
+
+        ServiceRegister::registerService(
+            IntegrationRegistrationServiceInterface::CLASS_NAME,
+            function () {
+                return new IntegrationRegistrationService(
+                    ServiceRegister::getService(Proxy::CLASS_NAME),
+                    ServiceRegister::getService(IntegrationRegistrationDataProviderInterface::CLASS_NAME),
+                    ServiceRegister::getService(Configuration::CLASS_NAME)
+                );
+            }
+        );
+
+        ServiceRegister::registerService(
+            OrderService::CLASS_NAME,
+            function () {
+                return OrderService::getInstance();
+            }
+        );
+
+        ServiceRegister::registerService(
+            DashboardController::CLASS_NAME,
+            function () {
+                return new DashboardController();
+            }
+        );
+
+        ServiceRegister::registerService(
+            ShippingMethodController::CLASS_NAME,
+            function () {
+                return new ShippingMethodController();
+            }
+        );
+
+        ServiceRegister::registerService(
+            LocationService::CLASS_NAME,
+            function () {
+                return LocationService::getInstance();
+            }
+        );
+
+        ServiceRegister::registerService(
+            PackageTransformer::CLASS_NAME,
+            function () {
+                return PackageTransformer::getInstance();
+            }
+        );
+
+        ServiceRegister::registerService(
+            OrderShipmentDetailsService::CLASS_NAME,
+            function () {
+                return OrderShipmentDetailsService::getInstance();
+            }
+        );
+
+        ServiceRegister::registerService(
+            ShipmentDraftServiceInterface::CLASS_NAME,
+            function () {
+                /**@var TaskExecutorInterface $taskExecutor */
+                $taskExecutor = ServiceRegister::getService(TaskExecutorInterface::CLASS_NAME);
+
+                return new ShipmentDraftService($taskExecutor);
+            }
+        );
+
+        ServiceRegister::registerService(
+            WarehouseServiceInterface::CLASS_NAME,
+            function () {
+                /** @var UpdateShippingServicesOrchestratorInterface $orchestrator */
+                $orchestrator = ServiceRegister::getService(UpdateShippingServicesOrchestratorInterface::class);
+
+                return new WarehouseService($orchestrator);
+            }
+        );
+
+        ServiceRegister::registerService(
+            CountryService::CLASS_NAME,
+            function () {
+                return CountryService::getInstance();
+            }
+        );
+
+        ServiceRegister::registerService(
+            WarehouseCountryService::CLASS_NAME,
+            function () {
+                return WarehouseCountryService::getInstance();
+            }
+        );
+
+        ServiceRegister::registerService(
+            RegistrationService::CLASS_NAME,
+            function () {
+                return RegistrationService::getInstance();
+            }
+        );
+
+        ServiceRegister::registerService(
+           CashOnDeliveryServiceInterface::CLASS_NAME,
+            function () {
+                return new CashOnDeliveryService();
+            }
+        );
+
+        ServiceRegister::registerService(
+            FileResolverService::CLASS_NAME,
+            function () {
+                return new FileResolverService(
+                    array(
+                        __DIR__ . '/../Brands/Packlink/Resources/countries',
+                        __DIR__ . '/Resources/countries',
+                    )
+                );
+            }
+        );
+
+        ServiceRegister::registerService(
+            LabelServiceInterface::CLASS_NAME,
+            function () {
+                /** @var FileResolverService $fileResolverService */
+                $fileResolverService = ServiceRegister::getService(FileResolverService::CLASS_NAME);
+
+                return new CountryLabelService($fileResolverService);
+            }
+        );
+
+        ServiceRegister::registerService(
+            AutoTestService::CLASS_NAME,
+            function () {
+                /**@var TaskExecutorInterface $taskExecutor */
+                $taskExecutor = ServiceRegister::getService(TaskExecutorInterface::CLASS_NAME);
+
+                /**@var TaskStatusProviderInterface $statusProvider */
+                $statusProvider = ServiceRegister::getService(TaskStatusProviderInterface::CLASS_NAME);
+
+                return new AutoTestService($taskExecutor, $statusProvider);
+            }
+        );
+
+        ServiceRegister::registerService(
+            CustomsService::CLASS_NAME,
+            function () {
+                return new CustomsService();
+            }
+        );
+
+        ServiceRegister::registerService(
+            OAuthStateServiceInterface::CLASS_NAME,
+            function () {
+                $repository = RepositoryRegistry::getRepository(OAuthState::CLASS_NAME);
+                return new OAuthStateService($repository);
+            }
+        );
+    }
+
+    /**
+     * Initializes the registry of DTO classes.
+     *
+     * @noinspection PhpUnhandledExceptionInspection
+     */
+    protected static function initDtoRegistry()
+    {
+        FrontDtoFactory::register(ValidationError::CLASS_KEY, ValidationError::CLASS_NAME);
+        FrontDtoFactory::register(Warehouse::CLASS_KEY, Warehouse::CLASS_NAME);
+        FrontDtoFactory::register(ParcelInfo::CLASS_KEY, ParcelInfo::CLASS_NAME);
+        FrontDtoFactory::register(DashboardStatus::CLASS_KEY, DashboardStatus::CLASS_NAME);
+        FrontDtoFactory::register(Country::CLASS_KEY, Country::CLASS_NAME);
+        FrontDtoFactory::register(RegistrationRequest::CLASS_KEY, RegistrationRequest::CLASS_NAME);
+        FrontDtoFactory::register(RegistrationLegalPolicy::CLASS_KEY, RegistrationLegalPolicy::CLASS_NAME);
+        FrontDtoFactory::register(ShippingPricePolicy::CLASS_KEY, ShippingPricePolicy::CLASS_NAME);
+        FrontDtoFactory::register(CustomsMapping::CLASS_KEY, CustomsMapping::CLASS_NAME);
+    }
+}

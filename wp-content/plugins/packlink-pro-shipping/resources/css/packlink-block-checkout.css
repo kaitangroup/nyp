@@ -1,0 +1,91 @@
+#pl-picker-modal {
+	position: fixed;
+	display: none;
+	top: 10%;
+	left: 10%;
+	height: 80%;
+	width: 80%;
+	z-index: 1100;
+	box-shadow: 0 0 10px 2px #e1e1e1;
+	border: none !important;
+}
+
+#pl-picker-modal a {
+	-webkit-box-shadow: unset;
+	box-shadow: unset;
+}
+
+#pl-drop-off-iframe {
+	display: inherit;
+	width: 100%;
+	height: 100%;
+}
+
+.pl-checkout-carrier-image {
+	display: inline-block;
+	height: 30px !important;
+	vertical-align: middle;
+}
+
+#pl-picker-modal svg {
+	position: absolute;
+	top: -40px;
+	right: -40px;
+	cursor: pointer;
+	width: 40px;
+	box-shadow: 0 0 10px 2px #e1e1e1;
+	border: none !important;
+	height: 40px;
+	border-radius: 50%;
+	background-color: white;
+}
+
+#packlink-drop-off-picker {
+	line-height: inherit;
+}
+
+.wc-block-components-shipping-rates-control .wc-block-components-radio-control__label-group {
+	display: inline-flex;
+	width: 100%;
+	align-items: center;
+	column-gap: 8px;
+}
+
+.wc-block-components-shipping-rates-control .wc-block-components-radio-control__label-group .wc-block-components-radio-control__label {
+	display: inline;
+	flex: 1;
+}
+
+.wc-block-components-shipping-rates-control .wc-block-components-radio-control__label-group .wc-block-components-radio-control__secondary-label {
+	min-width: unset;
+}
+
+.lp-location-wrapper {
+	text-indent: 0;
+	text-align: left;
+}
+
+.pl-image-wrapper {
+	width: 100px;
+	border-radius: 4px;
+	padding: 2px;
+	text-align: center;
+	border: 1px solid lightgray;
+	margin-right: 8px;
+}
+
+
+@media screen and (max-width: 800px) {
+	#pl-picker-modal svg {
+		top: -30px;
+		right: -30px;
+		width: 30px;
+		height: 30px;
+	}
+
+	.wc-block-components-shipping-rates-control .wc-block-components-radio-control__label-group {
+		flex-direction: column;
+		row-gap: 8px;
+		align-items: flex-start;
+	}
+}

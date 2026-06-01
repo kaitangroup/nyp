@@ -1,0 +1,122 @@
+.sfw-account-card {
+	line-height: variables.$sfw-line-height-smaller;
+
+	&--is-disabled {
+		opacity: 0.5;
+	}
+
+	&--is-expanded-detail {
+		.sfw-account-card__indicator {
+			grid-area: 1/3;
+		}
+
+		.sfw-account-card__detail {
+			grid-area: 2/2/auto/span 2;
+		}
+	}
+
+	&__styled {
+		&--align-top {
+			align-self: flex-start;
+		}
+	}
+
+	&__body-layout {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: start;
+	}
+
+	&__icon {
+		grid-area: 1/1/span 2;
+		line-height: 0;
+		margin-inline-end: wpVariables.$grid-unit-20;
+	}
+
+	&__subject {
+		grid-area: 1/2;
+	}
+
+	&__indicator {
+		grid-area: 1/3/span 2;
+		margin-inline-start: wpVariables.$grid-unit-20;
+
+		&--align-to-detail {
+			grid-area: 2/3;
+			margin-block-start: wpVariables.$grid-unit-15;
+		}
+	}
+
+	&__detail {
+		grid-area: 2/2;
+		margin-block-start: wpVariables.$grid-unit-15;
+	}
+
+	&__actions {
+		grid-area: 3/2/auto/span 2;
+		margin-block-start: wpVariables.$grid-unit-15;
+	}
+
+	&__title {
+		margin: 0;
+		color: wpColors.$black;
+	}
+
+	&__description {
+		align-items: flex-start;
+		color: wpColors.$gray-900;
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+		margin-block-start: wpVariables.$grid-unit-05;
+
+		> p {
+			margin: 0;
+		}
+	}
+
+	&__helper {
+		color: wpColors.$gray-700;
+		font-size: wpVariables.$helptext-font-size;
+		font-style: italic;
+		margin-block-start: wpVariables.$grid-unit-05;
+	}
+
+	.components-card__footer {
+		padding: calc(var(--main-gap) / 3 * 2) var(--main-gap);
+
+		// The buttons in card footer usually use the link style in SFW,
+		// but the default link style has a smaller size that doesn't meet
+		// the visual design needs. So we override its size here.
+		> .components-button.is-link {
+			min-height: variables.$sfw-size-control-height;
+			padding: calc(wpVariables.$grid-unit-15 / 2) wpVariables.$grid-unit-15;
+		}
+	}
+
+	.components-notice.is-error {
+		margin: 0;
+		background-color: #f8ebea;
+	}
+
+	.components-notice.is-success {
+		background-color: #edfaef;
+		border: 0;
+		font-size: wpVariables.$helptext-font-size;
+		margin-block: 0 var(--main-gap);
+		margin-inline: var(--large-gap);
+		padding: wpVariables.$grid-unit-20;
+	}
+
+	@media (max-width: wpBreakpoints.$break-small) {
+		&__body-layout {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+
+			> div {
+				margin: wpVariables.$grid-unit-10;
+			}
+		}
+	}
+}

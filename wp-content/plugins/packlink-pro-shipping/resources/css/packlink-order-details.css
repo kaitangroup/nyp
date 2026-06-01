@@ -1,0 +1,70 @@
+#packlink-shipping-modal .inside {
+	padding: 0;
+	margin: 0;
+}
+
+#packlink-shipping-modal .pl-order-detail-section {
+	margin-bottom: 1.33em;
+}
+
+#packlink-shipping-modal .pl-order-detail-section dl {
+	counter-reset: pl-counter;
+}
+
+#packlink-shipping-modal .pl-order-detail-section dl dd {
+	margin-left: 20px;
+}
+
+#packlink-shipping-modal .pl-order-detail-section dl dd::before {
+	content: counter(pl-counter, disc);
+	counter-increment: pl-counter;
+	margin-right: 5px;
+}
+
+#packlink-shipping-modal .pl-carrier-image {
+	width: 50px;
+	height: 30px;
+}
+
+#packlink-shipping-modal .pl-order-detail-section.pl-create-draft {
+	margin-top: 1.33em;
+	text-align: center;
+}
+
+#packlink-shipping-modal h4 {
+	margin-bottom: 0;
+}
+
+#packlink-shipping-modal .pl-timestamp {
+	line-height: 1.4em;
+	font-size: 13px;
+	padding: 2px 0 1px;
+	display: inline !important;
+	height: auto !important;
+}
+
+#packlink-shipping-modal .pl-timestamp:before {
+	font: 400 20px/1 dashicons;
+	content: "\f145";
+	position: relative;
+	top: -1px;
+	speak: none;
+	display: inline-block;
+	margin-left: -1px;
+	padding-right: 3px;
+	vertical-align: top;
+	-webkit-font-smoothing: antialiased;
+}
+
+#packlink-shipping-modal .pl-button-view {
+	float: left;
+}
+
+#packlink-shipping-modal button.button.button-primary {
+	float: right;
+}
+
+#packlink-shipping-modal .pl-button-view.pl-carrier-button {
+	float: right;
+	margin-right: 20px;
+}

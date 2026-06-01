@@ -1,0 +1,20 @@
+.sfw-disconnect-accounts-modal {
+	@include wpMixins.break-small {
+		max-inline-size: variables.$sfw-width-large;
+	}
+
+	.components-modal__header-heading {
+		display: flex;
+		align-items: center;
+	}
+
+	.gridicon.gridicons-notice-outline {
+		margin-inline-end: wpVariables.$grid-unit-10;
+		fill: wpColors.$alert-red;
+	}
+
+	.components-base-control {
+		margin-block: var(--main-gap) var(--large-gap);
+		margin-inline: 0;
+	}
+}

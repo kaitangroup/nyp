@@ -1,0 +1,58 @@
+.sfw-app-tab-nav__tabs {
+	align-items: stretch;
+	box-shadow: inset 0 -1px 0 wpColors.$gray-400;
+	display: flex;
+	flex-wrap: wrap;
+	margin-block-end: var(--main-gap);
+
+	&-item {
+		background: transparent;
+		block-size: wpVariables.$grid-unit-60;
+		border: none;
+		border-radius: 0;
+		box-shadow: inset 0 -1px 0 wpColors.$gray-400;
+		box-sizing: border-box;
+		cursor: pointer;
+		font-weight: 500;
+		margin-inline-start: 0;
+		padding: calc(wpVariables.$grid-unit-15 / 4) wpVariables.$grid-unit-20; // Use padding to offset the is-active border, this benefits Windows High Contrast mode
+
+		// This pseudo-element "duplicates" the tab label and sets the text to bold.
+		// This ensures that the tab doesn't change width when selected.
+		// See: https://github.com/WordPress/gutenberg/pull/9793
+		&::after {
+			block-size: 0;
+			content: attr(data-label);
+			display: block;
+			overflow: hidden;
+			speak: none;
+			visibility: hidden;
+		}
+
+		&:focus:not(:disabled) {
+			box-shadow: inset 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
+		}
+
+		&.is-active {
+			// The transparent shadow ensures no jumpiness when focus animates on an active tab.
+			box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) transparent, inset 0 0 - $border-width-tab 0 0 var(--wp-admin-theme-color);
+			position: relative;
+
+			// This border appears in Windows High Contrast mode instead of the box-shadow.
+			&::before {
+				border-block-end: $border-width-tab solid transparent;
+				content: "";
+				inset: 0 0 1px;
+				position: absolute;
+			}
+		}
+
+		&:focus {
+			box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
+		}
+
+		&.is-active:focus {
+			box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color), inset 0 0 - $border-width-tab 0 0 var(--wp-admin-theme-color);
+		}
+	}
+}

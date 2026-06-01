@@ -1,0 +1,11 @@
+{
+  "form_preview.js": "form_preview.js",
+  "post_editor_block.js": "post_editor_block.js",
+  "public.js": "public.js",
+  "powered-by-mailpoet-block.js": "auto/powered-by-mailpoet-block.js",
+  "powered-by-mailpoet-block.php": "auto/powered-by-mailpoet-block.asset.php",
+  "mailpoet.js": "auto/mailpoet.js",
+  "mailpoet.php": "auto/mailpoet.asset.php",
+  "./style-powered-by-mailpoet-block.css": "auto/./style-powered-by-mailpoet-block.css",
+  "powered-by-mailpoet/block.json": "auto/powered-by-mailpoet/block.json"
+}

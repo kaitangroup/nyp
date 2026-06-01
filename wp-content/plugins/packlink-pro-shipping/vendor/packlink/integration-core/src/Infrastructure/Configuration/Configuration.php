@@ -1,0 +1,374 @@
+<?php
+/** @noinspection PhpDocMissingThrowsInspection */
+
+/** @noinspection PhpUnusedParameterInspection */
+
+namespace Logeecom\Infrastructure\Configuration;
+
+use Logeecom\Infrastructure\Http\DTO\Options;
+use Logeecom\Infrastructure\ORM\QueryFilter\QueryFilter;
+use Logeecom\Infrastructure\ORM\RepositoryRegistry;
+use Logeecom\Infrastructure\Singleton;
+
+/**
+ * Class Configuration.
+ *
+ * @package Logeecom\Infrastructure\Configuration
+ */
+abstract class Configuration extends Singleton
+{
+    /**
+     * Current language.
+     *
+     * @var string
+     */
+    private static $currentLanguage;
+
+    /**
+     * Fully qualified name of this interface.
+     */
+    const CLASS_NAME = __CLASS__;
+    /**
+     * Minimal log level
+     */
+    const MIN_LOG_LEVEL = 3;
+    /**
+     * System user context.
+     *
+     * @var string
+     */
+    protected $context;
+    /**
+     * Configuration repository.
+     *
+     * @var \Logeecom\Infrastructure\ORM\Interfaces\RepositoryInterface
+     */
+    protected $repository;
+
+    /**
+     * Retrieves current UI country code.
+     *
+     * @return string
+     */
+    public static function getUICountryCode()
+    {
+        return self::$currentLanguage;
+    }
+
+    /**
+     * Sets current UI country code.
+     *
+     * @param string $currentLanguage
+     */
+    public static function setUICountryCode($currentLanguage)
+    {
+        self::$currentLanguage = $currentLanguage;
+    }
+
+    /**
+     * Retrieves integration name.
+     *
+     * @return string Integration name.
+     */
+    abstract public function getIntegrationName();
+
+    /**
+     * Returns current system identifier.
+     *
+     * @return string Current system identifier.
+     */
+    abstract public function getCurrentSystemId();
+
+    /**
+     * Sets task execution context.
+     *
+     * When integration supports multiple accounts (middleware integration) proper context must be set based on
+     * middleware account that is using core library functionality. This context should then be used by business
+     * services to fetch account specific data.Core will set context provided upon task enqueueing before task
+     * execution.
+     *
+     * @param string $context Context to set.
+     */
+    public function setContext($context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * Gets task execution context.
+     *
+     * @return string
+     *  Context in which task is being executed. If no context is provided empty string is returned (global context).
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * Saves min log level in integration database.
+     *
+     * @param int $minLogLevel Min log level.
+     */
+    public function saveMinLogLevel($minLogLevel)
+    {
+        $this->saveConfigValue('minLogLevel', $minLogLevel);
+    }
+
+    /**
+     * Retrieves min log level from integration database.
+     *
+     * @return int Min log level.
+     */
+    public function getMinLogLevel()
+    {
+        return $this->getConfigValue('minLogLevel', static::MIN_LOG_LEVEL);
+    }
+
+    /**
+     * Set default logger status (enabled/disabled).
+     *
+     * @param bool $status TRUE if default logger is enabled; otherwise, false.
+     */
+    public function setDefaultLoggerEnabled($status)
+    {
+        $this->saveConfigValue('defaultLoggerEnabled', $status);
+    }
+
+    /**
+     * Returns synchronous process timeout in milliseconds.
+     *
+     * @return int|null
+     */
+    public function getSyncRequestTimeout()
+    {
+        return $this->getConfigValue('syncRequestTimeout');
+    }
+
+    /**
+     * Return whether default logger is enabled or not.
+     *
+     * @return bool TRUE if default logger is enabled; otherwise, false.
+     */
+    public function isDefaultLoggerEnabled()
+    {
+        return $this->getConfigValue('defaultLoggerEnabled', false);
+    }
+
+    /**
+     * Sets debug mode status (enabled/disabled).
+     *
+     * @param bool $status TRUE if debug mode is enabled; otherwise, false.
+     */
+    public function setDebugModeEnabled($status)
+    {
+        $this->saveConfigValue('debugModeEnabled', (bool)$status);
+    }
+
+    /**
+     * Returns debug mode status.
+     *
+     * @return bool TRUE if debug mode is enabled; otherwise, false.
+     */
+    public function isDebugModeEnabled()
+    {
+        return $this->getConfigValue('debugModeEnabled', false);
+    }
+
+    /**
+     * Gets current auto-configuration state.
+     *
+     * @return string Current state.
+     */
+    public function getAutoConfigurationState()
+    {
+        return $this->getConfigValue('autoConfigurationState', '');
+    }
+
+
+    /**
+     * Sets current auto-configuration state.
+     *
+     * @param string $state Current state.
+     */
+    public function setAutoConfigurationState($state)
+    {
+        $this->saveConfigValue('autoConfigurationState', $state);
+    }
+
+    /**
+     * Gets current HTTP configuration options for given domain.
+     *
+     * @param string $domain A domain for which to return configuration options.
+     *
+     * @return \Logeecom\Infrastructure\Http\DTO\Options[]
+     */
+    public function getHttpConfigurationOptions($domain)
+    {
+        $data = json_decode($this->getConfigValue('httpConfigurationOptions', '[]'), true);
+        if (isset($data[$domain])) {
+            return Options::fromBatch($data[$domain]);
+        }
+
+        return array();
+    }
+
+    /**
+     * Sets HTTP configuration options for given domain.
+     *
+     * @param string $domain A domain for which to save configuration options.
+     *
+     * @param Options[] $options HTTP configuration options
+     */
+    public function setHttpConfigurationOptions($domain, array $options)
+    {
+        // get all current options and append new ones for given domain
+        $data = json_decode($this->getConfigValue('httpConfigurationOptions', '[]'), true);
+        $data[$domain] = array();
+        foreach ($options as $option) {
+            $data[$domain][] = $option->toArray();
+        }
+
+        $this->saveConfigValue('httpConfigurationOptions', json_encode($data));
+    }
+
+    /**
+     * Sets the auto-test mode flag.
+     *
+     * @param bool $status
+     */
+    public function setAutoTestMode($status)
+    {
+        $this->saveConfigValue('autoTestMode', $status);
+    }
+
+    /**
+     * Returns whether the auto-test mode is active.
+     *
+     * @return bool TRUE if the auto-test mode is active; otherwise, FALSE.
+     */
+    public function isAutoTestMode()
+    {
+        return (bool)$this->getConfigValue('autoTestMode', false);
+    }
+
+    /**
+     * Generic configuration getter (domain-agnostic).
+     *
+     * @param string $key
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    public function get($key, $default = null)
+    {
+        return $this->getConfigValue($key, $default);
+    }
+
+    /**
+     * Generic configuration setter (domain-agnostic).
+     *
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return \Logeecom\Infrastructure\Configuration\ConfigEntity
+     */
+    public function set($key, $value)
+    {
+        return $this->saveConfigValue($key, $value);
+    }
+
+    /**
+     * Gets configuration value for given name.
+     *
+     * @param string $name Name of the config parameter.
+     * @param mixed $default Default value if config entity does not exist.
+     *
+     * @return mixed Value of config entity if found; otherwise, default value provided in $default parameter.
+     */
+    protected function getConfigValue($name, $default = null)
+    {
+        $entity = $this->getConfigEntity($name);
+
+        return $entity ? $entity->getValue() : $default;
+    }
+
+    /**
+     * Returns configuration entity with provided name.
+     *
+     * @param string $name Configuration property name.
+     *
+     * @return \Logeecom\Infrastructure\Configuration\ConfigEntity Configuration entity, if found; otherwise, null;
+     */
+    protected function getConfigEntity($name)
+    {
+        $filter = new QueryFilter();
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $filter->where('name', '=', $name);
+        if ($this->isSystemSpecific($name)) {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $filter->where('systemId', '=', $this->getCurrentSystemId());
+        }
+        $filter->orderBy('id');
+
+        /** @var ConfigEntity $config */
+        $config = $this->getRepository()->selectOne($filter);
+
+        return $config;
+    }
+
+    /**
+     * Saves configuration value or updates it if it already exists.
+     *
+     * @param string $name Configuration property name.
+     * @param mixed $value Configuration property value.
+     *
+     * @return \Logeecom\Infrastructure\Configuration\ConfigEntity
+     */
+    protected function saveConfigValue($name, $value)
+    {
+        /** @var ConfigEntity $config */
+        $config = $this->getConfigEntity($name) ?: new ConfigEntity();
+        if ($this->isSystemSpecific($name)) {
+            $config->setSystemId($this->getCurrentSystemId());
+        }
+
+        $config->setValue($value);
+        if ($config->getId() === null) {
+            $config->setName($name);
+            $this->getRepository()->save($config);
+        } else {
+            $this->getRepository()->update($config);
+        }
+
+        return $config;
+    }
+
+    /**
+     * Determines whether the configuration entry is system specific.
+     *
+     * @param string $name Configuration entry name.
+     *
+     * @return bool
+     */
+    protected function isSystemSpecific($name)
+    {
+        return true;
+    }
+
+    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
+     * Returns repository instance.
+     *
+     * @return \Logeecom\Infrastructure\ORM\Interfaces\RepositoryInterface Configuration repository.
+     */
+    protected function getRepository()
+    {
+        if ($this->repository === null) {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $this->repository = RepositoryRegistry::getRepository(ConfigEntity::getClassName());
+        }
+
+        return $this->repository;
+    }
+}
