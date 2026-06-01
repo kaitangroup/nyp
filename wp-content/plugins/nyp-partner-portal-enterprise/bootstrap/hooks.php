@@ -1,0 +1,2 @@
+<?php
+// Centralized hook registration

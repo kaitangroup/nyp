@@ -10,12 +10,15 @@ nbproject
 wp-content/wflogs/config-synced.php
 wp-content/cache
 /cache
+/co
+/staging
 /tmp
 tmp
 tmp/*
 /wp-content/uploads/
 wp-content/wflogs
 wp-content/wflogs/
+wp-admin/.htaccess
 
 # ** Only works in OSs that support newer versions of fnmatch (Bash 4+)
 
