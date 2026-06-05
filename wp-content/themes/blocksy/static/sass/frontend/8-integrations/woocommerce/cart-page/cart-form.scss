@@ -1,0 +1,34 @@
+@use "../../../1-helpers/functions";
+
+.ct-woocommerce-cart-form {
+	display: grid;
+	gap: 40px;
+
+	@include functions.media-breakpoint-down (md) {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	@include functions.media-breakpoint-up (lg) {
+		grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+	}
+
+	.woocommerce-cart-form table {
+		
+		@include functions.media-breakpoint-up (md) {
+
+			&:first-child {
+				margin-top: 7px;
+			}
+		}
+	}
+}
+
+// cart form + checkout form
+.woocommerce-checkout .ct-woocommerce-cart-form {
+	grid-template-columns: initial;
+}
+
+// hide "update cart" button
+.ct-cart-auto-update .actions button[name='update_cart'] {
+	display: none;
+}

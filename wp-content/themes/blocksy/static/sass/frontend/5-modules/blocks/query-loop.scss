@@ -1,0 +1,21 @@
+.ct-query-template-grid {
+	display: grid;
+	gap: var(--grid-columns-gap, 30px);
+	grid-template-columns: repeat(var(--grid-columns-width), minmax(0, 1fr));
+}
+
+// container link
+.ct-has-link-overlay {
+	
+	:is(.wp-block-post, .wp-block-term)	{
+		position: relative;
+		cursor: pointer;
+
+		.ct-link-overlay {
+			position: absolute;
+			inset: 0;
+			margin: 0;
+			pointer-events: none;
+		}
+	}
+}

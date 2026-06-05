@@ -1,0 +1,22 @@
+@use "../../static/sass/main.scss";
+
+.ct-newsletter-subscribe-block {
+
+	.wp-element-button {
+		border: none;
+		box-sizing: border-box;
+	}
+
+	.gdpr-confirm-policy {
+		pointer-events: none;
+
+		label {
+			font-size: 13px;
+		}
+	}
+}
+
+// hide border radius link/unlink option from Gutenberg UI
+[role="tabpanel"]:has(.blocksy-options-hide-border-unlink) .components-border-radius-control__linked-button {
+    display: none
+}

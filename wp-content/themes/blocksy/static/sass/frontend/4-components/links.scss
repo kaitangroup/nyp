@@ -1,0 +1,49 @@
+$selector: 
+	'.entry-content :where(p, em, strong ) > a',
+	'.entry-content > :where(ul, ol) a',
+	'.wp-block-table a',
+	'.ct-link-styles',
+;
+
+a {
+	color: var(--theme-link-initial-color);
+	text-decoration: var(--has-link-decoration, var(--theme-text-decoration, none));
+
+	&:hover {
+		color: var(--theme-link-hover-color);
+	}
+}
+
+// type 2
+[data-link='type-2'] :where(#{$selector}) {
+
+	&:not(:hover) {
+		--theme-text-decoration: underline;
+	}
+}
+
+// type 3 & 4 & 5
+:where([data-link='type-3'], [data-link='type-4'], [data-link='type-5']) :where(#{$selector}) {
+	background-position: var(--has-link-decoration, 0% 100%);
+	background-repeat: var(--has-link-decoration, no-repeat);
+}
+
+// type 4
+[data-link='type-4'] :where(#{$selector}) {
+	background-size: var(--has-link-decoration, 100% 1px);
+	background-image: var(--has-link-decoration, linear-gradient(currentColor, currentColor));
+}
+
+
+// links speciffic cases
+:where(footer.ct-footer [data-link] a, [data-link] .ct-posts-shortcode .entry-title a) {
+	--has-link-decoration: var(--false);
+
+	&:hover {
+		color: var(--theme-link-hover-color);
+	}
+}
+
+footer.ct-footer [data-link="underline"] a {
+	text-decoration: underline;
+}

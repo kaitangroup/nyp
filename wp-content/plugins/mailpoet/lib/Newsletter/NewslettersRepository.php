@@ -12,6 +12,7 @@ use MailPoet\AutomaticEmails\WooCommerce\Events\PurchasedInCategory;
 use MailPoet\AutomaticEmails\WooCommerce\Events\PurchasedProduct;
 use MailPoet\Doctrine\Repository;
 use MailPoet\Entities\NewsletterEntity;
+use MailPoet\Entities\NewsletterOptionEntity;
 use MailPoet\Entities\NewsletterOptionFieldEntity;
 use MailPoet\Entities\NewsletterSegmentEntity;
 use MailPoet\Entities\ScheduledTaskEntity;
@@ -275,6 +276,25 @@ class NewslettersRepository extends Repository {
       ->setParameter('types', $types)
       ->setParameter('statusCompleted', SendingQueueEntity::STATUS_COMPLETED);
 
+    $excludeFromArchiveSubQuery = $this->entityManager
+      ->createQueryBuilder()
+      ->select('1')
+      ->from(NewsletterOptionEntity::class, 'archiveOption')
+      ->innerJoin('archiveOption.optionField', 'archiveOptionField')
+      ->where('archiveOption.newsletter = n')
+      ->andWhere('archiveOption.value = :excludeFromArchive')
+      ->andWhere('archiveOptionField.name = :excludeFromArchiveOptionName')
+      ->getDQL();
+
+    $queryBuilder
+      ->andWhere($queryBuilder->expr()->orX(
+        'n.type != :standardNewsletterType',
+        $queryBuilder->expr()->not($queryBuilder->expr()->exists($excludeFromArchiveSubQuery))
+      ))
+      ->setParameter('standardNewsletterType', NewsletterEntity::TYPE_STANDARD)
+      ->setParameter('excludeFromArchive', '1')
+      ->setParameter('excludeFromArchiveOptionName', NewsletterOptionFieldEntity::NAME_EXCLUDE_FROM_ARCHIVE);
+
     $segmentIds = $params['segmentIds'] ?? [];
     if (!empty($segmentIds)) {
       $queryBuilder->innerJoin(NewsletterSegmentEntity::class, 'ns', Join::WITH, 'ns.newsletter = n.id')
@@ -309,6 +329,98 @@ class NewslettersRepository extends Repository {
     }
 
     return $queryBuilder->getQuery()->getResult();
+  }
+
+  public function findEmbeddableNewsletterById(int $newsletterId): ?NewsletterEntity {
+    return $this->entityManager
+      ->createQueryBuilder()
+      ->select('n')
+      ->from(NewsletterEntity::class, 'n')
+      ->where('n.id = :newsletterId')
+      ->andWhere('n.status = :status')
+      ->andWhere('n.deletedAt IS NULL')
+      ->andWhere('n.type IN (:types)')
+      ->setParameter('newsletterId', $newsletterId)
+      ->setParameter('status', NewsletterEntity::STATUS_SENT)
+      ->setParameter('types', [
+        NewsletterEntity::TYPE_STANDARD,
+        NewsletterEntity::TYPE_NOTIFICATION_HISTORY,
+      ], ArrayParameterType::STRING)
+      ->getQuery()
+      ->getOneOrNullResult();
+  }
+
+  /**
+   * @return array<int, array{id: int, subject: string|null, sentAt: \DateTimeInterface|string|null, type: string|null, wpPostId: int|null}>
+   */
+  public function findEmbeddableNewsletterRows(string $search = '', int $limit = 20): array {
+    $queryBuilder = $this->entityManager
+      ->createQueryBuilder()
+      ->select('
+        n.id,
+        n.subject,
+        n.type,
+        IDENTITY(n.wpPost) AS wpPostId,
+        MAX(st.processedAt) AS sentAt
+      ')
+      ->from(NewsletterEntity::class, 'n')
+      ->innerJoin(SendingQueueEntity::class, 'sq', Join::WITH, 'sq.newsletter = n.id')
+      ->innerJoin(ScheduledTaskEntity::class, 'st', Join::WITH, 'st.id = sq.task')
+      ->where('n.status = :newsletterStatus')
+      ->andWhere('n.deletedAt IS NULL')
+      ->andWhere('n.type IN (:types)')
+      ->andWhere('st.status = :taskStatus')
+      ->setParameter('newsletterStatus', NewsletterEntity::STATUS_SENT)
+      ->setParameter('taskStatus', ScheduledTaskEntity::STATUS_COMPLETED)
+      ->setParameter('types', [
+        NewsletterEntity::TYPE_STANDARD,
+        NewsletterEntity::TYPE_NOTIFICATION_HISTORY,
+      ], ArrayParameterType::STRING)
+      ->groupBy('n.id')
+      ->addGroupBy('n.subject')
+      ->addGroupBy('n.type')
+      ->addGroupBy('n.wpPost')
+      ->orderBy('sentAt', 'DESC')
+      ->addOrderBy('n.id', 'DESC')
+      ->setMaxResults($limit);
+
+    if ($search !== '') {
+      $queryBuilder
+        ->andWhere(
+          $queryBuilder->expr()->orX(
+            $queryBuilder->expr()->like('n.subject', ':search'),
+            $queryBuilder->expr()->like('sq.newsletterRenderedSubject', ':search')
+          )
+        )
+        ->setParameter('search', '%' . Helpers::escapeSearch($search) . '%');
+    }
+
+    $rows = $queryBuilder->getQuery()->getArrayResult();
+    $result = [];
+    foreach ($rows as $row) {
+      if (!is_array($row)) {
+        continue;
+      }
+
+      $subject = $row['subject'] ?? null;
+      $type = $row['type'] ?? null;
+      $sentAt = $row['sentAt'] ?? null;
+      $wpPostId = $row['wpPostId'] ?? null;
+      $id = $row['id'] ?? null;
+      if (!is_numeric($id)) {
+        continue;
+      }
+
+      $result[] = [
+        'id' => (int)$id,
+        'subject' => is_scalar($subject) ? (string)$subject : null,
+        'sentAt' => $sentAt instanceof \DateTimeInterface || is_string($sentAt) ? $sentAt : null,
+        'type' => is_scalar($type) ? (string)$type : null,
+        'wpPostId' => is_numeric($wpPostId) ? (int)$wpPostId : null,
+      ];
+    }
+
+    return $result;
   }
 
   /**

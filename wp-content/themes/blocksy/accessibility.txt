@@ -1,0 +1,31 @@
+=== Accessibility Statement ===
+Blocksy is developed with accessibility in mind and aims to support the WordPress accessibility-ready theme requirements. We work to keep core theme functionality usable with keyboards and assistive technologies, and we review reported accessibility issues as part of ongoing maintenance.
+
+== Quick Information ==
+Accessibility audit completed: No
+
+== Testing Tools and Methodology ==
+Accessibility is reviewed as part of the theme development process and ongoing maintenance work.
+
+Current theme accessibility work includes:
+
+* Reviewing theme markup, labels, and navigation patterns during development
+* Keyboard testing for common navigation and interactive flows
+* Checking focus visibility and screen-reader-only text handling
+* Regression testing when accessibility issues are reported and fixed
+
+Blocksy also includes built-in accessibility-related patterns such as a skip link and support for the `.screen-reader-text` utility class.
+
+== Screen Reader Text Class ==
+.screen-reader-text
+
+== Accessibility Features ==
+* Skip link support
+* Screen-reader-text utility class
+* Screen-reader labels in search forms and other interactive UI where applicable
+
+== Accessibility Help Contact ==
+For accessibility help, please use the Blocksy support forum: https://wordpress.org/support/theme/blocksy/
+
+== Where to Report Issues ==
+Please report accessibility issues in the Blocksy support forum: https://wordpress.org/support/theme/blocksy/

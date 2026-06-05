@@ -1,0 +1,31 @@
+@use "../../../../../static/sass/frontend/common-frontend/functions";
+
+.ct-newsletter-subscribe-container {
+	margin-top: 60px;
+	padding: var(--padding, 30px);
+	color: var(--text-color, var(--theme-text-color));
+	border-radius: var(--theme-border-radius, 0px);
+	border: var(--newsletter-container-border, none);
+	box-shadow: var(--theme-box-shadow);
+
+	h3 {
+		font-size: 20px;
+	}
+
+	> * {
+		text-align: center;
+		margin-inline: auto;
+
+		@include functions.media-breakpoint-up(md) {
+			width: 80%;
+		}
+
+		&:first-child {
+			margin-top: 20px;
+		}
+
+		&:last-child {
+			margin-bottom: 20px;
+		}
+	}
+}

@@ -1,0 +1,16 @@
+.ct-option-time-picker {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 10px;
+	margin: 0;
+
+	li {
+
+		&:hover {
+
+			.ct-option-description {
+				opacity: 1;
+			}
+		}
+	}
+}

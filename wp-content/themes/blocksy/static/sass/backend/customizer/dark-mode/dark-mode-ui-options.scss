@@ -1,0 +1,919 @@
+@use "sass:color";
+@use "variables";
+
+.ct-dark-mode {
+
+	// input
+	[class^=ct-option] {
+		
+		textarea,
+		input[type='text'],
+		input[type='number'],
+		[class^=ct-option] input[type='search'] {
+			color: variables.$light;
+			border-color: variables.$border;
+			background: variables.$background_light;
+		}
+	}
+
+	// checkbox & radiobox
+	input[type=checkbox],
+	input[type=radio] {
+		&:not(:checked) {
+			background: variables.$background_light;
+
+			&:not(:hover) {
+				border-color: color.adjust(variables.$border, $lightness: 5%);
+			}
+		}
+	}
+
+	.ct-option-spacing {
+
+		> span input.inactive {
+			color: color.adjust(variables.$light, $lightness: -50%);
+			background: color.adjust(variables.$background_light, $lightness: -2%);
+		}
+	}
+
+
+	// ct-title
+	.ct-options-container .ct-title {
+		h3 {
+			color: variables.$light;
+		}
+
+		p {
+			color: color.adjust(variables.$background, $lightness: 60%);
+		}
+	}
+
+	// group title
+	.ct-group-title {
+		border-top-color: variables.$border;
+
+		h3 {
+			// color: $accent;
+			color: color.adjust(variables.$accent, $lightness: 7%);
+		}
+	}
+
+	.ct-options-container .ct-control > header label {
+		color: color.adjust(variables.$background, $lightness: 65%);
+	}
+
+	// switch
+	.ct-option-switch {
+		&:not(.ct-active) {
+			border-color: color.adjust(variables.$border, $lightness: 4%);
+
+			> span {
+				background: color.adjust(variables.$border, $lightness: 15%);
+			}
+
+			&:after {
+				border-color: color.adjust(variables.$border, $lightness: 15%);
+			}
+		}
+
+		&.ct-active {
+			background: variables.$accent;
+			border-color: variables.$accent;
+		}
+	}
+	
+	.ct-control:hover {
+		.ct-option-switch:not(.ct-active) {
+			border-color: color.adjust(variables.$border, $lightness: 12%);
+
+			> span {
+				background: color.adjust(variables.$border, $lightness: 25%);
+			}
+		}
+	}
+
+	// slider
+	.ct-option-slider .ct-slider{
+		&:before {
+			--backgroundColor: var(--optionBorderColor);
+		}
+	}
+
+	// image picker
+	.ct-image-picker {
+		li {
+			&.active {
+				background: variables.$accent;
+			}
+
+			&:not(.active):not(:hover) {
+				background: rgba(221, 224, 226, 0.5);
+
+				svg {
+					fill: variables.$background_light;
+				}
+			}
+		}
+	}
+
+	// panel
+	.ct-panel.ct-click-allowed {
+		&:hover:before {
+			background: variables.$background_light;
+		}
+
+		.ct-customizer-panel-option button {
+			color: color.adjust(variables.$background, $lightness: 60%);
+		}
+	}
+
+	.customize-panel-actions {
+		background: variables.$background_light;
+		border-top-color: variables.$border;
+		border-bottom-color: variables.$border;
+
+		h3 {
+			color: color.adjust(variables.$background, $lightness: 40%);
+		}
+	}
+
+	.ct-customizer-panel {
+		background: variables.$background;
+		border-bottom-color: variables.$border;
+		border-top-color: variables.$border;
+	}
+
+	.ct-more-options-trigger button {
+		color: variables.$color_background_light;
+	}
+
+	// tabs
+	.ct-tabs {
+		--tabs-pills-inactive-color: #{color.adjust(variables.$background, $lightness: 60%)};
+		--tabs-pills-inactive-background-color: #{variables.$background_light};
+
+		--tabs-pills-hover-color: #{color.adjust(variables.$background, $lightness: 60%)};
+		--tabs-pills-hover-background-color: #{color.adjust(variables.$background_light, $lightness: 2%)};
+
+		--tabs-pills-active-color: #{color.adjust(variables.$background, $lightness: 60%)};
+		--tabs-pills-active-background-color: #{variables.$background};
+	}
+
+	.widget-inside .ct-tabs li.active:after {
+		background: color.adjust(variables.$background_light, $lightness: -1.5%);
+	}
+
+	// color picker
+	.ct-color-picker-single {
+		> span > span {
+			box-shadow: 0 0 0 2px color.adjust(variables.$background, $lightness: 10%);
+
+			&:after {
+				display: none;
+			}
+		}
+	}
+	
+	.ct-color-picker-modal {
+		.components-color-picker__inputs-wrapper .components-base-control__field label,
+		.components-color-picker__inputs-toggle {
+			background: color.adjust(variables.$background_light, $lightness: 3%);
+			color: color.adjust(variables.$background, $lightness: 60%);
+		}
+	}
+
+	.ct-gutenberg-color-picker .ct-option-color-value,
+	.ct-gutenberg-color-picker .ct-option-color-variable,
+	.ct-color-picker-palette,
+	.ct-image-tab > *:not(:last-child) {
+		border-color: variables.$border;
+	}
+
+	.ct-color-picker-palette span.active {
+		box-shadow: none;
+
+		&:before {
+			display: none;;
+		}
+	}
+
+	.ct-gradient-tab {
+
+		.components-custom-gradient-picker__type-picker,
+		.components-angle-picker-control__input-field {
+
+			.components-input-control__label {
+				color: color.adjust(variables.$background, $lightness: 65%);
+			}
+
+			.components-input-control__container {
+				color: variables.$light;
+				background: variables.$background_light;
+
+				.components-input-control__backdrop {
+					border-color: variables.$border !important;
+					box-shadow: none !important;
+				}
+			}
+		}
+
+		.components-angle-picker-control__angle-circle {
+			border-color: variables.$border;
+
+			.components-angle-picker-control__angle-circle-indicator {
+				background: var(--ui-accent-color);
+			}
+		}
+	}
+
+
+	// responsive controls
+	.ct-responsive-controls li {
+		color: #929499;
+
+		&.active {
+			color: variables.$accent;
+		}
+
+		&:not(.active) {
+
+			&:hover {
+				color: #babbbe;
+			}
+		}
+	}
+
+	// number
+	.ct-option-number > a {
+		color: #fff;
+	}
+
+	// buttons group
+	.ct-buttons-group li {
+		color: color.adjust(variables.$background, $lightness: 60%);
+		background: variables.$background_light;
+		box-shadow: inset 0px 0px 0px 1px variables.$border;
+
+		&.active {
+			color: variables.$light;
+			background: variables.$accent;
+			box-shadow: inset 0px 0px 0px 1px color.adjust(variables.$accent, $lightness: -5%);
+		}
+
+		&:not(.active) {
+			color: color.adjust(variables.$background, $lightness: 60%);
+
+			&:hover {
+				color: variables.$light;
+				background: color.adjust(variables.$background_light, $lightness: 4%);
+			}
+		}
+	}
+
+	// option description
+	.ct-option-description {
+		color: color.adjust(variables.$background, $lightness: 50%);
+	}
+
+	// select
+	.ct-select-input {
+		input[readonly] {
+			color: variables.$light;
+			border-color: variables.$border;
+			background: variables.$background_light;
+		}
+
+		&:before {
+			background: variables.$background_light;
+		}
+
+		&:after {
+			color: variables.$light;
+		}
+	}
+
+	.ct-select-dropdown {
+		border-color: variables.$border;
+		background: variables.$background_light;
+
+		> div {
+			color: color.adjust(variables.$background, $lightness: 60%);
+			border-top-color: variables.$border;
+
+			&.active,
+			&.selected {
+				color: variables.$light;
+				background: color.adjust(variables.$background_light, $lightness: 4%);
+			}
+		}
+
+		.ct-select-dropdown-group {
+			color: variables.$light;
+			background: color.adjust(variables.$background_light, $lightness: 2%);
+		}
+	}
+
+	// layers
+
+	.ct-layer-controls {
+		color: color.adjust(variables.$background, $lightness: 60%);
+		background: color.adjust(variables.$background_light, $lightness: 1%);
+
+		> * {
+			color: color.adjust(variables.$background, $lightness: 60%);
+		}
+
+		.ct-visibility:before {
+			background: color.adjust(variables.$background, $lightness: 60%);
+			box-shadow: 0px 0px 0px 1px color.adjust(variables.$background_light, $lightness: 1%);
+		}
+	}
+
+	.ct-layer-content {
+		background: color.adjust(variables.$background_light, $lightness: -1.5%);
+	}
+
+	// value changer
+	.ct-value-changer {
+		--backgroundColor: #{variables.$background_light};
+
+		input[type="number"] {
+			background: transparent;
+		}
+
+		.ct-units-list {
+			background: variables.$background_light;
+
+			span:not(:hover) {
+				color: color.adjust(variables.$background, $lightness: 60%);
+			}
+
+			&:after, span {
+				border-color: variables.$border;
+			}
+		}
+	}
+
+	// notification
+	.ct-notification {
+		color: color.adjust(variables.$background, $lightness: 50%);
+		// background: $background_light;
+		// border-left-color: $accent;
+	}
+
+	// attachment
+	.ct-attachment {
+		
+		.thumbnail {
+			border-color: variables.$border; 
+		}
+
+		.actions {
+			background: color.adjust(variables.$background_light, $lightness: 1%);
+		}
+	}
+
+	.ct-upload-button {
+		box-shadow: none;
+		background: variables.$background_light !important;
+
+		&:not(:hover) {
+			border-color: variables.$border;
+		}
+	}
+
+	// tooltip
+	.ct-tooltip {
+		background: variables.$accent;
+	}
+
+	[data-tooltip-reveal="top"] .ct-tooltip {
+		
+		&:after {
+			border-top-color: variables.$accent;
+		}
+	}
+
+	[data-tooltip-reveal="left"] .ct-tooltip {
+		
+		&:after {
+			border-inline-start-color: variables.$accent;
+		}
+	}
+
+	// color pallete
+	.ct-color-palettes {
+		li {
+			&.active,
+			&:hover {
+				background: variables.$background_light;
+			}
+		}
+	}
+
+	.ct-spacing-controls a {
+		&:not(:hover) {
+			color: color.adjust(variables.$background, $lightness: 40%);
+		}
+	}
+
+	// box-shadow
+	.ct-box-shadow-values {
+		background: variables.$background_light;
+
+		button {
+			color: color.adjust(variables.$background, $lightness: 65%);
+			border-right-color: var(--optionBorderColor);
+
+			&:before {
+				background: color.adjust(variables.$background, $lightness: 65%);
+				box-shadow: 0px 0px 0px 1px variables.$background_light;
+			}
+		}
+
+		span {
+			&:hover {
+				color: #fff;
+			}
+
+			&:after {
+				background: var(--ui-accent-color);
+			}
+		}
+	}
+
+	.ct-box-shadow-modal > *:not(:last-child),
+	.shadow-sliders > section:not(:last-child) {
+		border-color: var(--optionBorderColor);
+	}
+
+
+	// ratio picker
+	.ct-ratio-preview {
+		background: variables.$background_light;
+	}
+
+	.ct-ratio-modal {
+		background: variables.$background_light;
+
+		&:before {
+			border-color: transparent transparent variables.$background_light transparent
+		}
+
+		.ct-radio-option {
+			border-color: color.adjust(variables.$border, $lightness: 5%);
+		}
+	}
+
+	// conditions
+	.ct-display-conditions {
+		border-top-color: variables.$border;
+	}
+
+	.ct-condition-group {
+		border-bottom-color: variables.$border;
+	}
+
+	.ct-condition-group button:not(:hover) {
+		color: variables.$light;
+	}
+
+	// admin modal
+	.ct-admin-modal {
+		background: variables.$background;
+		box-shadow: 0 10px 500px 10px rgba(0, 0, 0, 0.7);
+
+		--optionBorderColor: red;
+
+		.ct-modal-content {
+			h2, h4 {
+				color: variables.$light;
+			}
+
+			p {
+				color: color.adjust(variables.$background, $lightness: 30%);
+			}
+		}
+
+		.ct-modal-actions.has-divider:before {
+			background: variables.$border;
+		}
+	}
+
+	[data-reach-dialog-overlay] {
+		background: rgba(56, 57, 60, 0.85);
+	}
+
+	// option modal
+	.ct-option-modal {
+		background: variables.$background_light;
+
+		&[data-position='bottom']:before {
+			border-color: transparent transparent variables.$background_light transparent;
+		}
+
+		&[data-position='top']:before {
+			border-color: variables.$background_light transparent transparent transparent;
+		}
+
+		.ct-color-picker-top,
+		.components-color-picker__inputs-wrapper,
+		.ct-gradient-swatches,
+		.ct-color-picker-modal,
+		.ct-patterns-list,
+		.ct-patterns-list li:not(.active),
+		.ct-color-picker-modal:before,
+		.ct-typography-top,
+		.ct-typography-options > li:not(:last-child) {
+			border-color: variables.$border;
+		}
+
+		.ct-typography-single-font, 
+		.ct-typography-variations li {
+
+			&:not(.active):not(:first-child) {
+				border-color: variables.$border;
+			}
+		}
+	}
+
+	.ct-options-popover .components-popover__content {
+		background: variables.$background_light;
+	}
+
+	.ct-color-picker-value,
+	.components-popover__content {
+		border-color: variables.$border !important;
+	}
+
+	.ct-color-palettes-container .ct-single-palette {
+		&:not(.active):not(:hover) {
+			border-color: var(--optionBorderColor);
+		}
+	}
+
+	.ct-options-popover {
+		
+		.components-button {
+			color: color.adjust(variables.$background, $lightness: 60%);
+		}
+	}
+
+	// modal
+	.ct-admin-modal .ct-modal-content {
+		--optionBorderColor: #{variables.$border};
+	}
+
+	// option modal tabs
+	.ct-modal-tabs {
+
+		li {
+			border-bottom-color: variables.$border;
+
+			&:not(:last-child) {
+				border-right-color: variables.$border;
+			}
+
+			&:not(.active) {
+				color: color.adjust(variables.$background, $lightness: 30%);
+
+				&:hover {
+					color: color.adjust(variables.$background, $lightness: 60%);
+				}
+			}
+
+			&.active {
+				color: color.adjust(variables.$background, $lightness: 60%);
+			}
+		}
+	}
+
+	// background modal
+	.ct-background-modal {
+		.ct-patterns-list li:not(.active):hover {
+			border-color: color.adjust(variables.$border, $lightness: 15%);
+		}
+
+		.ct-color-picker-modal:before {
+			background: variables.$background_light;
+		}
+	}
+
+	// icon picker
+	.ct-icon-picker-value > div {
+		background: variables.$background_light;
+	}
+
+	.ct-icon-picker-modal {
+		
+		.ct-icons-list h2 {
+			color: color.adjust(variables.$background, $lightness: 65%);
+		}
+
+		ul li:not(.active):hover {
+			color: #fff;
+			background: color.adjust(variables.$background_light, $lightness: 4%);
+		}
+	}
+
+	// typography
+	.ct-typohraphy-value {
+		border-color: variables.$border;
+		background: variables.$background_light;
+
+		&:hover {
+			border-color: variables.$accent;
+
+			a {
+				color: variables.$accent;
+			}
+		}
+
+		> div > span {
+			&:hover span {
+				color: variables.$light;
+			}
+
+			&:after {
+				background: variables.$accent;
+			}
+		}
+
+		> a {
+			color: variables.$light;
+		}
+	}
+
+	.ct-typography-top li {
+		color: color.adjust(variables.$background, $lightness: 65%);
+		background: variables.$background_light;
+
+		&:not(.active) {
+			border-color: color.adjust(variables.$border, $lightness: 10%);
+
+			&:hover {
+				border-color: variables.$accent;
+			}
+		}
+
+		&.ct-weight {
+			&:before {
+				color: color.adjust(variables.$background, $lightness: 40%);
+			}
+
+			span {
+				background: variables.$background_light;
+				box-shadow: 0px 0px 10px 3px variables.$background_light;
+			}
+		}
+	}
+
+	.ct-typography-variant ul li {
+		&:not(.active) {
+			border-color: color.adjust(variables.$border, $lightness: 5%);
+		}
+
+		&:not(:hover):not(.active) {
+			color: color.adjust(variables.$background, $lightness: 50%);
+		}
+	}
+
+	.ct-typography-single-font:not(.active):not(:hover):after {
+		box-shadow: -5px 0px 15px 10px variables.$background_light;
+	}
+
+	.ct-control {
+		border-color: var(--optionBorderColor) !important;
+	}
+
+	// widgets
+	.customize-control-widget_form .widget-top {
+		border-color: var(--optionBorderColor);
+		background: color.adjust(variables.$background_light, $lightness: 1%);
+
+		h3 {
+			color: color.adjust(variables.$background, $lightness: 60%);
+		}
+	}
+
+	.widget-inside {
+		border-color: var(--optionBorderColor);
+		background: color.adjust(variables.$background_light, $lightness: -1.5%);
+	}
+
+	#available-widgets,
+	#available-menu-items {
+		background: variables.$background_light;
+	}
+
+	#available-widgets-filter {
+		background: variables.$background_light;
+	}
+
+	#available-widgets,
+	#available-widgets-list {
+		border-color: var(--optionBorderColor);
+	}
+
+	#available-widgets {
+		.widget-tpl {
+			background: variables.$background_light;
+
+			h3 {
+				color: color.adjust(variables.$background, $lightness: 60%);
+			}
+
+			.widget-title:before {
+				color: color.adjust(variables.$background, $lightness: 60%);
+			}
+
+			.widget-description {
+				color: color.adjust(variables.$background, $lightness: 25%);
+			}
+			
+			&:not(:hover) {
+				border-left-color: variables.$background_light;
+				border-bottom-color: var(--optionBorderColor);
+			}
+
+			&:hover {
+				background: color.adjust(variables.$background_light, $lightness: 3%);
+				border-left-color: var(--ui-accent-color);
+				border-bottom-color: color.adjust(variables.$border, $lightness: 3%);
+			}
+		}
+	}
+
+
+	// block widgets
+	#customize-sidebar-outer-content {
+		border-color: variables.$border;
+		background: variables.$background;
+
+		.customize-widgets-layout__inserter-panel {
+			background: transparent;
+
+			.customize-widgets-layout__inserter-panel-header {
+				border-bottom-color: variables.$border;
+				background: variables.$background_light;
+
+				h2,
+				button {
+					color: variables.$color_background_light;
+				}
+			}
+
+			.customize-widgets-layout__inserter-panel-content {
+
+				.components-search-control__input-wrapper {
+
+					input[type=search] {
+						background: variables.$background_light;
+					}
+
+					.components-search-control__icon svg {
+						fill: variables.$color_background_light;
+					}
+				}
+
+				.block-editor-inserter__panel-content {
+
+					.components-button {
+
+						&:hover {
+							background: variables.$background_light;
+						}
+
+						.block-editor-block-types-list__item-icon {
+							--wp-admin-theme-color: var(--ui-accent-color);
+							color: color.adjust(variables.$background, $lightness: 65%);
+						}
+
+						.block-editor-block-types-list__item-title {
+							color: color.adjust(variables.$background, $lightness: 65%) !important;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+// header builder
+.ct-dark-mode {
+	
+	// header instances
+	.ct-panels-manager li {
+		color: color.adjust(variables.$background, $lightness: 60%);
+		background: color.adjust(variables.$background_light, $lightness: 1%);
+
+		&:not(.active):not(:hover) {
+			border-color: variables.$border;
+		}
+	}
+
+	// available items
+	.ct-available-items {
+		.ct-title {
+			color: variables.$light;
+		}
+
+		.ct-builder-item.sortable-chosen,
+		.ct-item-in-builder {
+			border-color: color.adjust(variables.$background, $lightness: 15%);
+			background: color.adjust(variables.$background, $lightness: 1%);
+
+			&:hover {
+				background: color.adjust(variables.$background, $lightness: 2.5%);
+			}
+		}
+
+		.ct-builder-item:not(.sortable-chosen):hover {
+			border-color: var(--ui-accent-color);
+		}
+	}
+
+	.ct-panel-builder {
+		background: variables.$background;
+	}
+
+	.placements-builder {
+		border-top-color: variables.$border;
+	}
+
+	.ct-view-switch {
+		border-top-color: variables.$border;
+		background: variables.$background_light;
+
+		li {
+			color: color.adjust(variables.$background, $lightness: 60%);
+			border-color: variables.$border;
+
+			&.active {
+				&:after {
+					background: var(--ui-accent-color);
+				}
+			}
+
+			&.active,
+			&:hover {
+				color: variables.$light;
+				background: color.adjust(variables.$background_light, $lightness: 2.5%);
+			}
+
+			&.ct-builder-toggle {
+				border-left-color: variables.$border;
+			}
+		}
+	}
+
+	.row-inner {
+		background: variables.$background;
+		border-color: color.adjust(variables.$background, $lightness: 20%);
+
+		.ct-builder-item:not(.sortable-ghost):hover {
+			border-color: var(--ui-accent-color);
+		}
+	}
+
+	.ct-builder-column-middle {
+		background: color.adjust(variables.$background, $lightness: 2%);
+		border-color: color.adjust(variables.$background, $lightness: 20%);
+	}
+
+	.ct-builder-item {
+		color: color.adjust(variables.$background, $lightness: 60%);
+		border-color: variables.$border;
+		background: color.adjust(variables.$background_light, $lightness: 1%);
+	}
+
+	// footer builder
+	[data-builder='footer'] {
+		.builder-column:not(:last-child) {
+			border-right-color: color.adjust(variables.$background, $lightness: 20%);
+		}
+	}
+
+	// instances
+	[class*="ct-instance-button"]:not(.active) {
+		color: color.adjust(variables.$background, $lightness: 60%);
+		border-color: variables.$border;
+		background: color.adjust(variables.$background_light, $lightness: 1%);
+
+		&:hover {
+			border-color: var(--ui-accent-color);
+		}
+	}
+
+	// palette picker
+	.ct-palettes-modal {
+		label {
+			color: color.adjust(variables.$background, $lightness: 65%);
+		}
+
+		.ct-single-palette {
+			border-bottom-color: variables.$border;
+		}
+	}
+}

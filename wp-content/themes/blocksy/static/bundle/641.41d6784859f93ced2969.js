@@ -1,0 +1,1 @@
+"use strict";(globalThis.blocksyJsonP=globalThis.blocksyJsonP||[]).push([[641],{641(s,n,t){t.r(n),t.d(n,{mount:function(){return e}});const e=function(){setTimeout(function(){ctEvents.trigger("ct:header:responsive-menu:refresh")},300)}}}]);

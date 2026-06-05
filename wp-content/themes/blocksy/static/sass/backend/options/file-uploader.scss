@@ -1,0 +1,8 @@
+.ct-file-uploader {
+	display: flex;
+	gap: 10px;
+
+	button {
+		min-height: var(--ui-input-height, 30px);
+	}
+}

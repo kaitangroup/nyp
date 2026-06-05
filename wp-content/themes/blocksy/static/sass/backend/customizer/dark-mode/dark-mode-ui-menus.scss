@@ -1,0 +1,38 @@
+@use "sass:color";
+@use "variables";
+
+.ct-dark-mode {
+
+	#customize-controls {
+
+		.control-section {
+			&:hover > .accordion-section-title {
+				color: color.adjust(variables.$accent, $lightness: 7%);
+				background-color: variables.$background_light;
+
+				&:after {
+					color: inherit;
+				}
+			}
+
+			.accordion-section-title {
+				&:hover .menu-in-location {
+					color: inherit;
+				}
+			}
+		}
+
+		.panel-meta.customize-info .accordion-section-title {
+			&:hover {
+				color: variables.$color_background_light;
+				background: variables.$background_light;
+			}
+		}
+	}
+}
+
+.wp-customizer .ct-dark-mode {
+	.control-section-nav_menu .menu-location-settings {
+		border-top-color: variables.$border;
+	}
+}

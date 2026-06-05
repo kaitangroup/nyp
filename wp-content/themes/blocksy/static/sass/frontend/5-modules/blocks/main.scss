@@ -1,0 +1,16 @@
+@use 'search';
+@use 'gallery';
+@use 'query-loop';
+@use 'contact-info';
+@use 'dynamic-data';
+
+
+.ct-widget {
+
+	li {
+		
+		ul, ol {
+			padding-inline-start: 25px;
+		}
+	}
+}

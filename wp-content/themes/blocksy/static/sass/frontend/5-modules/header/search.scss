@@ -1,0 +1,52 @@
+@use "../../1-helpers/functions";
+
+#search-modal {
+	--vertical-alignment: center;
+
+	.ct-search-form {
+		margin-inline: auto;
+		width: 100%;
+		max-width: var(--theme-form-max-width, 750px);
+
+		@include functions.media-breakpoint-up(md) {
+			--theme-form-font-size: 20px;
+			--theme-form-field-height: 50px;
+		}
+
+		@include functions.media-breakpoint-down(md) {
+			--theme-form-max-width: 90%;
+		}
+
+		@include functions.media-breakpoint-down(sm) {
+			--theme-form-font-size: 20px;
+			--theme-form-field-height: 40px;
+			--theme-form-inner-spacing: 12px;
+		}
+	}
+
+	.ct-search-form-inner {
+		--theme-form-inner-spacing: 15px;
+
+		height: auto;
+		padding-block: var(--theme-form-inner-spacing);
+		padding-inline: var(--has-classic-forms, var(--theme-form-inner-spacing));		
+		border-radius: var(--has-classic-forms, var(--theme-form-border-radius));
+
+		@include functions.media-breakpoint-up(md) {
+			margin-bottom: 35px;
+		}
+
+		@include functions.media-breakpoint-down(md) {
+			margin-bottom: 25px;
+		}
+	}
+
+	.wp-element-button {
+		--theme-icon-size: calc(100% / 3);
+
+		--theme-button-border-radius: max(
+			calc(var(--theme-form-border-radius, 100%) * 0.5),
+			calc(var(--theme-form-border-radius, 100%) - var(--theme-form-inner-spacing))
+		);
+	}
+}

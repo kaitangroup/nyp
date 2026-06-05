@@ -1,0 +1,1 @@
+#main-container:has(.hero-section) .eventkoi-title{display:none}.eventkoi-main .eventkoi-title{max-width:min(var(--theme-block-width),var(--theme-block-max-width)) !important}

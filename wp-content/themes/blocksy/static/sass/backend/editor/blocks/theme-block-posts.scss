@@ -1,0 +1,45 @@
+@use '../../../../../static/sass/frontend/1-helpers/functions';
+
+@use '../../../../../static/sass/frontend/4-components/ratio.scss';
+@use '../../../../../static/sass/frontend/4-components/entry-meta.scss';
+@use '../../../../../static/sass/frontend/4-components/pagination.scss';
+@use '../../../../../static/sass/frontend/4-components/entry-button.scss';
+@use '../../../../../static/sass/frontend/6-layout/entries/main.scss';
+
+@use '../../../../../static/sass/frontend/5-modules/blocks/query-loop.scss';
+
+.ct-posts-block {
+	p {
+		margin-top: 0;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.ct-media-container {
+
+		img {
+			height: auto;
+			max-width: 100%;
+		}
+		
+		.ct-video-indicator {
+			position: absolute;
+			inset: 0;
+			z-index: 3;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.ct-pause-path,
+			.ct-video-loader {
+				display: none;
+			}
+		}
+	}
+
+	.entry-button {
+		box-sizing: border-box;
+	}
+}

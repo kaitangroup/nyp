@@ -1,0 +1,50 @@
+@use "../../../1-helpers/functions";
+
+#review_form {
+	position: sticky;
+	top: 70px;
+
+	.comment-reply-title {
+		display: flex;
+		font-weight: 700;
+		color: var(--theme-heading-color, var(--theme-heading-2-color, var(--theme-headings-color)));
+		margin-bottom: 10px;
+	}
+
+	.comment-form {
+		display: grid;
+		grid-column-gap: 20px;
+		grid-row-gap: 1.5em;
+		--theme-content-spacing: 0;
+		--theme-link-initial-color: var(--theme-text-color);
+
+		@include functions.media-breakpoint-up(md) {
+			grid-template-columns: repeat(2, 1fr);
+
+			> * {
+				grid-column: var(--grid-column, 1/-1);
+			}
+
+			[class*='comment-form-field-input'] {
+				--grid-column: span 1;
+			}
+		}
+
+		.required {
+			color: #cc0000;
+		}
+	}
+
+	[class*='comment-form-field'] label {
+		display: flex;
+		color: var(--theme-form-text-initial-color);
+		margin-bottom: var(--has-classic-forms, 0.5em);
+	}
+
+	.gdpr-confirm-policy {
+		
+		+ .comment-form-cookies-consent {
+			margin-top: -1em;
+		}
+	}
+}

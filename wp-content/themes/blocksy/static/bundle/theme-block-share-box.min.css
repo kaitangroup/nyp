@@ -1,0 +1,1 @@
+.ct-share-box a{display:flex;justify-content:center}.ct-share-box a:hover .ct-tooltip{opacity:1;visibility:visible;transform:translate3d(0px, calc(-100% - 12px), 0px)}.ct-share-box .ct-tooltip{transform:translate3d(0px, calc(-100% - 7px), 0px)}.ct-share-box:is([data-type=type-2],[data-type=type-3])>div{display:inline-flex;flex-wrap:wrap;gap:var(--items-spacing, 15px)}

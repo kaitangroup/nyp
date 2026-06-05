@@ -1,0 +1,23 @@
+.entry-card {
+	
+	.ct-overall-score-layer {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+
+		.ct-score-label,
+		.ct-average-score {
+			font-size: 14px;
+			font-weight: 600;
+		}
+
+		.ct-average-score {
+			margin: 0 5px;
+			margin-inline-end: auto;
+		}
+
+		// .star-rating {
+		// 	margin: 3px 0;
+		// }
+	}
+}

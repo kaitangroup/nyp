@@ -19,18 +19,24 @@ class PostEditorBlock {
   /** @var SubscriptionFormBlock */
   private $subscriptionFormBlock;
 
+  /** @var NewsletterBlock */
+  private $newsletterBlock;
+
   public function __construct(
     Renderer $renderer,
     WPFunctions $wp,
-    SubscriptionFormBlock $subscriptionFormBlock
+    SubscriptionFormBlock $subscriptionFormBlock,
+    NewsletterBlock $newsletterBlock
   ) {
     $this->renderer = $renderer;
     $this->wp = $wp;
     $this->subscriptionFormBlock = $subscriptionFormBlock;
+    $this->newsletterBlock = $newsletterBlock;
   }
 
   public function init() {
     $this->subscriptionFormBlock->init();
+    $this->newsletterBlock->init();
 
     if ($this->wp->isAdmin()) {
       $this->initAdmin();
@@ -42,13 +48,23 @@ class PostEditorBlock {
   private function initAdmin() {
     $this->wp->addAction('enqueue_block_editor_assets', [$this, 'enqueueAssets']);
     $this->subscriptionFormBlock->initAdmin();
+    $this->newsletterBlock->initAdmin();
   }
 
   public function enqueueAssets() {
     $this->wp->wpEnqueueScript(
       'mailpoet-block-form-block-js',
       Env::$assetsUrl . '/dist/js/' . $this->renderer->getJsAsset('post_editor_block.js'),
-      ['wp-blocks', 'wp-components', 'wp-server-side-render', 'wp-block-editor'],
+      [
+        'wp-api-fetch',
+        'wp-blocks',
+        'wp-components',
+        'wp-element',
+        'wp-i18n',
+        'wp-server-side-render',
+        'wp-block-editor',
+        'wp-url',
+      ],
       Env::$version,
       true
     );
@@ -63,5 +79,6 @@ class PostEditorBlock {
 
   private function initFrontend() {
     $this->subscriptionFormBlock->initFrontend();
+    $this->newsletterBlock->initFrontend();
   }
 }

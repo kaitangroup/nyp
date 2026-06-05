@@ -1,0 +1,76 @@
+@use "../../../../../static/sass/frontend/common-frontend/functions";
+
+.ct-newsletter-subscribe-form {
+	--theme-link-initial-color: var(--text-color, var(--theme-text-color));
+	--theme-button-min-height: var(--theme-form-field-height, 40px);
+	--theme-button-padding: 5px 20px;
+	--theme-button-border-radius: var(--theme-form-field-border-radius, 3px);
+
+	.ct-newsletter-subscribe-form-elements {
+		display: grid;
+		gap: var(--theme-form-field-gap, 10px);
+
+		&[data-columns="2"] {
+			@include functions.media-breakpoint-up(md) {
+				grid-template-columns: 1fr auto;
+			}
+		}
+
+		&[data-columns="3"] {
+			@include functions.media-breakpoint-up(md) {
+				grid-template-columns: 1fr 1fr auto;
+			}
+		}
+
+		// boxed type
+		&[data-container="boxed"] {
+			--theme-form-boxed-padding: calc(var(--theme-form-field-gap, 10px) / 2);
+
+			height: auto;
+			padding: var(--theme-form-boxed-padding);
+
+			.wp-element-button {
+				--theme-button-border-radius: max(
+					calc(var(--theme-form-field-border-radius, 3px) * 0.6),
+					calc(var(--theme-form-field-border-radius, 3px) - var(--theme-form-boxed-padding))
+				);
+			}
+		}
+	}
+
+
+	// form messages
+	.gdpr-confirm-policy,
+	.ct-newsletter-subscribe-message {
+		margin: 10px 0 0 0;
+	}
+
+	.ct-newsletter-subscribe-message {
+		display: none;
+	}
+
+	&.subscribe-error,
+	&.subscribe-success {
+
+		.ct-newsletter-subscribe-message {
+			display: block;
+		}
+	}
+
+	&.subscribe-error {
+
+		.ct-newsletter-subscribe-message {
+			color: #e42b2b;
+			font-size: 14px;
+		}
+	}
+
+	&.subscribe-success {
+
+		*:not(.ct-newsletter-subscribe-message) {
+			display: none;
+		}
+	}
+}
+
+

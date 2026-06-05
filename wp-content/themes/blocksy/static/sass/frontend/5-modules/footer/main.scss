@@ -1,0 +1,14 @@
+@use '../../1-helpers/functions';
+
+@use 'footer-container';
+@use 'footer-grid';
+@use 'divider';
+@use 'footer-reveal';
+
+// footer elements
+@use 'common';
+@use 'copyright';
+@use 'socials';
+
+// footer widgets
+@use 'widgets';

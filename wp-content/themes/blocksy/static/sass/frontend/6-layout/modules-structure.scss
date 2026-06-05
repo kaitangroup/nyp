@@ -1,0 +1,25 @@
+@use "../1-helpers/functions";
+
+article > :is(.ct-comments, .ct-related-posts) {
+	margin-top: 60px;
+	padding-top: 50px;
+	border-top: 1px solid var(--theme-border-color);
+}
+
+// separated comments
+.ct-comments-container > div {
+	@include functions.media-breakpoint-down(sm) {
+		padding-top: 40px;
+		padding-bottom: 60px;
+	}
+
+	@include functions.media-breakpoint-up(md) {
+		padding-top: 60px;
+		padding-bottom: 100px;
+	}
+}
+
+// content blocks
+[data-block-structure="custom"] {
+	width: 100%;
+}

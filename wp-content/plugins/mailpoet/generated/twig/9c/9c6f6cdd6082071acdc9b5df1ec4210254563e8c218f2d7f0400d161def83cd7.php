@@ -490,11 +490,15 @@ class __TwigTemplate_ee165e5b4f8563d8513127bab042c7a2b7959b76320c0c8e57a68effec7
     </div>
 </div>
 
-<div class=\"mailpoet_form_field\">
+<div class=\"mailpoet_form_field mailpoet-flex mailpoet-grid-space-between-vertical-center\">
     <input type=\"button\" class=\"button button-primary mailpoet_done_editing\" value=\"";
         // line 299
         yield $this->env->getRuntime('MailPoetVendor\Twig\Runtime\EscaperRuntime')->escape($this->extensions['MailPoet\Twig\I18n']->translate("Done"), "html_attr");
         yield "\" />
+    <a href=\"https://kb.mailpoet.com/article/238-faq-post-notifications\" class=\"mailpoet_automated_latest_content_post_notifications_help\" target=\"_blank\" rel=\"noopener noreferrer\">";
+        // line 300
+        yield $this->extensions['MailPoet\Twig\I18n']->translate("Learn more");
+        yield "</a>
 </div>
 
 ";
@@ -522,7 +526,7 @@ class __TwigTemplate_ee165e5b4f8563d8513127bab042c7a2b7959b76320c0c8e57a68effec7
      */
     public function getDebugInfo()
     {
-        return array (  493 => 299,  482 => 291,  475 => 287,  466 => 281,  459 => 277,  449 => 270,  440 => 264,  433 => 260,  422 => 252,  410 => 243,  401 => 237,  394 => 233,  382 => 224,  376 => 221,  367 => 215,  358 => 209,  351 => 205,  341 => 198,  335 => 195,  326 => 189,  317 => 183,  310 => 179,  299 => 171,  290 => 165,  283 => 161,  273 => 154,  264 => 148,  255 => 142,  248 => 138,  237 => 130,  228 => 124,  221 => 120,  212 => 114,  203 => 108,  194 => 102,  187 => 98,  178 => 92,  169 => 86,  160 => 80,  151 => 74,  144 => 70,  135 => 64,  126 => 58,  117 => 52,  107 => 45,  100 => 41,  88 => 32,  79 => 26,  60 => 10,  56 => 9,  52 => 8,  45 => 4,  38 => 1,);
+        return array (  497 => 300,  493 => 299,  482 => 291,  475 => 287,  466 => 281,  459 => 277,  449 => 270,  440 => 264,  433 => 260,  422 => 252,  410 => 243,  401 => 237,  394 => 233,  382 => 224,  376 => 221,  367 => 215,  358 => 209,  351 => 205,  341 => 198,  335 => 195,  326 => 189,  317 => 183,  310 => 179,  299 => 171,  290 => 165,  283 => 161,  273 => 154,  264 => 148,  255 => 142,  248 => 138,  237 => 130,  228 => 124,  221 => 120,  212 => 114,  203 => 108,  194 => 102,  187 => 98,  178 => 92,  169 => 86,  160 => 80,  151 => 74,  144 => 70,  135 => 64,  126 => 58,  117 => 52,  107 => 45,  100 => 41,  88 => 32,  79 => 26,  60 => 10,  56 => 9,  52 => 8,  45 => 4,  38 => 1,);
     }
 
     public function getSourceContext()

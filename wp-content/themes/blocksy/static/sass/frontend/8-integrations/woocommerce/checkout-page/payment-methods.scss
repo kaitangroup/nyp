@@ -1,0 +1,138 @@
+@use "../../../1-helpers/functions";
+
+.woocommerce-checkout-payment {
+
+	@include functions.media-breakpoint-down (sm) {
+		position: relative;
+		margin-inline: calc(26px * -1);
+	}	
+
+	.place-order {
+		margin-top: 30px;
+		margin-top: 2em;
+
+		@include functions.media-breakpoint-down (sm) {
+			padding: 0 25px;
+		}
+
+		.woocommerce-terms-and-conditions-wrapper {
+			font-size: 14px;
+			line-height: 1.4;
+			margin-bottom: 30px;
+		}
+
+		button[type="submit"] {
+			width: 100%;
+		}
+	}
+}
+
+
+// payment methods
+#payment ul.payment_methods {
+
+	> li.wc_payment_method {
+		position: relative;
+		border: 1px solid var(--theme-border-color);
+
+		&:not(:first-child) {
+			border-top: none;
+		}
+
+		> input[type="radio"]:first-child {
+			// display: none;
+			position: absolute;
+			clip: rect(1px, 1px, 1px, 1px);
+
+
+			&:checked + label:before {
+				background: #fff;
+				border-width: 5px;
+				border-color: var(--theme-form-selection-field-active-color);
+			}
+
+			&:focus-visible + label:before {				
+				outline-offset: 2px;
+				outline: 1px solid var(--theme-form-selection-field-active-color);
+			}
+		}
+
+		> label {
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin: 0;
+			padding: 18px 25px;
+			cursor: pointer;
+			font-size: 15px;
+			font-weight: 600;
+
+			&:before {
+				content: '';
+				width: 16px;
+				height: 16px;
+				min-width: 16px;
+				margin-top: 2px;
+				border-radius: 100%;
+				border: var(--form-selection-control-border-width, var(--theme-form-field-border-width, 1px)) solid var(--theme-form-selection-field-initial-color);
+			}
+
+			img {
+				max-height: 35px;
+
+				&:first-of-type {
+					margin-inline-start: auto !important;
+				}
+			}
+
+			.payment-methods--logos {
+				margin-inline-start: auto;
+			}
+
+			.about_paypal {
+				display: none;
+			}
+		}
+	}
+
+
+	// payment box
+	.payment_box {
+		padding: 25px;
+		border-top: 1px solid var(--theme-border-color);
+
+		p {
+			font-size: 14px;
+			line-height: 1.5;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+
+		.woocommerce-SavedPaymentMethods {
+			margin: 0;
+			padding: 0;
+
+			li {
+
+				&:not(:last-child) {
+					margin-bottom: 0.5em;
+				}
+			}
+		}
+
+		fieldset {
+			padding: 0 !important;
+			border: none;
+
+			// this margin adds extra spacing and needs to be deactivated - https://d.pr/v/yh3QZB
+			// margin-top: 20px;
+
+			.form-row:not(:first-child) {
+				margin-top: 15px;
+			}
+		}
+	}
+}

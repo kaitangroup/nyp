@@ -1,0 +1,1 @@
+"use strict";(globalThis.blocksyJsonP=globalThis.blocksyJsonP||[]).push([[198],{198(n,o,e){e.r(o),e.d(o,{mount:function(){return t}});const t=function(n,{event:o}){const e=n.querySelector(".ct-link-overlay");if(!e)return;const t=e.href,r=e.target||"_self";if(!t)return;const l=o.ctrlKey||o.metaKey;"_blank"===r||l?window.open(t,"_blank","noopener"):window.location.href=t}}}]);

@@ -1,0 +1,20 @@
+.ct-pseudo-input {
+
+	:is(input, select) {
+		outline: none;
+		border-width: 0;
+		border-radius: 0;
+		box-shadow: none;
+		background-color: transparent;
+
+		// &:focus {
+		// 	background-color: transparent;
+		// }
+	}
+
+	&:has(:is(input, select):focus) {
+		outline-color: var(--theme-form-field-border-focus-color);
+		border-color: var(--theme-form-field-border-focus-color);
+		background-color: var(--has-classic-forms, var(--theme-form-field-background-focus-color));
+	}
+}

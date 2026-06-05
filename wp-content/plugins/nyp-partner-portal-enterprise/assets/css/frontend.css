@@ -1,0 +1,155 @@
+.hero-section[data-type="type-2"] {
+    position: relative;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    }
+    
+    .hero-section[data-type="type-2"] figure,
+    .hero-section[data-type="type-2"] .ct-media-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    }
+    
+    .hero-section[data-type="type-2"] img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    }
+    
+    /* Dark overlay */
+    
+    .hero-section[data-type="type-2"]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 1;
+    }
+    
+    /* Content */
+    
+    .hero-section[data-type="type-2"] .entry-header {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    }
+    
+    /* Shop title */
+    
+    .hero-section[data-type="type-2"] .page-title {
+    color: #fff !important;
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 10px rgba(0,0,0,.35);
+    }
+
+    .woocommerce-shop .entry-header {
+        display: none !important;
+    }
+    
+    /* Mobile */
+    
+    @media (max-width: 768px) {
+    
+
+    .hero-section[data-type="type-2"] {
+        min-height: 280px;
+    }
+    
+    .hero-section[data-type="type-2"] .page-title {
+        font-size: 36px;
+    }
+ 
+    
+    }
+
+
+    /*
+|--------------------------------------------------------------------------
+| How It Works
+|--------------------------------------------------------------------------
+*/
+
+.nyp-how-it-works {
+    max-width: 1400px;
+    margin: 80px auto;
+    padding: 0 20px;
+}
+
+.nyp-how-it-works h2 {
+    text-align: center;
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.nyp-how-it-works > p {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 50px;
+    color: #6b7280;
+    font-size: 18px;
+}
+
+.nyp-how-it-works .wp-block-group-is-layout-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 25px;
+}
+
+.nyp-how-it-works .wp-block-group-is-layout-grid p {
+    background: #ffffff;
+    padding: 30px 20px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    margin: 0;
+    position: relative;
+    transition: all .3s ease;
+}
+
+.nyp-how-it-works .wp-block-group-is-layout-grid p:hover {
+    transform: translateY(-5px);
+}
+
+.nyp-how-it-works .wp-block-group-is-layout-grid p:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    right: -18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 28px;
+    color: #d4a24c;
+    font-weight: bold;
+}
+
+/* Mobile */
+
+@media (max-width: 1024px) {
+
+    .nyp-how-it-works .wp-block-group-is-layout-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nyp-how-it-works .wp-block-group-is-layout-grid p::after {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+
+    .nyp-how-it-works .wp-block-group-is-layout-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nyp-how-it-works h2 {
+        font-size: 32px;
+    }
+}
+    

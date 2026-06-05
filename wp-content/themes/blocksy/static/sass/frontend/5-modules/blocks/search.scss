@@ -1,0 +1,114 @@
+.ct-search-form {
+	position: relative;
+	isolation: isolate;
+	--theme-link-initial-color: var(--theme-text-color);
+
+	.ct-pseudo-input {
+		align-items: center;
+		padding-inline: 0;
+	}
+
+	.ct-select-taxonomy {
+		font-size: 13px;
+		padding-inline-start: 10px;
+		width: fit-content;
+		height: calc(var(--theme-form-field-height, 40px) - 16px);
+		border-color: var(--theme-form-field-border-initial-color);
+	}
+
+	.wp-element-button {
+		--theme-button-min-height: var(--search-button-size, var(--theme-form-field-height, 40px));
+		--theme-button-border-radius: var(--theme-form-field-border-radius, 3px);
+		flex-shrink: 0;
+	}
+
+	.ct-ajax-loader {
+		--loader-size: 18px;
+		opacity: 0;
+	}
+
+	// has dropdown
+	&:has(input[aria-expanded='true']) {
+		z-index: 2;
+	}
+
+	// inner container
+	.ct-search-form-inner {
+		position: relative;
+		z-index: 2;
+		display: flex;
+	}
+
+	// outside controls
+	&[data-form-controls="outside"] {
+
+		.ct-pseudo-input {
+			display: flex;
+		}
+
+		.ct-select-taxonomy {
+			border-inline-start-width: 1px;
+		}
+		
+		.wp-element-button {
+			margin-inline-start: 10px;
+		}
+	}
+
+
+	// inside controls
+	&[data-form-controls="inside"] {
+
+		&[data-submit-button="text"] {
+			--theme-form-inner-spacing: 4px;
+			--search-dropdown-extra-spacing: calc(var(--theme-form-inner-spacing) * 2 + var(--theme-form-field-border-width, 1px) * 2);
+
+			.ct-search-form-inner {
+				height: auto;
+				padding-block: var(--theme-form-inner-spacing);
+				padding-inline-end: var(--theme-form-inner-spacing);
+			}
+
+			.ct-select-taxonomy {
+				border-inline-start-width: 1px;
+			}
+
+			.wp-element-button {
+				--theme-button-border-radius: max(
+					calc(var(--theme-form-field-border-radius, 3px) * 0.6),
+					calc(var(--theme-form-field-border-radius, 3px) - var(--theme-form-inner-spacing))
+				);
+			}
+		}
+
+		&[data-submit-button*="icon"] {
+
+			.ct-select-taxonomy {
+				border-inline-width: 1px;
+			}
+		}
+	}
+
+
+	&[data-submit-button*="icon"] {
+
+		.wp-element-button {
+			--theme-icon-color: currentColor;
+			padding: initial;
+			width: var(--search-button-size, var(--theme-form-field-height, 40px));
+		}
+	}
+
+	&[data-submit-button*="minimal"] {
+
+		.wp-element-button {
+			--theme-icon-size: 13px;
+			--theme-button-shadow: none;
+			--theme-button-transform: none;
+			--theme-button-text-initial-color: var(--theme-text-color);
+			--theme-button-text-hover-color: var(--theme-form-field-border-focus-color);
+			--theme-button-background-initial-color: var(--has-classic-forms, var(--theme-form-field-background-initial-color));
+			--theme-button-background-hover-color: var(--has-classic-forms, var(--theme-form-field-background-initial-color));
+		}
+	}
+}

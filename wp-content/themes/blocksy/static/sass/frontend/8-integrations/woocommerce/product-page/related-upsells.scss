@@ -1,0 +1,10 @@
+.single-product article {
+
+	> :where(.related, .up-sells) {
+		margin-top: 50px;
+
+		.ct-module-title {
+			margin-bottom: 30px;	
+		}
+	}
+}

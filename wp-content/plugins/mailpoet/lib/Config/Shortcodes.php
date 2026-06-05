@@ -9,6 +9,7 @@ use MailPoet\Entities\NewsletterEntity;
 use MailPoet\Entities\SendingQueueEntity;
 use MailPoet\Entities\SubscriberEntity;
 use MailPoet\Form\Widget;
+use MailPoet\Newsletter\Embed\NewsletterEmbedService;
 use MailPoet\Newsletter\NewslettersRepository;
 use MailPoet\Newsletter\Sharing\ShareVisibility;
 use MailPoet\Newsletter\Shortcodes\Categories\Date;
@@ -63,6 +64,9 @@ class Shortcodes {
   /** @var Site */
   private $siteCategory;
 
+  /** @var NewsletterEmbedService */
+  private $newsletterEmbedService;
+
   public function __construct(
     Pages $subscriptionPages,
     WPFunctions $wp,
@@ -75,7 +79,8 @@ class Shortcodes {
     Link $linkCategory,
     Newsletter $newsletterCategory,
     SubscriberCategory $subscriberCategory,
-    Site $siteCategory
+    Site $siteCategory,
+    NewsletterEmbedService $newsletterEmbedService
   ) {
     $this->subscriptionPages = $subscriptionPages;
     $this->wp = $wp;
@@ -89,6 +94,7 @@ class Shortcodes {
     $this->newsletterCategory = $newsletterCategory;
     $this->subscriberCategory = $subscriberCategory;
     $this->siteCategory = $siteCategory;
+    $this->newsletterEmbedService = $newsletterEmbedService;
   }
 
   public function init() {
@@ -107,6 +113,9 @@ class Shortcodes {
     $this->wp->addShortcode('mailpoet_archive', [
       $this, 'getArchive',
     ]);
+    $this->wp->addShortcode('mailpoet_newsletter', [
+      $this, 'getNewsletterEmbed',
+    ]);
 
     $this->wp->addFilter('mailpoet_archive_email_processed_date', [
       $this, 'renderArchiveDate',
@@ -119,6 +128,22 @@ class Shortcodes {
     $this->subscriptionPages->init();
     // initialize subscription management shortcodes
     $this->subscriptionPages->initShortcodes();
+  }
+
+  public function getNewsletterEmbed($params = []): string {
+    if (!is_array($params)) {
+      $params = [];
+    }
+
+    return $this->newsletterEmbedService->render([
+      'newsletterId' => $params['id'] ?? null,
+      'height' => $params['height'] ?? null,
+      'width' => $params['width'] ?? null,
+      'showFallbackLink' => $params['show_fallback_link'] ?? true,
+      'fallbackLinkAlignment' => $params['fallback_link_alignment'] ?? 'center',
+      'iframeAlignment' => $params['iframe_alignment'] ?? 'center',
+      'showEmailBackground' => $params['show_email_background'] ?? true,
+    ]);
   }
 
   public function formWidget($params = []) {

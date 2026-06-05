@@ -10656,6 +10656,18 @@ return array(
  'version' => 'dev-trunk',
  'path' => $baseDir . '/lib/Newsletter/Editor/Transformer.php'
  ),
+ 'MailPoet\\Newsletter\\Embed\\NewsletterEmbedService' => array(
+ 'version' => 'dev-trunk',
+ 'path' => $baseDir . '/lib/Newsletter/Embed/NewsletterEmbedService.php'
+ ),
+ 'MailPoet\\Newsletter\\Embed\\RestApi\\Endpoints\\NewsletterEmbedEndpoint' => array(
+ 'version' => 'dev-trunk',
+ 'path' => $baseDir . '/lib/Newsletter/Embed/RestApi/Endpoints/NewsletterEmbedEndpoint.php'
+ ),
+ 'MailPoet\\Newsletter\\Embed\\RestApi\\Endpoints\\NewsletterEmbedSelectorEndpoint' => array(
+ 'version' => 'dev-trunk',
+ 'path' => $baseDir . '/lib/Newsletter/Embed/RestApi/Endpoints/NewsletterEmbedSelectorEndpoint.php'
+ ),
  'MailPoet\\Newsletter\\Links\\Links' => array(
  'version' => 'dev-trunk',
  'path' => $baseDir . '/lib/Newsletter/Links/Links.php'
@@ -10975,6 +10987,10 @@ return array(
  'MailPoet\\PostEditorBlocks\\MarketingOptinBlock' => array(
  'version' => 'dev-trunk',
  'path' => $baseDir . '/lib/PostEditorBlocks/MarketingOptinBlock.php'
+ ),
+ 'MailPoet\\PostEditorBlocks\\NewsletterBlock' => array(
+ 'version' => 'dev-trunk',
+ 'path' => $baseDir . '/lib/PostEditorBlocks/NewsletterBlock.php'
  ),
  'MailPoet\\PostEditorBlocks\\PostEditorBlock' => array(
  'version' => 'dev-trunk',

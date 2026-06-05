@@ -1,0 +1,30 @@
+.shop_table .shipping {
+	--theme-table-text-align: start;
+
+	td {
+		padding-inline-start: 0;
+
+		.ct-shipping-heading {
+			font-weight: 600;
+			margin-bottom: 15px;
+		}
+	}
+	
+	form button {
+		width: 100%;
+	}
+
+	p:last-of-type {
+		margin-bottom: 0;
+	}
+}
+
+ul#shipping_method {
+	clear: both;
+	list-style: none;
+	padding-inline-start: 0;
+
+	li:not(:last-child) {
+		margin-bottom: 10px;
+	}
+}

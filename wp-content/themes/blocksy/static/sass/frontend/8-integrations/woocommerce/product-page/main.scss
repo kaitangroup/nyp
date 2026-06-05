@@ -1,0 +1,38 @@
+@use 'image-zoom';
+@use 'popup-box';
+@use 'entry-summary';
+@use 'entry-meta';
+@use 'star-rating';
+@use 'sticky-parts';
+
+
+// gallery types
+@use 'gallery-common';
+@use 'default-gallery';
+
+
+// product elements
+@use 'product-divider';
+@use 'payment-methods';
+@use 'additional-info';
+@use 'layer-heading';
+
+
+// product types
+@use 'common';
+@use 'simple';
+@use 'grouped';
+@use 'variable';
+@use 'reset-variations';
+
+
+// tabs section
+@use 'product-tabs';
+@use 'custom-tabs';
+@use 'product-attributes';
+@use 'reviews';
+@use 'reviews-form';
+
+
+// related & upsells
+@use 'related-upsells';

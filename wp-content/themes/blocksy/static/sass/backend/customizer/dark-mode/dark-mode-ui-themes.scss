@@ -1,0 +1,67 @@
+@use "sass:color";
+@use "variables";
+
+.ct-dark-mode {
+
+	.control-panel-themes {
+		#accordion-section-installed_themes {
+			border-top-color: variables.$border;
+		}
+
+		.customize-themes-section-title {
+			background: variables.$background_light;
+			border-bottom-color: variables.$border;
+			border-left-color: variables.$border;
+
+			&.selected {
+				color: variables.$accent;
+
+				&:after {
+					background: variables.$accent;
+				}
+			}
+
+			&:not(.selected) {
+				&:after {
+					border-color: color.adjust(variables.$border, $lightness: 3%);
+					background: color.adjust(variables.$background_light, $lightness: 5%);
+				}
+			}
+
+			&:hover {
+				color: variables.$accent;
+				border-left-color: variables.$accent;
+			}
+		}
+
+		.customize-themes-full-container {
+			background: variables.$background_light;
+		}
+
+		.filter-themes-count .themes-displayed {
+			color: variables.$color_background_light;
+		}
+	}
+
+	.customize-preview-header.themes-filter-bar {
+		background: variables.$background_light;
+		border-bottom-color: variables.$border;
+
+		.search-icon {
+			color: variables.$color_background_light;
+		}
+	}
+
+	.customize-control-theme .theme {
+		border-color: variables.$border;
+
+		.theme-name {
+			color: variables.$light;
+			background: variables.$background;
+		}
+
+		.theme-actions {
+			background: transparent;	
+		}
+	}
+}

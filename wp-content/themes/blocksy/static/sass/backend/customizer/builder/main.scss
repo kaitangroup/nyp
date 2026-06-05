@@ -1,0 +1,25 @@
+@use 'builder-sidebar';
+@use 'panels-manager';
+
+@use 'panels';
+@use 'view-switch';
+@use 'builder-rows';
+@use 'builder-columns';
+@use 'builder-items';
+@use 'available-items';
+@use 'builder-offcanvas';
+@use 'builder-pointers';
+@use 'item-buttons';
+@use 'footer';
+
+[data-builder='header'] {
+	.ct-builder-footer {
+		display: none;
+	}
+}
+
+[data-builder='footer'] {
+	.ct-builder-header {
+		display: none;
+	}
+}

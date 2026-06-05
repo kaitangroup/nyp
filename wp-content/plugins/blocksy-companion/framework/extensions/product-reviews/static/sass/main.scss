@@ -1,0 +1,23 @@
+@use 'archive-cards';
+@use 'slider';
+@use 'title';
+@use 'scores';
+@use 'actions';
+@use 'description';
+@use 'quick-info';
+
+.ct-product-hero {
+	padding-top: var(--theme-content-vertical-spacing, 60px);
+
+	.ct-container {
+		padding-bottom: var(--theme-content-vertical-spacing, 60px);
+		border-bottom: 1px solid var(--theme-border-color);
+	}
+
+	ul li {
+
+		&:not(:last-child) {
+			margin-bottom: 0.3em;
+		}
+	}
+}

@@ -1,0 +1,68 @@
+{
+	"attributes": {
+		"hasParallax": {
+			"type": "boolean",
+			"default": false
+		},
+		"isRepeated": {
+			"type": "boolean",
+			"default": false
+		},
+		"overlayColor": {
+			"type": "string"
+		},
+		"customOverlayColor": {
+			"type": "string"
+		},
+		"isUserOverlayColor": {
+			"type": "boolean"
+		},
+		"focalPoint": {
+			"type": "object"
+		},
+		"minHeight": {
+			"type": "number"
+		},
+		"minHeightUnit": {
+			"type": "string"
+		},
+		"contentPosition": {
+			"type": "string"
+		},
+		"isDark": {
+			"type": "boolean",
+			"default": true
+		},
+		"allowedBlocks": {
+			"type": "array"
+		},
+		"templateLock": {
+			"type": ["string", "boolean"],
+			"enum": ["all", "insert", "contentOnly", false]
+		},
+		"tagName": {
+			"type": "string",
+			"default": "div"
+		},
+
+		"allowCustomContentAndWideSize": {
+			"type": "boolean",
+			"default": true
+		},
+
+		"contentSize": {
+			"type": "string",
+			"default": ""
+		},
+
+		"wideSize": {
+			"type": "string",
+			"default": ""
+		},
+
+		"minimumHeight": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

@@ -1,0 +1,8 @@
+@use "../../1-helpers/functions";
+
+.instagram-media {
+	@include functions.media-breakpoint-down (sm) {
+		max-width: 100% !important;
+		min-width: initial !important;
+	}
+}

@@ -1,0 +1,35 @@
+.ct-option-switch {
+	display: flex;
+	align-items: center;
+	// position: relative;
+	width: 32px;
+	height: 20px;
+	padding-inline: 2px;
+	margin-inline-start: auto;
+	cursor: pointer;
+	border-radius: 100px;
+	box-sizing: border-box;
+	border: 2px solid #555d66;
+	transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+				border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+	> span {
+		width: 12px;
+		height: 12px;
+		background: #555d66;
+		border-radius: inherit;
+		transform: translate3d(0, 0, 0);
+		transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+					transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	&.ct-active {
+		background: var(--ui-accent-color);
+		border-color: var(--ui-accent-color);
+
+		span {
+			background: #fff;
+			transform: translate3d(12px, 0, 0);
+		}
+	}
+}

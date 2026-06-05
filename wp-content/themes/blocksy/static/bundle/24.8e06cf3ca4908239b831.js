@@ -1,0 +1,1 @@
+"use strict";(globalThis.blocksyJsonP=globalThis.blocksyJsonP||[]).push([[24],{6024(o,n,s){s.r(n),s.d(n,{mount:function(){return c}});const c=function(){if(!window.wpcf7)return;const o=document.querySelectorAll(".wpcf7-form");o.length&&o.forEach(function(o){const n=o.closest(".no-js");n&&(wpcf7.init(o),n.classList.replace("no-js","js"))})}}}]);

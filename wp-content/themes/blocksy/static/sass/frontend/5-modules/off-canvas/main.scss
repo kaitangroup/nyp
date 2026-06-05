@@ -1,0 +1,90 @@
+@use 'variables';
+@use 'modal';
+@use 'panel';
+@use "../../1-helpers/functions";
+
+body {
+	&[data-panel] {
+		padding-right: var(--scrollbar-width, 0px);
+
+		.ct-panel.active {
+			display: flex;
+		}
+	}
+
+	&[data-panel*='in'] {
+		.ct-panel.active {
+			opacity: 1;
+			pointer-events: auto;
+		}
+	}
+}
+
+.ct-panel {
+	flex-direction: column;
+	position: fixed;
+	z-index: 999999;
+	inset: var(--admin-bar, 0px) 0 0 0;
+	opacity: 0;
+	display: none;
+	pointer-events: none;
+	transition: opacity variables.$transition-duration ease-in-out;
+
+	.ct-panel-inner {
+		display: flex;
+		flex-direction: column;
+
+		@include functions.media-breakpoint-down(sm) {
+			--panel-padding: 25px;
+		}
+	}
+}
+
+// panel actions
+.ct-panel-actions {
+	display: flex;
+	align-items: center;
+	padding-inline: var(--panel-padding, 35px);
+
+	@include functions.media-breakpoint-down(sm) {
+		padding-top: 20px;
+	}
+
+	@include functions.media-breakpoint-up(md) {
+		padding-top: 30px;
+	}
+
+	.ct-panel-heading {
+		font-size: 15px;
+		font-weight: 600;
+		color: var(--theme-text-color);
+	}
+
+	// .close-button {
+	// 	margin-inline-start: auto;
+	// }
+
+	.ct-toggle-close {
+		--toggle-button-padding: 10px;
+		--toggle-button-margin-end: -10px;
+		--toggle-button-margin-block: -10px;
+	}
+}
+
+// panel content
+.ct-panel-content {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: var(--vertical-alignment, flex-start);
+}
+
+.ct-panel-content-inner {
+	display: flex;
+	flex-direction: column;
+	align-items: var(--horizontal-alignment, flex-start);
+	height: var(--panel-content-height, auto);
+	overflow-y: auto;
+	padding: var(--panel-padding, 35px);
+}

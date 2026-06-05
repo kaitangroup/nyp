@@ -1,0 +1,8 @@
+:root :where(.has-background) {
+	box-sizing: border-box;
+}
+
+:root :where(p.has-background, .wp-block-group.has-background) {
+	// padding: 30px;
+	padding: var(--theme-content-spacing);
+}

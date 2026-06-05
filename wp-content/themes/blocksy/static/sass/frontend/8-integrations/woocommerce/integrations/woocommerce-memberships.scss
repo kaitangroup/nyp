@@ -1,0 +1,7 @@
+@use "../../../1-helpers/functions";
+
+@include functions.media-breakpoint-down (sm) {
+	.woocommerce-account table.my_account_memberships {
+		table-layout: auto;
+	}
+}

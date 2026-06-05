@@ -1,0 +1,16 @@
+@use 'variables';
+@use 'mode-switch';
+@use 'dark-mode-ui';
+@use 'dark-mode-ui-menus';
+@use 'dark-mode-ui-options';
+@use 'dark-mode-ui-themes';
+
+.ct-dark-mode {
+	--ui-accent-color: #157EFB;
+	--optionBorderColor: #{variables.$border};
+}
+
+// disable transitions
+.ct-disable-transitions * {
+	transition: none !important;
+}

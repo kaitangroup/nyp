@@ -1,0 +1,10 @@
+<wpml-config>
+	<custom-fields>
+		<custom-field action="copy-once" encoding="json">blocksy_post_meta_options</custom-field>
+		<custom-field action="copy">template_type</custom-field>
+	</custom-fields>
+
+	<custom-term-fields>
+		<custom-term-field action="copy-once">blocksy_taxonomy_meta_options</custom-term-field>
+	</custom-term-fields>
+</wpml-config>

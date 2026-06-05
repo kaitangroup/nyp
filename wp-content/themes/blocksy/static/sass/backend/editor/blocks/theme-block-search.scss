@@ -1,0 +1,13 @@
+@use '../../../../../static/sass/frontend/5-modules/blocks/search';
+
+.ct-search-form {
+
+	.ct-fake-select {
+		display: flex;
+		flex-shrink: 0;
+	}
+
+	.wp-element-button {
+		box-sizing: border-box;
+	}
+}

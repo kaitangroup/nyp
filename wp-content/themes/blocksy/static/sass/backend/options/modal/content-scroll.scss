@@ -1,0 +1,38 @@
+// modal scroll default
+.ct-modal-scroll {
+	overflow: auto;
+	padding: 0 var(--modal-padding);
+	margin: 0 calc(var(--modal-padding) * -1);
+
+	&[data-section-divider="top"] {
+		padding-block: 30px;
+		border-top: 1px solid var(--optionBorderColor);
+
+		> *:first-child {
+			--options-vertical-spacing: 0;
+		}
+	}
+}
+
+// tabs scroll
+.ct-tabs-scroll {
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	margin: 0 calc(var(--modal-padding) * -1);
+
+	.ct-tabs {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		padding-top: 1px;
+		--tabs-container-margin: 20px 0 0 0;
+		--tabs-pills-margin: 0 var(--modal-padding);
+	}
+
+	.ct-current-tab {
+		overflow-y: auto;
+		overflow-x: hidden;
+		--tabs-content-padding: 15px var(--modal-padding) 35px var(--modal-padding);
+	}
+}

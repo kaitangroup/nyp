@@ -1,0 +1,6 @@
+article > .entry-content {
+	
+	> :is(istable, iframe) {
+		--theme-block-width: var(--theme-container-width);
+	}
+}

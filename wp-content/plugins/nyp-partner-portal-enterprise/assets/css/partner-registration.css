@@ -1,0 +1,59 @@
+.nyp-partner-registration-form {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
+
+.nyp-form-row {
+    margin-bottom: 20px;
+}
+
+.nyp-form-row label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.nyp-form-row input,
+.nyp-form-row textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.nyp-partner-registration-form button {
+    background: #111827;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.nyp-partner-registration-form button:hover {
+    opacity: .9;
+}
+
+.nyp-notice {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.nyp-notice-success {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+.nyp-notice-error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+}

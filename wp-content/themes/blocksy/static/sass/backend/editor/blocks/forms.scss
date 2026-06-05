@@ -1,0 +1,110 @@
+.wp-block-search__input,
+.ff-inherit-theme-style .ff-el-form-control,
+.ff-inherit-theme-style select.ff-el-form-control:not([size]):not([multiple]),
+.ct-newsletter-subscribe-form-elements input,
+.ct-filter-widget-wrapper input,
+.ct-pseudo-input,
+.ct-search-form :where(input, .ct-fake-select) {
+	margin: 0;
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+	height: var(--theme-form-field-height, 40px);
+	padding: var(--has-classic-forms, var(--theme-form-field-padding, 0 15px));
+
+	font-size: var(--theme-form-font-size, 16px);
+	color: var(--theme-form-text-initial-color, var(--theme-text-color));
+
+	border-width: var(--theme-form-field-border-width, 1px);
+	border-style: var(--theme-form-field-border-style, solid);
+	border-color: var(--theme-form-field-border-initial-color);
+
+	border-radius: var(--has-classic-forms, var(--theme-form-field-border-radius, 3px));
+	background-color: var(--has-classic-forms, var(--theme-form-field-background-initial-color));
+	transition: all 0.12s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+
+	outline: max(2px, var(--theme-form-field-border-width, 1px)) solid transparent;
+	outline-offset: calc(var(--theme-form-field-border-width, 1px) * -1);
+	
+	&:focus {
+		box-shadow: none;
+		color: var(--theme-form-text-focus-color, var(--theme-text-color));
+		outline-color: var(--theme-form-field-border-focus-color);
+		border-color: var(--theme-form-field-border-focus-color);
+		background-color: var(--has-classic-forms, var(--theme-form-field-background-focus-color));
+	}
+
+	&::placeholder {
+		opacity: 0.7;
+		color: inherit;
+	}
+
+	&::-webkit-search-cancel-button {
+		-webkit-appearance: none;
+	}
+}
+
+
+// textarea
+.ff-inherit-theme-style textarea {
+	--theme-form-field-height: auto;
+	--theme-form-field-padding: 15px;
+}
+
+// checkbox & radiobox
+.ct-newsletter-subscribe-block input[type="checkbox"],
+.ff-inherit-theme-style :is(input[type="checkbox"], input[type="radio"]) {
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	margin-inline-end: 0.7em;
+	box-shadow: none;
+	background: transparent;
+	border: var(--form-selection-control-border-width, var(--theme-form-field-border-width, 1px)) solid var(--theme-form-selection-field-initial-color);
+}
+
+.ct-newsletter-subscribe-block input[type="checkbox"],
+.ff-inherit-theme-style input[type="checkbox"] {
+	border-radius: var(--theme-form-checkbox-border-radius, 3px);
+}
+
+.ff-inherit-theme-style input[type="radio"] {
+	border-radius: 100%;
+}
+
+// labels
+.ff-inherit-theme-style .ff-el-input--label label {
+	font-size: 15px;
+}
+
+
+// select
+.ff-inherit-theme-style select,
+.ct-search-form :where(.ct-fake-select) {
+	appearance: none;
+	padding-inline-end: 25px;
+	background-image: url("data:image/svg+xml,%3Csvg width='21' height='13' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.5.379L20.621 2.5 10.5 12.621.379 2.5 2.5.379l8 8z' fill='%234F5D6D' fill-rule='nonzero'/%3E%3C/svg%3E");
+	background-repeat: no-repeat, repeat;
+	background-size: 8px auto, 100%;
+	background-position: right 10px top 50%, 0 0;
+}
+
+
+// pseudo input
+.ct-pseudo-input {
+
+	:is(input, select, .ct-fake-select) {
+		outline: none;
+		border-width: 0;
+		border-radius: 0;
+		box-shadow: none;
+		background-color: transparent;
+	}
+
+	&:has(:is(input, .ct-select-taxonomy):focus) {
+		outline-color: var(--theme-form-field-border-focus-color);
+		border-color: var(--theme-form-field-border-focus-color);
+		background-color: var(--has-classic-forms, var(--theme-form-field-background-focus-color));
+	}
+}

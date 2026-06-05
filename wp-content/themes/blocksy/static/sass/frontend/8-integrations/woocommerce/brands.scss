@@ -1,0 +1,14 @@
+.ct-product-brands {
+	display: flex;
+	align-items: center;
+	justify-content: var(--horizontal-alignment); // for archive alignment
+	flex-wrap: wrap;
+	gap: var(--product-brands-gap, 10px);
+
+	--theme-link-initial-color: var(--theme-text-color);
+
+	.ct-media-container {
+		flex: 0 0 var(--product-brand-logo-size, 60px);
+		max-width: var(--product-brand-logo-size, 60px);
+	}
+}

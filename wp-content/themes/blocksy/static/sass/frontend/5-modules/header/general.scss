@@ -1,0 +1,19 @@
+@use "../../1-helpers/functions";
+
+#header {
+	position: relative;
+	z-index: 50;
+}
+
+// visibility
+@include functions.media-breakpoint-down(md) {
+	#header [data-device='desktop'] {
+		display: none;
+	}
+}
+
+@include functions.media-breakpoint-up(lg) {
+	#header [data-device='mobile'] {
+		display: none;
+	}
+}
