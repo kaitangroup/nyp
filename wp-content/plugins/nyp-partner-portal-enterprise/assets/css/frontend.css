@@ -485,3 +485,247 @@ box-shadow: 0 15px 40px rgba(0,0,0,.12);
     }
 
 }
+
+.nyp-intake-form {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.nyp-form-section {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border: 1px solid #e5e7eb;
+}
+
+.nyp-form-section h3 {
+    margin-bottom: 10px;
+}
+
+.nyp-section-description {
+    margin-bottom: 25px;
+    color: #6b7280;
+}
+
+.nyp-form-row {
+    margin-bottom: 20px;
+}
+
+.nyp-form-row input,
+.nyp-form-row textarea,
+.nyp-form-row select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+}
+
+/* ===================================
+   Planning Brief Actions
+=================================== */
+
+.nyp-form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.nyp-form-actions .button {
+    min-width: 180px;
+    height: 46px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.nyp-form-actions .button:hover {
+    transform: translateY(-1px);
+}
+
+.nyp-form-actions .button-primary {
+    background: #111827;
+    border-color: #111827;
+    color: #fff;
+}
+
+.nyp-form-actions .button-primary:hover {
+    background: #000;
+    border-color: #000;
+}
+
+/* ===================================
+   Submitted Message
+=================================== */
+
+.nyp-brief-submitted {
+    background: #f8fafc;
+    border: 1px solid #dbe4ee;
+    border-left: 5px solid #2563eb;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 30px 0;
+}
+
+.nyp-brief-submitted strong {
+    display: block;
+    color: #1e293b;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.nyp-brief-submitted p {
+    margin: 0;
+    color: #475569;
+}
+
+/* ===================================
+   Read Only Form
+=================================== */
+
+.nyp-intake-form input[readonly],
+.nyp-intake-form textarea[readonly] {
+    background: #f9fafb;
+    cursor: not-allowed;
+}
+
+.nyp-intake-form select:disabled,
+.nyp-intake-form input:disabled,
+.nyp-intake-form textarea:disabled {
+    background: #f9fafb;
+    opacity: .8;
+    cursor: not-allowed;
+}
+
+/* ===================================
+   Mobile
+=================================== */
+
+@media (max-width: 768px) {
+
+    .nyp-form-actions {
+        flex-direction: column;
+    }
+
+    .nyp-form-actions .button {
+        width: 100%;
+    }
+}
+
+.nyp-upload-group-title {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.nyp-file-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f8fafc;
+    margin-bottom: 10px;
+}
+
+.nyp-file-name {
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.nyp-file-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.nyp-file-actions .button-small {
+    padding: 6px 12px;
+    min-height: auto;
+}
+
+@media (max-width: 768px) {
+
+    .nyp-file-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nyp-file-actions {
+        width: 100%;
+    }
+
+    .nyp-file-actions .button,
+    .nyp-file-actions button {
+        flex: 1;
+    }
+}
+
+.nyp-form-row input,
+.nyp-form-row textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+}
+
+.nyp-form-row select {
+    width: 100%;
+    height: 50px;
+    padding: 0 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+}
+
+.nyp-category-info{
+    padding:20px;
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    border-radius:8px;
+    margin-top:8px;
+}
+
+.nyp-category-info p{
+    margin:0;
+}
+
+.nyp-checkbox-label{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    font-weight:400;
+}
+
+.nyp-checkbox-label input{
+    width:auto !important;
+    margin-top:4px;
+}
+
+.nyp-confirmation-list{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.nyp-checkbox-label{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:15px;
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    border-radius:8px;
+    line-height:1.6;
+    font-weight:400;
+}
+
+.nyp-checkbox-label input{
+    width:auto !important;
+    min-width:18px;
+    margin-top:4px;
+}

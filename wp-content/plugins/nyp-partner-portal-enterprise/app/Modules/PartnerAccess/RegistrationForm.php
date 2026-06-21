@@ -1,8 +1,6 @@
 <?php
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+namespace NYP\Modules\PartnerAccess;
 
 class RegistrationForm
 {

@@ -1,15 +1,13 @@
 <?php
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+namespace NYP\Modules\PartnerAccess;
 
 class ApprovalManager
 {
     public function register()
     {
 
-        error_log('ApprovalManager register called');
+       
         add_action(
             'show_user_profile',
             [$this, 'partner_status_field']

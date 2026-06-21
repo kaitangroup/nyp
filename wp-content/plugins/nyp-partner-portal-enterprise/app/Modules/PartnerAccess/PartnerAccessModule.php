@@ -1,13 +1,6 @@
 <?php
 
-if (!defined('ABSPATH')) {
-    exit;
-}
-
-require_once dirname(__FILE__) . '/RegistrationProcessor.php';
-require_once dirname(__FILE__) . '/ProductVisibilityManager.php';
-
-require_once dirname(__FILE__) . '/ApprovalManager.php';
+namespace NYP\Modules\PartnerAccess;
 
 class PartnerAccessModule
 {

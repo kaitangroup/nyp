@@ -8,4 +8,8 @@
 
 if (!defined('ABSPATH')) exit;
 
-require_once __DIR__ . '/bootstrap/app.php';
+
+
+define('NYP_PLUGIN_PATH', plugin_dir_path(__FILE__));
+
+require_once NYP_PLUGIN_PATH . 'bootstrap/app.php';

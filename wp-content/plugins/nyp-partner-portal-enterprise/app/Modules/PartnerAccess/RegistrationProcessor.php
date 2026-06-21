@@ -1,8 +1,7 @@
 <?php
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+namespace NYP\Modules\PartnerAccess;
+use WP_User;
 
 class RegistrationProcessor
 {
