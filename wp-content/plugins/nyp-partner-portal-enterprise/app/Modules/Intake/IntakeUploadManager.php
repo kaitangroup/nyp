@@ -80,7 +80,11 @@ class IntakeUploadManager
             return;
         }
 
+        error_log('BEFORE VALIDATION');
+
         $this->validateUploads();
+
+        error_log('AFTER VALIDATION');
 
         $uploadDir = wp_upload_dir();
 
@@ -149,6 +153,14 @@ class IntakeUploadManager
         int $orderId,
         string $metaKey
     ): void {
+
+        error_log(
+            'SINGLE FILE DATA: ' .
+            print_r(
+                $_FILES[$field] ?? [],
+                true
+            )
+        );
     
         if (
             empty($_FILES[$field]['name'])

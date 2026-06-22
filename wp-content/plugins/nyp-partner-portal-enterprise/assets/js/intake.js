@@ -9,13 +9,17 @@ document.addEventListener(
             .forEach(function(input){
 
                 FilePond.create(input, {
+
+                    storeAsFile: true,
+
                     allowMultiple:
                         input.hasAttribute(
                             'multiple'
                         ),
-                maxFiles: 10,
 
-                maxFileSize: '50MB'
+                    maxFiles: 10,
+
+                    maxFileSize: '50MB'
 
                 });
 
