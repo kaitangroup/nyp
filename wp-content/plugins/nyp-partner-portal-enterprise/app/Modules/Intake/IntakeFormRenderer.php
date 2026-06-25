@@ -58,9 +58,13 @@ class IntakeFormRenderer
         //     0
         // );
 
-        $isSubmitted = (bool) $order->get_meta(
+        $isSubmitted =
+        $order->get_meta(
             '_nyp_brief_submitted'
-        );
+        ) === 'yes';
+         
+
+         echo $isSubmitted;
         $readonly = $isSubmitted
     ? 'readonly'
     : '';
