@@ -247,6 +247,8 @@ class IntakeOrderStorage
             '_nyp_additional_files'
         );
 
+        $order = wc_get_order($orderId);
+
         /*
         |--------------------------------------------------------------------------
         | Validate required floor plan AFTER uploads
