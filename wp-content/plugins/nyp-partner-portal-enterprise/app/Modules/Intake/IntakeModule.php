@@ -7,7 +7,7 @@ class IntakeModule {
         (new IntakeFormRenderer())->register();
         (new IntakeValidator())->register();
         (new IntakeOrderStorage())->register();
-        (new IntakeUploadManager())->register();
+     //  (new IntakeUploadManager())->register();
         (new IntakeAdminView())->register();
         (new OrderWorkflowManager())->register();
         (new IntakeAccountActions())->register();

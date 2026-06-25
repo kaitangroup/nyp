@@ -53,7 +53,10 @@ class IntakeFormRenderer
 
         $order = wc_get_order($orderId);
 
-
+        // $order->update_meta_data(
+        //     '_nyp_brief_submitted',
+        //     0
+        // );
 
         $isSubmitted = (bool) $order->get_meta(
             '_nyp_brief_submitted'
@@ -87,6 +90,51 @@ class IntakeFormRenderer
             Planning Brief
         </h2>
 <?php
+
+
+
+$error = sanitize_text_field(
+    wp_unslash(
+        $_GET['nyp_error'] ?? ''
+    )
+);
+
+if ($error) :
+
+?>
+
+<div class="nyp-notice nyp-notice-error">
+
+    <?php
+
+    switch ($error) {
+
+        case 'floor_plan_required':
+
+            echo esc_html__(
+                'Please upload a Floor Plan / Dimensioned Sketch before submitting the Planning Brief.',
+                'nyp'
+            );
+
+            break;
+
+        case 'missing_required_fields':
+
+            echo esc_html__(
+                'Please complete all required fields before submitting the Planning Brief.',
+                'nyp'
+            );
+
+            break;
+
+    }
+
+    ?>
+
+</div>
+
+<?php endif; ?> 
+<?php
             if (
                 isset($_GET['saved'])
             ) {
@@ -109,6 +157,12 @@ class IntakeFormRenderer
     'nyp_save_project_info',
     'nyp_nonce'
 ); ?>
+
+<input
+    type="hidden"
+    name="return_url"
+    value="<?php echo esc_url( get_permalink() . '?order_id=' . $order->get_id() ); ?>"
+>
 
 <input
     type="hidden"
@@ -689,15 +743,43 @@ if (!$selectedCategory) {
         Worktop Material
     </label>
 
-    <input
-        type="text"
-        name="worktop_material"
-        value="<?php echo esc_attr(
-            $order->get_meta(
-                '_nyp_worktop_material'
-            )
-        ); ?>"
-    >
+    <select name="worktop_material">
+
+        <option value="">Select Material</option>
+
+        <option value="laminate" <?php selected($order->get_meta('_nyp_worktop_material'),'laminate'); ?>>
+            Laminate
+        </option>
+
+        <option value="compact_laminate" <?php selected($order->get_meta('_nyp_worktop_material'),'compact_laminate'); ?>>
+            Compact Laminate
+        </option>
+
+        <option value="quartz" <?php selected($order->get_meta('_nyp_worktop_material'),'quartz'); ?>>
+            Quartz
+        </option>
+
+        <option value="granite" <?php selected($order->get_meta('_nyp_worktop_material'),'granite'); ?>>
+            Granite
+        </option>
+
+        <option value="ceramic" <?php selected($order->get_meta('_nyp_worktop_material'),'ceramic'); ?>>
+            Ceramic
+        </option>
+
+        <option value="dekton" <?php selected($order->get_meta('_nyp_worktop_material'),'dekton'); ?>>
+            Dekton
+        </option>
+
+        <option value="wood" <?php selected($order->get_meta('_nyp_worktop_material'),'wood'); ?>>
+            Solid Wood
+        </option>
+
+        <option value="other" <?php selected($order->get_meta('_nyp_worktop_material'),'other'); ?>>
+            Other
+        </option>
+
+    </select>
 
 </div>
 
@@ -706,18 +788,28 @@ if (!$selectedCategory) {
 <div class="nyp-form-row">
 
     <label>
-        Worktop Thickness (mm)
+        Worktop Thickness
     </label>
 
-    <input
-        type="number"
-        name="worktop_thickness"
-        value="<?php echo esc_attr(
-            $order->get_meta(
-                '_nyp_worktop_thickness'
-            )
-        ); ?>"
-    >
+    <select name="worktop_thickness">
+
+        <option value="">Select Thickness</option>
+
+        <option value="12mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'12mm'); ?>>12 mm</option>
+
+        <option value="20mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'20mm'); ?>>20 mm</option>
+
+        <option value="30mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'30mm'); ?>>30 mm</option>
+
+        <option value="38mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'38mm'); ?>>38 mm</option>
+
+        <option value="40mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'40mm'); ?>>40 mm</option>
+
+        <option value="60mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'60mm'); ?>>60 mm</option>
+
+        <option value="other" <?php selected($order->get_meta('_nyp_worktop_thickness'),'other'); ?>>Other</option>
+
+    </select>
 
 </div>
 
@@ -742,36 +834,48 @@ if (!$selectedCategory) {
 <div class="nyp-form-row">
 
     <label>
-        Corpus Height (mm)
+        Corpus Height
     </label>
 
-    <input
-        type="number"
-        name="corpus_height"
-        value="<?php echo esc_attr(
-            $order->get_meta(
-                '_nyp_corpus_height'
-            )
-        ); ?>"
-    >
+    <select name="corpus_height">
+
+        <option value="">Select Height</option>
+
+        <option value="720mm" <?php selected($order->get_meta('_nyp_corpus_height'),'720mm'); ?>>720 mm</option>
+
+        <option value="780mm" <?php selected($order->get_meta('_nyp_corpus_height'),'780mm'); ?>>780 mm</option>
+
+        <option value="792mm" <?php selected($order->get_meta('_nyp_corpus_height'),'792mm'); ?>>792 mm</option>
+
+        <option value="864mm" <?php selected($order->get_meta('_nyp_corpus_height'),'864mm'); ?>>864 mm</option>
+
+        <option value="other" <?php selected($order->get_meta('_nyp_corpus_height'),'other'); ?>>Other</option>
+
+    </select>
 
 </div>
 
 <div class="nyp-form-row">
 
     <label>
-        Plinth Height (mm)
+        Plinth Height
     </label>
 
-    <input
-        type="number"
-        name="plinth_height"
-        value="<?php echo esc_attr(
-            $order->get_meta(
-                '_nyp_plinth_height'
-            )
-        ); ?>"
-    >
+    <select name="plinth_height">
+
+        <option value="">Select Height</option>
+
+        <option value="70mm" <?php selected($order->get_meta('_nyp_plinth_height'),'70mm'); ?>>70 mm</option>
+
+        <option value="100mm" <?php selected($order->get_meta('_nyp_plinth_height'),'100mm'); ?>>100 mm</option>
+
+        <option value="150mm" <?php selected($order->get_meta('_nyp_plinth_height'),'150mm'); ?>>150 mm</option>
+
+        <option value="200mm" <?php selected($order->get_meta('_nyp_plinth_height'),'200mm'); ?>>200 mm</option>
+
+        <option value="other" <?php selected($order->get_meta('_nyp_plinth_height'),'other'); ?>>Other</option>
+
+    </select>
 
 </div>
 
@@ -781,15 +885,39 @@ if (!$selectedCategory) {
         Niche Cladding
     </label>
 
-    <input
-        type="text"
-        name="niche_cladding"
-        value="<?php echo esc_attr(
-            $order->get_meta(
-                '_nyp_niche_cladding'
-            )
-        ); ?>"
-    >
+    <select name="niche_cladding">
+
+        <option value="">Select Niche Cladding</option>
+
+        <option value="same_as_worktop" <?php selected($order->get_meta('_nyp_niche_cladding'),'same_as_worktop'); ?>>
+            Same as Worktop
+        </option>
+
+        <option value="glass" <?php selected($order->get_meta('_nyp_niche_cladding'),'glass'); ?>>
+            Glass
+        </option>
+
+        <option value="ceramic" <?php selected($order->get_meta('_nyp_niche_cladding'),'ceramic'); ?>>
+            Ceramic
+        </option>
+
+        <option value="compact_laminate" <?php selected($order->get_meta('_nyp_niche_cladding'),'compact_laminate'); ?>>
+            Compact Laminate
+        </option>
+
+        <option value="stone" <?php selected($order->get_meta('_nyp_niche_cladding'),'stone'); ?>>
+            Stone
+        </option>
+
+        <option value="painted_wall" <?php selected($order->get_meta('_nyp_niche_cladding'),'painted_wall'); ?>>
+            Painted Wall
+        </option>
+
+        <option value="other" <?php selected($order->get_meta('_nyp_niche_cladding'),'other'); ?>>
+            Other
+        </option>
+
+    </select>
 
 </div>
 
@@ -1231,57 +1359,127 @@ if (!$selectedCategory) {
 
     </div>
 
-    <div class="nyp-form-row">
+    <?php
 
-        <label>
-            Planning Priority
-        </label>
+$planningPriority = $order->get_meta(
+    '_nyp_planning_priority'
+);
 
-        <select name="planning_priority">
 
-            <option value="">
-                Select Priority
-            </option>
 
-            <option value="design">
-                Design / Visual Impact
-            </option>
+?>
 
-            <option value="storage">
-                Storage
-            </option>
+<div class="nyp-form-row">
 
-            <option value="functionality">
-                Functionality / Workflow
-            </option>
+<label>
+    Planning Priority
+</label>
 
-            <option value="budget">
-                Budget-Conscious Planning
-            </option>
+<select name="planning_priority">
 
-            <option value="appliances">
-                Appliances
-            </option>
+    <option
+        value=""
+        <?php selected(
+            $planningPriority,
+            ''
+        ); ?>
+    >
+        Select Priority
+    </option>
 
-            <option value="materials">
-                Materials
-            </option>
+    <option
+        value="balanced"
+        <?php selected(
+            $planningPriority,
+            'balanced'
+        ); ?>
+    >
+        Balanced Approach
+    </option>
 
-            <option value="presentation">
-                Presentation / Sales Impact
-            </option>
+    <option
+        value="design"
+        <?php selected(
+            $planningPriority,
+            'design'
+        ); ?>
+    >
+        Design / Visual Impact
+    </option>
 
-            <option value="balanced">
-                Balanced Approach
-            </option>
+    <option
+        value="storage"
+        <?php selected(
+            $planningPriority,
+            'storage'
+        ); ?>
+    >
+        Storage
+    </option>
 
-            <option value="everyday_use">
-                Easy Everyday Use
-            </option>
+    <option
+        value="functionality"
+        <?php selected(
+            $planningPriority,
+            'functionality'
+        ); ?>
+    >
+        Functionality / Workflow
+    </option>
 
-        </select>
+    <option
+        value="budget"
+        <?php selected(
+            $planningPriority,
+            'budget'
+        ); ?>
+    >
+        Budget-Conscious Planning
+    </option>
 
-    </div>
+    <option
+        value="appliances"
+        <?php selected(
+            $planningPriority,
+            'appliances'
+        ); ?>
+    >
+        Appliances
+    </option>
+
+    <option
+        value="materials"
+        <?php selected(
+            $planningPriority,
+            'materials'
+        ); ?>
+    >
+        Materials
+    </option>
+
+    <option
+        value="presentation"
+        <?php selected(
+            $planningPriority,
+            'presentation'
+        ); ?>
+    >
+        Presentation / Sales Impact
+    </option>
+
+    <option
+        value="everyday_use"
+        <?php selected(
+            $planningPriority,
+            'everyday_use'
+        ); ?>
+    >
+        Easy Everyday Use
+    </option>
+
+</select>
+
+</div>
 
     <div class="nyp-form-row">
 
@@ -1965,7 +2163,7 @@ if (!$selectedCategory) {
         name="nyp_action"
         value="submit_brief"
         class="button button-primary"
-        onclick="return confirm('Are you sure you want to submit this planning brief? After submission you will no longer be able to edit it.');"
+        onclick="return confirm('Are you sure you want to submit this planning brief? After submission, changes may require NYP review.');"
     >
     Review & Continue to Checkout
     </button>
