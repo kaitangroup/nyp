@@ -40,23 +40,34 @@ $fields = [
     // Section 1
     '_nyp_project_name'         => 'project_name',
     '_nyp_reference_number'     => 'reference_number',
-    '_nyp_customer_name'        => 'customer_name',
-    '_nyp_installation_date'    => 'installation_date',
+    '_nyp_studio_contact_person' => 'studio_contact_person',
+
+    '_nyp_planning_category'
+    => 'planning_category',
+
+'_nyp_package_validation_confirmation'
+    => 'package_validation_confirmation',
 
     // Section 2
-    '_nyp_room_shape'           => 'room_shape',
-    '_nyp_kitchen_type'         => 'kitchen_type',
-    '_nyp_room_width'           => 'room_width',
-    '_nyp_room_length'          => 'room_length',
-    '_nyp_ceiling_height'       => 'ceiling_height',
+   
+    '_nyp_kitchen_layout'
+    => 'kitchen_layout',
+
+'_nyp_ceiling_height'
+    => 'ceiling_height',
+ 
+
 
     // Section 3
     '_nyp_manufacturer'         => 'manufacturer',
-    '_nyp_planning_software'    => 'planning_software',
+    '_nyp_finish_concept'
+    => 'finish_concept',
+
+'_nyp_handle_preference'
+    => 'handle_preference',
+
     '_nyp_product_line'         => 'product_line',
-    '_nyp_door_style'           => 'door_style',
-    '_nyp_finish'               => 'finish',
-    '_nyp_existing_planning'    => 'existing_planning',
+
 
     // Section 4
     '_nyp_reuse_appliances'     => 'reuse_appliances',
@@ -78,12 +89,20 @@ $fields = [
 
 // Section 6 - Worktop / Niche / Ergonomics
 
-'_nyp_worktop_material'   => 'worktop_material',
-'_nyp_worktop_thickness'  => 'worktop_thickness',
-'_nyp_work_height'        => 'work_height',
-'_nyp_corpus_height'      => 'corpus_height',
-'_nyp_plinth_height'      => 'plinth_height',
-'_nyp_niche_cladding'     => 'niche_cladding',
+'_nyp_worktop_material' => 'worktop_material',
+'_nyp_worktop_thickness' => 'worktop_thickness',
+'_nyp_work_height' => 'work_height',
+'_nyp_corpus_height' => 'corpus_height',
+'_nyp_plinth_height' => 'plinth_height',
+'_nyp_niche_cladding' => 'niche_cladding',
+'_nyp_corpus_material' => 'corpus_material',
+
+// section 7 - Appliances / Sink / Tap
+'_nyp_sink_model' => 'sink_model',
+'_nyp_sink_finish' => 'sink_finish',
+'_nyp_tap_model' => 'tap_model',
+'_nyp_tap_finish' => 'tap_finish',
+
 
 
 // Section 8 - Budget & Equipment Level
@@ -106,6 +125,7 @@ $fields = [
 '_nyp_drw_required'           => 'drw_required',
 '_nyp_renderings_required'    => 'renderings_required',
 
+
 // Section 10 - Special Wishes / No-Gos
 
 '_nyp_customer_priority' => 'customer_priority',
@@ -126,6 +146,96 @@ foreach ($fields as $metaKey => $fieldName) {
 }
 
 // Textareas
+
+$order->update_meta_data(
+    '_nyp_design_concept',
+    sanitize_textarea_field(
+        wp_unslash(
+            $_POST['design_concept'] ?? ''
+        )
+    )
+);
+
+$order->update_meta_data(
+    '_nyp_must_have_features',
+    sanitize_textarea_field(
+        wp_unslash(
+            $_POST['must_have_features'] ?? ''
+        )
+    )
+);
+
+$order->update_meta_data(
+    '_nyp_nice_to_have_features',
+    sanitize_textarea_field(
+        wp_unslash(
+            $_POST['nice_to_have_features'] ?? ''
+        )
+    )
+);
+
+$order->update_meta_data(
+    '_nyp_no_gos',
+    sanitize_textarea_field(
+        wp_unslash(
+            $_POST['no_gos'] ?? ''
+        )
+    )
+);
+
+$order->update_meta_data(
+    '_nyp_planning_notes',
+    sanitize_textarea_field(
+        wp_unslash(
+            $_POST['planning_notes'] ?? ''
+        )
+    )
+);
+
+$order->update_meta_data(
+    '_nyp_delivery_notes',
+    sanitize_textarea_field(
+        wp_unslash(
+            $_POST['delivery_notes'] ?? ''
+        )
+    )
+);
+
+$order->update_meta_data(
+    '_nyp_budget_notes',
+    sanitize_textarea_field(
+        wp_unslash(
+            $_POST['budget_notes'] ?? ''
+        )
+    )
+);
+
+$order->update_meta_data(
+    '_nyp_water_system_requirements',
+    sanitize_textarea_field(
+        wp_unslash(
+            $_POST['water_system_requirements'] ?? ''
+        )
+    )
+);
+
+$order->update_meta_data(
+    '_nyp_sink_tap_notes',
+    sanitize_textarea_field(
+        wp_unslash(
+            $_POST['sink_tap_notes'] ?? ''
+        )
+    )
+);
+
+$order->update_meta_data(
+    '_nyp_ergonomics_notes',
+    sanitize_textarea_field(
+        wp_unslash(
+            $_POST['ergonomics_notes'] ?? ''
+        )
+    )
+);
 
 $order->update_meta_data(
     '_nyp_installation_address',
@@ -354,20 +464,20 @@ if ($action === 'submit_brief') {
     $requiredConfirmations = [
 
         'confirm_measurements',
-        'confirm_category_review',
-        'confirm_planning_basis',
+        'confirm_scope_review',
+        'confirm_scope_adjustment',
+        'confirm_planning_quality',
         'confirm_budget_guidance',
-        'confirm_delivery_requirements',
-        'confirm_execution_responsibility',
+        'confirm_nyp_responsibility',
     
     ];
     
-    foreach ($requiredConfirmations as $confirmation) {
+    foreach ($requiredConfirmations as $field) {
     
-        if (!isset($_POST[$confirmation])) {
+        if (empty($_POST[$field])) {
     
             wp_die(
-                'Please confirm all required declarations before submitting the planning brief.'
+                'Please accept all required confirmations.'
             );
         }
     }

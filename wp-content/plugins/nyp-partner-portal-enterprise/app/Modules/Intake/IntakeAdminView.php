@@ -192,15 +192,68 @@ public function renderMetaBox($order): void
         
         $this->renderBudgetInformation($order);
         
-        $this->renderSoftwareInformation($order);
+        $this->renderDeliveryFormat($order);
         
-        $this->renderSpecialWishes($order);
+        $this->renderDesignBrief($order);
         
         $this->renderConfirmations($order);
         
         $this->renderUploadedFiles($order);
 
         echo '</div>';
+    }
+
+    private function renderDesignBrief(
+        \WC_Order $order
+    ): void {
+    
+        $this->sectionStart(
+            'Design Brief / Planning Goals'
+        );
+    
+        $this->row(
+            'Design Concept',
+            $order->get_meta(
+                '_nyp_design_concept'
+            )
+        );
+    
+        $this->row(
+            'Planning Priority',
+            $order->get_meta(
+                '_nyp_planning_priority'
+            )
+        );
+    
+        $this->row(
+            'Must-Have Features',
+            $order->get_meta(
+                '_nyp_must_have_features'
+            )
+        );
+    
+        $this->row(
+            'Nice-to-Have Features',
+            $order->get_meta(
+                '_nyp_nice_to_have_features'
+            )
+        );
+    
+        $this->row(
+            'No-Gos / Exclusions',
+            $order->get_meta(
+                '_nyp_no_gos'
+            )
+        );
+    
+        $this->row(
+            'Additional Planning Notes',
+            $order->get_meta(
+                '_nyp_planning_notes'
+            )
+        );
+    
+        $this->sectionEnd();
     }
 
     private function renderConfirmations(
@@ -355,6 +408,31 @@ public function renderMetaBox($order): void
         $this->sectionEnd();
     }
 
+    private function renderDeliveryFormat(
+        \WC_Order $order
+    ): void {
+    
+        $this->sectionStart(
+            'Delivery Format'
+        );
+    
+        $this->row(
+            'Delivery Format',
+            $order->get_meta(
+                '_nyp_delivery_format'
+            )
+        );
+    
+        $this->row(
+            'Delivery Notes',
+            $order->get_meta(
+                '_nyp_delivery_notes'
+            )
+        );
+    
+        $this->sectionEnd();
+    }
+
     private function renderBudgetInformation(
         \WC_Order $order
     ): void {
@@ -362,70 +440,28 @@ public function renderMetaBox($order): void
         $this->sectionStart(
             'Budget & Equipment Level'
         );
-    
-        $this->row(
-            'Furniture Level',
-            $order->get_meta(
-                '_nyp_furniture_level'
-            )
-        );
-    
-        $this->row(
-            'Manufacturer Fixed',
-            $order->get_meta(
-                '_nyp_manufacturer_fixed'
-            )
-        );
-    
-        $this->row(
-            'Manufacturer Details',
-            $order->get_meta(
-                '_nyp_manufacturer_fixed_details'
-            )
-        );
-    
-        $this->row(
-            'Appliance Class',
-            $order->get_meta(
-                '_nyp_appliance_class'
-            )
-        );
-    
-        $this->row(
-            'Worktop Level',
-            $order->get_meta(
-                '_nyp_worktop_level'
-            )
-        );
-    
+        
         $this->row(
             'Budget Range',
             $order->get_meta(
                 '_nyp_budget_range'
             )
         );
-    
-        $this->row(
-            'Budget Scope',
-            $order->get_meta(
-                '_nyp_budget_scope'
-            )
-        );
-    
+        
         $this->row(
             'Planning Priority',
             $order->get_meta(
                 '_nyp_planning_priority'
             )
         );
-    
+        
         $this->row(
             'Budget Notes',
             $order->get_meta(
                 '_nyp_budget_notes'
             )
         );
-    
+        
         $this->sectionEnd();
     }
 
@@ -439,44 +475,42 @@ public function renderMetaBox($order): void
     
         $this->row(
             'Worktop Material',
-            $order->get_meta(
-                '_nyp_worktop_material'
-            )
+            $order->get_meta('_nyp_worktop_material')
         );
-    
+        
         $this->row(
             'Worktop Thickness',
-            $order->get_meta(
-                '_nyp_worktop_thickness'
-            )
+            $order->get_meta('_nyp_worktop_thickness')
         );
-    
+        
         $this->row(
-            'Work Height',
-            $order->get_meta(
-                '_nyp_work_height'
-            )
+            'Desired Work Height',
+            $order->get_meta('_nyp_work_height')
         );
-    
+        
         $this->row(
             'Corpus Height',
-            $order->get_meta(
-                '_nyp_corpus_height'
-            )
+            $order->get_meta('_nyp_corpus_height')
         );
-    
+        
         $this->row(
             'Plinth Height',
-            $order->get_meta(
-                '_nyp_plinth_height'
-            )
+            $order->get_meta('_nyp_plinth_height')
         );
-    
+        
         $this->row(
             'Niche Cladding',
-            $order->get_meta(
-                '_nyp_niche_cladding'
-            )
+            $order->get_meta('_nyp_niche_cladding')
+        );
+        
+        $this->row(
+            'Front / Corpus Material',
+            $order->get_meta('_nyp_corpus_material')
+        );
+        
+        $this->row(
+            'Ergonomics Notes',
+            $order->get_meta('_nyp_ergonomics_notes')
         );
     
         $this->sectionEnd();
@@ -549,10 +583,20 @@ public function renderMetaBox($order): void
     {
         $this->sectionStart('Room & Kitchen Layout');
 
-        $this->row('Room Shape', $order->get_meta('_nyp_room_shape'));
-        $this->row('Kitchen Type', $order->get_meta('_nyp_kitchen_type'));
-        $this->row('Room Width', $order->get_meta('_nyp_room_width'));
-        $this->row('Room Length', $order->get_meta('_nyp_room_length'));
+        $this->row(
+            'Kitchen Layout',
+            $order->get_meta('_nyp_kitchen_layout')
+        );
+        
+        $this->row(
+            'Ceiling Height',
+            $order->get_meta('_nyp_ceiling_height')
+        );
+        
+        $this->row(
+            'Layout Notes',
+            $order->get_meta('_nyp_layout_notes')
+        );
         $this->row('Ceiling Height', $order->get_meta('_nyp_ceiling_height'));
         $this->row('Layout Notes', $order->get_meta('_nyp_layout_notes'));
 
@@ -563,13 +607,30 @@ public function renderMetaBox($order): void
     {
         $this->sectionStart('Manufacturer Information');
 
-        $this->row('Manufacturer', $order->get_meta('_nyp_manufacturer'));
-        $this->row('Planning Software', $order->get_meta('_nyp_planning_software'));
-        $this->row('Product Line', $order->get_meta('_nyp_product_line'));
-        $this->row('Door Style', $order->get_meta('_nyp_door_style'));
-        $this->row('Finish', $order->get_meta('_nyp_finish'));
-        $this->row('Existing Planning', $order->get_meta('_nyp_existing_planning'));
-        $this->row('Manufacturer Notes', $order->get_meta('_nyp_manufacturer_notes'));
+        $this->row(
+            'Manufacturer',
+            $order->get_meta('_nyp_manufacturer')
+        );
+        
+        $this->row(
+            'Product Line',
+            $order->get_meta('_nyp_product_line')
+        );
+        
+        $this->row(
+            'Handle Preference',
+            $order->get_meta('_nyp_handle_preference')
+        );
+        
+        $this->row(
+            'Color / Finish Concept',
+            $order->get_meta('_nyp_finish_concept')
+        );
+        
+        $this->row(
+            'Manufacturer Notes',
+            $order->get_meta('_nyp_manufacturer_notes')
+        );
 
         $this->sectionEnd();
     }
@@ -588,6 +649,47 @@ public function renderMetaBox($order): void
         $this->row('Dishwasher', $order->get_meta('_nyp_dishwasher'));
         $this->row('Extractor Hood', $order->get_meta('_nyp_extractor_hood'));
         $this->row('Notes', $order->get_meta('_nyp_appliance_notes'));
+        $this->row(
+            'Sink Brand / Model',
+            $order->get_meta(
+                '_nyp_sink_model'
+            )
+        );
+        
+        $this->row(
+            'Sink Color / Finish',
+            $order->get_meta(
+                '_nyp_sink_finish'
+            )
+        );
+        
+        $this->row(
+            'Tap Brand / Model',
+            $order->get_meta(
+                '_nyp_tap_model'
+            )
+        );
+        
+        $this->row(
+            'Tap Color / Finish',
+            $order->get_meta(
+                '_nyp_tap_finish'
+            )
+        );
+        
+        $this->row(
+            'Water System Requirements',
+            $order->get_meta(
+                '_nyp_water_system_requirements'
+            )
+        );
+        
+        $this->row(
+            'Sink / Tap Notes',
+            $order->get_meta(
+                '_nyp_sink_tap_notes'
+            )
+        );
 
         $this->sectionEnd();
     }

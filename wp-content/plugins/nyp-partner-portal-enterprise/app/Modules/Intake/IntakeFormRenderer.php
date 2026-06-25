@@ -12,9 +12,9 @@ class IntakeFormRenderer
     private function getFilePath(
         string $relativePath
     ): string {
-    
+
         $uploadDir = wp_upload_dir();
-    
+
         return
             $uploadDir['basedir']
             . '/'
@@ -27,9 +27,9 @@ class IntakeFormRenderer
     private function getFileUrl(
         string $relativePath
     ): string {
-    
+
         $uploadDir = wp_upload_dir();
-    
+
         return
             $uploadDir['baseurl']
             . '/'
@@ -39,7 +39,7 @@ class IntakeFormRenderer
             );
     }
 
-    
+
     public function render(): string
     {
         $orderId = absint(
@@ -52,9 +52,9 @@ class IntakeFormRenderer
 
 
         $order = wc_get_order($orderId);
-     
 
-       
+
+
         $isSubmitted = (bool) $order->get_meta(
             '_nyp_brief_submitted'
         );
@@ -62,21 +62,21 @@ class IntakeFormRenderer
     ? 'readonly'
     : '';
 
-$disabled = $isSubmitted
-    ? 'disabled'
-    : '';
+        $disabled = $isSubmitted
+            ? 'disabled'
+            : '';
 
-    $isLocked = (bool) $order->get_meta(
-        '_nyp_brief_submitted'
-    );
+        $isLocked = (bool) $order->get_meta(
+            '_nyp_brief_submitted'
+        );
 
-    $submittedAt = $order->get_meta(
-        '_nyp_brief_submitted_at'
-    );
-    
-    $submittedBy = $order->get_meta(
-        '_nyp_brief_submitted_by'
-    );
+        $submittedAt = $order->get_meta(
+            '_nyp_brief_submitted_at'
+        );
+
+        $submittedBy = $order->get_meta(
+            '_nyp_brief_submitted_by'
+        );
 
         ob_start();
         ?>
@@ -94,11 +94,11 @@ $disabled = $isSubmitted
         Project information saved.
     </div>';
 
- if($isSubmitted) {
-    echo '<div class="woocommerce-message">
+                if ($isSubmitted) {
+                    echo '<div class="woocommerce-message">
     Your planning brief has been submitted and can no longer be edited.
     </div>';
- } 
+                }
             }
 
         ?>
@@ -119,328 +119,321 @@ $disabled = $isSubmitted
 <div class="nyp-form-section">
 
     <h3>
-    Project / Commission Data
+        Project / Commission Data
     </h3>
 
-<div class="nyp-form-row">
+    <div class="nyp-form-row">
 
-    <label>
-        Project Name *
-    </label>
-
-    <input
-        type="text"
-        name="project_name"
-        value="<?php echo esc_attr(
-            $order->get_meta(
-                '_nyp_project_name'
-            )
-        ); ?>"
-        required
-    >
-
-</div>
-
-<div class="nyp-form-row">
-
-    <label>
-        Reference Number
-    </label>
-
-    <input
-        type="text"
-        name="reference_number"
-        value="<?php echo esc_attr(
-            $order->get_meta(
-                '_nyp_reference_number'
-            )
-        ); ?>"
-    >
-
-</div>
-
-<div class="nyp-form-row">
-
-    <label>
-        Customer Name *
-    </label>
-
-    <input
-        type="text"
-        name="customer_name"
-        value="<?php echo esc_attr(
-            $order->get_meta(
-                '_nyp_customer_name'
-            )
-        ); ?>"
-        required
-    >
-
-</div>
-
-<div class="nyp-form-row">
-
-    <label>
-        Installation Address *
-    </label>
-
-    <textarea
-        name="installation_address"
-        required><?php
-
-        echo esc_textarea(
-            $order->get_meta(
-                '_nyp_installation_address'
-            )
-        );
-
-        ?></textarea>
-
-</div>
-
-<div class="nyp-form-row">
-
-    <label>
-        Target Installation Date
-    </label>
-
-    <input
-        type="date"
-        name="installation_date"
-        value="<?php echo esc_attr(
-            $order->get_meta(
-                '_nyp_installation_date'
-            )
-        ); ?>"
-    >
-
-</div>
-    </div>
-
-    <div class="nyp-form-section">
-
-<h3>
-    Planning Category
-</h3>
-
-<?php 
-
-
-
-?>
-
-<p class="nyp-section-description">
-    Please review the selected planning category. NYP may pause processing and request an upgrade if the selected category does not match the actual project scope.
-</p>
-
-<?php
-
-$category = '';
-
-foreach ($order->get_items() as $item) {
-
-    $productName = $item->get_name();
-
-    if (
-        (stripos($productName, 'Basic') !== false  ) || ( stripos($productName, 'Basis') !== false)
-    ) {
-
-        $category = 'Basic Planning';
-
-    } elseif (
-        stripos($productName, 'Professional') !== false
-    ) {
-
-        $category = 'Professional Kitchen Design';
-
-    } elseif (
-        stripos($productName, 'Premium') !== false
-    ) {
-
-        $category = 'Premium Room Concept';
-    }
-
-    break;
-}
-
-?>
-
-<div class="nyp-form-row">
-
-    <label>
-        Selected Planning Category
-    </label>
-
-    <input
-        type="text"
-        value="<?php echo esc_attr($category); ?>"
-        readonly
-    >
-
-</div>
-
-<div class="nyp-form-row">
-
-    <label>
-        Category Description
-    </label>
-
-    <div class="nyp-category-info">
-
-        <?php if ($category === 'Basic Planning') : ?>
-
-            <p>
-                Functional planning for simple kitchen layouts with clear specifications and limited design complexity.
-            </p>
-
-        <?php elseif ($category === 'Professional Kitchen Design') : ?>
-
-            <p>
-                High-quality, sellable kitchen planning with stronger design ambition, presentation value and spatial thinking.
-            </p>
-
-        <?php elseif ($category === 'Premium Room Concept') : ?>
-
-            <p>
-                Advanced room and kitchen concept with deeper design development, spatial planning and presentation quality.
-            </p>
-
-        <?php endif; ?>
-
-    </div>
-
-</div>
-
-<div class="nyp-form-row">
-
-    <label class="nyp-checkbox-label">
+        <label>
+            Project Name *
+        </label>
 
         <input
-            type="checkbox"
-            name="category_confirmation"
-            value="yes"
-            <?php checked(
+            type="text"
+            name="project_name"
+            value="<?php echo esc_attr(
                 $order->get_meta(
-                    '_nyp_category_confirmation'
-                ),
-                'yes'
-            ); ?>
+                    '_nyp_project_name'
+                )
+            ); ?>"
             required
         >
 
-        I understand that NYP may review the project scope and request an upgrade if the selected planning category does not match the actual project requirements.
+    </div>
 
-    </label>
+    <div class="nyp-form-row">
+
+        <label>
+            Studio Reference / Project ID
+        </label>
+
+        <input
+            type="text"
+            name="reference_number"
+            value="<?php echo esc_attr(
+                $order->get_meta(
+                    '_nyp_reference_number'
+                )
+            ); ?>"
+        >
+
+    </div>
+
+    <div class="nyp-form-row">
+
+        <label>
+            Studio Contact Person *
+        </label>
+
+        <input
+            type="text"
+            name="studio_contact_person"
+            value="<?php echo esc_attr(
+                $order->get_meta(
+                    '_nyp_studio_contact_person'
+                )
+            ); ?>"
+            required
+        >
+
+    </div>
 
 </div>
 
+<div class="nyp-form-section">
+
+    <h3>
+        Planning Category
+    </h3>
+<?php 
+
+$selectedCategory =
+    $order->get_meta(
+        '_nyp_planning_category'
+    );
+
+if (!$selectedCategory) {
+
+    foreach (
+        $order->get_items()
+        as $item
+    ) {
+
+        $product = method_exists($item, 'get_product') ? $item->get_product() : null;
+
+        if (!$product) {
+            continue;
+        }
+
+        $sku = $product->get_sku();
+
+        switch ($sku) {
+
+            case 'NYP-BASIC':
+                $selectedCategory = 'basic';
+                break;
+
+            case 'NYP-PROFESSIONAL':
+                $selectedCategory = 'professional';
+                break;
+
+            case 'NYP-PREMIUM':
+                $selectedCategory = 'premium';
+                break;
+        }
+
+        break;
+    }
+}
+
+?>
+    <p class="nyp-section-description">
+        Select the planning category that best matches the project scope. NYP will review the submitted project before planning begins.
+    </p>
+
+    <div class="nyp-form-row">
+
+        <label>
+            Planning Category *
+        </label>
+
+        <select
+            name="planning_category"
+            required
+        >
+
+            <option value="">
+                Select Category
+            </option>
+
+            <option
+                value="basic"
+                <?php selected(
+                    $selectedCategory,
+                    'basic'
+                ); ?>
+            >
+                Basic Planning
+            </option>
+
+            <option
+                value="professional"
+                <?php selected(
+                     $selectedCategory,
+                    'professional'
+                ); ?>
+            >
+                Professional Kitchen Design
+            </option>
+
+            <option
+                value="premium"
+                <?php selected(
+                     $selectedCategory,
+                    'premium'
+                ); ?>
+            >
+                Premium Room Concept
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="nyp-form-row">
+
+        <label>
+            Package Validation Confirmation *
+        </label>
+
+        <label class="nyp-checkbox-label">
+
+            <input
+                type="checkbox"
+                name="package_validation_confirmation"
+                value="yes"
+                <?php checked(
+                    $order->get_meta(
+                        '_nyp_package_validation_confirmation'
+                    ),
+                    'yes'
+                ); ?>
+                required
+            >
+
+            I understand that NYP may review the submitted project scope before planning begins. If the selected category does not match the actual requirements, NYP may request an upgrade, reduce the planning scope, or pause the project until the scope is clarified.
+
+        </label>
+
+    </div>
+
 </div>
 
-    <div class="nyp-form-section">
+<div class="nyp-form-section">
 
 <h3>
     Room & Kitchen Layout
 </h3>
 
 <p class="nyp-section-description">
-    Please provide basic room and layout information.
+    Room dimensions should primarily be provided through the uploaded floor plan or dimensioned sketch. Additional notes can be added below.
 </p>
 
 <div class="nyp-form-row">
 
     <label>
-        Room Shape
+        Kitchen Layout *
     </label>
 
-    <select name="room_shape">
+    <select
+        name="kitchen_layout"
+        required
+    >
 
         <option value="">
-            Select
+            Select Layout
         </option>
 
-        <option value="rectangular">
-            Rectangular
+        <option value="single_wall"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'single_wall'
+            ); ?>
+        >
+            Single wall kitchen
         </option>
 
-        <option value="square">
-            Square
+        <option value="galley"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'galley'
+            ); ?>
+        >
+            Galley / two-line kitchen
         </option>
 
-        <option value="open_plan">
-            Open Plan
+        <option value="l_shape"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'l_shape'
+            ); ?>
+        >
+            L-shaped kitchen
         </option>
 
-        <option value="irregular">
-            Irregular
+        <option value="u_shape"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'u_shape'
+            ); ?>
+        >
+            U-shaped kitchen
+        </option>
+
+        <option value="island"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'island'
+            ); ?>
+        >
+            Island kitchen
+        </option>
+
+        <option value="peninsula"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'peninsula'
+            ); ?>
+        >
+            Peninsula kitchen
+        </option>
+
+        <option value="appliance_wall"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'appliance_wall'
+            ); ?>
+        >
+            Kitchen with appliance wall
+        </option>
+
+        <option value="open_plan"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'open_plan'
+            ); ?>
+        >
+            Open-plan kitchen
+        </option>
+
+        <option value="living_dining"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'living_dining'
+            ); ?>
+        >
+            Kitchen-living-dining concept
+        </option>
+
+        <option value="not_defined"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'not_defined'
+            ); ?>
+        >
+            Not defined yet
+        </option>
+
+        <option value="other"
+            <?php selected(
+                $order->get_meta('_nyp_kitchen_layout'),
+                'other'
+            ); ?>
+        >
+            Other / special layout
         </option>
 
     </select>
-
-</div>
-
-<div class="nyp-form-row">
-
-    <label>
-        Kitchen Type
-    </label>
-
-    <select name="kitchen_type">
-
-        <option value="">
-            Select
-        </option>
-
-        <option value="single_wall">
-            Single Wall
-        </option>
-
-        <option value="galley">
-            Galley
-        </option>
-
-        <option value="l_shape">
-            L-Shape
-        </option>
-
-        <option value="u_shape">
-            U-Shape
-        </option>
-
-        <option value="island">
-            Island
-        </option>
-
-        <option value="peninsula">
-            Peninsula
-        </option>
-
-    </select>
-
-</div>
-
-<div class="nyp-form-row">
-
-    <label>
-        Room Width (mm)
-    </label>
-
-    <input
-        type="number"
-        name="room_width"
-    >
-
-</div>
-
-<div class="nyp-form-row">
-
-    <label>
-        Room Length (mm)
-    </label>
-
-    <input
-        type="number"
-        name="room_length"
-    >
 
 </div>
 
@@ -453,6 +446,13 @@ foreach ($order->get_items() as $item) {
     <input
         type="number"
         name="ceiling_height"
+        min="0"
+        step="1"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_ceiling_height'
+            )
+        ); ?>"
     >
 
 </div>
@@ -460,25 +460,36 @@ foreach ($order->get_items() as $item) {
 <div class="nyp-form-row">
 
     <label>
-        Additional Notes
+        Additional Room / Layout Notes
     </label>
 
     <textarea
         name="layout_notes"
-    ></textarea>
+        rows="4"
+    ><?php
+
+        echo esc_textarea(
+            $order->get_meta(
+                '_nyp_layout_notes'
+            )
+        );
+
+    ?></textarea>
 
 </div>
 
 </div>
+
+<!-- Section 4  -->
 
 <div class="nyp-form-section">
 
     <h3>
-    Manufacturer / Program / Front / Handle
+        Manufacturer / Program / Material Concept
     </h3>
 
     <p class="nyp-section-description">
-        Tell us which manufacturer and planning system are being used for this project.
+        Please provide the preferred manufacturer, collection, material direction and design concept.
     </p>
 
     <div class="nyp-form-row">
@@ -487,52 +498,49 @@ foreach ($order->get_items() as $item) {
             Kitchen Manufacturer *
         </label>
 
-        <input
-            type="text"
+        <select
             name="manufacturer"
-            value="<?php echo esc_attr(
-                $order->get_meta('_nyp_manufacturer')
-            ); ?>"
-            placeholder="e.g. Nobilia, Häcker, Schüller"
             required
         >
 
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Planning Software
-        </label>
-
-        <select name="planning_software">
-
             <option value="">
-                Select
+                Select Manufacturer
             </option>
 
-            <option value="carat">
-                Carat
+            <option value="nobilia"
+                <?php selected(
+                    $order->get_meta('_nyp_manufacturer'),
+                    'nobilia'
+                ); ?>
+            >
+                Nobilia
             </option>
 
-            <option value="winner">
-                Winner
+            <option value="schueller"
+                <?php selected(
+                    $order->get_meta('_nyp_manufacturer'),
+                    'schueller'
+                ); ?>
+            >
+                Schueller
             </option>
 
-            <option value="compusoft">
-                Compusoft
+            <option value="nolte"
+                <?php selected(
+                    $order->get_meta('_nyp_manufacturer'),
+                    'nolte'
+                ); ?>
+            >
+                Nolte
             </option>
 
-            <option value="kps">
-                KPS
-            </option>
-
-            <option value="none">
-                No Planning Software
-            </option>
-
-            <option value="other">
-                Other
+            <option value="other"
+                <?php selected(
+                    $order->get_meta('_nyp_manufacturer'),
+                    'other'
+                ); ?>
+            >
+                Other (only after prior confirmation by NYP)
             </option>
 
         </select>
@@ -549,9 +557,11 @@ foreach ($order->get_items() as $item) {
             type="text"
             name="product_line"
             value="<?php echo esc_attr(
-                $order->get_meta('_nyp_product_line')
+                $order->get_meta(
+                    '_nyp_product_line'
+                )
             ); ?>"
-            placeholder="e.g. Easytouch, Laser, Nova"
+            placeholder="Example: Easytouch, Structura, Nova Lack..."
         >
 
     </div>
@@ -559,55 +569,59 @@ foreach ($order->get_items() as $item) {
     <div class="nyp-form-row">
 
         <label>
-            Front / Door Style
+            Handle / Handleless Preference
         </label>
 
-        <input
-            type="text"
-            name="door_style"
-            value="<?php echo esc_attr(
-                $order->get_meta('_nyp_door_style')
-            ); ?>"
-            placeholder="Optional"
+        <select
+            name="handle_preference"
         >
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Color / Finish
-        </label>
-
-        <input
-            type="text"
-            name="finish"
-            value="<?php echo esc_attr(
-                $order->get_meta('_nyp_finish')
-            ); ?>"
-            placeholder="Optional"
-        >
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Existing Planning Available?
-        </label>
-
-        <select name="existing_planning">
 
             <option value="">
                 Select
             </option>
 
-            <option value="yes">
-                Yes
+            <option value="handleless"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_handle_preference'
+                    ),
+                    'handleless'
+                ); ?>
+            >
+                Handleless
             </option>
 
-            <option value="no">
-                No
+            <option value="handles"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_handle_preference'
+                    ),
+                    'handles'
+                ); ?>
+            >
+                Handles
+            </option>
+
+            <option value="mixed"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_handle_preference'
+                    ),
+                    'mixed'
+                ); ?>
+            >
+                Mixed
+            </option>
+
+            <option value="no_preference"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_handle_preference'
+                    ),
+                    'no_preference'
+                ); ?>
+            >
+                No Preference
             </option>
 
         </select>
@@ -617,7 +631,32 @@ foreach ($order->get_items() as $item) {
     <div class="nyp-form-row">
 
         <label>
-            Special Manufacturer Notes
+            Color / Finish Concept
+        </label>
+
+        <textarea
+            name="finish_concept"
+            rows="4"
+        ><?php
+
+            echo esc_textarea(
+                $order->get_meta(
+                    '_nyp_finish_concept'
+                )
+            );
+
+        ?></textarea>
+
+        <small>
+            Example: Island in dark green, tall units in white, worktop in stone look.
+        </small>
+
+    </div>
+
+    <div class="nyp-form-row">
+
+        <label>
+            Special Manufacturer / Material Notes
         </label>
 
         <textarea
@@ -626,7 +665,9 @@ foreach ($order->get_items() as $item) {
         ><?php
 
             echo esc_textarea(
-                $order->get_meta('_nyp_manufacturer_notes')
+                $order->get_meta(
+                    '_nyp_manufacturer_notes'
+                )
             );
 
         ?></textarea>
@@ -635,225 +676,191 @@ foreach ($order->get_items() as $item) {
 
 </div>
 
+<!-- Section 5  -->
 <div class="nyp-form-section">
 
-    <h3>
-        Worktop / Niche / Ergonomics
-    </h3>
+<h3>
+    Worktop / Niche / Ergonomics
+</h3>
 
-    <p class="nyp-section-description">
-        Please specify worktop preferences, ergonomic requirements and niche design details. Open answers such as "Please suggest" are acceptable.
-    </p>
+<div class="nyp-form-row">
 
-    <div class="nyp-form-row">
+    <label>
+        Worktop Material
+    </label>
 
-        <label>
-            Worktop Material
-        </label>
-
-        <select name="worktop_material">
-
-            <option value="">Select</option>
-
-            <option value="laminate" <?php selected($order->get_meta('_nyp_worktop_material'), 'laminate'); ?>>
-                Laminate
-            </option>
-
-            <option value="compact" <?php selected($order->get_meta('_nyp_worktop_material'), 'compact'); ?>>
-                Compact
-            </option>
-
-            <option value="glass" <?php selected($order->get_meta('_nyp_worktop_material'), 'glass'); ?>>
-                Glass Worktop
-            </option>
-
-            <option value="ceramic" <?php selected($order->get_meta('_nyp_worktop_material'), 'ceramic'); ?>>
-                Ceramic
-            </option>
-
-            <option value="quartz" <?php selected($order->get_meta('_nyp_worktop_material'), 'quartz'); ?>>
-                Quartz Composite
-            </option>
-
-            <option value="natural_stone" <?php selected($order->get_meta('_nyp_worktop_material'), 'natural_stone'); ?>>
-                Natural Stone
-            </option>
-
-            <option value="dekton" <?php selected($order->get_meta('_nyp_worktop_material'), 'dekton'); ?>>
-                Dekton / Sintered Stone
-            </option>
-
-            <option value="wood" <?php selected($order->get_meta('_nyp_worktop_material'), 'wood'); ?>>
-                Wood
-            </option>
-
-            <option value="stainless" <?php selected($order->get_meta('_nyp_worktop_material'), 'stainless'); ?>>
-                Stainless Steel
-            </option>
-
-            <option value="please_suggest" <?php selected($order->get_meta('_nyp_worktop_material'), 'please_suggest'); ?>>
-                Please Suggest
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Worktop Thickness
-        </label>
-
-        <select name="worktop_thickness">
-
-            <option value="">Select</option>
-
-            <option value="10mm">10 mm</option>
-            <option value="12mm">12 mm</option>
-            <option value="16mm">16 mm</option>
-            <option value="20mm">20 mm</option>
-            <option value="25mm">25 mm</option>
-            <option value="30mm">30 mm</option>
-            <option value="40mm">40 mm</option>
-            <option value="please_suggest">Please Suggest</option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Desired Work Height
-        </label>
-
-        <input
-            type="text"
-            name="work_height"
-            value="<?php echo esc_attr(
-                $order->get_meta('_nyp_work_height')
-            ); ?>"
-            placeholder="e.g. 92 cm or Please Suggest"
-        >
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Corpus Height
-        </label>
-
-        <select name="corpus_height">
-
-            <option value="">Select</option>
-
-            <option value="standard">Standard</option>
-            <option value="xl">XL</option>
-            <option value="please_suggest">Please Suggest</option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Plinth Height
-        </label>
-
-        <select name="plinth_height">
-
-            <option value="">Select</option>
-
-            <option value="5">5 cm</option>
-            <option value="7.5">7.5 cm</option>
-            <option value="10">10 cm</option>
-            <option value="12.5">12.5 cm</option>
-            <option value="15">15 cm</option>
-            <option value="please_suggest">Please Suggest</option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Niche Cladding
-        </label>
-
-        <select name="niche_cladding">
-
-            <option value="">Select</option>
-
-            <option value="none">No Niche Cladding</option>
-            <option value="glass">Glass</option>
-            <option value="mirror">Mirror</option>
-            <option value="corpus_material">Corpus Material</option>
-            <option value="worktop_material">Worktop Material</option>
-            <option value="tiles">Tiles</option>
-            <option value="stone_ceramic">Stone / Ceramic</option>
-            <option value="please_suggest">Please Suggest</option>
-
-        </select>
-
-    </div>
+    <input
+        type="text"
+        name="worktop_material"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_worktop_material'
+            )
+        ); ?>"
+    >
 
 </div>
 
+
+
+<div class="nyp-form-row">
+
+    <label>
+        Worktop Thickness (mm)
+    </label>
+
+    <input
+        type="number"
+        name="worktop_thickness"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_worktop_thickness'
+            )
+        ); ?>"
+    >
+
+</div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Desired Work Height (mm)
+    </label>
+
+    <input
+        type="number"
+        name="work_height"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_work_height'
+            )
+        ); ?>"
+    >
+
+</div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Corpus Height (mm)
+    </label>
+
+    <input
+        type="number"
+        name="corpus_height"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_corpus_height'
+            )
+        ); ?>"
+    >
+
+</div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Plinth Height (mm)
+    </label>
+
+    <input
+        type="number"
+        name="plinth_height"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_plinth_height'
+            )
+        ); ?>"
+    >
+
+</div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Niche Cladding
+    </label>
+
+    <input
+        type="text"
+        name="niche_cladding"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_niche_cladding'
+            )
+        ); ?>"
+    >
+
+</div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Front / Corpus Material
+    </label>
+
+    <input
+        type="text"
+        name="corpus_material"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_corpus_material'
+            )
+        ); ?>"
+    >
+
+</div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Worktop / Niche / Ergonomics Notes
+    </label>
+
+    <textarea
+        name="ergonomics_notes"
+        rows="4"
+    ><?php
+
+        echo esc_textarea(
+            $order->get_meta(
+                '_nyp_ergonomics_notes'
+            )
+        );
+
+    ?></textarea>
+
+</div>
+
+</div>
+
+<!-- Section 6 -->
+
 <div class="nyp-form-section">
 
     <h3>
-    Appliances / Sink / Tap
+        Appliances / Sink / Tap
     </h3>
 
     <p class="nyp-section-description">
-        Please provide appliance requirements and indicate whether existing appliances will be reused.
+        Please specify appliance preferences together with sink, tap and water system requirements.
     </p>
 
     <div class="nyp-form-row">
 
         <label>
-            Existing Appliances To Reuse?
-        </label>
-
-        <select name="reuse_appliances">
-
-            <option value="">
-                Select
-            </option>
-
-            <option value="yes">
-                Yes
-            </option>
-
-            <option value="no">
-                No
-            </option>
-
-            <option value="partial">
-                Partially
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Preferred Appliance Manufacturer
+            Preferred Appliance Brand
         </label>
 
         <input
             type="text"
             name="appliance_brand"
             value="<?php echo esc_attr(
-                $order->get_meta('_nyp_appliance_brand')
+                $order->get_meta(
+                    '_nyp_appliance_brand'
+                )
             ); ?>"
-            placeholder="e.g. Bosch, Siemens, Miele, Neff"
+            placeholder="e.g. Siemens, Bosch, Miele, Neff"
         >
 
     </div>
@@ -861,16 +868,17 @@ foreach ($order->get_items() as $item) {
     <div class="nyp-form-row">
 
         <label>
-            Hob / Cooktop
+            Cooktop
         </label>
 
         <input
             type="text"
             name="cooktop"
             value="<?php echo esc_attr(
-                $order->get_meta('_nyp_cooktop')
+                $order->get_meta(
+                    '_nyp_cooktop'
+                )
             ); ?>"
-            placeholder="Induction, Gas, Existing Model..."
         >
 
     </div>
@@ -885,9 +893,10 @@ foreach ($order->get_items() as $item) {
             type="text"
             name="oven"
             value="<?php echo esc_attr(
-                $order->get_meta('_nyp_oven')
+                $order->get_meta(
+                    '_nyp_oven'
+                )
             ); ?>"
-            placeholder="Model or requirements"
         >
 
     </div>
@@ -902,9 +911,10 @@ foreach ($order->get_items() as $item) {
             type="text"
             name="microwave"
             value="<?php echo esc_attr(
-                $order->get_meta('_nyp_microwave')
+                $order->get_meta(
+                    '_nyp_microwave'
+                )
             ); ?>"
-            placeholder="Optional"
         >
 
     </div>
@@ -919,9 +929,10 @@ foreach ($order->get_items() as $item) {
             type="text"
             name="refrigerator"
             value="<?php echo esc_attr(
-                $order->get_meta('_nyp_refrigerator')
+                $order->get_meta(
+                    '_nyp_refrigerator'
+                )
             ); ?>"
-            placeholder="Integrated / Freestanding"
         >
 
     </div>
@@ -936,9 +947,10 @@ foreach ($order->get_items() as $item) {
             type="text"
             name="freezer"
             value="<?php echo esc_attr(
-                $order->get_meta('_nyp_freezer')
+                $order->get_meta(
+                    '_nyp_freezer'
+                )
             ); ?>"
-            placeholder="Optional"
         >
 
     </div>
@@ -949,14 +961,33 @@ foreach ($order->get_items() as $item) {
             Dishwasher
         </label>
 
-        <input
-            type="text"
-            name="dishwasher"
-            value="<?php echo esc_attr(
-                $order->get_meta('_nyp_dishwasher')
-            ); ?>"
-            placeholder="Integrated / Existing"
-        >
+        <select name="dishwasher">
+
+            <option value="">
+                Select
+            </option>
+
+            <option value="integrated">
+                Integrated dishwasher
+            </option>
+
+            <option value="existing">
+                Existing dishwasher to be planned in
+            </option>
+
+            <option value="none">
+                No dishwasher required
+            </option>
+
+            <option value="raised">
+                Raised dishwasher requested
+            </option>
+
+            <option value="suggest">
+                Please suggest
+            </option>
+
+        </select>
 
     </div>
 
@@ -970,33 +1001,133 @@ foreach ($order->get_items() as $item) {
             type="text"
             name="extractor_hood"
             value="<?php echo esc_attr(
-                $order->get_meta('_nyp_extractor_hood')
+                $order->get_meta(
+                    '_nyp_extractor_hood'
+                )
             ); ?>"
-            placeholder="Ceiling, Wall, Downdraft..."
         >
 
     </div>
 
     <div class="nyp-form-row">
 
-        <label>
-            Additional Appliance Requirements
-        </label>
+    <label>
+        Sink Brand / Model
+    </label>
 
-        <textarea
-            name="appliance_notes"
-            rows="4"
-        ><?php
-
-            echo esc_textarea(
-                $order->get_meta('_nyp_appliance_notes')
-            );
-
-        ?></textarea>
-
-    </div>
+    <input
+        type="text"
+        name="sink_model"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_sink_model'
+            )
+        ); ?>"
+        placeholder="e.g. Blanco Subline"
+    >
 
 </div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Sink Color / Finish
+    </label>
+
+    <input
+        type="text"
+        name="sink_finish"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_sink_finish'
+            )
+        ); ?>"
+    >
+
+</div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Tap Brand / Model
+    </label>
+
+    <input
+        type="text"
+        name="tap_model"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_tap_model'
+            )
+        ); ?>"
+        placeholder="e.g. Quooker Flex"
+    >
+
+</div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Tap Color / Finish
+    </label>
+
+    <input
+        type="text"
+        name="tap_finish"
+        value="<?php echo esc_attr(
+            $order->get_meta(
+                '_nyp_tap_finish'
+            )
+        ); ?>"
+    >
+
+</div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Special Tap / Water System Requirements
+    </label>
+
+    <textarea
+        name="water_system_requirements"
+        rows="3"
+    ><?php
+
+        echo esc_textarea(
+            $order->get_meta(
+                '_nyp_water_system_requirements'
+            )
+        );
+
+    ?></textarea>
+
+</div>
+
+<div class="nyp-form-row">
+
+    <label>
+        Sink / Tap / Water System Notes
+    </label>
+
+    <textarea
+        name="sink_tap_notes"
+        rows="4"
+    ><?php
+
+        echo esc_textarea(
+            $order->get_meta(
+                '_nyp_sink_tap_notes'
+            )
+        );
+
+    ?></textarea>
+
+</div>
+
+</div>
+
+<!-- Section 7 -->
 
 <div class="nyp-form-section">
 
@@ -1005,246 +1136,95 @@ foreach ($order->get_items() as $item) {
     </h3>
 
     <p class="nyp-section-description">
-        The most important information is the desired quality and equipment level, not necessarily the exact customer budget.
+
+        Budget information is used only as planning orientation.
+
+        NYP does not provide final price calculation or sales pricing.
+
     </p>
 
     <div class="nyp-form-row">
 
         <label>
-            Furniture / Manufacturer Level
-        </label>
-
-        <select name="furniture_level">
-
-            <option value="">Select</option>
-
-            <option value="entry" <?php selected($order->get_meta('_nyp_furniture_level'), 'entry'); ?>>
-                Entry Level
-            </option>
-
-            <option value="mid_range" <?php selected($order->get_meta('_nyp_furniture_level'), 'mid_range'); ?>>
-                Solid Mid-Range
-            </option>
-
-            <option value="elevated" <?php selected($order->get_meta('_nyp_furniture_level'), 'elevated'); ?>>
-                Elevated Segment
-            </option>
-
-            <option value="premium" <?php selected($order->get_meta('_nyp_furniture_level'), 'premium'); ?>>
-                Premium
-            </option>
-
-            <option value="high_end" <?php selected($order->get_meta('_nyp_furniture_level'), 'high_end'); ?>>
-                High-End
-            </option>
-
-            <option value="fixed" <?php selected($order->get_meta('_nyp_furniture_level'), 'fixed'); ?>>
-                Manufacturer Fixed
-            </option>
-
-            <option value="please_suggest" <?php selected($order->get_meta('_nyp_furniture_level'), 'please_suggest'); ?>>
-                Please Suggest
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Manufacturer / Program Fixed?
-        </label>
-
-        <select name="manufacturer_fixed">
-
-            <option value="">Select</option>
-
-            <option value="yes">
-                Yes
-            </option>
-
-            <option value="no">
-                No
-            </option>
-
-            <option value="still_open">
-                Still Open
-            </option>
-
-            <option value="please_suggest">
-                Please Suggest
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Manufacturer Details
-        </label>
-
-        <input
-            type="text"
-            name="manufacturer_fixed_details"
-            value="<?php echo esc_attr(
-                $order->get_meta(
-                    '_nyp_manufacturer_fixed_details'
-                )
-            ); ?>"
-            placeholder="If fixed, specify manufacturer or program"
-        >
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Appliance Class
-        </label>
-
-        <select name="appliance_class">
-
-            <option value="">Select</option>
-
-            <option value="entry">
-                Entry
-            </option>
-
-            <option value="mid_range">
-                Mid-Range
-            </option>
-
-            <option value="elevated">
-                Elevated
-            </option>
-
-            <option value="premium">
-                Premium (e.g. Miele / Higher BSH)
-            </option>
-
-            <option value="high_end">
-                High-End (Gaggenau, Bora Professional, V-Zug)
-            </option>
-
-            <option value="fixed">
-                Appliances Fixed
-            </option>
-
-            <option value="please_suggest">
-                Please Suggest
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Worktop Level
-        </label>
-
-        <select name="worktop_level">
-
-            <option value="">Select</option>
-
-            <option value="price_conscious">
-                Price Conscious
-            </option>
-
-            <option value="elevated">
-                Elevated
-            </option>
-
-            <option value="premium">
-                Premium
-            </option>
-
-            <option value="high_end">
-                High-End Material Solution
-            </option>
-
-            <option value="please_suggest">
-                Please Suggest
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Budget Range (Planning Orientation)
+            Budget Range / Planning Orientation
         </label>
 
         <select name="budget_range">
 
-            <option value="">Select</option>
-
-            <option value="under_15000">
-                Up to €15,000
+            <option value="">
+                Select Budget Range
             </option>
 
-            <option value="15000_25000">
-                €15,000 – €25,000
+            <option
+                value="under_10000"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_budget_range'
+                    ),
+                    'under_10000'
+                ); ?>
+            >
+                Under €10,000
             </option>
 
-            <option value="25000_40000">
-                €25,000 – €40,000
+            <option
+                value="10000_20000"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_budget_range'
+                    ),
+                    '10000_20000'
+                ); ?>
+            >
+                €10,000 - €20,000
             </option>
 
-            <option value="40000_60000">
-                €40,000 – €60,000
+            <option
+                value="20000_30000"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_budget_range'
+                    ),
+                    '20000_30000'
+                ); ?>
+            >
+                €20,000 - €30,000
             </option>
 
-            <option value="over_60000">
-                Over €60,000
+            <option
+                value="30000_50000"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_budget_range'
+                    ),
+                    '30000_50000'
+                ); ?>
+            >
+                €30,000 - €50,000
             </option>
 
-            <option value="open">
-                Open
+            <option
+                value="50000_plus"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_budget_range'
+                    ),
+                    '50000_plus'
+                ); ?>
+            >
+                €50,000+
             </option>
 
-            <option value="not_relevant">
-                Not Relevant – Plan by Equipment Level
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Budget Refers To
-        </label>
-
-        <select name="budget_scope">
-
-            <option value="">Select</option>
-
-            <option value="furniture">
-                Furniture Only
-            </option>
-
-            <option value="appliances">
-                Appliances Only
-            </option>
-
-            <option value="furniture_appliances">
-                Furniture + Appliances
-            </option>
-
-            <option value="complete_project">
-                Complete Project incl. Worktop & Accessories
-            </option>
-
-            <option value="unclear">
-                Unclear
+            <option
+                value="unknown"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_budget_range'
+                    ),
+                    'unknown'
+                ); ?>
+            >
+                Not Yet Defined
             </option>
 
         </select>
@@ -1259,30 +1239,44 @@ foreach ($order->get_items() as $item) {
 
         <select name="planning_priority">
 
-            <option value="">Select</option>
-
-            <option value="budget">
-                Keep Budget
+            <option value="">
+                Select Priority
             </option>
 
             <option value="design">
-                Design Impact
+                Design / Visual Impact
             </option>
 
             <option value="storage">
-                Storage Capacity
+                Storage
+            </option>
+
+            <option value="functionality">
+                Functionality / Workflow
+            </option>
+
+            <option value="budget">
+                Budget-Conscious Planning
             </option>
 
             <option value="appliances">
-                Appliance Quality
+                Appliances
             </option>
 
             <option value="materials">
-                Material Quality
+                Materials
+            </option>
+
+            <option value="presentation">
+                Presentation / Sales Impact
             </option>
 
             <option value="balanced">
-                Balanced Planning
+                Balanced Approach
+            </option>
+
+            <option value="everyday_use">
+                Easy Everyday Use
             </option>
 
         </select>
@@ -1292,7 +1286,7 @@ foreach ($order->get_items() as $item) {
     <div class="nyp-form-row">
 
         <label>
-            Budget & Equipment Notes
+            Budget / Equipment Notes
         </label>
 
         <textarea
@@ -1312,74 +1306,21 @@ foreach ($order->get_items() as $item) {
 
 </div>
 
+<!-- Section 8 -->
+
 <div class="nyp-form-section">
 
     <h3>
-        Planning Software & Delivery Format
+        Delivery Format
     </h3>
 
     <p class="nyp-section-description">
-        Please specify the planning software currently being used and the preferred delivery format for the final planning files.
+
+        Select the preferred delivery format.
+
+        Renderings included in the selected package will be embedded in the PDF presentation unless otherwise requested.
+
     </p>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Planning Software
-        </label>
-
-        <select name="planning_software_used">
-
-            <option value="">Select</option>
-
-            <option value="winner" <?php selected($order->get_meta('_nyp_planning_software_used'), 'winner'); ?>>
-                Winner
-            </option>
-
-            <option value="carat" <?php selected($order->get_meta('_nyp_planning_software_used'), 'carat'); ?>>
-                Carat
-            </option>
-
-            <option value="compusoft" <?php selected($order->get_meta('_nyp_planning_software_used'), 'compusoft'); ?>>
-                Compusoft
-            </option>
-
-            <option value="kps" <?php selected($order->get_meta('_nyp_planning_software_used'), 'kps'); ?>>
-                KPS
-            </option>
-
-            <option value="2020_design" <?php selected($order->get_meta('_nyp_planning_software_used'), '2020_design'); ?>>
-                2020 Design
-            </option>
-
-            <option value="other" <?php selected($order->get_meta('_nyp_planning_software_used'), 'other'); ?>>
-                Other
-            </option>
-
-            <option value="unknown" <?php selected($order->get_meta('_nyp_planning_software_used'), 'unknown'); ?>>
-                Unknown
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Software Version
-        </label>
-
-        <input
-            type="text"
-            name="software_version"
-            value="<?php echo esc_attr(
-                $order->get_meta('_nyp_software_version')
-            ); ?>"
-            placeholder="e.g. Winner Flex 15"
-        >
-
-    </div>
 
     <div class="nyp-form-row">
 
@@ -1389,82 +1330,80 @@ foreach ($order->get_items() as $item) {
 
         <select name="delivery_format">
 
-            <option value="">Select</option>
-
-            <option value="pdf" <?php selected($order->get_meta('_nyp_delivery_format'), 'pdf'); ?>>
-                PDF Only
+            <option value="">
+                Select Delivery Format
             </option>
 
-            <option value="pdf_images" <?php selected($order->get_meta('_nyp_delivery_format'), 'pdf_images'); ?>>
-                PDF + Images
+            <option
+                value="pdf_only"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_delivery_format'
+                    ),
+                    'pdf_only'
+                ); ?>
+            >
+                PDF Presentation Only
             </option>
 
-            <option value="pdf_drw" <?php selected($order->get_meta('_nyp_delivery_format'), 'pdf_drw'); ?>>
-                PDF + DRW
+            <option
+                value="pdf_renders"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_delivery_format'
+                    ),
+                    'pdf_renders'
+                ); ?>
+            >
+                PDF Presentation + Render Images
             </option>
 
-            <option value="pdf_images_drw" <?php selected($order->get_meta('_nyp_delivery_format'), 'pdf_images_drw'); ?>>
-                PDF + Images + DRW
+            <option
+                value="pdf_drw"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_delivery_format'
+                    ),
+                    'pdf_drw'
+                ); ?>
+            >
+                PDF Presentation + DRW File
             </option>
 
-            <option value="software_export" <?php selected($order->get_meta('_nyp_delivery_format'), 'software_export'); ?>>
-                Native Software Export
+            <option
+                value="pdf_renders_drw"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_delivery_format'
+                    ),
+                    'pdf_renders_drw'
+                ); ?>
+            >
+                PDF Presentation + Render Images + DRW File
             </option>
 
-            <option value="please_suggest" <?php selected($order->get_meta('_nyp_delivery_format'), 'please_suggest'); ?>>
+            <option
+                value="other"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_delivery_format'
+                    ),
+                    'other'
+                ); ?>
+            >
+                Other File Export (Requires NYP Confirmation)
+            </option>
+
+            <option
+                value="suggest"
+                <?php selected(
+                    $order->get_meta(
+                        '_nyp_delivery_format'
+                    ),
+                    'suggest'
+                ); ?>
+            >
                 Please Suggest
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            DRW File Required?
-        </label>
-
-        <select name="drw_required">
-
-            <option value="">Select</option>
-
-            <option value="yes" <?php selected($order->get_meta('_nyp_drw_required'), 'yes'); ?>>
-                Yes
-            </option>
-
-            <option value="no" <?php selected($order->get_meta('_nyp_drw_required'), 'no'); ?>>
-                No
-            </option>
-
-            <option value="if_available" <?php selected($order->get_meta('_nyp_drw_required'), 'if_available'); ?>>
-                If Available
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Renderings Required
-        </label>
-
-        <select name="renderings_required">
-
-            <option value="">Select</option>
-
-            <option value="yes" <?php selected($order->get_meta('_nyp_renderings_required'), 'yes'); ?>>
-                Yes
-            </option>
-
-            <option value="no" <?php selected($order->get_meta('_nyp_renderings_required'), 'no'); ?>>
-                No
-            </option>
-
-            <option value="please_recommend" <?php selected($order->get_meta('_nyp_renderings_required'), 'please_recommend'); ?>>
-                Please Recommend
             </option>
 
         </select>
@@ -1497,12 +1436,85 @@ foreach ($order->get_items() as $item) {
 <div class="nyp-form-section">
 
     <h3>
-        Special Wishes / No-Gos
+        Design Brief / Planning Goals
     </h3>
 
     <p class="nyp-section-description">
-        Please describe any special customer requests, mandatory requirements, restrictions, or elements that should be avoided during planning.
+        Describe the overall design direction and planning objectives for this project.
     </p>
+
+    <div class="nyp-form-row">
+
+        <label>
+            Desired Design Concept / Overall Direction
+        </label>
+
+        <textarea
+            name="design_concept"
+            rows="4"
+        ><?php
+
+            echo esc_textarea(
+                $order->get_meta(
+                    '_nyp_design_concept'
+                )
+            );
+
+        ?></textarea>
+
+    </div>
+
+    <div class="nyp-form-row">
+
+        <label>
+            Planning Priority
+        </label>
+
+        <select name="planning_priority">
+
+            <option value="">
+                Select Priority
+            </option>
+
+            <option value="balanced">
+                Balanced Approach
+            </option>
+
+            <option value="design">
+                Design / Visual Impact
+            </option>
+
+            <option value="storage">
+                Storage
+            </option>
+
+            <option value="functionality">
+                Functionality / Workflow
+            </option>
+
+            <option value="budget">
+                Budget-Conscious Planning
+            </option>
+
+            <option value="appliances">
+                Appliances
+            </option>
+
+            <option value="materials">
+                Materials
+            </option>
+
+            <option value="presentation">
+                Presentation / Sales Impact
+            </option>
+
+            <option value="everyday_use">
+                Easy Everyday Use
+            </option>
+
+        </select>
+
+    </div>
 
     <div class="nyp-form-row">
 
@@ -1513,7 +1525,6 @@ foreach ($order->get_items() as $item) {
         <textarea
             name="must_have_features"
             rows="4"
-            placeholder="e.g. Kitchen island, tall storage wall, Bora cooktop, breakfast area..."
         ><?php
 
             echo esc_textarea(
@@ -1535,7 +1546,6 @@ foreach ($order->get_items() as $item) {
         <textarea
             name="nice_to_have_features"
             rows="4"
-            placeholder="Optional features that would be appreciated if possible."
         ><?php
 
             echo esc_textarea(
@@ -1557,7 +1567,6 @@ foreach ($order->get_items() as $item) {
         <textarea
             name="no_gos"
             rows="4"
-            placeholder="e.g. No wall cabinets, no dark colors, no visible handles..."
         ><?php
 
             echo esc_textarea(
@@ -1573,90 +1582,12 @@ foreach ($order->get_items() as $item) {
     <div class="nyp-form-row">
 
         <label>
-            Customer Priorities
-        </label>
-
-        <select name="customer_priority">
-
-            <option value="">Select</option>
-
-            <option value="design"
-                <?php selected(
-                    $order->get_meta('_nyp_customer_priority'),
-                    'design'
-                ); ?>
-            >
-                Design
-            </option>
-
-            <option value="storage"
-                <?php selected(
-                    $order->get_meta('_nyp_customer_priority'),
-                    'storage'
-                ); ?>
-            >
-                Storage
-            </option>
-
-            <option value="functionality"
-                <?php selected(
-                    $order->get_meta('_nyp_customer_priority'),
-                    'functionality'
-                ); ?>
-            >
-                Functionality
-            </option>
-
-            <option value="budget"
-                <?php selected(
-                    $order->get_meta('_nyp_customer_priority'),
-                    'budget'
-                ); ?>
-            >
-                Budget
-            </option>
-
-            <option value="appliances"
-                <?php selected(
-                    $order->get_meta('_nyp_customer_priority'),
-                    'appliances'
-                ); ?>
-            >
-                Appliances
-            </option>
-
-            <option value="materials"
-                <?php selected(
-                    $order->get_meta('_nyp_customer_priority'),
-                    'materials'
-                ); ?>
-            >
-                Materials
-            </option>
-
-            <option value="balanced"
-                <?php selected(
-                    $order->get_meta('_nyp_customer_priority'),
-                    'balanced'
-                ); ?>
-            >
-                Balanced Approach
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
             Additional Planning Notes
         </label>
 
         <textarea
             name="planning_notes"
-            rows="6"
-            placeholder="Any additional information that may help the planner."
+            rows="5"
         ><?php
 
             echo esc_textarea(
@@ -1671,183 +1602,7 @@ foreach ($order->get_items() as $item) {
 
 </div>
 
-<div class="nyp-form-section">
 
-    <h3>
-    Split into Kitchen Form + Worktop + Special Wishes
-    </h3>
-
-    <p class="nyp-section-description">
-        Please describe the desired design style, materials, storage requirements, and any special customer preferences.
-    </p>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Preferred Design Style
-        </label>
-
-        <select name="design_style">
-
-            <option value="">Select</option>
-
-            <option value="modern">Modern</option>
-
-            <option value="contemporary">Contemporary</option>
-
-            <option value="minimalist">Minimalist</option>
-
-            <option value="classic">Classic</option>
-
-            <option value="country">Country / Cottage</option>
-
-            <option value="industrial">Industrial</option>
-
-            <option value="scandinavian">Scandinavian</option>
-
-            <option value="luxury">Luxury</option>
-
-            <option value="other">Other</option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Preferred Color Scheme
-        </label>
-
-        <input
-            type="text"
-            name="color_scheme"
-            value="<?php echo esc_attr(
-                $order->get_meta('_nyp_color_scheme')
-            ); ?>"
-            placeholder="e.g. White & Oak, Anthracite, Cashmere"
-        >
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Worktop Preference
-        </label>
-
-        <input
-            type="text"
-            name="worktop_preference"
-            value="<?php echo esc_attr(
-                $order->get_meta('_nyp_worktop_preference')
-            ); ?>"
-            placeholder="Quartz, Ceramic, Laminate, Granite..."
-        >
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Handle Preference
-        </label>
-
-        <select name="handle_preference">
-
-            <option value="">Select</option>
-
-            <option value="handleless">Handleless</option>
-
-            <option value="integrated">Integrated Handle</option>
-
-            <option value="bar_handle">Bar Handle</option>
-
-            <option value="knob">Knob</option>
-
-            <option value="no_preference">No Preference</option>
-
-        </select>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Lighting Requirements
-        </label>
-
-        <textarea
-            name="lighting_requirements"
-            rows="3"
-        ><?php
-
-            echo esc_textarea(
-                $order->get_meta('_nyp_lighting_requirements')
-            );
-
-        ?></textarea>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Storage Requirements
-        </label>
-
-        <textarea
-            name="storage_requirements"
-            rows="3"
-        ><?php
-
-            echo esc_textarea(
-                $order->get_meta('_nyp_storage_requirements')
-            );
-
-        ?></textarea>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Special Customer Requests
-        </label>
-
-        <textarea
-            name="customer_requests"
-            rows="4"
-        ><?php
-
-            echo esc_textarea(
-                $order->get_meta('_nyp_customer_requests')
-            );
-
-        ?></textarea>
-
-    </div>
-
-    <div class="nyp-form-row">
-
-        <label>
-            Additional Design Notes
-        </label>
-
-        <textarea
-            name="design_notes"
-            rows="5"
-        ><?php
-
-            echo esc_textarea(
-                $order->get_meta('_nyp_design_notes')
-            );
-
-        ?></textarea>
-
-    </div>
-
-</div>
 
 <div class="nyp-form-section">
 
@@ -1862,7 +1617,7 @@ foreach ($order->get_items() as $item) {
     <div class="nyp-form-row">
 
         <label>
-            Floor Plan / Ground Plan *
+        Floor Plan / Dimensioned Sketch *
         </label>
 
         <input
@@ -1879,7 +1634,7 @@ foreach ($order->get_items() as $item) {
             '_nyp_floor_plan'
         );
 
-       
+
 
         $this->renderUploadedFile(
             'Current Floor Plan',
@@ -1892,7 +1647,7 @@ foreach ($order->get_items() as $item) {
         ?>
 
         <small>
-            Accepted formats: PDF, JPG, JPEG, PNG
+        A dimensioned floor plan or clearly readable hand sketch is required.
         </small>
 
     </div>
@@ -1966,7 +1721,7 @@ foreach ($order->get_items() as $item) {
     <div class="nyp-form-row">
 
         <label>
-            Manufacturer Planning Export
+        Existing Planning / Sketches
         </label>
 
         <input
@@ -1990,7 +1745,7 @@ foreach ($order->get_items() as $item) {
         ?>
 
         <small>
-            Optional export from Carat, Winner, Compusoft, KPS or similar software.
+        Upload existing planning drafts, hand sketches, rough room sketches, screenshots, customer notes or similar documents.
         </small>
 
     </div>
@@ -2069,10 +1824,10 @@ foreach ($order->get_items() as $item) {
     </h3>
 
     <p class="nyp-section-description">
-        Please review and confirm the following statements before submitting the planning brief.
+        Please review and confirm the following statements before proceeding.
     </p>
 
-    <div class="nyp-confirmation-list">
+    <div class="nyp-checkbox-group">
 
         <label class="nyp-checkbox-label">
 
@@ -2081,12 +1836,15 @@ foreach ($order->get_items() as $item) {
                 name="confirm_measurements"
                 value="yes"
                 <?php checked(
-                    $order->get_meta('_nyp_confirm_measurements'),
+                    $order->get_meta(
+                        '_nyp_confirm_measurements'
+                    ),
                     'yes'
                 ); ?>
+                required
             >
 
-            I confirm that all submitted measurements, dimensions and floorplans are correct to the best of my knowledge.
+            I confirm that all submitted measurements, dimensions and floor plans are accurate and complete to the best of my knowledge.
 
         </label>
 
@@ -2094,15 +1852,18 @@ foreach ($order->get_items() as $item) {
 
             <input
                 type="checkbox"
-                name="confirm_category_review"
+                name="confirm_scope_review"
                 value="yes"
                 <?php checked(
-                    $order->get_meta('_nyp_confirm_category_review'),
+                    $order->get_meta(
+                        '_nyp_confirm_scope_review'
+                    ),
                     'yes'
                 ); ?>
+                required
             >
 
-            I understand that NYP may review the selected planning category and request an upgrade if the project scope exceeds the selected service level.
+            I understand that NYP may review the selected planning category before planning begins.
 
         </label>
 
@@ -2110,15 +1871,37 @@ foreach ($order->get_items() as $item) {
 
             <input
                 type="checkbox"
-                name="confirm_planning_basis"
+                name="confirm_scope_adjustment"
                 value="yes"
                 <?php checked(
-                    $order->get_meta('_nyp_confirm_planning_basis'),
+                    $order->get_meta(
+                        '_nyp_confirm_scope_adjustment'
+                    ),
                     'yes'
                 ); ?>
+                required
             >
 
-            I understand that planning quality depends on the accuracy and completeness of the information and files provided.
+            I understand that NYP may request an upgrade, reduce the planning scope, or pause/cancel the project if the selected category does not match the actual project requirements.
+
+        </label>
+
+        <label class="nyp-checkbox-label">
+
+            <input
+                type="checkbox"
+                name="confirm_planning_quality"
+                value="yes"
+                <?php checked(
+                    $order->get_meta(
+                        '_nyp_confirm_planning_quality'
+                    ),
+                    'yes'
+                ); ?>
+                required
+            >
+
+            I understand that planning quality depends on complete and accurate project information.
 
         </label>
 
@@ -2129,12 +1912,15 @@ foreach ($order->get_items() as $item) {
                 name="confirm_budget_guidance"
                 value="yes"
                 <?php checked(
-                    $order->get_meta('_nyp_confirm_budget_guidance'),
+                    $order->get_meta(
+                        '_nyp_confirm_budget_guidance'
+                    ),
                     'yes'
                 ); ?>
+                required
             >
 
-            I understand that budget and equipment information is intended as planning guidance and may require adjustment during project development.
+            I understand that budget and equipment information is used only as planning guidance and does not represent final pricing.
 
         </label>
 
@@ -2142,31 +1928,18 @@ foreach ($order->get_items() as $item) {
 
             <input
                 type="checkbox"
-                name="confirm_delivery_requirements"
+                name="confirm_nyp_responsibility"
                 value="yes"
                 <?php checked(
-                    $order->get_meta('_nyp_confirm_delivery_requirements'),
+                    $order->get_meta(
+                        '_nyp_confirm_nyp_responsibility'
+                    ),
                     'yes'
                 ); ?>
+                required
             >
 
-            I confirm that the selected software, delivery format and planning requirements have been reviewed.
-
-        </label>
-
-        <label class="nyp-checkbox-label">
-
-            <input
-                type="checkbox"
-                name="confirm_execution_responsibility"
-                value="yes"
-                <?php checked(
-                    $order->get_meta('_nyp_confirm_execution_responsibility'),
-                    'yes'
-                ); ?>
-            >
-
-            I understand that NYP provides planning services only and is not responsible for installation, construction work or site execution.
+            I understand that NYP is not responsible for installation, construction work, site execution, final measurements, manufacturer ordering, assembly, or final order verification.
 
         </label>
 
@@ -2194,7 +1967,7 @@ foreach ($order->get_items() as $item) {
         class="button button-primary"
         onclick="return confirm('Are you sure you want to submit this planning brief? After submission you will no longer be able to edit it.');"
     >
-        Submit Planning Brief
+    Review & Continue to Checkout
     </button>
 
 </div>
@@ -2243,11 +2016,11 @@ foreach ($order->get_items() as $item) {
 <input
     type="hidden"
     name="return_url"
-    value="<?php echo esc_url( add_query_arg(
+    value="<?php echo esc_url(add_query_arg(
         'order_id',
         $orderId,
         get_permalink()
-    ) ); ?>"
+    )); ?>"
 >
 </form>
     </div>
@@ -2264,13 +2037,13 @@ foreach ($order->get_items() as $item) {
         bool $allowDelete = true
     ): void {
 
-     
-    
-    
+
+
+
         if (empty($file)) {
             return;
         }
-    
+
         ?>
     
         <div class="nyp-file-card">
@@ -2325,11 +2098,11 @@ foreach ($order->get_items() as $item) {
                 }
             )
         );
-        
+
         if (empty($files)) {
             return;
         }
-    
+
         ?>
     
         <div class="nyp-uploaded-files">
@@ -2345,31 +2118,31 @@ foreach ($order->get_items() as $item) {
                     <div class="nyp-file-name">
     
                         <?php
-    
+
                         $extension = strtolower(
                             pathinfo(
                                 $file,
                                 PATHINFO_EXTENSION
                             )
                         );
-    
-                        $icon = '📄';
-    
-                        if (
-                            in_array(
-                                $extension,
-                                ['jpg', 'jpeg', 'png', 'webp']
-                            )
-                        ) {
-                            $icon = '🖼️';
-                        }
-    
-                        echo $icon . ' ' .
-                            esc_html(
-                                basename($file)
-                            );
-    
-                        ?>
+
+                $icon = '📄';
+
+                if (
+                    in_array(
+                        $extension,
+                        ['jpg', 'jpeg', 'png', 'webp']
+                    )
+                ) {
+                    $icon = '🖼️';
+                }
+
+                echo $icon . ' ' .
+                    esc_html(
+                        basename($file)
+                    );
+
+                ?>
     
                     </div>
     
