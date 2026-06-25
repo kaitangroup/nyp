@@ -73,9 +73,10 @@ class IntakeFormRenderer
             ? 'disabled'
             : '';
 
-        $isLocked = (bool) $order->get_meta(
+        $isLocked = 
+        $order->get_meta(
             '_nyp_brief_submitted'
-        );
+        ) === 'yes';
 
         $submittedAt = $order->get_meta(
             '_nyp_brief_submitted_at'
