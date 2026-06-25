@@ -470,6 +470,19 @@ private function saveIntakeFields(
         );
     }
 
+       /*
+    |--------------------------------------------------------------------------
+    | Textareas
+    |--------------------------------------------------------------------------
+    */
+
+$order->update_meta_data(
+    '_nyp_package_validation_confirmation',
+    !empty($_POST['package_validation_confirmation'])
+        ? 'yes'
+        : 'no'
+);
+
     /*
     |--------------------------------------------------------------------------
     | Textareas
