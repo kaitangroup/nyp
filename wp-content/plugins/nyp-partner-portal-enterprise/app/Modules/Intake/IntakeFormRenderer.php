@@ -2,12 +2,55 @@
 
 namespace NYP\Modules\Intake;
 
+use WC_Order;
+use WC_Product;
+
 class IntakeFormRenderer
 {
-    public function register(): void
+
+    protected ?\WC_Order $order = null;
+
+    protected array $planningData = [];
+
+    private function getReturnUrl(): string
     {
-        add_shortcode('nyp_intake_form', [$this, 'render']);
+        if ($this->order) {
+            return add_query_arg(
+                'order_id',
+                $this->order->get_id(),
+                get_permalink()
+            );
+        }
+    
+        return get_permalink();
     }
+
+  
+
+    private function initialize(): bool
+{
+    $orderId = absint($_GET['order_id'] ?? 0);
+
+    if ($orderId) {
+
+        $this->order = wc_get_order($orderId);
+
+        if (!$this->order) {
+            return false;
+        }
+
+        return true;
+    }
+
+    $session = new \NYP\Services\PlanningSessionStorage();
+
+    $this->planningData = $session->all();
+    
+
+    return true;
+}
+
+
 
     private function getFilePath(
         string $relativePath
@@ -39,32 +82,49 @@ class IntakeFormRenderer
             );
     }
 
+    private function meta(
+        string $key,
+        $default = ''
+    ) {
+    
+        if ($this->order instanceof \WC_Order) {
+            return $this->order->get_meta($key);
+        }
+    
+        return $this->planningData[$key] ?? $default;
+    }
 
-    public function render(): string
-    {
-        $orderId = absint(
-            $_GET['order_id'] ?? 0
-        );
-        if (!$orderId) {
-            return '<p>Invalid order.</p>';
+
+    public function render(?WC_Order $order = null)
+{
+    $this->order = $order;
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Initialize Data Source
+    |--------------------------------------------------------------------------
+    */
+
+    if (!$this->order) {
+
+        if (!$this->initialize()) {
+
+            return '<div class="woocommerce-error">
+                Invalid planning session.
+            </div>';
+
         }
 
+    }
 
-
-        $order = wc_get_order($orderId);
-
-        // $order->update_meta_data(
-        //     '_nyp_brief_submitted',
-        //     0
-        // );
-
+    
         $isSubmitted =
-        $order->get_meta(
+        $this->meta(
             '_nyp_brief_submitted'
         ) === 'yes';
          
 
-         echo $isSubmitted;
+        
         $readonly = $isSubmitted
     ? 'readonly'
     : '';
@@ -74,15 +134,15 @@ class IntakeFormRenderer
             : '';
 
         $isLocked = 
-        $order->get_meta(
+        $this->meta(
             '_nyp_brief_submitted'
         ) === 'yes';
 
-        $submittedAt = $order->get_meta(
+        $submittedAt = $this->meta(
             '_nyp_brief_submitted_at'
         );
 
-        $submittedBy = $order->get_meta(
+        $submittedBy = $this->meta(
             '_nyp_brief_submitted_by'
         );
 
@@ -163,16 +223,12 @@ if ($error) :
     'nyp_nonce'
 ); ?>
 
-<input
-    type="hidden"
-    name="return_url"
-    value="<?php echo esc_url( get_permalink() . '?order_id=' . $order->get_id() ); ?>"
->
+
 
 <input
     type="hidden"
     name="order_id"
-    value="<?php echo esc_attr($orderId); ?>"
+    value="<?php echo esc_attr($this->order ? $this->order->get_id() : ''); ?>"
 >
 
 <div class="nyp-form-section">
@@ -191,7 +247,7 @@ if ($error) :
             type="text"
             name="project_name"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_project_name'
                 )
             ); ?>"
@@ -210,7 +266,7 @@ if ($error) :
             type="text"
             name="reference_number"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_reference_number'
                 )
             ); ?>"
@@ -228,7 +284,7 @@ if ($error) :
             type="text"
             name="studio_contact_person"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_studio_contact_person'
                 )
             ); ?>"
@@ -244,48 +300,96 @@ if ($error) :
     <h3>
         Planning Category
     </h3>
-<?php 
 
-$selectedCategory =
-    $order->get_meta(
-        '_nyp_planning_category'
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Resolve Planning Category
+|--------------------------------------------------------------------------
+|
+| Priority:
+|
+| 1. Previously saved planning category
+| 2. Planning session product (Milestone 3)
+| 3. Existing WooCommerce order (Milestone 2)
+|
+*/
+
+$selectedCategory = $this->meta(
+    '_nyp_planning_category'
+);
+
+if (empty($selectedCategory)) {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Planning Session Product
+    |--------------------------------------------------------------------------
+    */
+
+    $productId = (int) $this->meta(
+        '_nyp_product_id'
     );
 
-if (!$selectedCategory) {
+    if ($productId > 0) {
 
-    foreach (
-        $order->get_items()
-        as $item
-    ) {
+        $product = wc_get_product($productId);
 
-        $product = method_exists($item, 'get_product') ? $item->get_product() : null;
+        if ($product instanceof WC_Product) {
 
-        if (!$product) {
-            continue;
+            switch ($product->get_sku()) {
+
+                case 'NYP-BASIC':
+                    $selectedCategory = 'basic';
+                    break;
+
+                case 'NYP-PROFESSIONAL':
+                    $selectedCategory = 'professional';
+                    break;
+
+                case 'NYP-PREMIUM':
+                    $selectedCategory = 'premium';
+                    break;
+            }
         }
 
-        $sku = $product->get_sku();
+    /*
+    |--------------------------------------------------------------------------
+    | Existing Order (Backward Compatibility)
+    |--------------------------------------------------------------------------
+    */
 
-        switch ($sku) {
+    } elseif ($this->order instanceof WC_Order) {
 
-            case 'NYP-BASIC':
-                $selectedCategory = 'basic';
-                break;
+        foreach ($this->order->get_items() as $item) {
 
-            case 'NYP-PROFESSIONAL':
-                $selectedCategory = 'professional';
-                break;
+            $product = method_exists($item, 'get_product') ? $item->get_product() : null;
 
-            case 'NYP-PREMIUM':
-                $selectedCategory = 'premium';
-                break;
+            if (!$product instanceof WC_Product) {
+                continue;
+            }
+
+            switch ($product->get_sku()) {
+
+                case 'NYP-BASIC':
+                    $selectedCategory = 'basic';
+                    break 2;
+
+                case 'NYP-PROFESSIONAL':
+                    $selectedCategory = 'professional';
+                    break 2;
+
+                case 'NYP-PREMIUM':
+                    $selectedCategory = 'premium';
+                    break 2;
+            }
         }
-
-        break;
     }
 }
 
 ?>
+
     <p class="nyp-section-description">
         Select the planning category that best matches the project scope. NYP will review the submitted project before planning begins.
     </p>
@@ -318,7 +422,7 @@ if (!$selectedCategory) {
             <option
                 value="professional"
                 <?php selected(
-                     $selectedCategory,
+                    $selectedCategory,
                     'professional'
                 ); ?>
             >
@@ -328,7 +432,7 @@ if (!$selectedCategory) {
             <option
                 value="premium"
                 <?php selected(
-                     $selectedCategory,
+                    $selectedCategory,
                     'premium'
                 ); ?>
             >
@@ -352,7 +456,7 @@ if (!$selectedCategory) {
                 name="package_validation_confirmation"
                 value="yes"
                 <?php checked(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_package_validation_confirmation'
                     ),
                     'yes'
@@ -395,7 +499,7 @@ if (!$selectedCategory) {
 
         <option value="single_wall"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'single_wall'
             ); ?>
         >
@@ -404,7 +508,7 @@ if (!$selectedCategory) {
 
         <option value="galley"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'galley'
             ); ?>
         >
@@ -413,7 +517,7 @@ if (!$selectedCategory) {
 
         <option value="l_shape"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'l_shape'
             ); ?>
         >
@@ -422,7 +526,7 @@ if (!$selectedCategory) {
 
         <option value="u_shape"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'u_shape'
             ); ?>
         >
@@ -431,7 +535,7 @@ if (!$selectedCategory) {
 
         <option value="island"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'island'
             ); ?>
         >
@@ -440,7 +544,7 @@ if (!$selectedCategory) {
 
         <option value="peninsula"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'peninsula'
             ); ?>
         >
@@ -449,7 +553,7 @@ if (!$selectedCategory) {
 
         <option value="appliance_wall"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'appliance_wall'
             ); ?>
         >
@@ -458,7 +562,7 @@ if (!$selectedCategory) {
 
         <option value="open_plan"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'open_plan'
             ); ?>
         >
@@ -467,7 +571,7 @@ if (!$selectedCategory) {
 
         <option value="living_dining"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'living_dining'
             ); ?>
         >
@@ -476,7 +580,7 @@ if (!$selectedCategory) {
 
         <option value="not_defined"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'not_defined'
             ); ?>
         >
@@ -485,7 +589,7 @@ if (!$selectedCategory) {
 
         <option value="other"
             <?php selected(
-                $order->get_meta('_nyp_kitchen_layout'),
+                $this->meta('_nyp_kitchen_layout'),
                 'other'
             ); ?>
         >
@@ -508,7 +612,7 @@ if (!$selectedCategory) {
         min="0"
         step="1"
         value="<?php echo esc_attr(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_ceiling_height'
             )
         ); ?>"
@@ -528,7 +632,7 @@ if (!$selectedCategory) {
     ><?php
 
         echo esc_textarea(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_layout_notes'
             )
         );
@@ -568,7 +672,7 @@ if (!$selectedCategory) {
 
             <option value="nobilia"
                 <?php selected(
-                    $order->get_meta('_nyp_manufacturer'),
+                    $this->meta('_nyp_manufacturer'),
                     'nobilia'
                 ); ?>
             >
@@ -577,7 +681,7 @@ if (!$selectedCategory) {
 
             <option value="schueller"
                 <?php selected(
-                    $order->get_meta('_nyp_manufacturer'),
+                    $this->meta('_nyp_manufacturer'),
                     'schueller'
                 ); ?>
             >
@@ -586,7 +690,7 @@ if (!$selectedCategory) {
 
             <option value="nolte"
                 <?php selected(
-                    $order->get_meta('_nyp_manufacturer'),
+                    $this->meta('_nyp_manufacturer'),
                     'nolte'
                 ); ?>
             >
@@ -595,7 +699,7 @@ if (!$selectedCategory) {
 
             <option value="other"
                 <?php selected(
-                    $order->get_meta('_nyp_manufacturer'),
+                    $this->meta('_nyp_manufacturer'),
                     'other'
                 ); ?>
             >
@@ -616,7 +720,7 @@ if (!$selectedCategory) {
             type="text"
             name="product_line"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_product_line'
                 )
             ); ?>"
@@ -641,7 +745,7 @@ if (!$selectedCategory) {
 
             <option value="handleless"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_handle_preference'
                     ),
                     'handleless'
@@ -652,7 +756,7 @@ if (!$selectedCategory) {
 
             <option value="handles"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_handle_preference'
                     ),
                     'handles'
@@ -663,7 +767,7 @@ if (!$selectedCategory) {
 
             <option value="mixed"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_handle_preference'
                     ),
                     'mixed'
@@ -674,7 +778,7 @@ if (!$selectedCategory) {
 
             <option value="no_preference"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_handle_preference'
                     ),
                     'no_preference'
@@ -699,7 +803,7 @@ if (!$selectedCategory) {
         ><?php
 
             echo esc_textarea(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_finish_concept'
                 )
             );
@@ -724,7 +828,7 @@ if (!$selectedCategory) {
         ><?php
 
             echo esc_textarea(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_manufacturer_notes'
                 )
             );
@@ -752,35 +856,35 @@ if (!$selectedCategory) {
 
         <option value="">Select Material</option>
 
-        <option value="laminate" <?php selected($order->get_meta('_nyp_worktop_material'),'laminate'); ?>>
+        <option value="laminate" <?php selected($this->meta('_nyp_worktop_material'),'laminate'); ?>>
             Laminate
         </option>
 
-        <option value="compact_laminate" <?php selected($order->get_meta('_nyp_worktop_material'),'compact_laminate'); ?>>
+        <option value="compact_laminate" <?php selected($this->meta('_nyp_worktop_material'),'compact_laminate'); ?>>
             Compact Laminate
         </option>
 
-        <option value="quartz" <?php selected($order->get_meta('_nyp_worktop_material'),'quartz'); ?>>
+        <option value="quartz" <?php selected($this->meta('_nyp_worktop_material'),'quartz'); ?>>
             Quartz
         </option>
 
-        <option value="granite" <?php selected($order->get_meta('_nyp_worktop_material'),'granite'); ?>>
+        <option value="granite" <?php selected($this->meta('_nyp_worktop_material'),'granite'); ?>>
             Granite
         </option>
 
-        <option value="ceramic" <?php selected($order->get_meta('_nyp_worktop_material'),'ceramic'); ?>>
+        <option value="ceramic" <?php selected($this->meta('_nyp_worktop_material'),'ceramic'); ?>>
             Ceramic
         </option>
 
-        <option value="dekton" <?php selected($order->get_meta('_nyp_worktop_material'),'dekton'); ?>>
+        <option value="dekton" <?php selected($this->meta('_nyp_worktop_material'),'dekton'); ?>>
             Dekton
         </option>
 
-        <option value="wood" <?php selected($order->get_meta('_nyp_worktop_material'),'wood'); ?>>
+        <option value="wood" <?php selected($this->meta('_nyp_worktop_material'),'wood'); ?>>
             Solid Wood
         </option>
 
-        <option value="other" <?php selected($order->get_meta('_nyp_worktop_material'),'other'); ?>>
+        <option value="other" <?php selected($this->meta('_nyp_worktop_material'),'other'); ?>>
             Other
         </option>
 
@@ -800,19 +904,19 @@ if (!$selectedCategory) {
 
         <option value="">Select Thickness</option>
 
-        <option value="12mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'12mm'); ?>>12 mm</option>
+        <option value="12mm" <?php selected($this->meta('_nyp_worktop_thickness'),'12mm'); ?>>12 mm</option>
 
-        <option value="20mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'20mm'); ?>>20 mm</option>
+        <option value="20mm" <?php selected($this->meta('_nyp_worktop_thickness'),'20mm'); ?>>20 mm</option>
 
-        <option value="30mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'30mm'); ?>>30 mm</option>
+        <option value="30mm" <?php selected($this->meta('_nyp_worktop_thickness'),'30mm'); ?>>30 mm</option>
 
-        <option value="38mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'38mm'); ?>>38 mm</option>
+        <option value="38mm" <?php selected($this->meta('_nyp_worktop_thickness'),'38mm'); ?>>38 mm</option>
 
-        <option value="40mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'40mm'); ?>>40 mm</option>
+        <option value="40mm" <?php selected($this->meta('_nyp_worktop_thickness'),'40mm'); ?>>40 mm</option>
 
-        <option value="60mm" <?php selected($order->get_meta('_nyp_worktop_thickness'),'60mm'); ?>>60 mm</option>
+        <option value="60mm" <?php selected($this->meta('_nyp_worktop_thickness'),'60mm'); ?>>60 mm</option>
 
-        <option value="other" <?php selected($order->get_meta('_nyp_worktop_thickness'),'other'); ?>>Other</option>
+        <option value="other" <?php selected($this->meta('_nyp_worktop_thickness'),'other'); ?>>Other</option>
 
     </select>
 
@@ -828,7 +932,7 @@ if (!$selectedCategory) {
         type="number"
         name="work_height"
         value="<?php echo esc_attr(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_work_height'
             )
         ); ?>"
@@ -846,15 +950,15 @@ if (!$selectedCategory) {
 
         <option value="">Select Height</option>
 
-        <option value="720mm" <?php selected($order->get_meta('_nyp_corpus_height'),'720mm'); ?>>720 mm</option>
+        <option value="720mm" <?php selected($this->meta('_nyp_corpus_height'),'720mm'); ?>>720 mm</option>
 
-        <option value="780mm" <?php selected($order->get_meta('_nyp_corpus_height'),'780mm'); ?>>780 mm</option>
+        <option value="780mm" <?php selected($this->meta('_nyp_corpus_height'),'780mm'); ?>>780 mm</option>
 
-        <option value="792mm" <?php selected($order->get_meta('_nyp_corpus_height'),'792mm'); ?>>792 mm</option>
+        <option value="792mm" <?php selected($this->meta('_nyp_corpus_height'),'792mm'); ?>>792 mm</option>
 
-        <option value="864mm" <?php selected($order->get_meta('_nyp_corpus_height'),'864mm'); ?>>864 mm</option>
+        <option value="864mm" <?php selected($this->meta('_nyp_corpus_height'),'864mm'); ?>>864 mm</option>
 
-        <option value="other" <?php selected($order->get_meta('_nyp_corpus_height'),'other'); ?>>Other</option>
+        <option value="other" <?php selected($this->meta('_nyp_corpus_height'),'other'); ?>>Other</option>
 
     </select>
 
@@ -870,15 +974,15 @@ if (!$selectedCategory) {
 
         <option value="">Select Height</option>
 
-        <option value="70mm" <?php selected($order->get_meta('_nyp_plinth_height'),'70mm'); ?>>70 mm</option>
+        <option value="70mm" <?php selected($this->meta('_nyp_plinth_height'),'70mm'); ?>>70 mm</option>
 
-        <option value="100mm" <?php selected($order->get_meta('_nyp_plinth_height'),'100mm'); ?>>100 mm</option>
+        <option value="100mm" <?php selected($this->meta('_nyp_plinth_height'),'100mm'); ?>>100 mm</option>
 
-        <option value="150mm" <?php selected($order->get_meta('_nyp_plinth_height'),'150mm'); ?>>150 mm</option>
+        <option value="150mm" <?php selected($this->meta('_nyp_plinth_height'),'150mm'); ?>>150 mm</option>
 
-        <option value="200mm" <?php selected($order->get_meta('_nyp_plinth_height'),'200mm'); ?>>200 mm</option>
+        <option value="200mm" <?php selected($this->meta('_nyp_plinth_height'),'200mm'); ?>>200 mm</option>
 
-        <option value="other" <?php selected($order->get_meta('_nyp_plinth_height'),'other'); ?>>Other</option>
+        <option value="other" <?php selected($this->meta('_nyp_plinth_height'),'other'); ?>>Other</option>
 
     </select>
 
@@ -894,31 +998,31 @@ if (!$selectedCategory) {
 
         <option value="">Select Niche Cladding</option>
 
-        <option value="same_as_worktop" <?php selected($order->get_meta('_nyp_niche_cladding'),'same_as_worktop'); ?>>
+        <option value="same_as_worktop" <?php selected($this->meta('_nyp_niche_cladding'),'same_as_worktop'); ?>>
             Same as Worktop
         </option>
 
-        <option value="glass" <?php selected($order->get_meta('_nyp_niche_cladding'),'glass'); ?>>
+        <option value="glass" <?php selected($this->meta('_nyp_niche_cladding'),'glass'); ?>>
             Glass
         </option>
 
-        <option value="ceramic" <?php selected($order->get_meta('_nyp_niche_cladding'),'ceramic'); ?>>
+        <option value="ceramic" <?php selected($this->meta('_nyp_niche_cladding'),'ceramic'); ?>>
             Ceramic
         </option>
 
-        <option value="compact_laminate" <?php selected($order->get_meta('_nyp_niche_cladding'),'compact_laminate'); ?>>
+        <option value="compact_laminate" <?php selected($this->meta('_nyp_niche_cladding'),'compact_laminate'); ?>>
             Compact Laminate
         </option>
 
-        <option value="stone" <?php selected($order->get_meta('_nyp_niche_cladding'),'stone'); ?>>
+        <option value="stone" <?php selected($this->meta('_nyp_niche_cladding'),'stone'); ?>>
             Stone
         </option>
 
-        <option value="painted_wall" <?php selected($order->get_meta('_nyp_niche_cladding'),'painted_wall'); ?>>
+        <option value="painted_wall" <?php selected($this->meta('_nyp_niche_cladding'),'painted_wall'); ?>>
             Painted Wall
         </option>
 
-        <option value="other" <?php selected($order->get_meta('_nyp_niche_cladding'),'other'); ?>>
+        <option value="other" <?php selected($this->meta('_nyp_niche_cladding'),'other'); ?>>
             Other
         </option>
 
@@ -936,7 +1040,7 @@ if (!$selectedCategory) {
         type="text"
         name="corpus_material"
         value="<?php echo esc_attr(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_corpus_material'
             )
         ); ?>"
@@ -956,7 +1060,7 @@ if (!$selectedCategory) {
     ><?php
 
         echo esc_textarea(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_ergonomics_notes'
             )
         );
@@ -989,7 +1093,7 @@ if (!$selectedCategory) {
             type="text"
             name="appliance_brand"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_appliance_brand'
                 )
             ); ?>"
@@ -1008,7 +1112,7 @@ if (!$selectedCategory) {
             type="text"
             name="cooktop"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_cooktop'
                 )
             ); ?>"
@@ -1026,7 +1130,7 @@ if (!$selectedCategory) {
             type="text"
             name="oven"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_oven'
                 )
             ); ?>"
@@ -1044,7 +1148,7 @@ if (!$selectedCategory) {
             type="text"
             name="microwave"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_microwave'
                 )
             ); ?>"
@@ -1062,7 +1166,7 @@ if (!$selectedCategory) {
             type="text"
             name="refrigerator"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_refrigerator'
                 )
             ); ?>"
@@ -1080,7 +1184,7 @@ if (!$selectedCategory) {
             type="text"
             name="freezer"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_freezer'
                 )
             ); ?>"
@@ -1134,7 +1238,7 @@ if (!$selectedCategory) {
             type="text"
             name="extractor_hood"
             value="<?php echo esc_attr(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_extractor_hood'
                 )
             ); ?>"
@@ -1152,7 +1256,7 @@ if (!$selectedCategory) {
         type="text"
         name="sink_model"
         value="<?php echo esc_attr(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_sink_model'
             )
         ); ?>"
@@ -1171,7 +1275,7 @@ if (!$selectedCategory) {
         type="text"
         name="sink_finish"
         value="<?php echo esc_attr(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_sink_finish'
             )
         ); ?>"
@@ -1189,7 +1293,7 @@ if (!$selectedCategory) {
         type="text"
         name="tap_model"
         value="<?php echo esc_attr(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_tap_model'
             )
         ); ?>"
@@ -1208,7 +1312,7 @@ if (!$selectedCategory) {
         type="text"
         name="tap_finish"
         value="<?php echo esc_attr(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_tap_finish'
             )
         ); ?>"
@@ -1228,7 +1332,7 @@ if (!$selectedCategory) {
     ><?php
 
         echo esc_textarea(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_water_system_requirements'
             )
         );
@@ -1249,7 +1353,7 @@ if (!$selectedCategory) {
     ><?php
 
         echo esc_textarea(
-            $order->get_meta(
+            $this->meta(
                 '_nyp_sink_tap_notes'
             )
         );
@@ -1291,7 +1395,7 @@ if (!$selectedCategory) {
             <option
                 value="under_10000"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_budget_range'
                     ),
                     'under_10000'
@@ -1303,7 +1407,7 @@ if (!$selectedCategory) {
             <option
                 value="10000_20000"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_budget_range'
                     ),
                     '10000_20000'
@@ -1315,7 +1419,7 @@ if (!$selectedCategory) {
             <option
                 value="20000_30000"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_budget_range'
                     ),
                     '20000_30000'
@@ -1327,7 +1431,7 @@ if (!$selectedCategory) {
             <option
                 value="30000_50000"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_budget_range'
                     ),
                     '30000_50000'
@@ -1339,7 +1443,7 @@ if (!$selectedCategory) {
             <option
                 value="50000_plus"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_budget_range'
                     ),
                     '50000_plus'
@@ -1351,7 +1455,7 @@ if (!$selectedCategory) {
             <option
                 value="unknown"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_budget_range'
                     ),
                     'unknown'
@@ -1366,7 +1470,7 @@ if (!$selectedCategory) {
 
     <?php
 
-$planningPriority = $order->get_meta(
+$planningPriority = $this->meta(
     '_nyp_planning_priority'
 );
 
@@ -1498,7 +1602,7 @@ $planningPriority = $order->get_meta(
         ><?php
 
             echo esc_textarea(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_budget_notes'
                 )
             );
@@ -1540,7 +1644,7 @@ $planningPriority = $order->get_meta(
             <option
                 value="pdf_only"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_delivery_format'
                     ),
                     'pdf_only'
@@ -1552,7 +1656,7 @@ $planningPriority = $order->get_meta(
             <option
                 value="pdf_renders"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_delivery_format'
                     ),
                     'pdf_renders'
@@ -1564,7 +1668,7 @@ $planningPriority = $order->get_meta(
             <option
                 value="pdf_drw"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_delivery_format'
                     ),
                     'pdf_drw'
@@ -1576,7 +1680,7 @@ $planningPriority = $order->get_meta(
             <option
                 value="pdf_renders_drw"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_delivery_format'
                     ),
                     'pdf_renders_drw'
@@ -1588,7 +1692,7 @@ $planningPriority = $order->get_meta(
             <option
                 value="other"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_delivery_format'
                     ),
                     'other'
@@ -1600,7 +1704,7 @@ $planningPriority = $order->get_meta(
             <option
                 value="suggest"
                 <?php selected(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_delivery_format'
                     ),
                     'suggest'
@@ -1625,7 +1729,7 @@ $planningPriority = $order->get_meta(
         ><?php
 
             echo esc_textarea(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_delivery_notes'
                 )
             );
@@ -1658,7 +1762,7 @@ $planningPriority = $order->get_meta(
         ><?php
 
             echo esc_textarea(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_design_concept'
                 )
             );
@@ -1731,7 +1835,7 @@ $planningPriority = $order->get_meta(
         ><?php
 
             echo esc_textarea(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_must_have_features'
                 )
             );
@@ -1752,7 +1856,7 @@ $planningPriority = $order->get_meta(
         ><?php
 
             echo esc_textarea(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_nice_to_have_features'
                 )
             );
@@ -1773,7 +1877,7 @@ $planningPriority = $order->get_meta(
         ><?php
 
             echo esc_textarea(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_no_gos'
                 )
             );
@@ -1794,7 +1898,7 @@ $planningPriority = $order->get_meta(
         ><?php
 
             echo esc_textarea(
-                $order->get_meta(
+                $this->meta(
                     '_nyp_planning_notes'
                 )
             );
@@ -1833,7 +1937,7 @@ $planningPriority = $order->get_meta(
 
         <?php
 
-        $floor_plan = $order->get_meta(
+        $floor_plan = $this->meta(
             '_nyp_floor_plan'
         );
 
@@ -1841,7 +1945,7 @@ $planningPriority = $order->get_meta(
 
         $this->renderUploadedFile(
             'Current Floor Plan',
-            $order->get_meta(
+            $this->meta(
                 '_nyp_floor_plan'
             ),
             !$isLocked
@@ -1874,7 +1978,7 @@ $planningPriority = $order->get_meta(
 
         $this->renderUploadedFiles(
             'Uploaded Kitchen Photos',
-            (array) $order->get_meta(
+            (array) $this->meta(
                 '_nyp_kitchen_photos'
             ),
             !$isLocked
@@ -1907,7 +2011,7 @@ $planningPriority = $order->get_meta(
 
         $this->renderUploadedFiles(
             'Uploaded Inspiration Images',
-            (array) $order->get_meta(
+            (array) $this->meta(
                 '_nyp_inspiration_images'
             ),
             !$isLocked
@@ -1939,7 +2043,7 @@ $planningPriority = $order->get_meta(
 
         $this->renderUploadedFile(
             'Current Planning Export',
-            $order->get_meta(
+            $this->meta(
                 '_nyp_planning_export'
             ),
             !$isLocked
@@ -1972,7 +2076,7 @@ $planningPriority = $order->get_meta(
 
         $this->renderUploadedFiles(
             'Uploaded Technical Documents',
-            (array) $order->get_meta(
+            (array) $this->meta(
                 '_nyp_technical_documents'
             ),
             !$isLocked
@@ -2004,7 +2108,7 @@ $planningPriority = $order->get_meta(
 
         $this->renderUploadedFiles(
             'Uploaded Additional Files',
-            (array) $order->get_meta(
+            (array) $this->meta(
                 '_nyp_additional_files'
             ),
             !$isLocked
@@ -2015,6 +2119,93 @@ $planningPriority = $order->get_meta(
         <small>
             Any additional files relevant to this project.
         </small>
+
+    </div>
+
+</div>
+<div class="nyp-form-section">
+
+    <h3>
+        Service Options
+    </h3>
+
+    <p class="nyp-section-description">
+        Choose the planning service that best fits your project timeline. Standard Planning is included with your selected planning package. Express Planning provides priority processing and accelerated delivery.
+    </p>
+
+    <?php
+
+    $serviceSpeed = $this->meta(
+        '_nyp_service_speed'
+    );
+
+    if (empty($serviceSpeed)) {
+        $serviceSpeed = 'standard';
+    }
+
+    ?>
+
+    <div class="nyp-service-options">
+
+        <label class="nyp-service-option">
+
+            <input
+                type="radio"
+                name="service_speed"
+                value="standard"
+                <?php checked(
+                    $serviceSpeed,
+                    'standard'
+                ); ?>
+            >
+
+            <span class="nyp-service-content">
+
+                <strong>
+                    Standard Planning
+                </strong>
+
+                <span class="nyp-service-price">
+                    Included
+                </span>
+
+                <small>
+                    Standard planning schedule. Your project will enter the normal NYP planning queue after payment.
+                </small>
+
+            </span>
+
+        </label>
+
+        <label class="nyp-service-option">
+
+            <input
+                type="radio"
+                name="service_speed"
+                value="express"
+                <?php checked(
+                    $serviceSpeed,
+                    'express'
+                ); ?>
+            >
+
+            <span class="nyp-service-content">
+
+                <strong>
+                    Express Planning
+                </strong>
+
+                <span class="nyp-service-price">
+                    + €400
+                </span>
+
+                <small>
+                    Priority planning service with accelerated processing and scheduling. This upgrade will be added during checkout.
+                </small>
+
+            </span>
+
+        </label>
 
     </div>
 
@@ -2039,7 +2230,7 @@ $planningPriority = $order->get_meta(
                 name="confirm_measurements"
                 value="yes"
                 <?php checked(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_confirm_measurements'
                     ),
                     'yes'
@@ -2058,7 +2249,7 @@ $planningPriority = $order->get_meta(
                 name="confirm_scope_review"
                 value="yes"
                 <?php checked(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_confirm_scope_review'
                     ),
                     'yes'
@@ -2077,7 +2268,7 @@ $planningPriority = $order->get_meta(
                 name="confirm_scope_adjustment"
                 value="yes"
                 <?php checked(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_confirm_scope_adjustment'
                     ),
                     'yes'
@@ -2096,7 +2287,7 @@ $planningPriority = $order->get_meta(
                 name="confirm_planning_quality"
                 value="yes"
                 <?php checked(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_confirm_planning_quality'
                     ),
                     'yes'
@@ -2115,7 +2306,7 @@ $planningPriority = $order->get_meta(
                 name="confirm_budget_guidance"
                 value="yes"
                 <?php checked(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_confirm_budget_guidance'
                     ),
                     'yes'
@@ -2134,7 +2325,7 @@ $planningPriority = $order->get_meta(
                 name="confirm_nyp_responsibility"
                 value="yes"
                 <?php checked(
-                    $order->get_meta(
+                    $this->meta(
                         '_nyp_confirm_nyp_responsibility'
                     ),
                     'yes'
@@ -2219,11 +2410,7 @@ $planningPriority = $order->get_meta(
 <input
     type="hidden"
     name="return_url"
-    value="<?php echo esc_url(add_query_arg(
-        'order_id',
-        $orderId,
-        get_permalink()
-    )); ?>"
+    value="<?php echo esc_url($this->getReturnUrl()); ?>"
 >
 </form>
     </div>
@@ -2247,6 +2434,7 @@ $planningPriority = $order->get_meta(
             return;
         }
 
+
         ?>
     
         <div class="nyp-file-card">
@@ -2268,13 +2456,9 @@ $planningPriority = $order->get_meta(
                     <button
     type="submit"
     name="delete_file"
-    value="<?php echo esc_attr(
-        $file
-    ); ?>"
+    value="<?php echo esc_attr($file); ?>"
     class="button button-small"
-    onclick="return confirm(
-        'Remove this file?'
-    );"
+    onclick="return confirm('Remove this file?');"
 >
     Remove
 </button>
@@ -2354,20 +2538,18 @@ $planningPriority = $order->get_meta(
                        
     
                         <?php if ($allowDelete) : ?>
-    
+
                             <button
     type="submit"
     name="delete_file"
-    value="<?php echo esc_attr(
-        $file
-    ); ?>"
+    value="<?php echo esc_attr($file); ?>"
     class="button button-small"
-    onclick="return confirm(
-        'Remove this file?'
-    );"
+    onclick="return confirm('Remove this file?');"
 >
     Remove
 </button>
+    
+    
     
                         <?php endif; ?>
     

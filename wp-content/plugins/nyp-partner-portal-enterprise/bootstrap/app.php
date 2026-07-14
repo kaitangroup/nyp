@@ -20,6 +20,7 @@ use NYP\Modules\Intake\IntakeModule;
 use NYP\Services\PlanningIdGenerator;
 
 
+
  (new IntakeModule())->register();
 
 $partnerAccessModule = new PartnerAccessModule();

@@ -768,3 +768,56 @@ box-shadow: 0 15px 40px rgba(0,0,0,.12);
     color: #166534;
 }
 
+/*--------------------------------------------------------------
+# Service Options
+--------------------------------------------------------------*/
+
+.nyp-service-options{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    margin-top:20px;
+}
+
+.nyp-service-option{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+    padding:18px;
+    border:1px solid #d8dde6;
+    border-radius:12px;
+    background:#fff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.nyp-service-option:hover{
+    border-color:#0b5fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+
+.nyp-service-option input{
+    margin-top:4px;
+}
+
+.nyp-service-content{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    width:100%;
+}
+
+.nyp-service-content strong{
+    font-size:16px;
+    color:#0f172a;
+}
+
+.nyp-service-price{
+    font-weight:700;
+    color:#0b5fff;
+}
+
+.nyp-service-content small{
+    color:#64748b;
+    line-height:1.6;
+}
