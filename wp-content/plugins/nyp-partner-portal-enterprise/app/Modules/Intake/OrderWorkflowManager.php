@@ -6,10 +6,10 @@ class OrderWorkflowManager
 {
     public function register(): void
     {
-        add_action(
-            'woocommerce_order_status_processing',
-            [$this, 'moveToPendingIntake']
-        );
+        // add_action(
+        //     'woocommerce_order_status_processing',
+        //     [$this, 'moveToPendingIntake']
+        // );
     }
 
     public function moveToPendingIntake($orderId): void
