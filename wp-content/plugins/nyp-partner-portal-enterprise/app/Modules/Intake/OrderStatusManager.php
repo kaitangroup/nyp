@@ -23,6 +23,11 @@ class OrderStatusManager
             'wc_order_statuses',
             [$this, 'addStatuses']
         );
+
+        add_action(
+            'woocommerce_payment_complete',
+            [$this, 'moveToAwaitingReview']
+        );
     }
 
     public function moveToAwaitingReview(
