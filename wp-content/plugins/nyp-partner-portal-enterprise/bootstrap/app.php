@@ -19,7 +19,10 @@ use NYP\Modules\PartnerAccess\PartnerAccessModule;
 use NYP\Modules\Intake\IntakeModule;
 use NYP\Services\PlanningIdGenerator;
 
-
+define(
+    'NYP_PLUGIN_PATH',
+    plugin_dir_path(__FILE__)
+);
 
  (new IntakeModule())->register();
 

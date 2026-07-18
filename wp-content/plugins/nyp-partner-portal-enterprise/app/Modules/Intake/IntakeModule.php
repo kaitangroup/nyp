@@ -9,6 +9,7 @@ use NYP\Services\PlanningOrderImporter;
 use WC_Product;
 use WC_Order;
 use NYP\Modules\Checkout\PaymentGatewayManager;
+use NYP\Modules\Intake\Emails\EmailManager;
 
 class IntakeModule {
     public function register(): void {
@@ -114,6 +115,7 @@ add_action(
         (new IntakeAdminView())->register();
         (new OrderWorkflowManager())->register();
         (new IntakeAccountActions())->register();
+        (new EmailManager())->register();
     }
 
 
