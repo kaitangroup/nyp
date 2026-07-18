@@ -38,19 +38,15 @@ class PaymentGatewayManager
     public function filterGateways(
         array $gateways
     ): array {
+       
 
         if (
-            is_admin() ||
-            !is_checkout()
+            is_admin() 
         ) {
             return $gateways;
         }
 
-        if (
-            $this->session->get(
-                '_nyp_service_speed'
-            ) !== 'express'
-        ) {
+        if (!$this->isExpressCheckout()) {
             return $gateways;
         }
 
@@ -68,4 +64,20 @@ class PaymentGatewayManager
 
         return $gateways;
     }
+
+    protected function isExpressCheckout(): bool
+{
+    if (!WC()->cart) {
+        return false;
+    }
+
+    foreach (WC()->cart->get_cart() as $item) {
+
+        if ((int) $item['product_id'] === 30) {
+            return true;
+        }
+    }
+
+    return false;
+}
 }

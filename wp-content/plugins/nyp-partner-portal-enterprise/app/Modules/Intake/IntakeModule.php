@@ -49,6 +49,13 @@ class IntakeModule {
             10,
             3
         );
+
+        add_action(
+            'woocommerce_init',
+            [$this, 'replaceSingleProductButton']
+        );
+        
+
     
         add_action(
             'template_redirect',
@@ -117,6 +124,36 @@ add_action(
         (new IntakeAccountActions())->register();
         (new EmailManager())->register();
     }
+
+    public function replaceSingleProductButton(): void
+{
+    remove_action(
+        'woocommerce_single_product_summary',
+        'woocommerce_template_single_add_to_cart',
+        30
+    );
+
+    add_action(
+        'woocommerce_single_product_summary',
+        [$this, 'planningSingleButton'],
+        30
+    );
+}
+
+    public function planningSingleButton(): void
+{
+    global $product;
+
+    if (!$product instanceof WC_Product) {
+        return;
+    }
+
+    echo $this->planningLoopButton(
+        '',
+        $product,
+        []
+    );
+}
 
 
     public function importPlanningToOrder(

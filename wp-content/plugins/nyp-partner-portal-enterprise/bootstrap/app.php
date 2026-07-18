@@ -18,11 +18,12 @@ require_once __DIR__ . '/hooks.php';
 use NYP\Modules\PartnerAccess\PartnerAccessModule;
 use NYP\Modules\Intake\IntakeModule;
 use NYP\Services\PlanningIdGenerator;
-
+if (!defined('NYP_PLUGIN_PATH')) {
 define(
     'NYP_PLUGIN_PATH',
     plugin_dir_path(__FILE__)
 );
+}
 
  (new IntakeModule())->register();
 
