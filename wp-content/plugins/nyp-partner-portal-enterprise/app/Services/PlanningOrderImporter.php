@@ -120,7 +120,7 @@ public function import(WC_Order $order): void
     |--------------------------------------------------------------------------
     */
 
-    $this->session->clear();
+   
 }
 
 

@@ -11,11 +11,6 @@ defined('ABSPATH') || exit;
 
 class CustomerPlanningReceivedEmail extends WC_Email
 {
-    /**
-     * @var WC_Order|null
-     */
-   
-
     public function __construct()
     {
         $this->id             = 'nyp_customer_planning_received';
@@ -44,17 +39,24 @@ class CustomerPlanningReceivedEmail extends WC_Email
         $this->template_html  = 'customer-planning-received.php';
         $this->template_plain = 'plain/customer-planning-received.php';
 
-  
         $this->template_base = NYP_PLUGIN_PATH . 'app/Modules/Intake/Emails/templates/';
+
+        /*
+        |--------------------------------------------------------------------------
+        | Email Placeholders
+        |--------------------------------------------------------------------------
+        */
+
+        $this->placeholders = [
+            '{site_title}'   => $this->get_blogname(),
+            '{order_number}' => '',
+        ];
+
         parent::__construct();
     }
 
     /**
      * Trigger the email.
-     *
-     * @param int $orderId
-     *
-     * @return void
      */
     public function trigger(
         int $orderId
@@ -72,7 +74,17 @@ class CustomerPlanningReceivedEmail extends WC_Email
             return;
         }
 
-        $this->recipient = $this->object->get_billing_email();
+        /*
+        |--------------------------------------------------------------------------
+        | Populate placeholders
+        |--------------------------------------------------------------------------
+        */
+
+        $this->placeholders['{order_number}'] =
+            $this->object->get_order_number();
+
+        $this->recipient =
+            $this->object->get_billing_email();
 
         if (
             !$this->is_enabled() ||
@@ -134,7 +146,7 @@ class CustomerPlanningReceivedEmail extends WC_Email
     public function get_default_content(): string
     {
         return __(
-            'Thank you for your order. We have received your payment and planning request. Our team will now review your submission before beginning the planning process.',
+            'Thank you for your order. We have successfully received your payment and planning request. NYP will now review your submitted project data and selected planning category.',
             'nyp'
         );
     }

@@ -135,4 +135,16 @@ protected function hasSession(): bool
     return function_exists('WC')
         && WC()->session;
 }
+
+/**
+ * Remove a single field.
+ */
+public function remove(string $key): void
+{
+    $data = $this->all();
+
+    unset($data[$key]);
+
+    $this->put($data);
+}
 }

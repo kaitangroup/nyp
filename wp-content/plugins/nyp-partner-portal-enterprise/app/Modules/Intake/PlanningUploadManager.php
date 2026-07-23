@@ -7,6 +7,7 @@ namespace NYP\Modules\Intake;
 defined('ABSPATH') || exit;
 
 use NYP\Services\PlanningSessionStorage;
+use NYP\Services\PlanningWorkflowService;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,7 @@ class PlanningUploadManager
      */
     protected string $relativeDirectory;
 
+    protected PlanningWorkflowService $workflow;
     /**
      * Constructor.
      *
@@ -260,234 +262,178 @@ class PlanningUploadManager
     |--------------------------------------------------------------------------
     */
 
-    protected function validate(): void
-    {
-        $maxFileSize = 50 * 1024 * 1024;      // 50 MB
+    protected function validationError(string $message): void
+{
 
-        $maxTotalSize = 250 * 1024 * 1024;    // 250 MB
+     error_log('Planning Upload Validation Error: ' . $message);
+    wc_add_notice(
+        esc_html__($message, 'nyp'),
+        'error'
+    );
+
+    wp_safe_redirect(
+        $this->workflow->getPlanningUrl()
+    );
+    exit;
+}
+
+protected function validate(): void
+{
+
+    $maxFileSize  = 50 * 1024 * 1024;   // 50 MB
+    $maxTotalSize = 250 * 1024 * 1024;  // 250 MB
+    $maxFileCount = 10;
     
-        $maxFileCount = 10;
-    
-        $allowedExtensions = [
-    
-            'pdf',
-    
-            'jpg',
-            'jpeg',
-            'png',
-            'webp',
-    
-            'dwg',
-    
-            'zip',
-    
-            'doc',
-            'docx',
-    
-        ];
-    
-        $totalFiles = 0;
-    
-        $totalSize = 0;
-    
-        foreach ($_FILES as $field => $file) {
-    
-            /*
-            |--------------------------------------------------------------------------
-            | Single upload
-            |--------------------------------------------------------------------------
-            */
-    
-            if (!is_array($file['name'])) {
-    
-                if (
-                    empty($file['name'])
-                    ||
-                    $file['error'] === UPLOAD_ERR_NO_FILE
-                ) {
-                    continue;
-                }
-    
-                if (
-                    $file['error'] !== UPLOAD_ERR_OK
-                ) {
-    
-                    wp_die(
-                        esc_html__(
-                            'A file upload failed. Please try again.',
-                            'nyp'
-                        )
-                    );
-    
-                }
-    
-                $extension = strtolower(
-                    pathinfo(
-                        $file['name'],
-                        PATHINFO_EXTENSION
-                    )
-                );
-    
-                if (
-                    !in_array(
-                        $extension,
-                        $allowedExtensions,
-                        true
-                    )
-                ) {
-    
-                    wp_die(
-                        esc_html__(
-                            'One or more uploaded files use an unsupported file format.',
-                            'nyp'
-                        )
-                    );
-    
-                }
-    
-                if (
-                    $file['size']
-                    > $maxFileSize
-                ) {
-    
-                    wp_die(
-                        esc_html__(
-                            'Each uploaded file must not exceed 50 MB.',
-                            'nyp'
-                        )
-                    );
-    
-                }
-    
-                $totalFiles++;
-    
-                $totalSize +=
-                    $file['size'];
-    
+
+    $allowedExtensions = [
+        'pdf',
+        'jpg',
+        'jpeg',
+        'png',
+        'webp',
+        'dwg',
+        'zip',
+        'doc',
+        'docx',
+    ];
+
+    $totalFiles = 0;
+    $totalSize  = 0;
+
+    foreach ($_FILES as $file) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Single Upload
+        |--------------------------------------------------------------------------
+        */
+        if (!is_array($file['name'])) {
+
+            if ($file['error'] === UPLOAD_ERR_NO_FILE) {
                 continue;
-    
             }
-    
-            /*
-            |--------------------------------------------------------------------------
-            | Multiple uploads
-            |--------------------------------------------------------------------------
-            */
-    
-            foreach (
-                $file['name']
-                as $index => $name
-            ) {
-    
-                if (
-                    empty($name)
-                ) {
-                    continue;
-                }
-    
-                if (
-                    $file['error'][$index]
-                    !== UPLOAD_ERR_OK
-                ) {
-    
-                    wp_die(
-                        esc_html__(
-                            'A file upload failed. Please try again.',
-                            'nyp'
-                        )
+
+            switch ($file['error']) {
+
+                case UPLOAD_ERR_OK:
+                    break;
+
+                case UPLOAD_ERR_INI_SIZE:
+                case UPLOAD_ERR_FORM_SIZE:
+
+                    $this->validationError(
+                        'The uploaded file exceeds the maximum allowed size of 50 MB.'
                     );
-    
-                }
-    
-                $extension = strtolower(
-    
-                    pathinfo(
-    
-                        $name,
-    
-                        PATHINFO_EXTENSION
-    
-                    )
-    
+
+                default:
+
+                    $this->validationError(
+                        'The file could not be uploaded. Please try again.'
+                    );
+            }
+
+            $extension = strtolower(
+                pathinfo($file['name'], PATHINFO_EXTENSION)
+            );
+
+            if (!in_array($extension, $allowedExtensions, true)) {
+
+                $this->validationError(
+                    'One or more uploaded files use an unsupported file format.'
                 );
-    
-                if (
-                    !in_array(
-                        $extension,
-                        $allowedExtensions,
-                        true
-                    )
-                ) {
-    
-                    wp_die(
-                        esc_html__(
-                            'One or more uploaded files use an unsupported file format.',
-                            'nyp'
-                        )
-                    );
-    
-                }
-    
-                if (
-                    $file['size'][$index]
-                    > $maxFileSize
-                ) {
-    
-                    wp_die(
-                        esc_html__(
-                            'Each uploaded file must not exceed 50 MB.',
-                            'nyp'
-                        )
-                    );
-    
-                }
-    
-                $totalFiles++;
-    
-                $totalSize +=
-                    $file['size'][$index];
-    
             }
-    
+
+            if ($file['size'] > $maxFileSize) {
+
+                $this->validationError(
+                    'Each uploaded file must not exceed 50 MB.'
+                );
+            }
+
+            $totalFiles++;
+            $totalSize += $file['size'];
+
+            continue;
         }
-    
+
         /*
         |--------------------------------------------------------------------------
-        | Maximum file count
+        | Multiple Uploads
         |--------------------------------------------------------------------------
         */
-    
-        if (
-            $totalFiles > $maxFileCount
-        ) {
-    
-            wp_die(
-                esc_html__(
-                    'A maximum of 10 files can be uploaded.',
-                    'nyp'
-                )
+
+        foreach ($file['name'] as $index => $name) {
+
+            if ($file['error'][$index] === UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            switch ($file['error'][$index]) {
+
+                case UPLOAD_ERR_OK:
+                    break;
+
+                case UPLOAD_ERR_INI_SIZE:
+                case UPLOAD_ERR_FORM_SIZE:
+
+                    $this->validationError(
+                        'The uploaded file exceeds the maximum allowed size of 50 MB.'
+                    );
+
+                default:
+
+                    $this->validationError(
+                        'The file could not be uploaded. Please try again.'
+                    );
+            }
+
+            $extension = strtolower(
+                pathinfo($name, PATHINFO_EXTENSION)
             );
-    
-        }
-    
-        /*
-        |--------------------------------------------------------------------------
-        | Maximum combined upload size
-        |--------------------------------------------------------------------------
-        */
-    
-        if (
-            $totalSize
-            > $maxTotalSize
-        ) {
-    
-            wp_die(
-                esc_html__(
-                    'The total upload size exceeds the allowed limit of 250 MB.',
-                    'nyp'
-                )
-            );
-    
+
+            if (!in_array($extension, $allowedExtensions, true)) {
+
+                $this->validationError(
+                    'One or more uploaded files use an unsupported file format.'
+                );
+            }
+
+            if ($file['size'][$index] > $maxFileSize) {
+
+                $this->validationError(
+                    'Each uploaded file must not exceed 50 MB.'
+                );
+            }
+
+            $totalFiles++;
+            $totalSize += $file['size'][$index];
         }
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Maximum File Count
+    |--------------------------------------------------------------------------
+    */
+
+    if ($totalFiles > $maxFileCount) {
+
+        $this->validationError(
+            'A maximum of 10 files can be uploaded.'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Maximum Combined Upload Size
+    |--------------------------------------------------------------------------
+    */
+
+    if ($totalSize > $maxTotalSize) {
+
+        $this->validationError(
+            'The total upload size exceeds the allowed limit of 250 MB.'
+        );
+    }
+}
 }

@@ -94,6 +94,15 @@ class IntakeFormRenderer
         return $this->planningData[$key] ?? $default;
     }
 
+    protected function isReadOnly(): bool
+{
+    if (!$this->order instanceof WC_Order) {
+        return false;
+    }
+
+    return $this->order->is_paid();
+}
+
 
     public function render(?WC_Order $order = null)
 {
@@ -118,10 +127,7 @@ class IntakeFormRenderer
     }
 
     
-        $isSubmitted =
-        $this->meta(
-            '_nyp_brief_submitted'
-        ) === 'yes';
+        $isSubmitted = $this->isReadOnly();
          
 
         
@@ -133,10 +139,7 @@ class IntakeFormRenderer
             ? 'disabled'
             : '';
 
-        $isLocked = 
-        $this->meta(
-            '_nyp_brief_submitted'
-        ) === 'yes';
+        $isLocked = $this->isReadOnly();
 
         $submittedAt = $this->meta(
             '_nyp_brief_submitted_at'
@@ -2176,7 +2179,7 @@ $planningPriority = $this->meta(
             </span>
 
         </label>
-
+        <div id="nyp-express-option">
         <label class="nyp-service-option">
 
             <input
@@ -2206,6 +2209,7 @@ $planningPriority = $this->meta(
             </span>
 
         </label>
+            </div>
 
     </div>
 
@@ -2399,7 +2403,7 @@ $planningPriority = $this->meta(
 
 <p>
     Your planning brief has been submitted successfully.
-    Our planning team will now review your project and begin the design process.
+    NYP will now review your submitted project data and selected planning category.
 </p>
 
 </div>

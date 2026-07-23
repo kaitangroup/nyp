@@ -223,33 +223,30 @@ public function prepareCheckout(): bool
 
     /*
     |--------------------------------------------------------------------------
-    | Planning Package
+    | Planning Package and Service Upgrade
     |--------------------------------------------------------------------------
     */
 
-    $added = WC()->cart->add_to_cart(
-        $productId
-    );
+    try {
 
-    if (!$added) {
-        return false;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Service Upgrade
-    |--------------------------------------------------------------------------
-    */
-
-    if (
-        $this->session->get(
-            '_nyp_service_speed'
-        ) === 'express'
-    ) {
-
-        WC()->cart->add_to_cart(
-            30 // Overnight Upgrade Product
+        $added = WC()->cart->add_to_cart($productId);
+    
+        if (!$added) {
+            return false;
+        }
+    
+        if (
+            $this->session->get('_nyp_service_speed') === 'express'
+        ) {
+            WC()->cart->add_to_cart(30);
+        }
+    
+    } finally {
+    
+        $this->session->remove(
+            '_nyp_allow_cart_add'
         );
+    
     }
 
     return true;

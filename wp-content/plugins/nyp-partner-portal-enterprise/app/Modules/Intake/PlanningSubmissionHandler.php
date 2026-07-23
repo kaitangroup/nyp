@@ -169,6 +169,25 @@ class PlanningSubmissionHandler
             )
         );
 
+        $sessionData = $this->session->all();
+
+if (empty($sessionData['_nyp_floor_plan'])) {
+
+    wc_add_notice(
+        __(
+            'Please upload floor plan before continuing.',
+            'nyp'
+        ),
+        'error'
+    );
+
+    wp_safe_redirect(
+        $this->workflow->getPlanningUrl()
+    );
+
+    exit;
+}
+
         $this->workflow->markPlanningSubmitted();
 
 $this->workflow->prepareCheckout();
@@ -379,6 +398,19 @@ protected function collectPlanningData(): array
     */
 
     $data['_nyp_schema_version'] = 1;
+    /*
+    |--------------------------------------------------------------------------
+    | Premium Room Concept cannot use Express Planning
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        ($data['_nyp_planning_category'] ?? '') === 'premium'
+    ) {
+        $data['_nyp_service_speed'] = 'standard';
+    }
+
+    return $data;
 
     return $data;
 }

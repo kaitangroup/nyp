@@ -10,6 +10,15 @@ defined('ABSPATH') || exit;
 
 class ProductHelper
 {
+    public const OVERNIGHT_PRODUCT_ID = 30;
+
+    public static function isOvernightUpgrade(
+        WC_Product $product
+    ): bool {
+        return $product->get_id() === self::OVERNIGHT_PRODUCT_ID;
+    }
+    
+    
     /**
      * Determine whether the product is an NYP Kitchen Planning package.
      */

@@ -10,6 +10,7 @@ use WC_Product;
 use WC_Order;
 use NYP\Modules\Checkout\PaymentGatewayManager;
 use NYP\Modules\Intake\Emails\EmailManager;
+use WP_REST_Request;
 
 class IntakeModule {
     public function register(): void {
@@ -40,6 +41,13 @@ class IntakeModule {
         );
         
         $paymentGatewayManager->register();
+
+        add_filter(
+            'woocommerce_add_to_cart_validation',
+            [$this, 'validatePlanningAddToCart'],
+            10,
+            5
+        );
 
         
 
@@ -97,7 +105,8 @@ add_action(
         if (
             !is_shop() &&
             !is_product_category() &&
-            !is_product_tag()
+            !is_product_tag() &&
+            !is_search()
         ) {
             return;
         }
@@ -106,10 +115,83 @@ add_action(
             'post__not_in',
             array_merge(
                 (array) $query->get('post__not_in'),
-                [30]
+                [ProductHelper::OVERNIGHT_PRODUCT_ID]
             )
         );
     }
+);
+
+add_filter(
+    'rest_post_search_query',
+    function (array $args, WP_REST_Request $request): array {
+
+        if (!$request->get_param('ct_live_search')) {
+            return $args;
+        }
+
+        $args['post__not_in'] = array_merge(
+            $args['post__not_in'] ?? [],
+            [
+                ProductHelper::OVERNIGHT_PRODUCT_ID,
+            ]
+        );
+
+        return $args;
+    },
+    10,
+    2
+);
+
+add_action(
+    'template_redirect',
+    function () {
+
+        if (!is_product()) {
+            return;
+        }
+
+        global $post;
+
+        if (!$post) {
+            return;
+        }
+
+        if ((int) $post->ID !== ProductHelper::OVERNIGHT_PRODUCT_ID) {
+            return;
+        }
+
+        wp_safe_redirect(wc_get_page_permalink('shop'));
+        exit;
+    }
+);
+
+add_filter(
+    'woocommerce_product_is_visible',
+    function ($visible, $product_id) {
+
+        if ($product_id === ProductHelper::OVERNIGHT_PRODUCT_ID) {
+            return false;
+        }
+
+        return $visible;
+    },
+    10,
+    2
+);
+
+add_action(
+    'template_redirect',
+    [$this, 'protectInternalProducts']
+);
+
+add_action(
+    'woocommerce_order_status_processing',
+    [$this, 'clearPlanningSessionAfterPayment']
+);
+
+add_action(
+    'woocommerce_order_status_completed',
+    [$this, 'clearPlanningSessionAfterPayment']
 );
 
        
@@ -124,6 +206,36 @@ add_action(
         (new IntakeAccountActions())->register();
         (new EmailManager())->register();
     }
+
+    public function clearPlanningSessionAfterPayment(int $orderId): void
+{
+    $session = new PlanningSessionStorage();
+
+    $session->clear();
+}
+
+    public function protectInternalProducts(): void
+{
+    if (!is_product()) {
+        return;
+    }
+
+    global $product;
+
+    if (!$product instanceof WC_Product) {
+        return;
+    }
+
+    if (!ProductHelper::isOvernightUpgrade($product)) {
+        return;
+    }
+
+    wp_safe_redirect(
+        wc_get_page_permalink('shop')
+    );
+
+    exit;
+}
 
     public function replaceSingleProductButton(): void
 {
@@ -153,6 +265,37 @@ add_action(
         $product,
         []
     );
+}
+
+public function validatePlanningAddToCart(
+    bool $passed,
+    int $productId,
+    int $quantity,
+    int $variationId = 0,
+    array $variations = []
+): bool {
+    $product = wc_get_product($productId);
+    $session = new PlanningSessionStorage();
+    if (!$product) {
+        return $passed;
+    }
+
+    if (!ProductHelper::isPlanningProduct($product)) {
+        return $passed;
+    }
+
+    if (
+        $session->get('_nyp_allow_cart_add') === 'yes'
+    ) {
+        return $passed;
+    }
+
+    wc_add_notice(
+        __('Please start your order using the Start Planning button.', 'nyp'),
+        'error'
+    );
+
+    return false;
 }
 
 
