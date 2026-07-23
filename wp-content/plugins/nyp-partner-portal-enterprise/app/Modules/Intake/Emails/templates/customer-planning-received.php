@@ -43,7 +43,7 @@ do_action(
 
 <p>
     <?php esc_html_e(
-        'Our planning team will now review your submission. Once the review is complete, we will begin preparing your kitchen design.',
+        'Our planning team will now review your submission. Once the review is complete and the project is approved by NYP, we will schedule the planning process.',
         'nyp'
     ); ?>
 </p>
