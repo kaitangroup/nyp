@@ -131,69 +131,99 @@ error_log(
     }
 
     /**
-     * Booking created.
-     */
-    protected function bookingCreated(
-        array $payload
-    ): void {
+ * Booking created.
+ */
+protected function bookingCreated(
+    array $payload
+): void {
 
-        $booking = $payload['payload'] ?? [];
+    $booking = $payload['payload'] ?? [];
 
-        $metadata = $booking['metadata'] ?? [];
+    $metadata = $booking['metadata'] ?? [];
 
-        $orderId = absint(
-            $metadata['order_id'] ?? 0
+    $orderId = absint(
+        $metadata['order_id'] ?? 0
+    );
+
+    if (!$orderId) {
+
+        error_log(
+            'Cal.com booking missing order_id.'
         );
 
-        if (!$orderId) {
+        return;
+    }
 
-            error_log(
-                'Cal.com booking missing order_id.'
-            );
+    $order = wc_get_order(
+        $orderId
+    );
 
-            return;
-
-        }
-
-        $order = wc_get_order(
-            $orderId
-        );
-
-        if (
-            !$order instanceof WC_Order
-        ) {
-            return;
-        }
-
-        $order->update_meta_data(
-            '_nyp_cal_booking_id',
-            $booking['id'] ?? ''
-        );
-
-        $order->update_meta_data(
-            '_nyp_cal_booking_status',
-            'scheduled'
-        );
-
-        $order->update_meta_data(
-            '_nyp_cal_booking_date',
-            $booking['startTime'] ?? ''
-        );
-
-        $order->update_meta_data(
-            '_nyp_cal_booking_url',
-            $booking['meetingUrl'] ?? ''
-        );
-
-        $order->save();
+    if (
+        !$order instanceof WC_Order
+    ) {
 
         error_log(
             sprintf(
-                'Cal.com booking saved for order #%d',
+                'Order #%d not found.',
                 $orderId
             )
         );
+
+        return;
     }
+
+    $order->update_meta_data(
+        '_nyp_cal_booking_id',
+        $booking['bookingId'] ?? ''
+    );
+
+    $order->update_meta_data(
+        '_nyp_cal_booking_uid',
+        $booking['uid'] ?? ''
+    );
+
+    $order->update_meta_data(
+        '_nyp_cal_booking_status',
+        strtolower(
+            $booking['status'] ?? 'scheduled'
+        )
+    );
+
+    $order->update_meta_data(
+        '_nyp_cal_booking_start',
+        $booking['startTime'] ?? ''
+    );
+
+    $order->update_meta_data(
+        '_nyp_cal_booking_end',
+        $booking['endTime'] ?? ''
+    );
+
+    $order->update_meta_data(
+        '_nyp_cal_booking_url',
+        $booking['videoCallData']['url'] ?? ''
+    );
+
+    $order->save();
+
+    error_log(
+        'Booking ID after save: ' .
+        $order->get_meta('_nyp_cal_booking_id')
+    );
+    
+    error_log(
+        'Status after save: ' .
+        $order->get_meta('_nyp_cal_booking_status')
+    );
+
+    error_log(
+        sprintf(
+            'Cal.com booking #%s saved for order #%d',
+            $booking['bookingId'] ?? '',
+            $orderId
+        )
+    );
+}
 
     /**
      * Booking cancelled.
