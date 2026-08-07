@@ -154,30 +154,40 @@ public function renderBooking(): string
 
     Cal.ns.express("inline", {
 
-        elementOrSelector:"#my-cal-inline",
+elementOrSelector:"#my-cal-inline",
 
-        calLink:"nyp-kitchen-dev/express-kitchen-planning",
+calLink:"nyp-kitchen-dev/express-kitchen-planning",
 
-        layout:"month_view",
+layout:"month_view",
 
-        metadata:{
+config: {
 
-            order_id:
-                <?php echo (int) $orderId; ?>,
+name: <?php echo wp_json_encode(
+    trim(
+        $order->get_billing_first_name() . ' ' .
+        $order->get_billing_last_name()
+    )
+); ?>,
 
-            order_number:
-                <?php echo wp_json_encode(
-                    $order->get_order_number()
-                ); ?>,
+email: <?php echo wp_json_encode(
+    $order->get_billing_email()
+); ?>,
 
-            customer_email:
-                <?php echo wp_json_encode(
-                    $order->get_billing_email()
-                ); ?>
+"metadata[order_id]": <?php echo wp_json_encode(
+    (string) $order->get_id()
+); ?>,
 
-        }
+"metadata[order_number]": <?php echo wp_json_encode(
+    $order->get_order_number()
+); ?>,
 
-    });
+"metadata[customer_email]": <?php echo wp_json_encode(
+    $order->get_billing_email()
+); ?>
+
+}
+
+});
 
     Cal.ns.express("ui", {
 
