@@ -48,6 +48,22 @@ class CalWebhookController
     ): WP_REST_Response|WP_Error {
 
         $payload = $request->get_json_params();
+        $payload = $request->get_json_params();
+
+error_log(
+    '================ CAL WEBHOOK ================'
+);
+
+error_log(
+    wp_json_encode(
+        $payload,
+        JSON_PRETTY_PRINT
+    )
+);
+
+error_log(
+    '============================================='
+);
 
         if (
             empty($payload)
