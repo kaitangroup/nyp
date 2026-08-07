@@ -10,6 +10,12 @@ use WC_Product;
 use WC_Order;
 use NYP\Modules\Checkout\PaymentGatewayManager;
 use NYP\Modules\Intake\Emails\EmailManager;
+use NYP\Modules\Intake\PlanningDownloadController;
+use NYP\Modules\Intake\GDPR\PlanningPersonalDataExporter;
+use NYP\Modules\Intake\GDPR\PlanningPersonalDataEraser;
+use NYP\Modules\Intake\Cal\CalRedirect;
+use NYP\Modules\Intake\CalWebhookController;
+
 use WP_REST_Request;
 
 class IntakeModule {
@@ -195,7 +201,7 @@ add_action(
 );
 
        
-
+(new PlanningDownloadController())->register();
         (new OrderStatusManager())->register();
      //   (new IntakeFormRenderer())->register();
      
@@ -205,6 +211,17 @@ add_action(
         (new OrderWorkflowManager())->register();
         (new IntakeAccountActions())->register();
         (new EmailManager())->register();
+        (new PlanningPersonalDataExporter())
+    ->register();
+    (new PlanningPersonalDataEraser())
+    ->register();
+
+    (new CalRedirect())
+    ->register();
+
+    (new CalWebhookController())
+    ->register();
+       
     }
 
     public function clearPlanningSessionAfterPayment(int $orderId): void

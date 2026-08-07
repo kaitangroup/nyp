@@ -715,31 +715,43 @@ public function renderMetaBox($order): void
         $this->sectionStart('Uploaded Files');
 
         $this->singleFile(
+            $order->get_id(),
+            '_nyp_floor_plan',
             'Floor Plan',
             $order->get_meta('_nyp_floor_plan')
         );
 
         $this->singleFile(
+            $order->get_id(),
+            '_nyp_planning_export',
             'Planning Export',
             $order->get_meta('_nyp_planning_export')
         );
 
         $this->multiFile(
+            $order->get_id(),
+            '_nyp_kitchen_photos',
             'Kitchen Photos',
             $order->get_meta('_nyp_kitchen_photos')
         );
 
         $this->multiFile(
+            $order->get_id(),
+            '_nyp_inspiration_images',
             'Inspiration Images',
             $order->get_meta('_nyp_inspiration_images')
         );
 
         $this->multiFile(
+            $order->get_id(),
+            '_nyp_technical_documents',
             'Technical Documents',
             $order->get_meta('_nyp_technical_documents')
         );
 
         $this->multiFile(
+            $order->get_id(),
+            '_nyp_additional_files',
             'Additional Files',
             $order->get_meta('_nyp_additional_files')
         );
@@ -785,16 +797,23 @@ echo '</p>';
     }
 
     private function singleFile(
+        int $orderId,
+        string $metaKey,
         string $label,
         $file
-    ): void {
+    ): void{
     
         if (empty($file)) {
             return;
         }
     
-        $url = $this->getFileUrl(
-            $file
+        $url = wp_nonce_url(
+            admin_url(
+                'admin-post.php?action=nyp_download_file'
+                . '&order_id=' . $orderId
+                . '&meta_key=' . rawurlencode($metaKey)
+            ),
+            'nyp_download_file'
         );
     
         echo '<p>';
@@ -824,6 +843,8 @@ echo '</p>';
     }
 
     private function multiFile(
+        int $orderId,
+        string $metaKey,
         string $label,
         $files
     ): void {
@@ -836,13 +857,9 @@ echo '</p>';
             return;
         }
     
-        $files = array_filter(
-            $files
-        );
+        $files = array_filter($files);
     
-        if (
-            empty($files)
-        ) {
+        if (empty($files)) {
             return;
         }
     
@@ -852,10 +869,16 @@ echo '</p>';
     
         echo '<ul>';
     
-        foreach ($files as $file) {
+        foreach ($files as $index => $file) {
     
-            $url = $this->getFileUrl(
-                $file
+            $url = wp_nonce_url(
+                admin_url(
+                    'admin-post.php?action=nyp_download_file'
+                    . '&order_id=' . $orderId
+                    . '&meta_key=' . rawurlencode($metaKey)
+                    . '&index=' . $index
+                ),
+                'nyp_download_file'
             );
     
             echo '<li style="margin-bottom:8px;">';
@@ -867,13 +890,9 @@ echo '</p>';
     
             echo ' ';
     
-            echo '<a
-                    href="'
-                    . esc_url($url)
-                    . '"
-                    target="_blank"
-                    class="button button-small"
-                  >
+            echo '<a href="'
+                . esc_url($url)
+                . '" class="button button-small">
                     Download
                   </a>';
     

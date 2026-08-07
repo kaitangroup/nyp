@@ -821,3 +821,55 @@ box-shadow: 0 15px 40px rgba(0,0,0,.12);
     color:#64748b;
     line-height:1.6;
 }
+
+
+
+.nyp-express-box{
+
+    margin-top:16px;
+
+    padding-top:16px;
+
+    border-top:1px solid #e5e7eb;
+
+}
+
+.nyp-express-box strong{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+}
+
+.nyp-express-status{
+
+    margin-bottom:12px;
+
+    font-weight:600;
+
+}
+
+.nyp-express-status.pending{
+
+    color:#d97706;
+
+}
+
+.nyp-express-status.success{
+
+    color:#16a34a;
+
+}
+
+.nyp-express-box small{
+
+    display:block;
+
+    margin-top:8px;
+
+    color:#6b7280;
+
+}
