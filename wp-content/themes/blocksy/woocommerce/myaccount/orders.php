@@ -169,9 +169,43 @@ if (
 
             <small>
 
-                <?php echo esc_html( $bookingDate ); ?>
+                <?php $bookingStart = $order->get_meta(
+    '_nyp_cal_booking_start'
+);
+
+if ($bookingStart) {
+
+    echo wp_date(
+        get_option('date_format') . ' ' . get_option('time_format'),
+        strtotime($bookingStart),
+        wp_timezone()
+    );
+
+} ?>
 
             </small>
+
+			<?php
+$meetingUrl = $order->get_meta(
+    '_nyp_cal_booking_url'
+);
+
+if ($meetingUrl) :
+?>
+
+<a
+    class="woocommerce-button button"
+    href="<?php echo esc_url($meetingUrl); ?>"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+    <?php esc_html_e(
+        'Join Google Meet',
+        'nyp'
+    ); ?>
+</a>
+
+<?php endif; ?>
 
         <?php endif; ?>
 
