@@ -2363,7 +2363,7 @@ $planningPriority = $this->meta(
         name="nyp_action"
         value="submit_brief"
         class="button button-primary"
-        onclick="return confirm('Are you sure you want to submit this planning brief? After submission, changes may require NYP review.');"
+        onclick="return confirm('Are you sure you want to continue to checkout? You can still edit the Planning Brief before payment');"
     >
     Review & Continue to Checkout
     </button>
