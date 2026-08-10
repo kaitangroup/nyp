@@ -29,7 +29,7 @@ do_action(
 
 <p>
     <?php esc_html_e(
-        'Thank you for choosing NYP Digital Kitchen.',
+        'Thank you for choosing NYP Kitchen Design.',
         'nyp'
     ); ?>
 </p>

@@ -21,6 +21,101 @@ class IntakeAdminView
     );
 }
 
+/**
+ * Convert internal Planning Brief values into
+ * human-readable admin labels.
+ *
+ * @param mixed $value
+ *
+ * @return string
+ */
+private function formatPlanningValue($value): string
+{
+    if (is_array($value)) {
+        return implode(
+            ', ',
+            array_map(
+                [$this, 'formatPlanningValue'],
+                $value
+            )
+        );
+    }
+
+    if ($value === null || $value === '') {
+        return '';
+    }
+
+    $value = (string) $value;
+
+    $labels = [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Kitchen Layout
+        |--------------------------------------------------------------------------
+        */
+
+        'open_plan' => 'Open Plan',
+        'l_shape' => 'L-Shape',
+        'u_shape' => 'U-Shape',
+        'galley' => 'Galley Kitchen',
+        'island' => 'Island Kitchen',
+        'single_wall' => 'Single Wall',
+        'two_wall' => 'Two Wall',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Manufacturer
+        |--------------------------------------------------------------------------
+        */
+
+        'schuller' => 'Schüller',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Handle Preference
+        |--------------------------------------------------------------------------
+        */
+
+        'handless' => 'Handleless',
+        'handles' => 'Handles',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Delivery Format
+        |--------------------------------------------------------------------------
+        */
+
+        'pdf' => 'PDF',
+        'renders' => 'Renderings',
+        'drw' => 'DRW',
+        'pdf_renders' => 'PDF + Renderings',
+        'pdf_renders_drw' => 'PDF + Renderings + DRW',
+    ];
+
+    if (isset($labels[$value])) {
+        return $labels[$value];
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fallback
+    |--------------------------------------------------------------------------
+    |
+    | If a new internal value is introduced later, don't expose
+    | the raw database-style value if we can format it safely.
+    |
+    */
+
+    return ucwords(
+        str_replace(
+            ['_', '-'],
+            ' ',
+            $value
+        )
+    );
+}
+
 public function downloadOrderFiles(): void
 {
     check_admin_referer(
@@ -524,11 +619,23 @@ public function renderMetaBox($order): void
             'Planning Category'
         );
     
+        $category = $order->get_meta(
+            '_nyp_planning_category'
+        );
+    
+        $categoryLabels = [
+            'basic'        => 'Basic Planning',
+            'professional' => 'Professional Kitchen Design',
+            'premium'      => 'Premium Room Concept',
+        ];
+    
+        if (isset($categoryLabels[$category])) {
+            $category = $categoryLabels[$category];
+        }
+    
         $this->row(
-            'Category Confirmation',
-            $order->get_meta(
-                '_nyp_category_confirmation'
-            )
+            'Planning Category',
+            $category
         );
     
         $this->sectionEnd();
@@ -588,15 +695,7 @@ public function renderMetaBox($order): void
             $order->get_meta('_nyp_kitchen_layout')
         );
         
-        $this->row(
-            'Ceiling Height',
-            $order->get_meta('_nyp_ceiling_height')
-        );
-        
-        $this->row(
-            'Layout Notes',
-            $order->get_meta('_nyp_layout_notes')
-        );
+   
         $this->row('Ceiling Height', $order->get_meta('_nyp_ceiling_height'));
         $this->row('Layout Notes', $order->get_meta('_nyp_layout_notes'));
 
@@ -914,14 +1013,31 @@ echo '</p>';
     }
 
     private function row(string $label, $value): void
-    {
-        if ($value === '') {
-            return;
-        }
-
-        echo '<p>';
-        echo '<strong>' . esc_html($label) . ':</strong><br>';
-        echo nl2br(esc_html((string) $value));
-        echo '</p>';
+{
+    if (
+        $value === ''
+        || $value === null
+        || $value === []
+    ) {
+        return;
     }
+
+    $value = $this->formatPlanningValue($value);
+
+    if ($value === '') {
+        return;
+    }
+
+    echo '<p>';
+
+    echo '<strong>'
+        . esc_html($label)
+        . ':</strong><br>';
+
+    echo nl2br(
+        esc_html($value)
+    );
+
+    echo '</p>';
+}
 }

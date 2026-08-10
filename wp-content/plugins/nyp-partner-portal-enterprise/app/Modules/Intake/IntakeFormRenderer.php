@@ -2203,7 +2203,7 @@ $planningPriority = $this->meta(
                 </span>
 
                 <small>
-                    Priority planning service with accelerated processing and scheduling. This upgrade will be added during checkout.
+                Priority overnight planning with accelerated processing. This upgrade is added to your order during checkout.
                 </small>
 
             </span>

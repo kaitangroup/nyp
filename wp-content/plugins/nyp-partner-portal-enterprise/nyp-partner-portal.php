@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: NYP Partner Portal
- * Description: Site-specific business logic plugin for NYP Digital Kitchen Design.
+ * Description: Site-specific business logic plugin for NYP Kitchen Design.
  * Version: 0.1.0
  * Author: Shariful
  */
