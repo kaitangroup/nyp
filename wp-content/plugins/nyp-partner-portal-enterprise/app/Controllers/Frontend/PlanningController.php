@@ -71,10 +71,32 @@ class PlanningController
  */
 public function start(): void
 {
-    $productId = absint($_GET['product_id'] ?? 0);
+    if (!$this->canAccessPlanning()) {
+
+        wc_add_notice(
+            __(
+                'Your partner account is currently awaiting approval by NYP. You will be able to submit planning requests after approval.',
+                'nyp'
+            ),
+            'notice'
+        );
+
+        wp_safe_redirect(
+            wc_get_page_permalink('myaccount')
+        );
+
+        exit;
+    }
+
+    $productId = absint(
+        $_GET['product_id'] ?? 0
+    );
 
     if (!$productId) {
-        wp_safe_redirect(home_url());
+
+        wp_safe_redirect(
+            home_url()
+        );
 
         exit;
     }
@@ -111,6 +133,17 @@ public function start(): void
      */
     public function show(): string
     {
+
+        if (!$this->canAccessPlanning()) {
+
+            return sprintf(
+                '<div class="woocommerce-info nyp-planning-access-denied">%s</div>',
+                esc_html__(
+                    'Your partner account is currently awaiting approval by NYP. You will be able to submit planning requests after approval.',
+                    'nyp'
+                )
+            );
+        }
         return $this->renderer->render();
     }
 
@@ -234,6 +267,62 @@ public function start(): void
 
             exit;
     }
+}
+
+/**
+ * Determine whether the current user can access the Planning Brief.
+ *
+ * Only approved partners may access the planning workflow.
+ *
+ * Administrators are allowed for administrative/testing purposes.
+ *
+ * @return bool
+ */
+private function canAccessPlanning(): bool
+{
+    if (!is_user_logged_in()) {
+        return false;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Administrators
+    |--------------------------------------------------------------------------
+    */
+
+    if (current_user_can('manage_options')) {
+        return true;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Partner Role
+    |--------------------------------------------------------------------------
+    */
+
+    $user = wp_get_current_user();
+
+    if (
+        !in_array(
+            'nyp_partner',
+            (array) $user->roles,
+            true
+        )
+    ) {
+        return false;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Partner Approval Status
+    |--------------------------------------------------------------------------
+    */
+
+    return get_user_meta(
+        $user->ID,
+        'nyp_partner_status',
+        true
+    ) === 'approved';
 }
 
 

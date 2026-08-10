@@ -344,23 +344,58 @@ public function validatePlanningAddToCart(
  *
  * @return bool
  */
+/**
+ * Determine whether the current user can start planning.
+ *
+ * Only approved partners may start a planning request.
+ *
+ * @return bool
+ */
 private function canStartPlanning(): bool
 {
     if (!is_user_logged_in()) {
         return false;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Administrators
+    |--------------------------------------------------------------------------
+    */
+
     if (current_user_can('manage_options')) {
         return true;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Partner Role
+    |--------------------------------------------------------------------------
+    */
+
     $user = wp_get_current_user();
 
-    return in_array(
-        'nyp_partner',
-        (array) $user->roles,
+    if (
+        !in_array(
+            'nyp_partner',
+            (array) $user->roles,
+            true
+        )
+    ) {
+        return false;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Partner Approval Status
+    |--------------------------------------------------------------------------
+    */
+
+    return get_user_meta(
+        $user->ID,
+        'nyp_partner_status',
         true
-    );
+    ) === 'approved';
 }
 
 public function planningLoopButton(
