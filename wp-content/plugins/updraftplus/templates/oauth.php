@@ -2,7 +2,7 @@
 /**
  * Oauth Callback Modal
  */
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>

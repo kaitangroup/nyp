@@ -194,7 +194,7 @@ class ThemeIntegration {
 
 			$file_path = dirname(__FILE__) . '/views/blocksy-posts.php';
 
-			return blocksy_render_view(
+			return blocksy_companion_render_view(
 				$file_path,
 				[
 					'args' => $args,

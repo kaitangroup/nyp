@@ -5203,7 +5203,7 @@ msgstr "Pohrani Gravatar slike lokalno"
 
 #: framework/premium/features/local-gravatars.php:41
 msgid "Store and load Gravatars locally for increased privacy and performance."
-msgstr "Pohrani i učitaj Gravatar slike lokalno radi poboljšane privatnosti i performansi."
+msgstr "Pohrani i u��itaj Gravatar slike lokalno radi poboljšane privatnosti i performansi."
 
 #: framework/premium/features/premium-header.php:350,
 #: framework/premium/features/socials.php:13,

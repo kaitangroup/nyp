@@ -271,7 +271,7 @@ class UpdraftCentral_Listener {
 			$command_class = isset($this->commands[$class_prefix]) ? $this->commands[$class_prefix] : new stdClass;
 	
 			if ('_' == substr($command, 0, 1) || !is_a($command_class, $command_php_class) || (!method_exists($command_class, $command) && !method_exists($command_class, '__call'))) {
-				if (defined('UPDRAFTCENTRAL_UDRPC_FORCE_DEBUG') && UPDRAFTCENTRAL_UDRPC_FORCE_DEBUG) error_log("Unknown RPC command received: ".$command);
+				if (defined('UPDRAFTCENTRAL_UDRPC_FORCE_DEBUG') && UPDRAFTCENTRAL_UDRPC_FORCE_DEBUG) error_log("Unknown RPC command received: ".$command); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging is intentionally enabled.
 
 				return $this->return_rpc_message(array('response' => 'rpcerror', 'data' => array('code' => 'unknown_rpc_command', 'data' => array('prefix' => $class_prefix, 'command' => $command, 'class' => $command_php_class))));
 			}
@@ -302,12 +302,12 @@ class UpdraftCentral_Listener {
 			return $this->return_rpc_message($msg);
 		} catch (Exception $e) {
 			$log_message = 'PHP Fatal Exception error ('.get_class($e).') has occurred during UpdraftCentral command execution. Error Message: '.$e->getMessage().' (Code: '.$e->getCode().', line '.$e->getLine().' in '.$e->getFile().')';
-			error_log($log_message);
+			error_log($log_message); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging is intentionally enabled.
 
 			return $this->return_rpc_message(array('response' => 'rpcerror', 'data' => array('code' => 'rpc_fatal_error', 'data' => array('command' => $command, 'message' => $log_message))));
 		} catch (Error $e) { // phpcs:ignore PHPCompatibility.Classes.NewClasses.errorFound -- The Error class does not exist in PHP below 5.6.
 			$log_message = 'PHP Fatal error ('.get_class($e).') has occurred during UpdraftCentral command execution. Error Message: '.$e->getMessage().' (Code: '.$e->getCode().', line '.$e->getLine().' in '.$e->getFile().')';
-			error_log($log_message);
+			error_log($log_message); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging is intentionally enabled.
 
 			return $this->return_rpc_message(array('response' => 'rpcerror', 'data' => array('code' => 'rpc_fatal_error', 'data' => array('command' => $command, 'message' => $log_message))));
 		}
@@ -322,7 +322,7 @@ class UpdraftCentral_Listener {
 
 		$this->host->error_reporting_stop_when_logged = true;
 		$error_levels = version_compare(PHP_VERSION, '8.4.0', '>=') ? E_ALL : E_ALL & ~E_STRICT;
-		set_error_handler(array($this->host, 'php_error'), $error_levels);
+		set_error_handler(array($this->host, 'php_error'), $error_levels); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_set_error_handler -- set_error_handle is intentionally used here.
 		$this->php_events = array();
 		@ob_start();// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Might be a bigger picture that I am missing but do we need to silence errors here?
 		add_filter($updraftcentral_host_plugin->get_logline_filter(), array($this, 'updraftcentral_logline'), 10, 4);

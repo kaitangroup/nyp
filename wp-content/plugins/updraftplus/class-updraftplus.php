@@ -1,7 +1,7 @@
 <?php
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery -- we try to reduce overhead by bypassing WP APIs and other extra layers; Some custom complex queries tailored specifically to our needs, giving us full control over the SQL commands and data manipulation
 // phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fgets, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.WP.AlternativeFunctions.file_system_operations_fread, WordPress.WP.AlternativeFunctions.file_system_operations_chmod, WordPress.WP.AlternativeFunctions.file_system_operations_fputs, WordPress.WP.AlternativeFunctions.file_system_operations_is_writeable, WordPress.WP.AlternativeFunctions.file_system_operations_chown, WordPress.WP.AlternativeFunctions.file_system_operations_chgrp, WordPress.WP.AlternativeFunctions.file_system_operations_touch, WordPress.WP.AlternativeFunctions.file_system_operations_rmdir, WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- Native PHP fileystem function is used for direct control and performance because it can bypass additional layers of abstraction so that no overhead from the WordPress filesystem API's internal handling
-// phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_setopt_array, WP.AlternativeFunctions.curl_curl_setopt, WordPress.WP.AlternativeFunctions.curl_curl_init, WordPress.WP.AlternativeFunctions.curl_curl_exec, WordPress.WP.AlternativeFunctions.curl_curl_getinfo, WordPress.WP.AlternativeFunctions.curl_curl_multi_init, WordPress.WP.AlternativeFunctions.curl_curl_multi_add_handle, WordPress.WP.AlternativeFunctions.curl_curl_multi_exec, WordPress.WP.AlternativeFunctions.curl_curl_multi_select, WordPress.WP.AlternativeFunctions.curl_curl_multi_getcontent, WordPress.WP.AlternativeFunctions.curl_curl_multi_remove_handle, WordPress.WP.AlternativeFunctions.curl_curl_multi_close, WordPress.WP.AlternativeFunctions.curl_curl_error, WordPress.WP.AlternativeFunctions.curl_curl_close -- Direct cURL usage is intentional to leverage specific low-level options not available via the WordPress HTTP API.
+// phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_setopt_array, WordPress.WP.AlternativeFunctions.curl_curl_setopt, WordPress.WP.AlternativeFunctions.curl_curl_init, WordPress.WP.AlternativeFunctions.curl_curl_exec, WordPress.WP.AlternativeFunctions.curl_curl_getinfo, WordPress.WP.AlternativeFunctions.curl_curl_multi_init, WordPress.WP.AlternativeFunctions.curl_curl_multi_add_handle, WordPress.WP.AlternativeFunctions.curl_curl_multi_exec, WordPress.WP.AlternativeFunctions.curl_curl_multi_select, WordPress.WP.AlternativeFunctions.curl_curl_multi_getcontent, WordPress.WP.AlternativeFunctions.curl_curl_multi_remove_handle, WordPress.WP.AlternativeFunctions.curl_curl_multi_close, WordPress.WP.AlternativeFunctions.curl_curl_error, WordPress.WP.AlternativeFunctions.curl_curl_close -- Direct cURL usage is intentional to leverage specific low-level options not available via the WordPress HTTP API.
 // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_print_r -- print_r is intentionally used to convert an array into a readable string or for controlled logging purposes.
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching -- some query operations need to always receive the most up-to-date or actual data directly from the database, reducing the risk of serving stale information.
 // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_set_error_handler -- we use the set_error_handler() function to provide a flexible way of handling PHP errors according to our needs; we centralises error handling in one place and customises certain errors based on their severity and context.
@@ -117,6 +117,7 @@ class UpdraftPlus {
 			'UpdraftPlus_HTTP_Error_Descriptions' => 'includes/class-http-error-descriptions.php',
 			'UpdraftPlus_Database_Utility' => 'includes/class-database-utility.php',
 			'UpdraftPlus_Migrator_Lite' => 'includes/migrator-lite.php',
+			'UpdraftPlus_Deactivation' => 'includes/class-updraftplus-deactivation.php',
 		);
 
 		if (is_file(UPDRAFTPLUS_DIR.'/udaddons/updraftplus-cli-command-base.php')) $load_classes['UpdraftPlus_CLI_Command_Base'] = 'udaddons/updraftplus-cli-command-base.php';
@@ -132,6 +133,8 @@ class UpdraftPlus {
 		if (defined('WP_CLI') && WP_CLI && class_exists('UpdraftPlus_CLI_Command_Base') && !class_exists('UpdraftPlus_CLI_Command')) {
 			WP_CLI::add_command('updraftplus', 'UpdraftPlus_CLI_Command_Base');
 		}
+
+		if (class_exists('UpdraftPlus_Deactivation')) UpdraftPlus_Deactivation::get_instance();
 
 		// Create admin page
 		add_action('init', array($this, 'initialize_required_settings'));
@@ -4756,6 +4759,9 @@ class UpdraftPlus {
 			// if (count($scheduled) < 2) {
 			// return $event;
 			// }
+
+			// Override the timestamp of the scheduled backup event based on the user's predefined schedule setting if there is a fixtime add-on.
+			$event = apply_filters('updraftplus_override_scheduled_backup_event', $event);
 		
 			$backup_scheduled_for = ('updraft_backup' == $event->hook) ? $event->timestamp : wp_next_scheduled('updraft_backup');
 			$db_scheduled_for = ('updraft_backup_database' == $event->hook) ? $event->timestamp : wp_next_scheduled('updraft_backup_database');
@@ -4939,9 +4945,9 @@ class UpdraftPlus {
 		// index.php is for a sanity check - make sure that we're not somewhere unexpected
 		if ((!is_dir($updraft_dir) || !is_file($updraft_dir.'/index.html') || !is_file($updraft_dir.'/.htaccess')) && !is_file($updraft_dir.'/index.php') || !is_file($updraft_dir.'/web.config')) {
 			@mkdir($updraft_dir, 0775, true);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
-			@file_put_contents($updraft_dir.'/index.html', "<html><body><a href=\"https://updraftplus.com\" target=\"_blank\">WordPress backups by UpdraftPlus</a></body></html>");// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
-			if (!is_file($updraft_dir.'/.htaccess')) @file_put_contents($updraft_dir.'/.htaccess', 'deny from all');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
-			if (!is_file($updraft_dir.'/web.config')) @file_put_contents($updraft_dir.'/web.config', "<configuration>\n<system.webServer>\n<authorization>\n<deny users=\"*\" />\n</authorization>\n</system.webServer>\n</configuration>\n");// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
+			@file_put_contents($updraft_dir.'/index.html', "<html><body><a href=\"https://updraftplus.com\" target=\"_blank\">WordPress backups by UpdraftPlus</a></body></html>");// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, PluginCheck.CodeAnalysis.WriteFile.PluginDirectoryWrite -- Silenced to suppress errors that may arise because of the function. False positive: the 'file_put_contents()' function doesn't put the file in the plugin directory, it puts it in the UpdraftPlus backup directory instead.
+			if (!is_file($updraft_dir.'/.htaccess')) @file_put_contents($updraft_dir.'/.htaccess', 'deny from all');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, PluginCheck.CodeAnalysis.WriteFile.PluginDirectoryWrite -- Silenced to suppress errors that may arise because of the function. False positive: the 'file_put_contents()' function doesn't put the file in the plugin directory, it puts it in the UpdraftPlus backup directory instead.
+			if (!is_file($updraft_dir.'/web.config')) @file_put_contents($updraft_dir.'/web.config', "<configuration>\n<system.webServer>\n<authorization>\n<deny users=\"*\" />\n</authorization>\n</system.webServer>\n</configuration>\n");// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, PluginCheck.CodeAnalysis.WriteFile.PluginDirectoryWrite -- Silenced to suppress errors that may arise because of the function. False positive: the 'file_put_contents()' function doesn't put the file in the plugin directory, it puts it in the UpdraftPlus backup directory instead.
 		}
 
 		$this->backup_dir = $updraft_dir;
@@ -5906,109 +5912,172 @@ class UpdraftPlus {
 	 * @return Array - the list of keys
 	 */
 	public function get_settings_keys() {
-		// N.B. updraft_backup_history is not included here, as we don't want that wiped
-		return array(
-			'updraft_autobackup_default',
-			'updraft_dropbox',
-			'updraft_pcloud',
-			'updraft_googledrive',
+		$general_keys = self::get_system_identifiers_list();
+		$general_keys = array_merge($general_keys['options'], array(
 			'updraftplus_tmp_googledrive_access_token',
 			'updraftplus_dismissedautobackup',
-			'dismissed_general_notices_until',
-			'dismissed_review_notice',
-			'dismissed_clone_php_notices_until',
-			'dismissed_clone_wc_notices_until',
-			'dismissed_season_notices_until',
 			'updraftplus_dismissedexpiry',
 			'updraftplus_dismisseddashnotice',
-			'updraft_interval',
-			'updraft_interval_increments',
-			'updraft_interval_database',
-			'updraft_retain',
-			'updraft_retain_db',
-			'updraft_encryptionphrase',
-			'updraft_service',
-			'updraft_googledrive_clientid',
-			'updraft_googledrive_secret',
-			'updraft_googledrive_remotepath',
-			'updraft_ftp',
-			'updraft_backblaze',
-			'updraft_server_address',
-			'updraft_dir',
-			'updraft_email',
-			'updraft_delete_local',
-			'updraft_debug_mode',
-			'updraft_include_plugins',
-			'updraft_include_themes',
-			'updraft_include_uploads',
-			'updraft_include_others',
-			'updraft_include_wpcore',
-			'updraft_include_wpcore_exclude',
-			'updraft_include_more',
-			'updraft_include_blogs',
-			'updraft_include_mu-plugins',
-			'updraft_auto_updates', // since WordPress 5.5, updraft_auto_updates option is no longer used and has been removed from the code, but the HTML IDs which use the same name that represent the automatic update setting are still zealously preserved so this one cannot be removed
-			'updraft_include_others_exclude',
-			'updraft_include_uploads_exclude',
-			'updraft_lastmessage',
-			'updraft_googledrive_token',
-			'updraft_dropboxtk_request_token',
-			'updraft_dropboxtk_access_token',
-			'updraft_adminlocking',
-			'updraft_updraftvault',
-			'updraft_remotesites',
-			'updraft_migrator_localkeys',
-			'updraft_central_localkeys',
-			'updraft_retain_extrarules',
-			'updraft_googlecloud',
-			'updraft_include_more_path',
-			'updraft_split_every',
-			'updraft_ssl_nossl',
-			'updraft_backupdb_nonwp',
-			'updraft_extradbs',
-			'updraft_combine_jobs_around',
-			'updraft_last_backup',
-			'updraft_starttime_files',
-			'updraft_starttime_db',
-			'updraft_startday_db',
-			'updraft_startday_files',
-			'updraft_sftp',
-			'updraft_s3',
-			'updraft_s3generic',
-			'updraft_dreamhost',
-			'updraft_s3generic_login',
-			'updraft_s3generic_pass',
-			'updraft_s3generic_remote_path',
-			'updraft_s3generic_endpoint',
-			'updraft_webdav',
-			'updraft_openstack',
-			'updraft_onedrive',
-			'updraft_azure',
-			'updraft_cloudfiles',
-			'updraft_cloudfiles_user',
-			'updraft_cloudfiles_apikey',
-			'updraft_cloudfiles_path',
-			'updraft_cloudfiles_authurl',
-			'updraft_ssl_useservercerts',
-			'updraft_ssl_disableverify',
-			'updraft_s3_login',
-			'updraft_s3_pass',
-			'updraft_s3_remote_path',
-			'updraft_dreamobjects_login',
-			'updraft_dreamobjects_pass',
-			'updraft_dreamobjects_remote_path',
-			'updraft_dreamobjects',
-			'updraft_report_warningsonly',
-			'updraft_report_wholebackup',
-			'updraft_report_dbbackup',
-			'updraft_log_syslog',
-			'updraft_extradatabases',
 			'updraftplus_tour_cancelled_on',
 			'updraftplus_version',
-			'updraft_dismiss_admin_warning_litespeed',
-			'updraft_dismiss_admin_warning_pclzip',
-			'updraft_dismiss_phpseclib_notice',
+		));
+		// N.B. updraft_backup_history is not included here, as we don't want that wiped
+		return array_diff($general_keys, array('updraft_restore_in_progress', 'updraft_backup_history'));
+	}
+
+	/**
+	 * Get a collection of unique names or keys used by the plugin to identify specific settings, options, scheduled tasks (crons), metadata, and transient data
+	 *
+	 * Note that the following list of setting keys are equivalent to the keys used in our code
+	 * Adding a new one to the list below means there's already a key used somewhere else in the codebase, or it will be added later (i.e. it's reserved)
+	 * Editing one of the keys below means that the corresponding key in the codebase should also be edited or updated for consistency
+	 *
+	 * @return Void
+	 */
+	public static function get_system_identifiers_list() {
+		$list = array(
+			'options' => array(
+				'updraft_autobackup_default',
+				'updraft_dropbox',
+				'updraft_pcloud',
+				'updraft_googledrive',
+				'dismissed_general_notices_until',
+				'dismissed_review_notice',
+				'dismissed_clone_php_notices_until',
+				'dismissed_clone_wc_notices_until',
+				'dismissed_season_notices_until',
+				'updraft_interval',
+				'updraft_interval_increments',
+				'updraft_interval_database',
+				'updraft_retain',
+				'updraft_retain_db',
+				'updraft_encryptionphrase',
+				'updraft_service',
+				'updraft_googledrive_clientid',
+				'updraft_googledrive_secret',
+				'updraft_googledrive_remotepath',
+				'updraft_ftp',
+				'updraft_backblaze',
+				'updraft_server_address',
+				'updraft_dir',
+				'updraft_email',
+				'updraft_delete_local',
+				'updraft_debug_mode',
+				'updraft_include_plugins',
+				'updraft_include_themes',
+				'updraft_include_uploads',
+				'updraft_include_others',
+				'updraft_include_wpcore',
+				'updraft_include_wpcore_exclude',
+				'updraft_include_more',
+				'updraft_include_blogs',
+				'updraft_include_mu-plugins',
+				'updraft_auto_updates', // since WordPress 5.5, updraft_auto_updates option is no longer used and has been removed from the code, but the HTML IDs which use the same name that represent the automatic update setting are still zealously preserved so this one cannot be removed
+				'updraft_include_others_exclude',
+				'updraft_include_uploads_exclude',
+				'updraft_lastmessage',
+				'updraft_googledrive_token',
+				'updraft_dropboxtk_request_token',
+				'updraft_dropboxtk_access_token',
+				'updraft_adminlocking',
+				'updraft_updraftvault',
+				'updraft_remotesites',
+				'updraft_migrator_localkeys',
+				'updraft_central_localkeys',
+				'updraft_retain_extrarules',
+				'updraft_googlecloud',
+				'updraft_include_more_path',
+				'updraft_split_every',
+				'updraft_ssl_nossl',
+				'updraft_backupdb_nonwp',
+				'updraft_extradbs',
+				'updraft_combine_jobs_around',
+				'updraft_last_backup',
+				'updraft_starttime_files',
+				'updraft_starttime_db',
+				'updraft_startday_db',
+				'updraft_startday_files',
+				'updraft_sftp',
+				'updraft_s3',
+				'updraft_s3generic',
+				'updraft_dreamhost',
+				'updraft_s3generic_login',
+				'updraft_s3generic_pass',
+				'updraft_s3generic_remote_path',
+				'updraft_s3generic_endpoint',
+				'updraft_webdav',
+				'updraft_openstack',
+				'updraft_onedrive',
+				'updraft_azure',
+				'updraft_cloudfiles',
+				'updraft_cloudfiles_user',
+				'updraft_cloudfiles_apikey',
+				'updraft_cloudfiles_path',
+				'updraft_cloudfiles_authurl',
+				'updraft_ssl_useservercerts',
+				'updraft_ssl_disableverify',
+				'updraft_s3_login',
+				'updraft_s3_pass',
+				'updraft_s3_remote_path',
+				'updraft_dreamobjects_login',
+				'updraft_dreamobjects_pass',
+				'updraft_dreamobjects_remote_path',
+				'updraft_dreamobjects',
+				'updraft_report_warningsonly',
+				'updraft_report_wholebackup',
+				'updraft_report_dbbackup',
+				'updraft_log_syslog',
+				'updraft_extradatabases',
+				'updraft_dismiss_admin_warning_litespeed',
+				'updraft_dismiss_admin_warning_pclzip',
+				'updraft_dismiss_phpseclib_notice',
+				'updraft_restore_in_progress',
+				'updraft_backup_history',
+			),
+			'prefixed_options' => array(
+				'updraft_jobdata_%',
+				'updraft_last_scheduled_%',
+				'updraft_lock_%',
+				'updraftplus_%',
+			),
+			'meta' => array(
+				'updraft_oneshotnonce',
+				'updraftplus-addons_options',
+				// leave the site ID until the x-spm-duplicate-of handler is implemented in our plugin
+				// 'updraftplus-addons_siteid',
+				'external_updates-updraftplus',
+				'updraft_lastmessage',
+			),
+			'transients' => array(
+				'updraft_initial_resume_interval',
+				'upaddons_remote',
+				'updraftplus_dashboard_news',
+				'udvault_last_config',
+				'updraftvault_quota_numeric',
+				'updraftvault_quota_text',
+				'updraftcentral_analytics_tracking_id',
+			),
+			'prefixed_transients' => array(
+				'ud_forgt_%',
+				'ud_rsenddck_%',
+				'updraftplus_%',
+			),
+			'crons' => array(
+				'updraft_backup',
+				'updraft_backup_database',
+				'updraft_backup_increments',
+				'updraftplus_clean_temporary_files',
+				'puc_cron_check_updates-updraftplus',
+				'updraftplus_temporary_clone_refresh_connection',
+				'updraft_backup_resume',
+				'ud_wp_maybe_auto_update',
+				'updraftplus_migration_token_cleanup',
+			),
 		);
+
+		$udaddons2_options = get_site_option('updraftplus-addons_options');
+		if (!empty($udaddons2_options['email'])) $list['transients'][] = 'udaddons_connect_'.substr(md5($udaddons2_options['email']), 0, 23);
+		return $list;
 	}
 
 	/**
@@ -6402,7 +6471,7 @@ class UpdraftPlus {
 		if (!class_exists('UpdraftPlus_Database_Utility')) updraft_try_include_file('includes/class-database-utility.php', 'include_once');
 		$escaped_table_name = UpdraftPlus_Database_Utility::escape_table_name($table);
 		if ($include_locks) {
-			$wpdb->query($wpdb->prepare("DELETE FROM $escaped_table_name WHERE ($field LIKE %s OR $field LIKE %s OR $field LIKE %s OR $field LIKE %s OR $field LIKE %s OR $field LIKE %s)", UpdraftPlus_Database_Utility::esc_like('updraftplus_unlocked_').'%', UpdraftPlus_Database_Utility::esc_like('updraftplus_locked_').'%', UpdraftPlus_Database_Utility::esc_like('updraftplus_last_lock_time_').'%', UpdraftPlus_Database_Utility::esc_like('updraftplus_semaphore_').'%', UpdraftPlus_Database_Utility::esc_like('updraft_jobdata_').'%', UpdraftPlus_Database_Utility::esc_like('updraft_last_scheduled_').'%'));// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely escaped via escape_table_name().
+			$wpdb->query($wpdb->prepare("DELETE FROM $escaped_table_name WHERE ($field LIKE %s OR $field LIKE %s OR $field LIKE %s OR $field LIKE %s OR $field LIKE %s OR $field LIKE %s)", UpdraftPlus_Database_Utility::esc_like('updraftplus_unlocked_').'%', UpdraftPlus_Database_Utility::esc_like('updraftplus_locked_').'%', UpdraftPlus_Database_Utility::esc_like('updraftplus_last_lock_time_').'%', UpdraftPlus_Database_Utility::esc_like('updraftplus_semaphore_').'%', UpdraftPlus_Database_Utility::esc_like('updraft_jobdata_').'%', UpdraftPlus_Database_Utility::esc_like('updraft_last_scheduled_').'%'));// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Table name is safely escaped via escape_table_name().
 		} else {
 			if (!empty($this->nonce)) {
 				$sql = $wpdb->prepare("DELETE FROM $escaped_table_name WHERE $field LIKE %s AND $field != %s", UpdraftPlus_Database_Utility::esc_like('updraft_jobdata_').'%', "updraft_jobdata_{$this->nonce}");// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely escaped via escape_table_name().
@@ -6763,6 +6832,30 @@ class UpdraftPlus {
 	public function get_avatar_url($url) {
 		if (preg_match('/gravatar.com/i', $url)) return UPDRAFTPLUS_URL.'/images/default-avatar.jpg';
 		return $url;
+	}
+
+	/**
+	 * Displays a checkbox for selecting a remote storage service.
+	 *
+	 * @param string $backup_using   The label describing the backup method to be used.
+	 * @param string $method         The method or service identifier (e.g., 'ftp', 's3').
+	 * @param string $multi          Indicates whether multiple services can be selected (e.g., 'multi').
+	 * @param mixed  $active_service The currently active service(s), can be a string or an array of active methods.
+	 * @param string $description    A brief description of the service for display purposes.
+	 * @param bool   $disabled       Whether the checkbox should be disabled (default: false).
+	 */
+	public function show_remote_storage($backup_using, $method, $multi, $active_service, $description, $disabled = false) {
+		/* translators: %s: Backup method */
+		$backup_using = esc_attr(sprintf(__("Backup using %s?", 'updraftplus'), $backup_using));
+		$class = esc_attr("updraft_servicecheckbox $method $multi");
+		$id = esc_attr("updraft_servicecheckbox_$method");
+		$value = esc_attr($method);
+		$description = esc_attr($description);
+
+		echo "<input aria-label=\"$backup_using\" name=\"updraft_service[]\" class=\"$class\" id=\"$id\" type=\"checkbox\" value=\"$value\""; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- All the variables are already escaped.
+		if (!$disabled && ($active_service === $method || (is_array($active_service) && in_array($method, $active_service)))) echo ' checked="checked"';
+		if ($disabled) echo ' disabled="disabled"';
+		echo " data-labelauty=\"$description\">"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The '$description' variable is already escaped.
 	}
 
 	/**

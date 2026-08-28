@@ -29,7 +29,7 @@ export const activateScreen = (
 	el,
 	{
 		// login | register | forgot
-		screen = 'login',
+		screen = 'login'
 	}
 ) => {
 	if (!el.querySelector(`.ct-${screen}-form`)) {
@@ -43,6 +43,21 @@ export const activateScreen = (
 
 	el.querySelector('[class*="-form"].active').classList.remove('active')
 	el.querySelector(`.ct-${screen}-form`).classList.add('active')
+
+	// When returning to the login screen, remove any mounted interstitial forms
+	// (WP 2FA, Kadence Security / iThemes, etc.) inserted as siblings of the
+	// login form so the user sees a clean login form again.
+	if (screen === 'login') {
+		const loginFormContainer = el.querySelector('.ct-login-form')
+
+		if (loginFormContainer) {
+			loginFormContainer
+				.querySelectorAll(
+					'[name="validate_2fa_form"], form[name^="itsec-"]'
+				)
+				.forEach((f) => f.remove())
+		}
+	}
 
 	if (el.querySelector(`.ct-${screen}-form form`)) {
 		el.querySelector(`.ct-${screen}-form form`).reset()
@@ -108,7 +123,7 @@ export const maybeAddErrors = (container, html) => {
 
 	return {
 		hasError: !!maybeLoginError,
-		doc,
+		doc
 	}
 }
 
@@ -224,7 +239,7 @@ export const handleAccountModal = (el) => {
 
 					{
 						method: maybeRegister.method,
-						body: new FormData(maybeRegister),
+						body: new FormData(maybeRegister)
 					}
 				)
 					.then((response) => response.text())
@@ -305,7 +320,7 @@ export const handleAccountModal = (el) => {
 
 				{
 					method: maybeLostPassword.method,
-					body: new FormData(maybeLostPassword),
+					body: new FormData(maybeLostPassword)
 				}
 			)
 				.then((response) => response.text())

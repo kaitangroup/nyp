@@ -215,6 +215,22 @@ textarea.updraft_input--wide {
 	font-size: 1.3em;
 }
 
+table#remote-storage-holder tbody tr.updraft-background-white {
+	background-color: #FFF;
+}
+
+table#remote-storage-holder tbody tr.updraft-empty-tr td {
+	padding: 10px;
+}
+
+table#remote-storage-holder tbody th {
+	padding: 10px;
+}
+
+table#remote-storage-holder tbody td {
+	padding: 0;
+}
+
 /* End input boxes */
 
 /* Reusable input error message css */
@@ -1298,9 +1314,8 @@ label[for=updraft_servicecheckbox_updraftvault] {
 }
 
 #updraft-wrap .udp-info {
-	position: absolute;
-	right: 10px;
-	top: calc(50% - 10px);
+	display: inline-block;
+	margin-left: 10px;
 }
 
 #updraft-wrap span.info-trigger {
@@ -3737,11 +3752,6 @@ span#updraftplus_ajax_restore_last_activity {
 .rtl label.updraft_checkbox {
 	margin-right: 26px;
 	margin-left: inherit;
-}
-
-.rtl #updraft-wrap .udp-info {
-	left: 10px;
-	right: inherit;
 }
 
 .rtl input.labelauty + label > span.labelauty-unchecked-image + span.labelauty-unchecked,

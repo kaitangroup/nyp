@@ -1,4 +1,4 @@
-<?php if (!defined('UPDRAFTPLUS_DIR')) die('No direct access.'); ?>
+<?php if (!defined('ABSPATH')) die('No direct access.'); ?>
 <div class="updraft_backup_content">
 	<div id="updraft-insert-admin-warning"></div>
 	<noscript>

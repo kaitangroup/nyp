@@ -111,6 +111,7 @@ class SubscribersResponseBuilder {
       'unsubscribe_token' => $subscriberEntity->getUnsubscribeToken(),
       'link_token' => $subscriberEntity->getLinkToken(),
       'tags' => $this->buildTags($subscriberEntity),
+      'timezone' => $subscriberEntity->getTimeZone(),
     ];
 
     return $this->buildCustomFields($subscriberEntity, $data);

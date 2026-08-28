@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 if (!class_exists('Updraft_Notices_1_3')) updraft_try_include_file('vendor/team-updraft/common-libs/src/updraft-notices/updraft-notices.php', 'require_once');
 

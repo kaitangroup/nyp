@@ -39,7 +39,7 @@ abstract class UpdraftPlus_RemoteSend {
 
 		// Create a receiver for each key
 		if (!class_exists('UpdraftPlus_Options')) {
-			error_log("UpdraftPlus_Options class not found: is UpdraftPlus properly installed?");
+			UpdraftPlus_Manipulation_Functions::error_log("UpdraftPlus_Options class not found: is UpdraftPlus properly installed?");
 			return;
 		}
 		$our_keys = UpdraftPlus_Options::get_updraft_option('updraft_migrator_localkeys');

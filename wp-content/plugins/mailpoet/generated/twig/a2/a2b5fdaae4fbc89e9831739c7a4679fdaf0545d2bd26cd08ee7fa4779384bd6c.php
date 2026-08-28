@@ -63,12 +63,20 @@ class __TwigTemplate_176225ef6518abb3a235b9f1785c332f068c4c798b602f397b3f290225c
         yield "      var mailpoet_logs_default_from = '";
         yield $this->env->getRuntime('MailPoetVendor\Twig\Runtime\EscaperRuntime')->escape(($context["logs_default_from"] ?? null), "js", null, true);
         yield "';
-      var mailpoet_logs_api = ";
+      var mailpoet_logs_filter_options = ";
         // line 13
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode(($context["logs_filter_options"] ?? null));
+        yield ";
+      var mailpoet_logs_api = ";
+        // line 14
         yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode(($context["api"] ?? null));
         yield ";
-    ";
+      var mailpoet_logs_download = ";
         // line 15
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode(($context["download"] ?? null));
+        yield ";
+    ";
+        // line 17
         yield "  </script>
 </div>
 
@@ -97,7 +105,7 @@ class __TwigTemplate_176225ef6518abb3a235b9f1785c332f068c4c798b602f397b3f290225c
      */
     public function getDebugInfo()
     {
-        return array (  69 => 15,  65 => 13,  60 => 12,  51 => 4,  47 => 3,  36 => 1,);
+        return array (  77 => 17,  73 => 15,  69 => 14,  65 => 13,  60 => 12,  51 => 4,  47 => 3,  36 => 1,);
     }
 
     public function getSourceContext()

@@ -29,11 +29,13 @@ use MailPoet\Newsletter\Renderer\Renderer;
 use MailPoet\Newsletter\Sending\NewsletterReplayMetadata;
 use MailPoet\Newsletter\Sending\ScheduledTasksRepository;
 use MailPoet\Newsletter\Sending\SendingQueuesRepository;
+use MailPoet\Newsletter\Shortcodes\Categories\Link as LinkShortcodeCategory;
 use MailPoet\NewsletterProcessingException;
 use MailPoet\RuntimeException;
 use MailPoet\Segments\SegmentsRepository;
 use MailPoet\Settings\TrackingConfig;
 use MailPoet\Statistics\GATracking;
+use MailPoet\Subscribers\TrackingConsentController;
 use MailPoet\Util\Helpers;
 use MailPoet\Util\pQuery\pQuery;
 use MailPoet\WP\Emoji;
@@ -92,6 +94,10 @@ class Newsletter {
   private CouponBlockDetector $couponBlockDetector;
   private OrderReviewUrl $orderReviewUrl;
 
+  private TrackingConsentController $trackingConsentController;
+
+  private LinkShortcodeCategory $linkShortcodeCategory;
+
   public function __construct(
     ?WPFunctions $wp = null,
     ?PostsTask $postsTask = null,
@@ -129,6 +135,72 @@ class Newsletter {
     $this->automationRunStorage = ContainerWrapper::getInstance()->get(AutomationRunStorage::class);
     $this->couponBlockDetector = ContainerWrapper::getInstance()->get(CouponBlockDetector::class);
     $this->orderReviewUrl = ContainerWrapper::getInstance()->get(OrderReviewUrl::class);
+    $this->trackingConsentController = ContainerWrapper::getInstance()->get(TrackingConsentController::class);
+    $this->linkShortcodeCategory = ContainerWrapper::getInstance()->get(LinkShortcodeCategory::class);
+  }
+
+  /**
+   * Put real destinations back for a recipient we may not track.
+   *
+   * Restoring the saved link turns a plain URL back into itself, but a link
+   * shortcode back into raw `[link:...]` text: the shortcode pass deliberately
+   * leaves those alone while site tracking is on, because the click redirect is
+   * normally what resolves them. Since these recipients get no redirect, we
+   * resolve the shortcodes here with the same call the redirect would have
+   * made, so they land on exactly the same page.
+   *
+   * A restored URL may also carry a non-link shortcode of its own, such as
+   * `http://example.com/?email=[subscriber:email]`. Clicks::processUrl() runs a
+   * full shortcode pass over those at click time, so this does the same at send
+   * time (STOMAIL-8340).
+   */
+  private function untrackLinks(
+    string $content,
+    NewsletterEntity $newsletter,
+    SubscriberEntity $subscriber,
+    SendingQueueEntity $queue
+  ): string {
+    // true = convert every hashed link, not only the shortcode ones.
+    $content = $this->newsletterLinks->convertHashedLinksToShortcodesAndUrls(
+      $content,
+      $queue->getId(),
+      true
+    );
+
+    // Matches the whole shortcode, arguments included, because a link shortcode
+    // may carry one: [link:action | name:value]. The (?!\/\/) guard mirrors the
+    // extractor in Shortcodes::extract() so text like [link://example.com] is
+    // left alone rather than resolved to nothing and dropped. Case-insensitive
+    // for the same reason: that extractor is too, so [LINK:...] gets stored.
+    $content = (string)preg_replace_callback(
+      '/\[link:(?!\/\/)(?<action>[^\]]+)\]/i',
+      function (array $matches) use ($newsletter, $subscriber, $queue): string {
+        // Pass the full shortcode, as Statistics\Track\Clicks::processUrl() does:
+        // processShortcodeAction() parses the brackets itself, and only sees the
+        // arguments when they are still attached.
+        $url = $this->linkShortcodeCategory->processShortcodeAction(
+          $matches[0],
+          $newsletter,
+          $subscriber,
+          $queue
+        );
+        // An unresolvable shortcode would otherwise ship as literal text.
+        return $url ?? '';
+      },
+      $content
+    );
+
+    // Anything still unresolved was reintroduced by the restore above: the pass
+    // in prepareNewsletterForSending() already ran, and at that point every link
+    // was a hashed tag, so URL-embedded shortcodes were not in the content to be
+    // seen. Running it again therefore only touches the restored URLs.
+    return ShortcodesTask::process(
+      $content,
+      null,
+      $newsletter,
+      $subscriber,
+      $queue
+    );
   }
 
   public function getNewsletterFromQueue(ScheduledTaskEntity $task): ?NewsletterEntity {
@@ -375,11 +447,20 @@ class Newsletter {
       $queue
     );
     if ($this->trackingEnabled) {
-      $preparedNewsletter = $this->newsletterLinks->replaceSubscriberData(
-        $subscriber->getId(),
-        $queue->getId(),
-        $preparedNewsletter
-      );
+      if ($this->trackingConsentController->isTrackingAllowed($subscriber)) {
+        $preparedNewsletter = $this->newsletterLinks->replaceSubscriberData(
+          $subscriber->getId(),
+          $queue->getId(),
+          $preparedNewsletter
+        );
+      } else {
+        // CNIL/Garante: withdrawal must stop the reading operation itself, not
+        // merely the recording of it. A tracked link still tells our server the
+        // recipient clicked, so these recipients get the plain destination
+        // instead of a redirect through us.
+        $preparedNewsletter = $this->untrackLinks($preparedNewsletter, $newsletter, $subscriber, $queue);
+        $preparedNewsletter = OpenTracking::removeTrackingImage($preparedNewsletter);
+      }
     }
     $preparedNewsletter = Helpers::splitObject($preparedNewsletter);
     if ($newsletter->getWpPostId() !== null) {

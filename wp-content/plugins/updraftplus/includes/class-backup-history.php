@@ -407,7 +407,7 @@ class UpdraftPlus_Backup_History {
 
 				// Support of multi_options is now required for storage methods that implement listfiles()
 				if (!$object->supports_feature('multi_options')) {
-					error_log("UpdraftPlus: Multi-options not supported by: ".$method);
+					UpdraftPlus_Manipulation_Functions::error_log("UpdraftPlus: Multi-options not supported by: ".$method);
 					continue;
 				}
 

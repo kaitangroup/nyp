@@ -14,6 +14,31 @@ class UpdraftPlus_BackupModule_dreamobjects extends UpdraftPlus_BackupModule_s3 
 	protected $provider_has_regions = true;
 
 	/**
+	 * Input and option field mappings with default values and supported contexts.
+	 *
+	 * @var array
+	 */
+	protected $input_option_field_mappings = array(
+		'accesskey' => array(
+			'default_value' => '',
+			'contexts' => array('option', 'input'),
+		),
+		'secretkey' => array(
+			'default_value' => '',
+			'contexts' => array('option', 'input'),
+		),
+		'path' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'location',
+			'contexts' => array('option', 'input'),
+		),
+		'endpoint' => array(
+			'default_value' => '',
+			'contexts' => array('input'),
+		),
+	);
+
+	/**
 	 * Regex for validating custom endpoint in the format `s3.<region>.dream.io`.
 	 *
 	 * @var string
@@ -86,19 +111,6 @@ class UpdraftPlus_BackupModule_dreamobjects extends UpdraftPlus_BackupModule_s3 
 	public function get_supported_features() {
 		// This options format is handled via only accessing options via $this->get_options()
 		return array('multi_options', 'config_templates', 'multi_storage', 'conditional_logic');
-	}
-
-	/**
-	 * Retrieve default options for this remote storage module.
-	 *
-	 * @return Array - an array of options
-	 */
-	public function get_default_options() {
-		return array(
-			'accesskey' => '',
-			'secretkey' => '',
-			'path' => '',
-		);
 	}
 
 	/**
@@ -257,14 +269,18 @@ class UpdraftPlus_BackupModule_dreamobjects extends UpdraftPlus_BackupModule_s3 
 			'configuration_helper_link_text' => __('For more detailed instructions, follow this link.', 'updraftplus'),
 			/* translators: %s: service name */
 			'input_accesskey_label' => sprintf(__('%s access key', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
+			'input_accesskey_placeholder' => __('Paste your access key here', 'updraftplus'),
 			/* translators: %s: service name */
 			'input_secretkey_label' => sprintf(__('%s secret key', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
+			'input_secretkey_placeholder' => __('Paste your secret key here', 'updraftplus'),
 			'input_secretkey_type' => apply_filters('updraftplus_admin_secret_field_type', 'password'),
 			/* translators: %s: service name */
 			'input_location_label' => sprintf(__('%s location', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
+			'input_location_prefix' => 'dreamobjects://',
 			'input_location_title' => __('Enter only a bucket name or a bucket and path.', 'updraftplus').' '.__('Examples: mybucket, mybucket/mypath', 'updraftplus'),
 			/* translators: %s: service name */
 			'input_endpoint_label' => sprintf(__('%s end-point', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
+			'input_endpoint_option_labels' => self::get_endpoints(),
 			/* translators: %s: service name */
 			'input_test_label' => sprintf(__('Test %s Settings', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
 			/* translators: %s: Desired endpoint format.*/
@@ -330,7 +346,7 @@ class UpdraftPlus_BackupModule_dreamobjects extends UpdraftPlus_BackupModule_s3 
 			) {
 				$msg = sprintf('Custom endpoint "%s" is not in the format "s3.<region>.dream.io".', esc_html($new_storage_options['endpoint']));
 				$this->log($msg, 'error');
-				error_log('UpdraftPlus: DreamObjects: '.$msg);
+				UpdraftPlus_Manipulation_Functions::error_log('UpdraftPlus: DreamObjects: '.$msg);
 			}
 		}
 		return parent::options_filter($new_settings);
@@ -348,5 +364,27 @@ class UpdraftPlus_BackupModule_dreamobjects extends UpdraftPlus_BackupModule_s3 
 		$endpoints = self::get_endpoints();
 		if (isset($endpoints[$endpoint]) || preg_match('/'.self::ENDPOINT_REGEX.'/i', $endpoint)) return true;
 		return false;
+	}
+
+	/**
+	 * Customize generated field data using legacy mapping values.
+	 *
+	 * Used by transform_template_properties_to_fields_structure()
+	 * to allow child classes to adjust the generated field structure
+	 * based on legacy data and field mapping requirements.
+	 *
+	 * @param array  $field               Field data.
+	 * @param array  $template_properties Template properties.
+	 * @param string $field_name          Field name.
+	 * @param array  $option              Field mapping option.
+	 *
+	 * @return array
+	 */
+	public function configure_field_from_legacy($field, $template_properties, $field_name, $option) {
+		$prefix = 'input_'.$option['template_property_input_mapping'].'_';
+
+		if (empty($field['tooltip']) && isset($template_properties[$prefix.'title'])) $field['tooltip'] = array('text' => $template_properties[$prefix.'title']);
+
+		return $field;
 	}
 }

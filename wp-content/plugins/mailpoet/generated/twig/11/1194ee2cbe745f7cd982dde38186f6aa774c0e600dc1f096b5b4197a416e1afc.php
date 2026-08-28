@@ -39,89 +39,91 @@ class __TwigTemplate_c57fdfc1a59b00dc7129161c18976ad5ba36cdd436a8430e0c1963def69
         $macros = $this->macros;
         // line 1
         yield "
-Parsley.addMessages('mailpoet', {
-  defaultMessage: '";
-        // line 3
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value seems to be invalid.");
-        yield "',
-  type: {
-    email: '";
-        // line 5
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should be a valid email.");
-        yield "',
-    url: '";
-        // line 6
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should be a valid url.");
-        yield "',
-    number: '";
-        // line 7
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should be a valid number.");
-        yield "',
-    integer: '";
-        // line 8
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should be a valid integer.");
-        yield "',
-    digits: '";
+";
         // line 9
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should be digits.");
-        yield "',
-    alphanum: '";
+        yield "Parsley.addMessages('mailpoet', {
+  defaultMessage: ";
         // line 10
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should be alphanumeric.");
-        yield "'
-  },
-  notblank: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value seems to be invalid."));
+        yield ",
+  type: {
+    email: ";
         // line 12
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should not be blank.");
-        yield "',
-  required: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should be a valid email."));
+        yield ",
+    url: ";
         // line 13
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value is required.");
-        yield "',
-  pattern: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should be a valid url."));
+        yield ",
+    number: ";
         // line 14
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value seems to be invalid.");
-        yield "',
-  min: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should be a valid number."));
+        yield ",
+    integer: ";
         // line 15
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should be greater than or equal to %s.");
-        yield "',
-  max: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should be a valid integer."));
+        yield ",
+    digits: ";
         // line 16
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should be lower than or equal to %s.");
-        yield "',
-  range: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should be digits."));
+        yield ",
+    alphanum: ";
         // line 17
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should be between %s and %s.");
-        yield "',
-  minlength: '";
-        // line 18
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value is too short. It should have %s characters or more.");
-        yield "',
-  maxlength: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should be alphanumeric."));
+        yield "
+  },
+  notblank: ";
         // line 19
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value is too long. It should have %s characters or fewer.");
-        yield "',
-  length: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should not be blank."));
+        yield ",
+  required: ";
         // line 20
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value length is invalid. It should be between %s and %s characters long.");
-        yield "',
-  mincheck: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value is required."));
+        yield ",
+  pattern: ";
         // line 21
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("You must select at least %s choices.");
-        yield "',
-  maxcheck: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value seems to be invalid."));
+        yield ",
+  min: ";
         // line 22
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("You must select %s choices or fewer.");
-        yield "',
-  check: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should be greater than or equal to %s."));
+        yield ",
+  max: ";
         // line 23
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("You must select between %s and %s choices.");
-        yield "',
-  equalto: '";
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should be lower than or equal to %s."));
+        yield ",
+  range: ";
         // line 24
-        yield $this->extensions['MailPoet\Twig\I18n']->translate("This value should be the same.");
-        yield "'
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should be between %s and %s."));
+        yield ",
+  minlength: ";
+        // line 25
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value is too short. It should have %s characters or more."));
+        yield ",
+  maxlength: ";
+        // line 26
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value is too long. It should have %s characters or fewer."));
+        yield ",
+  length: ";
+        // line 27
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value length is invalid. It should be between %s and %s characters long."));
+        yield ",
+  mincheck: ";
+        // line 28
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("You must select at least %s choices."));
+        yield ",
+  maxcheck: ";
+        // line 29
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("You must select %s choices or fewer."));
+        yield ",
+  check: ";
+        // line 30
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("You must select between %s and %s choices."));
+        yield ",
+  equalto: ";
+        // line 31
+        yield $this->extensions['MailPoet\Twig\Functions']->jsonEncode($this->extensions['MailPoet\Twig\I18n']->translate("This value should be the same."));
+        yield "
 });
 
 Parsley.setLocale('mailpoet');
@@ -150,7 +152,7 @@ Parsley.setLocale('mailpoet');
      */
     public function getDebugInfo()
     {
-        return array (  120 => 24,  116 => 23,  112 => 22,  108 => 21,  104 => 20,  100 => 19,  96 => 18,  92 => 17,  88 => 16,  84 => 15,  80 => 14,  76 => 13,  72 => 12,  67 => 10,  63 => 9,  59 => 8,  55 => 7,  51 => 6,  47 => 5,  42 => 3,  38 => 1,);
+        return array (  122 => 31,  118 => 30,  114 => 29,  110 => 28,  106 => 27,  102 => 26,  98 => 25,  94 => 24,  90 => 23,  86 => 22,  82 => 21,  78 => 20,  74 => 19,  69 => 17,  65 => 16,  61 => 15,  57 => 14,  53 => 13,  49 => 12,  44 => 10,  41 => 9,  38 => 1,);
     }
 
     public function getSourceContext()

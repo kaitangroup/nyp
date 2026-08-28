@@ -246,7 +246,7 @@ class Checkout_Handler {
 	 * Loads javascript and css resources
 	 */
 	public function load_scripts() {
-		if ( is_cart() || is_checkout() ) {
+		if ( is_cart() || Checkout_Helper::is_packlink_checkout() ) {
 			Script_Loader::load_js(
 				array(
 					'packlink/js/StateUUIDService.js',

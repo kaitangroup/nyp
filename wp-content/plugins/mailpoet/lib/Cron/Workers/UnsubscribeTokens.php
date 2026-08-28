@@ -8,9 +8,9 @@ if (!defined('ABSPATH')) exit;
 use MailPoet\Entities\NewsletterEntity;
 use MailPoet\Entities\ScheduledTaskEntity;
 use MailPoet\Entities\SubscriberEntity;
-use MailPoet\InvalidStateException;
 use MailPoet\Util\Security;
 use MailPoetVendor\Carbon\Carbon;
+use MailPoetVendor\Doctrine\DBAL\ParameterType;
 use MailPoetVendor\Doctrine\ORM\EntityManager;
 
 class UnsubscribeTokens extends SimpleWorker {
@@ -18,79 +18,54 @@ class UnsubscribeTokens extends SimpleWorker {
   const BATCH_SIZE = 1000;
   const AUTOMATIC_SCHEDULING = false;
 
-  /** @var Security */
-  private $security;
-
   /** @var EntityManager */
   private $entityManager;
 
   public function __construct(
-    Security $security,
     EntityManager $entityManager
   ) {
     parent::__construct();
-    $this->security = $security;
     $this->entityManager = $entityManager;
   }
 
   public function processTaskStrategy(ScheduledTaskEntity $task, $timer) {
-    $meta = $task->getMeta();
-
-    if (!isset($meta['last_subscriber_id'])) {
-      $meta['last_subscriber_id'] = 0;
-    }
-
-    if (!isset($meta['last_newsletter_id'])) {
-      $meta['last_newsletter_id'] = 0;
-    }
-
-    do {
-      $this->cronHelper->enforceExecutionLimit($timer);
-      $subscribersCount = $this->addTokens(SubscriberEntity::class, $meta['last_subscriber_id']);
-      $task->setMeta($meta);
-      $this->scheduledTasksRepository->persist($task);
-      $this->scheduledTasksRepository->flush();
-    } while ($subscribersCount === self::BATCH_SIZE);
-    do {
-      $this->cronHelper->enforceExecutionLimit($timer);
-      $newslettersCount = $this->addTokens(NewsletterEntity::class, $meta['last_newsletter_id']);
-      $task->setMeta($meta);
-      $this->scheduledTasksRepository->persist($task);
-      $this->scheduledTasksRepository->flush();
-    } while ($newslettersCount === self::BATCH_SIZE);
-    if ($subscribersCount > 0 || $newslettersCount > 0) {
-      return false;
+    foreach ([SubscriberEntity::class, NewsletterEntity::class] as $entityClass) {
+      do {
+        $this->cronHelper->enforceExecutionLimit($timer);
+        $updatedCount = $this->addTokens($entityClass);
+      } while ($updatedCount === self::BATCH_SIZE);
     }
     return true;
   }
 
-  private function addTokens($entityClass, &$lastProcessedId = 0) {
-    $queryBuilder = $this->entityManager->createQueryBuilder();
+  /**
+   * @param class-string $entityClass
+   */
+  private function addTokens(string $entityClass): int {
+    $tableName = $this->entityManager->getClassMetadata($entityClass)->getTableName();
+    $connection = $this->entityManager->getConnection();
+    $authKey = defined('AUTH_KEY') ? AUTH_KEY : '';
 
-    $entities = $queryBuilder
-      ->select('PARTIAL e.{id}')
-      ->from($entityClass, 'e')
-      ->where('e.unsubscribeToken IS NULL')
-      ->andWhere('e.id > :lastProcessedId')
-      ->orderBy('e.id', 'ASC')
-      ->setMaxResults(self::BATCH_SIZE)
-      ->setParameter('lastProcessedId', $lastProcessedId)
-      ->getQuery()
-      ->getResult();
-
-    if (!is_iterable($entities) || !is_countable($entities)) {
-      throw new InvalidStateException('Entities must be iterable');
-    }
-
-    foreach ($entities as $entity) {
-      $lastProcessedId = $entity->getId();
-      $entity->setUnsubscribeToken($this->security->generateUnsubscribeTokenByEntity($entity));
-      $this->entityManager->persist($entity);
-    }
-
-    $this->entityManager->flush();
-
-    return count($entities);
+    // A direct UPDATE keeps the backfill out of Doctrine's UnitOfWork: changes made to
+    // PARTIAL-hydrated entities are not registered, so the previous entity-based approach
+    // computed an empty changeset and silently wrote nothing. The token is derived from
+    // AUTH_KEY (so it stays unguessable) and salted per entity type (so it avoids
+    // systematic cross-table collisions; truncated-hash collisions remain extremely unlikely).
+    return (int)$connection->executeStatement(
+      "UPDATE {$tableName} SET unsubscribe_token = SUBSTRING(MD5(CONCAT(:authKey, :salt, id)), 1, :tokenLength) WHERE unsubscribe_token IS NULL LIMIT :limit",
+      [
+        'authKey' => $authKey,
+        'salt' => $entityClass,
+        'tokenLength' => Security::UNSUBSCRIBE_TOKEN_LENGTH,
+        'limit' => self::BATCH_SIZE,
+      ],
+      [
+        'authKey' => ParameterType::STRING,
+        'salt' => ParameterType::STRING,
+        'tokenLength' => ParameterType::INTEGER,
+        'limit' => ParameterType::INTEGER,
+      ]
+    );
   }
 
   public function getNextRunDate() {

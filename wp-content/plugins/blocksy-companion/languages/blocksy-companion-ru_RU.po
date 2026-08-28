@@ -344,7 +344,7 @@ msgstr "Это поле является обязательным"
 
 #: framework/theme-integration.php:90
 msgid "Please fix this field."
-msgstr "Испр��вьте содержимое этого поля."
+msgstr "��справьте содержимое этого поля."
 
 #: framework/theme-integration.php:91
 msgid "Please enter a valid email address."
@@ -380,7 +380,7 @@ msgstr "Введите то же значение ещё раз."
 
 #: framework/theme-integration.php:99
 msgid "Please enter no more than {0} characters."
-msgstr "Введите не более {0} символов."
+msgstr "Введите ��е более {0} символов."
 
 #: framework/theme-integration.php:100
 msgid "Please enter at least {0} characters."
@@ -436,7 +436,7 @@ msgstr "Отображает простой баннер согласия, ин�
 #: framework/features/demo-install/parsers.php:99,
 #: framework/features/demo-install/parsers.php:107
 msgid "There was an error when reading this WXR file"
-msgstr "При чтении данного WXR-файла произошла ошибка!"
+msgstr "При чтении данног�� WXR-файла произошла ошибка!"
 
 #: framework/features/demo-install/parsers.php:56
 msgid "Details are shown above. The importer will now try again with a different parser..."
@@ -1659,7 +1659,7 @@ msgstr "Перейдите по ссылке ниже, чтобы оформит
 #: framework/premium/extensions/woocommerce-extra/features/product-waitlist/templates/emails/waitlist-confirm-subscription.php:30,
 #: framework/premium/extensions/woocommerce-extra/features/product-waitlist/templates/emails/plain/waitlist-confirm-subscription.php:15
 msgid "You have requested to join the waitlist for this item:"
-msgstr "Вы ��одали заявку на включение в список ожидания этого товара:"
+msgstr "Вы подали заявку на включение в список ожидания этого товара:"
 
 #: framework/premium/extensions/woocommerce-extra/features/product-waitlist/templates/emails/waitlist-confirm-subscription.php:66
 msgid "Click the button below to confirm your subscription. Once confirmed, we will notify you when the item is back in stock."
@@ -2422,7 +2422,7 @@ msgstr "Вид сетки"
 #: static/js/editor/blocks/post-template/Edit.js:371
 #: static/js/editor/blocks/tax-template/Edit.js:309
 msgid "Tablet Columns"
-msgstr "Колонки п��аншета"
+msgstr "Колонки планшета"
 
 #: static/js/editor/blocks/post-template/Edit.js:380
 #: static/js/editor/blocks/tax-template/Edit.js:319
@@ -3329,7 +3329,7 @@ msgstr "Расширенный режим"
 
 #: static/js/options/ConditionsManager/SingleCondition.js:152
 msgid "Select product"
-msgstr "Выбрать товар"
+msgstr "Выбрать то��ар"
 
 #: static/js/options/ConditionsManager/ScheduleDate.js:149
 msgid "Monday"
@@ -3433,7 +3433,7 @@ msgstr "Перейдите на любой профессиональный та
 
 #: static/js/dashboard/screens/DemoInstall/SingleDemo.js:61
 msgid "Upgrade to the business or agency plan and get instant access to this starter site and many other features."
-msgstr "Перейдите на профессиональный или агентский тариф и получите мгновенный доступ к этому старт��вому сайту и многим другим функциям."
+msgstr "Перейдите на профессиональный или агентский тариф и получите мгновенный доступ к этому стартовому сайту и многим другим функциям."
 
 #: static/js/dashboard/helpers/useProExtensionInFree.js:14
 msgid "This is a Pro extension"
@@ -4428,7 +4428,7 @@ msgstr "Скругление углов окна"
 
 #: framework/premium/extensions/woocommerce-extra/features/compare/options.php:452
 msgid "Compare Bar"
-msgstr "Панель сра��нения"
+msgstr "Панель сравнения"
 
 #: framework/premium/extensions/woocommerce-extra/features/compare/options.php:480
 msgid "Button Icon"
@@ -4541,7 +4541,7 @@ msgstr "Заголовок партнёрской ссылки"
 #: framework/premium/extensions/woocommerce-extra/features/affiliate/options.php:57,
 #: framework/premium/extensions/woocommerce-extra/features/affiliate/options.php:90
 msgid "Open Button Link In New Tab"
-msgstr "Открывать кноп��ой новую вкладку"
+msgstr "Открывать кнопкой новую вкладку"
 
 #: framework/premium/extensions/woocommerce-extra/features/cart-page/options.php:14
 msgid "Quantity Auto Update"
@@ -5471,7 +5471,7 @@ msgstr "Набор функций, позволяющих легко созда�
 
 #: framework/helpers/exts-configs.php:270
 msgid "Compare View"
-msgstr "Таблица сравне��ия"
+msgstr "Таблица сравнения"
 
 #: framework/helpers/exts-configs.php:239
 msgid "Adds the “add to cart” actions to the product page as a floating bar if the product summary has disappeared from view."
@@ -8350,7 +8350,7 @@ msgstr "Страница списка желаний"
 
 #: framework/premium/extensions/woocommerce-extra/features/wish-list/options.php:46
 msgid "The page you select here will display the wish list for your logged out users."
-msgstr " На странице, которую вы выберете здесь, будет отображаться список желаний для невошедших в систему пользователей."
+msgstr " На с��ра��ице, которую вы выберете здесь, будет отображаться список желаний для невошедших в систему пользователей."
 
 #: framework/premium/extensions/woocommerce-extra/features/added-to-cart-popup/customizer-options.php:25
 msgid "Archive Page"
@@ -9013,7 +9013,7 @@ msgstr "Курсивный"
 
 #: framework/premium/extensions/custom-fonts/dashboard-static/js/RegularTab.js:30
 msgid "Upload only the %s.woff2%s or %s.ttf%s font file formats (see browser coverage %shere%s). Use %sthis converter tool%s if you don't have these font formats."
-msgstr "Загружайте только файлы шрифтов в форматах %s.woff2%s или %s.ttf%s (смотрите покрытие браузера %sздесь%s). Используйте %sэтот конвертер%s, если у вас нет таких форматов шрифтов."
+msgstr "Загружайте только файлы шрифтов в форматах %s.woff2%s или %s.ttf%s (смотрите покрытие браузера %sздесь%s). Используйте %sэтот конвертер%s, если у вас нет таких фо��ма��ов шрифтов."
 
 #: framework/premium/extensions/custom-fonts/dashboard-static/js/Uploader.js:91
 msgid "Font Name"

@@ -1,5 +1,9 @@
 <?php
 
+if (! defined('ABSPATH')) {
+	exit;
+}
+
 $options = [
 	[
 		'title' => __('Date & Time', 'blocksy-companion'),

@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 
 abstract class UpdraftPlus_Login {
 	
@@ -32,7 +32,8 @@ abstract class UpdraftPlus_Login {
 	 * @internal
 	 * @param array  $data   The submitted form data
 	 * @param string $action The name of the action or service that will be triggered in UpdraftCentral Cloud
-	 * @return array - The response from the server
+	 *
+	 * @return WP_Error|array - The response from the server, or an error
 	 */
 	protected function send_remote_request($data, $action) {
 		global $updraftplus;

@@ -1,5 +1,26 @@
 *** Packlink PRO Changelog ***
 
+2026-08-12 - version 4.3.1
+- Security update
+
+2026-07-28 - version 4.3.0
+- Add customs support for international shipments: customs settings with default values and data mapping, product HS code and country of origin fields, a customer tax ID / VAT number field on the admin customer profile, automatic customs invoice creation, and customs invoice download/print on the order details page
+
+2026-07-23 - version 4.2.3
+- Fix checkout SyntaxError caused by unescaped apostrophes in drop-off translations
+
+2026-07-14 - version 4.2.2
+- Fix fatal error when activating the plugin on WordPress Multisite installations with multiple sites
+
+2026-07-08 - version 4.2.1
+- Add support for shipping in Brazil
+
+2026-07-07 - version 4.2.0
+- Add compatibility with Divi, Astra, Makeaholic themes
+- Add subscription banners
+- Improve bulk printing labels
+- Fix drop-off location selection on CartFlows Store Checkout
+
 2026-05-19 - version 4.1.2
 - Fix PHP notice about textdomain being loaded too early in WordPress 6.7+
 - Fix drop-off translations being overridden by incomplete auto-downloaded translations

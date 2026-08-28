@@ -377,7 +377,7 @@ class UpdraftPlus_Commands {
 
 		$vault = $updraftplus_admin->get_updraftvault($instance_id);
 
-		$return_data_only = isset($_REQUEST['return_data_only']) ? true : false;
+		$return_data_only = UpdraftPlus_Manipulation_Functions::fetch_superglobal('request', 'return_data_only', false);
 
 		return $vault->ajax_vault_recountquota(false, $return_data_only);
 	}
@@ -1458,6 +1458,10 @@ class UpdraftPlus_Commands {
 	 */
 	public function update_backup_and_storage_settings($params) {
 		if (!isset($params['current_step'])) return;
+
+		if (false === ($updraftplus = $this->_load_ud())) return new WP_Error('no_updraftplus');
+		
+		if (!UpdraftPlus_Options::user_can_manage()) return new WP_Error('updraftplus_permission_denied');
 		
 		// Save backup settings
 		if ('backup_settings' == $params['current_step']) {
@@ -1472,24 +1476,16 @@ class UpdraftPlus_Commands {
 		
 		// Save remote storage data
 		if ('remote_storage_setup' == $params['current_step'] && !empty($params['remote_storages'])) {
-			global $updraftplus;
 
 			foreach ($params['remote_storages'] as $method => $details) {
 				if (!array_key_exists($method, $updraftplus->backup_methods)) continue;
-				
-				$option = UpdraftPlus_Options::get_updraft_option('updraft_'.$method);
 
 				if ('email' == $method) {
-					$option = array($details['address']);
+					$option = array($details['email_address']);
 				} else {
-					if (!$option || !isset($option['settings'])) continue;
-
-					$first_key = key($option['settings']);
-					foreach ($details as $key => $value) {
-						if (isset($option['settings'][$first_key][$key])) {
-							$option['settings'][$first_key][$key] = $value;
-						}
-					}
+					$option = UpdraftPlus_Options::get_updraft_option('updraft_'.$method);
+					$instance_id = key($option['settings']);
+					$option['settings'][$instance_id] = $details;
 				}
 
 				UpdraftPlus_Options::update_updraft_option('updraft_'.$method, $option);

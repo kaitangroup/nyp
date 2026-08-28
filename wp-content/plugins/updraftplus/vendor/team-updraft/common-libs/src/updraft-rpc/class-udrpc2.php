@@ -59,7 +59,7 @@ if (!class_exists('UpdraftPlus_Remote_Communications_V2')) :
 class UpdraftPlus_Remote_Communications_V2 {
 
 	// Version numbers relate to versions of this PHP library only (i.e. it's not a protocol support number, and version numbers of other compatible libraries (e.g. JavaScript) are not comparable)
-	public $version = '2.0';
+	public $version = '2.1';
 
 	private $key_name_indicator;
 
@@ -95,7 +95,7 @@ class UpdraftPlus_Remote_Communications_V2 {
 	private $http_transport = null;
 
 	// Default protocol version - this can be over-ridden with set_message_format
-	// Protocol version 1 (which uses only one RSA key-pair, instead of two) is legacy/deprecated
+	// Protocol version 1 (which uses only one RSA key-pair, instead of two) has been removed
 	private $format = 2;
 
 	private $http_credentials = array();
@@ -106,14 +106,29 @@ class UpdraftPlus_Remote_Communications_V2 {
 	
 	private $require_message_to_be_understood = false;
 
+	/**
+	 * Constructor
+	 *
+	 * @param string $key_name_indicator
+	 */
 	public function __construct($key_name_indicator = 'default') {
 		$this->set_key_name_indicator($key_name_indicator);
 	}
 
+	/**
+	 * Set the key name indicator
+	 *
+	 * @param string $key_name_indicator
+	 */
 	public function set_key_name_indicator($key_name_indicator) {
 		$this->key_name_indicator = $key_name_indicator;
 	}
 
+	/**
+	 * Set whether generating a new key-pair is allowed
+	 *
+	 * @param boolean $can_generate
+	 */
 	public function set_can_generate($can_generate = true) {
 		$this->can_generate = $can_generate;
 	}
@@ -455,7 +470,7 @@ class UpdraftPlus_Remote_Communications_V2 {
 	 * Decrypt the message, using the local key (which needs to exist)
 	 *
 	 * @param  string $message
-	 * @return array
+	 * @return string|boolean
 	 */
 	public function decrypt_message($message) {
 
@@ -483,6 +498,10 @@ class UpdraftPlus_Remote_Communications_V2 {
 		$sym_key = base64_decode($sym_key);
 		$sym_key = $rsa->decrypt($sym_key);
 
+		if (false === $sym_key || !is_string($sym_key) || strlen($sym_key) < 16) {
+			return false;
+		}
+		
 		// Decrypt the message
 		$rij->setKey($sym_key);
 
@@ -535,10 +554,8 @@ class UpdraftPlus_Remote_Communications_V2 {
 			'udrpc_message' => $send_data,
 		);
 
-		if ($this->format >= 2) {
-			$signature = $this->signature_for_message($send_data, $use_key_local);
-			$message['signature'] = $signature;
-		}
+		$signature = $this->signature_for_message($send_data, $use_key_local);
+		$message['signature'] = $signature;
 
 		return $message;
 
@@ -729,24 +746,27 @@ class UpdraftPlus_Remote_Communications_V2 {
 
 		if (!is_array($decoded) || empty($decoded['udrpc_message'])) return new WP_Error('response_not_understood', 'Response from remote site was not in the expected format ('.$post['body'].')', $decoded);
 
-		if ($this->format >= 2) {
+		$format = $decoded['format'];
+		
+		// Don't allow the remote side to downgrade
+		if ($format > 1 || $this->format > 1) {
 			if (empty($decoded['signature'])) {
-				$this->log('No message signature found');
+				$this->log('Decoding response: no message signature found');
 				die;
 			}
 			if (!$this->key_remote) {
-				$this->log('No signature verification key has been set');
+				$this->log('Decoding response: no signature verification key has been set');
 				die;
 			}
 			if (!$this->verify_signature($decoded['udrpc_message'], $decoded['signature'], $this->key_remote)) {
-				$this->log('Signature verification failed; discarding');
+				$this->log('Decoding response: signature verification failed; discarding');
 				die;
 			}
 		}
 
 		$decoded = $this->decrypt_message($decoded['udrpc_message']);
 
-		if (!is_string($decoded)) return new WP_Error('not_decrypted', 'Response from remote site was not successfully decrypted', $decoded['udrpc_message']);
+		if (!is_string($decoded)) return new WP_Error('not_decrypted', 'Response from remote site was not successfully decrypted');
 
 		$json_decoded = json_decode($decoded, true);
 
@@ -840,7 +860,7 @@ class UpdraftPlus_Remote_Communications_V2 {
 		$format = $_POST['format'];
 
 		/*
-		In format 1 (legacy/obsolete), the one encrypts (the shared AES key) using one half of the key-pair, and decrypts with the other; whereas the other side of the conversation does the reverse when replying (and uses a different shared AES key). Though this is possible in RSA, this is the wrong thing to do - see https://crypto.stackexchange.com/questions/2123/rsa-encryption-with-private-key-and-decryption-with-a-public-key
+		In format 1 (obsolete/deprecated), the one encrypts (the shared AES key) using one half of the key-pair, and decrypts with the other; whereas the other side of the conversation does the reverse when replying (and uses a different shared AES key). Though this is possible in RSA, this is the wrong thing to do - see https://crypto.stackexchange.com/questions/2123/rsa-encryption-with-private-key-and-decryption-with-a-public-key
 		In format 2, both sides have their own private and public key. The sender encrypts using the other side's public key, and decrypts using its own private key. Messages are signed (the message digest is SHA-256).
 		*/
 
@@ -856,13 +876,8 @@ class UpdraftPlus_Remote_Communications_V2 {
 		$udrpc_message = (string) $_POST['udrpc_message'];
 
 		// Check this now, rather than allow the decrypt method to thrown an Exception
-		
-		if (empty($this->key_local)) {
-			$this->log('no local key (format 1): cannot decrypt', 'error');
-			die;
-		}
 
-		if ($format >= 2) {
+		if ($format > 1) {
 			if (empty($_POST['signature'])) {
 				$this->log('No message signature found', 'error');
 				die;
@@ -884,6 +899,11 @@ class UpdraftPlus_Remote_Communications_V2 {
 			die;
 		}
 
+		if (!is_string($udrpc_message)) {
+			$this->log('Could not decrypt incoming message', 'error');
+			die;
+		}
+		
 		$udrpc_message = json_decode($udrpc_message, true);
 
 		if (empty($udrpc_message) || !is_array($udrpc_message) || empty($udrpc_message['command']) || !is_string($udrpc_message['command'])) {
@@ -989,8 +1009,14 @@ class UpdraftPlus_Remote_Communications_V2 {
 			header('Access-Control-Allow-Credentials: true');
 		}
 
+		// Restrict use of format 1
+		if ($format < 2 && (!in_array($command, array('ping', 'get_file_status', 'send_chunk', 'upload_complete')) || !preg_match('/^([a-f0-9]+)\.migrator.updraftplus.com$/', $this->key_name_indicator))) {
+			$this->log("Obsolete format used - dropping (command: $command)", 'error');
+			die;
+		}
+		
 		$this->log('Command received: '.$command, 'info');
-
+		
 		if ('ping' == $command) {
 			$response = array('response' => 'pong', 'data' => null);
 		} else {

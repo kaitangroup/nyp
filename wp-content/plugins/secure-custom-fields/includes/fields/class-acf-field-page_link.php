@@ -82,7 +82,7 @@ if ( ! class_exists( 'acf_field_page_link' ) ) :
 				$key   = '';
 			}
 
-			if ( ! acf_verify_ajax( $nonce, $key, ! $conditional_logic ) ) {
+			if ( ! acf_verify_ajax( $nonce, $key, ! $conditional_logic, 'page_link' ) ) {
 				die();
 			}
 
@@ -204,7 +204,7 @@ if ( ! class_exists( 'acf_field_page_link' ) ) :
 			}
 
 			// get posts grouped by post type
-			$groups = acf_get_grouped_posts( $args );
+			$groups = acf_get_grouped_posts( $args, true );
 
 			// loop
 			if ( ! empty( $groups ) ) {
@@ -483,7 +483,7 @@ if ( ! class_exists( 'acf_field_page_link' ) ) :
 			acf_render_field_setting(
 				$field,
 				array(
-					'label'        => __( 'Allow Archives URLs', 'secure-custom-fields' ),
+					'label'        => __( 'Allow Archive URLs', 'secure-custom-fields' ),
 					'instructions' => '',
 					'name'         => 'allow_archives',
 					'type'         => 'true_false',
@@ -495,7 +495,7 @@ if ( ! class_exists( 'acf_field_page_link' ) ) :
 				$field,
 				array(
 					'label'        => __( 'Select Multiple', 'secure-custom-fields' ),
-					'instructions' => 'Allow content editors to select multiple values',
+					'instructions' => __( 'Allow content editors to select multiple values', 'secure-custom-fields' ),
 					'name'         => 'multiple',
 					'type'         => 'true_false',
 					'ui'           => 1,

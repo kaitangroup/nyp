@@ -35,7 +35,6 @@ class BlockWrapper {
 
 	public function blocksy_block_wrapper_block() {
 		$block_data = [
-			'api_version' => 3,
 			'render_callback' => function ($attributes, $content, $block) {
 				if (strpos($content, 'class="ct-') === false) {
 					return '';
@@ -152,7 +151,10 @@ class BlockWrapper {
 			},
 		];
 
-		register_block_type('blocksy/widgets-wrapper', $block_data);
+		register_block_type(
+			BLOCKSY_PATH . '/static/js/editor/blocks/widgets-wrapper/block.json',
+			$block_data
+		);
 	}
 
 	public function enqueue_admin() {

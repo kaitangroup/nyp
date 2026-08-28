@@ -5,9 +5,14 @@ namespace MailPoet\Form;
 if (!defined('ABSPATH')) exit;
 
 
+use MailPoet\WP\Functions as WPFunctions;
+
 class ApiDataSanitizer {
   /** @var FormHtmlSanitizer */
   private $htmlSanitizer;
+
+  /** @var WPFunctions */
+  private $wp;
 
   /**
    * List of blocks and their parameters that will be sanitized
@@ -29,9 +34,11 @@ class ApiDataSanitizer {
   ];
 
   public function __construct(
-    FormHtmlSanitizer $htmlSanitizer
+    FormHtmlSanitizer $htmlSanitizer,
+    WPFunctions $wp
   ) {
     $this->htmlSanitizer = $htmlSanitizer;
+    $this->wp = $wp;
   }
 
   public function sanitizeBody(array $body): array {
@@ -46,6 +53,9 @@ class ApiDataSanitizer {
   }
 
   public function sanitizeBlock(array $block): array {
+    if (isset($block['id'])) {
+      $block['id'] = is_scalar($block['id']) ? $this->wp->sanitizeKey((string)$block['id']) : '';
+    }
     if (!isset($this->htmlSanitizeConfig[$block['type']])) {
       return $block;
     }

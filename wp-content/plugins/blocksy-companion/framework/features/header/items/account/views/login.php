@@ -518,12 +518,11 @@ if ($loggedin_interaction_type === 'dropdown') {
 			$dropdown_row['id'] === 'wishlist'
 			&&
 			function_exists('wc_get_endpoint_url')
+			&&
+			function_exists('blocksy_companion_get_wish_list_slug')
 		) {
 			$url = wc_get_endpoint_url(
-				apply_filters(
-					'blocksy:pro:woocommerce-extra:wish-list:slug',
-					'woo-wish-list'
-				),
+				blocksy_companion_get_wish_list_slug(),
 				'',
 				get_permalink(get_option('woocommerce_myaccount_page_id'))
 			);
@@ -566,12 +565,11 @@ if ($loggedin_interaction_type === 'dropdown') {
 			$dropdown_row['id'] === 'waitlist'
 			&&
 			function_exists('wc_get_endpoint_url')
+			&&
+			function_exists('blocksy_companion_get_waitlist_slug')
 		) {
 			$url = wc_get_endpoint_url(
-				apply_filters(
-					'blocksy:pro:woocommerce-extra:waitlist-list:slug',
-					'woo-waitlist-list'
-				),
+				blocksy_companion_get_waitlist_slug(),
 				'',
 				get_permalink(get_option('woocommerce_myaccount_page_id'))
 			);

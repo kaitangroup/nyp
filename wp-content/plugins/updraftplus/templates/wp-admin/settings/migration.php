@@ -1,5 +1,5 @@
 <?php
-if (!defined('UPDRAFTPLUS_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 ?>
 <?php if ($is_extendify_migration_active) { ?>

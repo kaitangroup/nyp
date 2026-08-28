@@ -1,17 +1,10 @@
 @use "./helpers/responsive-variables-generator.scss" as *;
+@use "./helpers/global-variables.scss" as *;
 
 // Components.
 @use "./components/icon/icon.scss" as *;
 @use "./components/button/button.scss" as *;
-
-$theme-global-variables: (
-    "text-icon-gap": (
-		"mobile": "bu-6",
-		"desktop": "bu-6"
-	),
-);
-
-@include tu-generate-responsive-variables("tu", $theme-global-variables);
+@use "./components/column-and-row/column-and-row.scss" as *;
 
 @font-face {
 	font-family: "Inter";

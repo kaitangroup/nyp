@@ -195,7 +195,7 @@ class Template4Popup extends FormTemplate {
   }
 
   public function getStyles(): string {
-    return <<<EOL
+    return <<<'EOL'
 /* form */
 .mailpoet_form {
 }

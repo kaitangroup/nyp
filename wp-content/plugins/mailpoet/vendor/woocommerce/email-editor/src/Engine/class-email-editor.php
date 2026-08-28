@@ -144,10 +144,10 @@ class Email_Editor {
  return false;
  }
  $post_id = $request->get_param( 'postId' );
- if ( ! is_numeric( $post_id ) || (int) $post_id <= 0 ) {
- return false;
- }
+ if ( is_numeric( $post_id ) && (int) $post_id > 0 ) {
  return current_user_can( 'edit_post', (int) $post_id );
+ }
+ return (bool) apply_filters( 'woocommerce_email_editor_send_preview_email_without_post_permission', false, $request );
  },
  )
  );
@@ -214,6 +214,10 @@ class Email_Editor {
  return $template;
  }
  if ( ! $this->current_post_is_email_post_type( $post->post_type ) ) {
+ return $template;
+ }
+ // Anyone can see a published email. For other statuses the user must be able to read the post.
+ if ( ! is_post_publicly_viewable( $post ) && ! current_user_can( 'read_post', $post->ID ) ) {
  return $template;
  }
  add_filter(

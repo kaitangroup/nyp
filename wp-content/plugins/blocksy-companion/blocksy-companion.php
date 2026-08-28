@@ -3,14 +3,14 @@
 /*
 Plugin Name: Blocksy Companion
 Description: This plugin is the companion for the Blocksy theme, it runs and adds its enhacements only if the Blocksy theme is installed and active.
-Version: 2.1.44
+Version: 2.1.53
 Author: CreativeThemes
 Author URI: https://creativethemes.com
 Text Domain: blocksy-companion
 Domain Path: /languages/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 6.5
+Requires at least: 6.7
 Requires PHP: 7.0
 */
 if ( !defined( 'ABSPATH' ) ) {
@@ -42,18 +42,35 @@ if ( function_exists( 'blocksy_companion_fs' ) || class_exists( '\\Blocksy\\Plug
                 define( 'WP_FS__PRODUCT_5115_MULTISITE', true );
             }
             require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
-            $blocksy_has_account = true;
+        }
+        $blocksy_has_account = true;
+        // start.php can return without loading the SDK when another
+        // plugin's bundled copy wins the version election.
+        if ( !isset( $blocksy_companion_fs ) && class_exists( '\\Freemius' ) ) {
             $blocksy_fs_instance = \Freemius::instance( 5115, 'blocksy-companion', true );
             $blocksy_active_extensions = get_option( 'blocksy_active_extensions', [] );
             if ( !is_array( $blocksy_active_extensions ) ) {
                 $blocksy_active_extensions = [];
             }
             if ( in_array( 'white-label', $blocksy_active_extensions ) && ($blocksy_fs_instance->is_plan( 'agency' ) || $blocksy_fs_instance->is_plan( 'agency_v2' )) ) {
+                /**
+                 * Filters the Blocksy white-label settings.
+                 *
+                 * Lets agency-plan sites override the stored white-label
+                 * configuration from code instead of the saved option.
+                 *
+                 * @since 1.7.18
+                 *
+                 * @param array $settings White-label settings. Default the stored
+                 *                         `blocksy_ext_white_label_settings` option, or [].
+                 */
                 $blocksy_wl_settings = apply_filters( 'blocksy:ext:white-label:settings', get_option( 'blocksy_ext_white_label_settings', [] ) );
                 if ( $blocksy_wl_settings && isset( $blocksy_wl_settings['hide_billing_account'] ) && $blocksy_wl_settings['hide_billing_account'] && !is_multisite() ) {
                     $blocksy_has_account = false;
                 }
             }
+        }
+        if ( !isset( $blocksy_companion_fs ) && function_exists( 'fs_dynamic_init' ) ) {
             $blocksy_companion_fs = fs_dynamic_init( array(
                 'id'               => '5115',
                 'slug'             => 'blocksy-companion',
@@ -88,6 +105,11 @@ if ( function_exists( 'blocksy_companion_fs' ) || class_exists( '\\Blocksy\\Plug
             }
 
             blocksy_companion_fs();
+            /**
+             * Fires after the Blocksy Companion Freemius SDK instance has loaded.
+             *
+             * @since 2.1.36
+             */
             do_action( 'blocksy_companion_fs_loaded' );
         }
     }

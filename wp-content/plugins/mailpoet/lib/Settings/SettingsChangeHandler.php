@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) exit;
 
 
 use MailPoet\Cron\CronWorkerScheduler;
-use MailPoet\Cron\Workers\InactiveSubscribers;
+use MailPoet\Cron\Workers\InactiveSubscribersMaintenance;
 use MailPoet\Cron\Workers\UnconfirmedSubscribersCleanup;
 use MailPoet\Cron\Workers\WooCommerceSync;
 use MailPoet\Entities\ScheduledTaskEntity;
@@ -63,16 +63,29 @@ class SettingsChangeHandler {
   }
 
   public function onInactiveSubscribersIntervalChange(): void {
-    $task = $this->scheduledTasksRepository->findOneBy([
-      'type' => InactiveSubscribers::TASK_TYPE,
-      'status' => ScheduledTaskEntity::STATUS_SCHEDULED,
-      'deletedAt' => null,
-    ], ['createdAt' => 'DESC']);
-    if (!($task instanceof ScheduledTaskEntity)) {
-      $task = $this->createScheduledTask(InactiveSubscribers::TASK_TYPE);
+    // Start a clean pass from subscriber 0 with the new interval: remove any pending run
+    // (scheduled or in-progress) instead of resuming one that was partway through the old interval.
+    $pendingTasks = array_merge(
+      $this->scheduledTasksRepository->findBy([
+        'type' => InactiveSubscribersMaintenance::TASK_TYPE,
+        'status' => ScheduledTaskEntity::STATUS_SCHEDULED,
+        'deletedAt' => null,
+      ]),
+      $this->scheduledTasksRepository->findBy([
+        'type' => InactiveSubscribersMaintenance::TASK_TYPE,
+        'status' => null,
+        'deletedAt' => null,
+      ])
+    );
+    $pendingTaskIds = array_map(function(ScheduledTaskEntity $task): int {
+      return (int)$task->getId();
+    }, $pendingTasks);
+    if ($pendingTaskIds) {
+      $this->scheduledTasksRepository->deleteByIds($pendingTaskIds);
     }
-    $datetime = Carbon::now()->millisecond(0);
-    $task->setScheduledAt($datetime->subMinute());
+
+    $task = $this->createScheduledTask(InactiveSubscribersMaintenance::TASK_TYPE);
+    $task->setScheduledAt(Carbon::now()->millisecond(0)->subMinute());
     $this->scheduledTasksRepository->persist($task);
     $this->scheduledTasksRepository->flush();
   }

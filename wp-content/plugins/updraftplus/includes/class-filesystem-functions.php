@@ -1,6 +1,6 @@
 <?php
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery -- we try to reduce overhead by bypassing WP APIs and other extra layers; Some custom complex queries tailored specifically to our needs, giving us full control over the SQL commands and data manipulation
-// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fgets, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.WP.AlternativeFunctions.file_system_operations_fread, WordPress.WP.AlternativeFunctions.file_system_operations_chmod, WordPress.WP.AlternativeFunctions.file_system_operations_fputs, WordPress.WP.AlternativeFunctions.file_system_operations_is_writeable, WordPress.WP.AlternativeFunctions.file_system_operations_chown, WordPress.WP.AlternativeFunctions.file_system_operations_chgrp, WordPress.WP.AlternativeFunctions.file_system_operations_touch -- Native PHP fileystem function is used for direct control and performance because it can bypass additional layers of abstraction so that no overhead from the WordPress filesystem API's internal handling
+// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fgets, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.WP.AlternativeFunctions.file_system_operations_fread, WordPress.WP.AlternativeFunctions.file_system_operations_chmod, WordPress.WP.AlternativeFunctions.file_system_operations_fputs, WordPress.WP.AlternativeFunctions.file_system_operations_is_writable, WordPress.WP.AlternativeFunctions.file_system_operations_chown, WordPress.WP.AlternativeFunctions.file_system_operations_chgrp, WordPress.WP.AlternativeFunctions.file_system_operations_touch, WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- Native PHP fileystem function is used for direct control and performance because it can bypass additional layers of abstraction so that no overhead from the WordPress filesystem API's internal handling
 // phpcs:disable WordPress.WP.AlternativeFunctions.rename_rename -- rename() usage is intentional and safe within this context
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching -- some query operations need to always receive the most up-to-date or actual data directly from the database, reducing the risk of serving stale information.
 if (!defined('ABSPATH')) die('No direct access.');
@@ -64,7 +64,7 @@ class UpdraftPlus_Filesystem_Functions {
 	
 		global $wp_filesystem, $updraftplus;
 
-		$build_url = UpdraftPlus_Options::admin_page().'?page=updraftplus&action=updraft_restore';
+		$build_url = UpdraftPlus_Options::admin_page().'?page=updraftplus&action=updraft_restore&nonce='.wp_create_nonce('updraftplus-credentialtest-nonce');
 		
 		foreach ($url_parameters as $k => $v) {
 			$build_url .= '&'.$k.'='.$v;
@@ -172,7 +172,7 @@ class UpdraftPlus_Filesystem_Functions {
 				}
 				if (isset($val['temp_import_table_prefix']) && '' != $val['temp_import_table_prefix'] && $wpdb->prefix != $val['temp_import_table_prefix']) {
 					$tables_to_remove = array();
-					$prefix = $wpdb->esc_like($val['temp_import_table_prefix'])."%";
+					$prefix = UpdraftPlus_Database_Utility::esc_like($val['temp_import_table_prefix'])."%";
 					$sql = $wpdb->prepare("SHOW TABLES LIKE %s", $prefix);
 					
 					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is built using $wpdb->prepare() on the line above.

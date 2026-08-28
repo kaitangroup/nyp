@@ -16,6 +16,9 @@ class AssetsController {
   /** @var WPFunctions */
   private $wp;
 
+  /** @var bool */
+  private $skipAdminPagesDependencies = false;
+
   public function __construct(
     Renderer $renderer,
     WPFunctions $wp
@@ -25,6 +28,9 @@ class AssetsController {
   }
 
   public function setupAdminPagesDependencies(): void {
+    if ($this->skipAdminPagesDependencies) {
+      return;
+    }
     $this->registerAdminDeps();
     $this->wp->wpEnqueueScript('mailpoet_admin');
   }
@@ -39,8 +45,13 @@ class AssetsController {
   }
 
   public function setupFormEditorDependencies(): void {
-    $this->enqueueJsEntrypoint('form_editor', ['underscore']);
-    $this->wp->wpEnqueueStyle('mailpoet_form_editor', $this->getCssUrl('mailpoet-form-editor.css'));
+    $this->skipAdminPagesDependencies = true;
+    $this->setupFormEditorLocalizationDependency();
+    $dependencies = ['mailpoet_mailpoet', 'underscore'];
+    if ($this->wp->wpEnqueueCodeEditor(['type' => 'text/css']) !== false) {
+      $dependencies[] = 'code-editor';
+    }
+    $this->enqueueJsEntrypoint('form_editor', $dependencies, false);
   }
 
   public function setupSettingsDependencies(): void {
@@ -109,15 +120,24 @@ class AssetsController {
     $this->wp->wpEnqueueStyle('mailpoet_automation_analytics', $this->getCssUrl('mailpoet-automation-analytics.css'));
   }
 
-  private function enqueueJsEntrypoint(string $asset, array $dependencies = []): void {
-    $this->registerAdminDeps();
+  private function enqueueJsEntrypoint(string $asset, array $dependencies = [], bool $withAdminDeps = true): void {
+    if ($withAdminDeps) {
+      $this->registerAdminDeps();
+    }
+
+    $assetData = $this->getScriptAssetData($asset);
+    $dependencies = array_values(array_unique(array_merge(
+      $dependencies,
+      $assetData['dependencies'],
+      $withAdminDeps ? ['mailpoet_admin'] : []
+    )));
 
     $name = "mailpoet_$asset";
     $this->wp->wpEnqueueScript(
       $name,
       Env::$assetsUrl . '/dist/js/' . $this->renderer->getJsAsset("$asset.js"),
-      array_merge($dependencies, ['mailpoet_admin']),
-      Env::$version,
+      $dependencies,
+      $assetData['version'],
       true
     );
     $this->wp->wpSetScriptTranslations($name, 'mailpoet');
@@ -125,11 +145,57 @@ class AssetsController {
     // Ensure Lodash doesn't override Underscore from WordPress on "window._" global.
     // Checking for "_.at" detects Lodash (the function doesn't exist in Underscore).
     $noConflict = 'if (window._ && window._.at && window._.noConflict) window._.noConflict();';
-    $this->wp->wpAddInlineScript('mailpoet_admin_commons', $noConflict);
-    $this->wp->wpAddInlineScript('mailpoet_mailpoet', $noConflict);
-    $this->wp->wpAddInlineScript('mailpoet_admin_vendor', $noConflict);
-    $this->wp->wpAddInlineScript('mailpoet_admin', $noConflict);
+    if ($withAdminDeps) {
+      $this->wp->wpAddInlineScript('mailpoet_admin_commons', $noConflict);
+      $this->wp->wpAddInlineScript('mailpoet_mailpoet', $noConflict);
+      $this->wp->wpAddInlineScript('mailpoet_admin_vendor', $noConflict);
+      $this->wp->wpAddInlineScript('mailpoet_admin', $noConflict);
+    }
     $this->wp->wpAddInlineScript($name, $noConflict);
+  }
+
+  /**
+   * @return array{dependencies: string[], version: string}
+   */
+  private function getScriptAssetData(string $asset): array {
+    $assetPaths = [
+      'form_editor' => Env::$assetsPath . '/dist/js/form_editor.asset.json',
+    ];
+    $fallback = [
+      'dependencies' => [],
+      'version' => Env::$version,
+    ];
+    $assetPath = $assetPaths[$asset] ?? null;
+    if ($assetPath === null) {
+      return $fallback;
+    }
+
+    if (!file_exists($assetPath)) {
+      $this->logScriptAssetDataIssue(sprintf('Missing script asset metadata for "%s" at "%s".', $asset, $assetPath));
+      return $fallback;
+    }
+
+    $assetData = json_decode((string)file_get_contents($assetPath), true);
+    if (!is_array($assetData)) {
+      $this->logScriptAssetDataIssue(sprintf('Invalid script asset metadata for "%s" at "%s".', $asset, $assetPath));
+      return $fallback;
+    }
+
+    $dependencies = is_array($assetData['dependencies'] ?? null) ? $assetData['dependencies'] : [];
+    $version = is_string($assetData['version'] ?? null) ? $assetData['version'] : $fallback['version'];
+
+    return [
+      'dependencies' => array_values(array_filter($dependencies, 'is_string')),
+      'version' => $version,
+    ];
+  }
+
+  private function logScriptAssetDataIssue(string $message): void {
+    if (defined('WP_DEBUG') && WP_DEBUG && function_exists('error_log')) {
+      // phpcs:disable QITStandard.PHP.DebugCode.DebugFunctionFound
+      error_log('[MailPoet] ' . $message); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
+      // phpcs:enable QITStandard.PHP.DebugCode.DebugFunctionFound
+    }
   }
 
   private function registerAdminDeps(): void {
@@ -173,9 +239,52 @@ class AssetsController {
     $this->registerFooterScript(
       'mailpoet_admin',
       $this->getScriptUrl('admin.js'),
-      ['mailpoet_admin_vendor']
+      ['mailpoet_admin_vendor', 'wp-preferences-persistence']
     );
+    $this->wp->wpLocalizeScript('mailpoet_admin', 'mailpoet_preferences_data', [
+      'currentUserId' => $this->wp->getCurrentUserId(),
+      'preloadedData' => $this->getPersistedPreferences(),
+    ]);
     $this->wp->wpSetScriptTranslations('mailpoet_admin', 'mailpoet');
+  }
+
+  private function setupFormEditorLocalizationDependency(): void {
+    $this->wp->wpRegisterScript('mailpoet_mailpoet', false, [], Env::$version, true);
+    $this->wp->wpAddInlineScript(
+      'mailpoet_mailpoet',
+      <<<'JAVASCRIPT'
+window.mailpoet_i18n = window.mailpoet_i18n || {};
+window.MailPoet = window.MailPoet || {};
+window.MailPoet.I18n = window.MailPoet.I18n || {
+  add: function(key, value) {
+    window.mailpoet_i18n[key] = value;
+  },
+  t: function(key) {
+    return window.mailpoet_i18n[key] || 'TRANSLATION "%1$s" NOT FOUND'.replace('%1$s', key);
+  },
+  all: function() {
+    return window.mailpoet_i18n;
+  }
+};
+JAVASCRIPT,
+      'before'
+    );
+    $this->wp->wpEnqueueScript('mailpoet_mailpoet');
+  }
+
+  private function getPersistedPreferences(): \stdClass {
+    $currentUserId = $this->wp->getCurrentUserId();
+    if (!$currentUserId) {
+      return new \stdClass();
+    }
+
+    $preferences = $this->wp->getUserMeta(
+      $currentUserId,
+      $this->wp->getBlogPrefix() . 'persisted_preferences',
+      true
+    );
+
+    return is_array($preferences) ? (object)$preferences : new \stdClass();
   }
 
   private function getScriptUrl(string $name): string {

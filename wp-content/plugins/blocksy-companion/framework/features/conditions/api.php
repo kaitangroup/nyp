@@ -35,7 +35,7 @@ class ConditionsManagerAPI {
 
 			$languages = [];
 
-			if (function_exists('blocksy_get_current_language')) {
+			if (function_exists('blocksy_get_all_i18n_languages')) {
 				$languages = blocksy_get_all_i18n_languages();
 			}
 
@@ -50,4 +50,3 @@ class ConditionsManagerAPI {
 		});
 	}
 }
-

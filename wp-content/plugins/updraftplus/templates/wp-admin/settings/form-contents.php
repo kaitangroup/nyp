@@ -100,44 +100,75 @@ foreach ($default_options as $k => $v) {
 <h2 class="updraft_settings_sectionheading"><?php esc_html_e('Sending Your Backup To Remote Storage', 'updraftplus');?></h2>
 
 <?php
-	$debug_mode = UpdraftPlus_Options::get_updraft_option('updraft_debug_mode') ? 'checked="checked"' : "";
-	$active_service = UpdraftPlus_Options::get_updraft_option('updraft_service');
+$debug_mode = UpdraftPlus_Options::get_updraft_option('updraft_debug_mode') ? 'checked="checked"' : "";
+$active_service = UpdraftPlus_Options::get_updraft_option('updraft_service');
+if (is_array($active_service)) $active_service = $updraftplus->just_one($active_service);
+		
+// Change this to give a class that we can exclude
+$multi = apply_filters('updraftplus_storage_printoptions_multi', '');
 ?>
 
 <table id="remote-storage-holder" class="form-table width-900">
-	<tr>
+	<tr class="updraft-background-white">
 		<th><?php
-			echo esc_html__('Choose your remote storage', 'updraftplus').'<br>'.wp_kses_post(apply_filters('updraftplus_after_remote_storage_heading_message', '<em>'.__('(tap on an icon to select or unselect)', 'updraftplus').'</em>'));
+			echo esc_html__('Select your preferred remote storage location', 'updraftplus').'<br>'.wp_kses_post(apply_filters('updraftplus_after_remote_storage_heading_message', '<em>'.__('(tap on an icon to select or unselect)', 'updraftplus').'</em>'));
 		?>:</th>
 		<td>
-		<div id="remote-storage-container">
-		<?php
-			if (is_array($active_service)) $active_service = $updraftplus->just_one($active_service);
-			
-			// Change this to give a class that we can exclude
-			$multi = apply_filters('updraftplus_storage_printoptions_multi', '');
-			
+		<div id="remote-storage-container" class="available-remote-storages">
+			<?php
+			$non_existent_backup_methods = array();
+
 			foreach ($updraftplus->backup_methods as $method => $description) {
-				/* translators: %s: Remote storage */
-				$backup_using = sprintf(__("Backup using %s?", 'updraftplus'), $description);
-				
-				echo '<input aria-label="'.esc_attr($backup_using).'" name="updraft_service[]" class="updraft_servicecheckbox '.esc_attr($method.' '. $multi).'" id="updraft_servicecheckbox_'.esc_attr($method).'" type="checkbox" value="'.esc_attr($method).'"';
-				if ($active_service === $method || (is_array($active_service) && in_array($method, $active_service))) echo ' checked="checked"';
-				echo " data-labelauty=\"".esc_attr($description)."\">";
+				if (!class_exists('UpdraftPlus_BackupModule_'.$method)) updraft_try_include_file('methods/'.$method.'.php', 'include_once');
+				if (is_subclass_of('UpdraftPlus_BackupModule_'.$method, 'UpdraftPlus_BackupModule_AddonNotYetPresent')) {
+					$non_existent_backup_methods[$method] = $description;
+					continue;
+				}
+				/* translators: 1: String 'UpdraftPlus', 2: String 'AWS S3' */
+				if ('updraftvault' == $method) $description = '<strong>'.$description.'</strong> ('.sprintf(__('integrated with %1$s and based on %2$s', 'updraftplus'), 'UpdraftPlus', 'AWS S3').')';
+				$updraftplus->show_remote_storage($description, $method, $multi, $active_service, $description);
 			}
 		?>
-		
+		</div>
+		</td>
+	</tr>
+	
+	<?php if (count($non_existent_backup_methods) > 0) { ?>
+	<tr class="updraft-empty-tr">
+		<td colspan="2"></td>
+	</tr>
+
+	<tr class="updraft-background-white">
+		<th></th>
+		<td>
+			<p>
+				<strong><?php
+					/* translators: %s: String 'UpdraftPlus Premium' */
+					echo sprintf(esc_html__('Get these additional storage locations when you upgrade to %s', 'updraftplus'), 'UpdraftPlus Premium').': ';
+					echo wp_kses_post('<a href="'.esc_url($updraftplus->get_url('premium')).'" target="_blank">'.__('Get Premium', 'updraftplus').'</a>');
+				?></strong>
+			</p>
+		<div id="remote-storage-container">
 		<?php
-			if (false === apply_filters('updraftplus_storage_printoptions', false, $active_service)) {
-				echo '</div>';
-				echo '<p><a href="'.esc_url($updraftplus->get_url('premium_more_than_one_storage')).'" target="_blank">'.esc_html(__('You can send a backup to more than one destination with Premium.', 'updraftplus')).'</a></p>';
+			foreach ($non_existent_backup_methods as $method => $description) {
+				$updraftplus->show_remote_storage($description, $method, $multi, $active_service, $description, true);
 			}
+		?>
+		</div>
+
+		<?php
+		if (false === apply_filters('updraftplus_storage_printoptions', false, $active_service)) {
+			echo '<p style="padding: 10px 20px">'.esc_html__('You can also choose more than one location i.e. backup your backups with', 'updraftplus').' <a href="'.esc_url($updraftplus->get_url('premium')).'" target="_blank">UpdraftPlus Premium</a>.</p>';
+		}
 		?>
 		
 		</td>
 	</tr>
+	<?php } ?>
 
-	<tr class="updraftplusmethod none ud_nostorage" style="display:none;">
+	<?php do_action('updraftplus_after_remote_storage'); ?>
+
+	<tr class="updraftplusmethod none ud_nostorage">
 		<td></td>
 		<td><em><?php echo esc_html(__('If you choose no remote storage, then the backups remain on the web-server.', 'updraftplus').' '.__('This is not recommended (unless you plan to manually copy them to your computer), as losing the web-server would mean losing both your website and the backups in one event.', 'updraftplus'));?></em></td>
 	</tr>

@@ -1,6 +1,6 @@
 <?php
 // phpcs:disable Squiz.PHP.DiscouragedFunctions.Discouraged -- some functions, like set_time_limit() and ini_set(), are used to temporarily change PHP configuration values based on the script's needs (e.g., processing large datasets or performing long operations).
-if (!defined('UPDRAFTPLUS_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No access.');
 
 /**
  * A class for interfacing with storage methods.
@@ -136,7 +136,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 					if (!isset($settings['version'])) $settings = self::update_remote_storage_options_format($method);
 					
 					if (is_wp_error($settings)) {
-						if (!empty($settings_from_db)) error_log("UpdraftPlus: failed to convert storage options format: $method");
+						if (!empty($settings_from_db)) UpdraftPlus_Manipulation_Functions::error_log("UpdraftPlus: failed to convert storage options format: $method");
 						$settings = array('settings' => array());
 					}
 
@@ -151,7 +151,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 						// See: https://wordpress.org/support/topic/cannot-setup-connectionauthenticate-with-dropbox/
 						if (empty($settings['settings'])) {
 							// This can get sent to the browser, and break the page, if the user has configured that. However, it should now (1.13.6+) be impossible for this condition to occur, now that we only log it after getting some default options.
-							error_log("UpdraftPlus: Warning: settings for $method are empty. A dummy field is usually needed so that something is saved.");
+							UpdraftPlus_Manipulation_Functions::error_log("UpdraftPlus: Warning: settings for $method are empty. A dummy field is usually needed so that something is saved.");
 						}
 						
 					}
@@ -169,7 +169,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 				}
 
 			} else {
-				error_log("UpdraftPlus: storage method not found: $method");
+				UpdraftPlus_Manipulation_Functions::error_log("UpdraftPlus: storage method not found: $method");
 			}
 		}
 
@@ -304,7 +304,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 			$object = $storage_objects_and_ids[$service]['object'];
 
 			if (!$object->supports_feature('multi_options')) {
-				error_log("UpdraftPlus_Storage_Methods_Interface::get_remote_file(): Multi-options not supported by: ".$service);
+				UpdraftPlus_Manipulation_Functions::error_log("UpdraftPlus_Storage_Methods_Interface::get_remote_file(): Multi-options not supported by: ".$service);
 				continue;
 			}
 			
@@ -371,7 +371,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 				return $service_object->download($file);
 			} catch (Exception $e) {
 				$log_message = 'Exception ('.get_class($e).') occurred during download: '.$e->getMessage().' (Code: '.$e->getCode().', line '.$e->getLine().' in '.$e->getFile().')';
-				error_log($log_message);
+				UpdraftPlus_Manipulation_Functions::error_log($log_message);
 				// @codingStandardsIgnoreLine
 				$log_message .= ' Backtrace: '.str_replace(array(ABSPATH, "\n"), array('', ', '), $e->getTraceAsString());
 				$updraftplus->log($log_message);
@@ -381,7 +381,7 @@ class UpdraftPlus_Storage_Methods_Interface {
 				return false;
 			} catch (Error $e) { //phpcs:ignore PHPCompatibility.Classes.NewClasses.errorFound -- This Error class will only get triggered during runtime but we don't explicitly throw this class in our code; so we only catch it when PHP throws it.
 				$log_message = 'PHP Fatal error ('.get_class($e).') has occurred during download. Error Message: '.$e->getMessage().' (Code: '.$e->getCode().', line '.$e->getLine().' in '.$e->getFile().')';
-				error_log($log_message);
+				UpdraftPlus_Manipulation_Functions::error_log($log_message);
 				// @codingStandardsIgnoreLine
 				$log_message .= ' Backtrace: '.str_replace(array(ABSPATH, "\n"), array('', ', '), $e->getTraceAsString());
 				$updraftplus->log($log_message);

@@ -30,24 +30,18 @@ class SubscribersEmailCountsController {
     $this->scheduledTasksTable = $this->entityManager->getClassMetadata(ScheduledTaskEntity::class)->getTableName();
   }
 
-  public function updateSubscribersEmailCounts(?\DateTimeInterface $dateLastProcessed, int $batchSize, ?int $startId = null): array {
+  public function updateSubscribersEmailCounts(?\DateTimeInterface $dateLastProcessed, int $startId, int $endId, ?\DateTimeInterface $now = null): int {
     $scheduledTaskSubscribersTable = $this->entityManager->getClassMetadata(ScheduledTaskSubscriberEntity::class)->getTableName();
 
     $connection = $this->entityManager->getConnection();
 
-    $dayAgo = new Carbon();
-    $dayAgoIso = $dayAgo->subDay()->toDateTimeString();
+    // $now is the run's frozen cutoff reference; the caller passes it so all windows of a run
+    // (including resumes) share the same dayAgo and match the stored baseline exactly.
+    $dayAgoIso = Carbon::createFromTimestamp(($now ?? new Carbon())->getTimestamp())->subDay()->toDateTimeString();
 
-    $startId = (int)$startId;
-
-    // Return if there are no new sending tasks
-    if ($dateLastProcessed && !$this->newSendingTasksSince($dateLastProcessed)) {
-      return [0, 0];
-    }
-    // Return if there are no subscribers to update
-    [$countSubscribersToUpdate, $endId] = $this->countAndMaxOfSubscribersInRange($startId, $batchSize);
+    $countSubscribersToUpdate = $this->countSubscribersInRange($startId, $endId);
     if (!$countSubscribersToUpdate) {
-      return [0, 0];
+      return 0;
     }
 
     $queryParams = [
@@ -64,11 +58,15 @@ class SubscribersEmailCountsController {
     $initUpdateValue = $dateLastProcessed ? 's.email_count' : '';
     $dateLastProcessedSql = $dateLastProcessed ? ' AND st.processed_at >= :dateFrom' : '';
 
-    $connection->executeQuery(
+    $connection->executeStatement(
       "
       UPDATE {$this->subscribersTable} as s
       JOIN (
-          SELECT s.id, COUNT(st.id) as email_count
+          -- STRAIGHT_JOIN pins the join order to subscribers -> sts -> scheduled_tasks so each
+          -- batch only scans its own subscribers' rows. Without it the optimizer may lead with
+          -- scheduled_tasks (type='sending' looks selective but isn't) and re-scan the whole
+          -- sending history on every batch -- observed on a particular site with heavy history.
+          SELECT STRAIGHT_JOIN s.id, COUNT(st.id) as email_count
           FROM {$this->subscribersTable} as s
           JOIN {$scheduledTaskSubscribersTable} as sts ON s.id = sts.subscriber_id
           JOIN {$this->scheduledTasksTable} as st ON st.id = sts.task_id
@@ -85,15 +83,14 @@ class SubscribersEmailCountsController {
       $queryParams
     );
 
-    return [$countSubscribersToUpdate, $endId];
+    return $countSubscribersToUpdate;
   }
 
-  private function newSendingTasksSince(\DateTimeInterface $dateLastProcessed): bool {
+  public function hasNewSendingTasksSince(\DateTimeInterface $dateLastProcessed, ?\DateTimeInterface $now = null): bool {
     $carbonDateLastProcessed = Carbon::createFromTimestamp($dateLastProcessed->getTimestamp());
     $dateFromIso = ($carbonDateLastProcessed->subDay())->toDateTimeString();
     $queryParams['dateFrom'] = $dateFromIso;
-    $dayAgo = new Carbon();
-    $dayAgoIso = $dayAgo->subDay()->toDateTimeString();
+    $dayAgoIso = Carbon::createFromTimestamp(($now ?? new Carbon())->getTimestamp())->subDay()->toDateTimeString();
     $queryParams['dayAgo'] = $dayAgoIso;
 
     $result = $this->entityManager->getConnection()->executeQuery(
@@ -111,29 +108,24 @@ class SubscribersEmailCountsController {
     return is_array($result) && isset($result[0]) && ((int)$result[0] > 0);
   }
 
-  private function countAndMaxOfSubscribersInRange(int $startId, int $batchSize): array {
+  private function countSubscribersInRange(int $startId, int $endId): int {
     $result = $this->entityManager->getConnection()->executeQuery(
       "
-      SELECT COUNT(ids.id) as count, COALESCE(MAX(ids.id), 0) as max FROM (
-        SELECT s.id FROM {$this->subscribersTable} as s
-        WHERE s.id >= :startId
-        ORDER BY s.id
-        LIMIT :batchSize
-        ) ids
+      SELECT COUNT(s.id) FROM {$this->subscribersTable} as s
+      WHERE s.id >= :startId
+      AND s.id <= :endId
     ",
       [
         'startId' => $startId,
-        'batchSize' => $batchSize,
+        'endId' => $endId,
       ],
       [
         'startId' => ParameterType::INTEGER,
-        'batchSize' => ParameterType::INTEGER,
+        'endId' => ParameterType::INTEGER,
       ]
-    );
+    )->fetchNumeric();
 
-    /** @var array{0: array{count:int, max:int}} $subscribersInRange */
-    $subscribersInRange = $result->fetchAllAssociative();
-
-    return [intval($subscribersInRange[0]['count']), intval($subscribersInRange[0]['max'])];
+    /** @var int[] $result - it's required for PHPStan */
+    return is_array($result) && isset($result[0]) ? intval($result[0]) : 0;
   }
 }

@@ -181,7 +181,7 @@ class Helper {
 					$widget_filter['name'] = self::generate_widget_filter_name( $widget_filter );
 				}
 
-				$type = ( isset( $widget_filter['type'] ) ) ? $widget_filter['type'] : '';
+				$type = $widget_filter['type'] ?? '';
 
 				// If this is a product_attribute filter with no specific attribute, expand it to all global attributes.
 				if ( 'product_attribute' === $type && empty( $widget_filter['attribute'] ) ) {
@@ -739,6 +739,26 @@ class Helper {
 	}
 
 	/**
+	 * Resolves the effective results-per-page value for the Search 3.0 blocks.
+	 *
+	 * `$override` is the author-set `resultsPerPage` block attribute; `0` (or
+	 * any non-positive value) means "use the site's `posts_per_page` Reading
+	 * setting." A non-positive Reading setting (e.g. `-1`, "show all") falls
+	 * back to 10 rather than clamping down to a single result. Either way the
+	 * result is capped at `get_max_posts_per_page()`.
+	 *
+	 * @param int $override Author override, or 0 to use the site default.
+	 * @return int Clamped, always-positive results-per-page value.
+	 */
+	public static function resolve_results_per_page( $override = 0 ) {
+		$value = $override > 0 ? (int) $override : (int) get_option( 'posts_per_page' );
+		if ( $value <= 0 ) {
+			$value = 10;
+		}
+		return min( $value, self::get_max_posts_per_page() );
+	}
+
+	/**
 	 * Returns the maximum offset for a search query.
 	 *
 	 * @since 5.8.0
@@ -928,6 +948,7 @@ class Helper {
 			'locale'                      => str_replace( '_', '-', self::is_valid_locale( get_locale() ) ? get_locale() : 'en_US' ),
 			'postsPerPage'                => $posts_per_page,
 			'siteId'                      => self::get_wpcom_site_id(),
+			'searchSuggestionsEnabled'    => (bool) get_option( 'jetpack_search_suggestions_enabled', false ),
 			'postTypes'                   => $post_type_labels,
 			'webpackPublicPath'           => plugins_url( '/build/instant-search/', __DIR__ ),
 			'isPhotonEnabled'             => ( $is_wpcom || $is_jetpack_photon_enabled ) && ! $is_private_site,
@@ -970,6 +991,7 @@ class Helper {
 			 * @param bool $disable_tracking Whether to disable tracking. Default false.
 			 */
 			'disableTracking'             => self::is_tracking_disabled() || apply_filters( 'jetpack_instant_search_disable_tracking', false ),
+			'aiAnswersEnabled'            => AI_Answers::is_enabled(),
 		);
 
 		/**
@@ -1068,5 +1090,15 @@ class Helper {
 	public static function is_tracking_disabled() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		return isset( $_GET['disable_tracking'] ) && $_GET['disable_tracking'];
+	}
+
+	/**
+	 * Enqueue the WordPress.com Tracks library that drains `window._tkq` and
+	 * sends the queued events. Shared by Instant Search and the Search blocks so
+	 * the handle, src, and cache-busting version live in one place. Callers own
+	 * the decision of whether to load it (e.g. the `is_tracking_disabled()` gate).
+	 */
+	public static function enqueue_tracks_script() {
+		wp_enqueue_script( 'jp-tracks', '//stats.wp.com/w.js', array(), gmdate( 'YW' ), true );
 	}
 }

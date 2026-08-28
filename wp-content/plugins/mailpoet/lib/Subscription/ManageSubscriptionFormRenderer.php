@@ -15,6 +15,7 @@ use MailPoet\Form\Renderer as FormRenderer;
 use MailPoet\Segments\SegmentsRepository;
 use MailPoet\Settings\SettingsController;
 use MailPoet\Subscribers\LinkTokens;
+use MailPoet\Subscribers\TrackingConsentController;
 use MailPoet\Util\Helpers;
 use MailPoet\Util\Url as UrlHelper;
 use MailPoet\WP\Functions as WPFunctions;
@@ -52,6 +53,9 @@ class ManageSubscriptionFormRenderer {
   /** @var SettingsController */
   private $settings;
 
+  /** @var TrackingConsentController */
+  private $trackingConsentController;
+
   public function __construct(
     WPFunctions $wp,
     UrlHelper $urlHelper,
@@ -61,7 +65,8 @@ class ManageSubscriptionFormRenderer {
     TemplateRenderer $templateRenderer,
     CustomFieldsRepository $customFieldsRepository,
     SegmentsRepository $segmentsRepository,
-    SettingsController $settings
+    SettingsController $settings,
+    TrackingConsentController $trackingConsentController
   ) {
     $this->wp = $wp;
     $this->urlHelper = $urlHelper;
@@ -72,6 +77,7 @@ class ManageSubscriptionFormRenderer {
     $this->customFieldsRepository = $customFieldsRepository;
     $this->segmentsRepository = $segmentsRepository;
     $this->settings = $settings;
+    $this->trackingConsentController = $trackingConsentController;
   }
 
   public function renderForm(SubscriberEntity $subscriber, string $formState = self::FORM_STATE_NOT_SUBMITTED): string {
@@ -225,6 +231,10 @@ class ManageSubscriptionFormRenderer {
     }, $this->customFieldsRepository->findAllActive());
   }
 
+  public static function getTrackingConsentCopy(): string {
+    return __('Allow tracking of email opens and link clicks', 'mailpoet');
+  }
+
   private function getBasicFields(SubscriberEntity $subscriber, bool $isModernStyle): array {
     $statusParams = [
       'required' => true,
@@ -277,7 +287,7 @@ class ManageSubscriptionFormRenderer {
       $statusParams['input_id'] = 'mailpoet_manage_subscription_status';
     }
 
-    return [
+    $fields = [
       [
         'id' => 'first_name',
         'type' => 'text',
@@ -302,6 +312,27 @@ class ManageSubscriptionFormRenderer {
         'params' => $statusParams,
       ],
     ];
+
+    // Only sites that asked subscribers to choose show a tracking control. A
+    // site that tracks everyone never exposes one, so nobody is prompted to
+    // opt out of something the site owner never offered.
+    if ($this->trackingConsentController->areSubscriberControlsVisible()) {
+      $fields[] = [
+        'id' => 'tracking_consent',
+        'type' => 'checkbox',
+        'params' => [
+          'label' => __('Email activity tracking', 'mailpoet'),
+          'values' => [
+            [
+              'value' => self::getTrackingConsentCopy(),
+              'is_checked' => $subscriber->getTrackingConsent() === SubscriberEntity::TRACKING_CONSENT_GRANTED,
+            ],
+          ],
+        ],
+      ];
+    }
+
+    return $fields;
   }
 
   private function getSegmentField(SubscriberEntity $subscriber, bool $isModernStyle): array {

@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) exit;
 
 use MailPoet\Cron\CronTrigger;
 use MailPoet\DI\ContainerWrapper;
+use MailPoet\Subscribers\TrackingConsentController;
 
 class SettingsController {
 
@@ -82,6 +83,9 @@ class SettingsController {
         ],
         'tracking' => [
           'level' => TrackingConfig::LEVEL_FULL,
+          'consent' => [
+            'subscriber_choice' => TrackingConsentController::CHOICE_TRACK_ALL,
+          ],
         ],
         'subscription' => [
           'manage_subscription_page_style' => self::MANAGE_SUBSCRIPTION_PAGE_STYLE_MODERN,

@@ -1,6 +1,16 @@
 @use "./base-units.scss" as *;
 @use "./breakpoints.scss" as *;
 
+@function tu-resolve-value($value) {
+    // If it's a string and starts with 'bu-', then only map with base units.
+    @if type-of($value) == 'string' and str-index($value, 'bu-') == 1 {
+        @return map-get($base-units, $value);
+    }
+
+    // Else return the value directly.
+    @return $value;
+}
+
 // Generates desktop-first variables.
 @mixin tu-generate-responsive-variables($prefix, $definitions) {
     // --- PART 1: Define all base variables in :root ---
@@ -11,7 +21,7 @@
             @if type-of($bu-ref) == 'map' {
                 // It's responsive, so set the "desktop" value as the base
                 @if map-has-key($bu-ref, "desktop") {
-                    $desktop-value: map-get($base-units, map-get($bu-ref, "desktop"));
+                    $desktop-value: tu-resolve-value(map-get($bu-ref, "desktop"));
                     #{$variable-name}: #{$desktop-value};
                 } @else {
                    // Warn developer to add desktop breakpoint value.
@@ -19,7 +29,7 @@
                 }
             } @else {
                 // It's static, so set its value as the base
-                $static-value: map-get($base-units, $bu-ref);
+                $static-value: tu-resolve-value($bu-ref);
                 #{$variable-name}: #{$static-value};
             }
         }
@@ -36,7 +46,7 @@
                             // Only create an override if the variable is responsive AND has a value for this breakpoint
                             @if type-of($bu-ref) == 'map' and map-has-key($bu-ref, $bp-name) {
                                 $variable-name: --#{$prefix}-#{$name};
-                                $breakpoint-value: map-get($base-units, map-get($bu-ref, $bp-name));
+                                $breakpoint-value: tu-resolve-value(map-get($bu-ref, $bp-name));
                                 #{$variable-name}: #{$breakpoint-value};
                             }
                         }

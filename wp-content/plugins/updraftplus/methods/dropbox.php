@@ -29,6 +29,30 @@ class UpdraftPlus_BackupModule_dropbox extends UpdraftPlus_BackupModule {
 	private $upload_tick;
 
 	/**
+	 * Input and option field mappings with default values and supported contexts.
+	 *
+	 * @var array
+	 */
+	protected $input_option_field_mappings = array(
+		'appkey' => array(
+			'default_value' => '',
+			'contexts' => array('option'),
+		),
+		'secret' => array(
+			'default_value' => '',
+			'contexts' => array('option'),
+		),
+		'tk_access_token' => array(
+			'default_value' => '',
+			'contexts' => array('option'),
+		),
+		'folder' => array(
+			'default_value' => '',
+			'contexts' => array('option', 'input'),
+		),
+	);
+
+	/**
 	 * This callback is called as upload progress is made
 	 *
 	 * @param Integer		 $offset   - the byte offset
@@ -91,20 +115,6 @@ class UpdraftPlus_BackupModule_dropbox extends UpdraftPlus_BackupModule {
 	}
 
 	/**
-	 * Default options
-	 *
-	 * @return Array
-	 */
-	public function get_default_options() {
-		return array(
-			'appkey' => '',
-			'secret' => '',
-			'folder' => '',
-			'tk_access_token' => '',
-		);
-	}
-
-	/**
 	 * Check whether options have been set up by the user, or not
 	 *
 	 * @param Array $opts - the potential options
@@ -131,7 +141,7 @@ class UpdraftPlus_BackupModule_dropbox extends UpdraftPlus_BackupModule {
 			if ('recursion' !== $opts->get_error_code()) {
 				$msg = "(".$opts->get_error_code()."): ".$opts->get_error_message();
 				$this->log($msg);
-				error_log("UpdraftPlus: $msg");
+				UpdraftPlus_Manipulation_Functions::error_log("UpdraftPlus: $msg");
 			}
 			// The saved options had a problem; so, return the new ones
 			return $dropbox;
@@ -636,6 +646,8 @@ class UpdraftPlus_BackupModule_dropbox extends UpdraftPlus_BackupModule {
 			'input_app_secret_label' => __('Your Dropbox App Secret', 'updraftplus'),
 			'partial_templates_contain_input_element' => isset($partial_templates['dropbox_additional_configuration_top']) && preg_match('/<input(?:>|[^>]+>)/i', $partial_templates['dropbox_additional_configuration_top']),
 			'deauthentication_nonce' => wp_create_nonce($this->get_id().'_deauth_nonce'),
+			'input_folder_label' => __('Store at', 'updraftplus'),
+			'input_folder_prefix' => 'apps/UpdraftPlus.Com/',
 		);
 		return wp_parse_args(apply_filters('updraft_'.$this->get_id().'_template_properties', array()), wp_parse_args($properties, $this->get_persistent_variables_and_methods()));
 	}
@@ -881,7 +893,7 @@ class UpdraftPlus_BackupModule_dropbox extends UpdraftPlus_BackupModule {
 				if ($return_instead_of_echo) return $auth_result;
 			}
 		} else {
-			error_log("UpdraftPlus: CSRF comparison failure: $csrf != $state");
+			UpdraftPlus_Manipulation_Functions::error_log("UpdraftPlus: CSRF comparison failure: $csrf != $state");
 		}
 	}
 
@@ -1143,5 +1155,25 @@ class UpdraftPlus_BackupModule_dropbox extends UpdraftPlus_BackupModule {
 		$this->set_storage($storage);
 		
 		return $storage;
+	}
+
+	/**
+	 * Customize generated field data using legacy mapping values.
+	 *
+	 * Used by transform_template_properties_to_fields_structure()
+	 * to allow child classes to adjust the generated field structure
+	 * based on legacy data and field mapping requirements.
+	 *
+	 * @param array  $field               Field data.
+	 * @param array  $template_properties Template properties.
+	 * @param string $field_name          Field name.
+	 * @param array  $option              Field mapping option.
+	 *
+	 * @return array
+	 */
+	public function configure_field_from_legacy($field, $template_properties, $field_name, $option) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Variable is not being used yet
+		if (!class_exists('UpdraftPlus_Addon_DropboxFolders') && 'folder' === $field_name) $field = array();
+
+		return $field;
 	}
 }

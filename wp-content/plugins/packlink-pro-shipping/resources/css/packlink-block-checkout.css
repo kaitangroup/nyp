@@ -49,15 +49,38 @@
 	width: 100%;
 	align-items: center;
 	column-gap: 8px;
+	flex-wrap: wrap;
 }
 
 .wc-block-components-shipping-rates-control .wc-block-components-radio-control__label-group .wc-block-components-radio-control__label {
 	display: inline;
 	flex: 1;
+	min-width: 0;
 }
 
 .wc-block-components-shipping-rates-control .wc-block-components-radio-control__label-group .wc-block-components-radio-control__secondary-label {
 	min-width: unset;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+/* Force the drop-off button to a new line in the WC Blocks flex container.
+   The button is injected before the secondary-label in the DOM, so without
+   re-ordering it pushes the price off the carrier row on themes with wide
+   button styling (Divi, Astra, Makeaholic, ...); `order: 99` keeps the price
+   on the carrier row and moves the button below it on every theme. */
+.wc-block-components-radio-control__label-group #packlink-drop-off {
+	order: 99;
+	flex-basis: 100%;
+	margin-top: 8px;
+}
+
+/* Ensure the delivery address also breaks to a new line, after the button. */
+.wc-block-components-radio-control__label-group .woocommerce-shipping-destination {
+	order: 100;
+	flex-basis: 100%;
+	font-size: 12px;
+	margin-top: 4px;
 }
 
 .lp-location-wrapper {
@@ -71,7 +94,8 @@
 	padding: 2px;
 	text-align: center;
 	border: 1px solid lightgray;
-	margin-right: 8px;
+	margin-right: 0;
+	flex-shrink: 0;
 }
 
 
@@ -88,4 +112,26 @@
 		row-gap: 8px;
 		align-items: flex-start;
 	}
+}
+
+/* Divi / Extra theme: style the drop-off button as a primary CTA on WC Blocks.
+   Uses Divi's accent color CSS variable so the button respects the user's theme
+   customizer choice; falls back to Divi's default blue when the variable is unset. */
+body.et_divi_theme .wc-block-components-shipping-rates-control #packlink-drop-off-picker,
+body.et_extra .wc-block-components-shipping-rates-control #packlink-drop-off-picker {
+	padding: 12px 16px;
+	background-color: var(--et_accent_color, var(--accent-color, #2ea3f2));
+	color: #ffffff;
+	border: none;
+	text-transform: uppercase;
+	line-height: 1.4;
+}
+
+body.et_divi_theme .wc-block-components-shipping-rates-control #packlink-drop-off-picker:hover,
+body.et_divi_theme .wc-block-components-shipping-rates-control #packlink-drop-off-picker:focus,
+body.et_extra .wc-block-components-shipping-rates-control #packlink-drop-off-picker:hover,
+body.et_extra .wc-block-components-shipping-rates-control #packlink-drop-off-picker:focus {
+	background-color: var(--et_accent_color, var(--accent-color, #2ea3f2));
+	color: #ffffff;
+	filter: brightness(0.9);
 }

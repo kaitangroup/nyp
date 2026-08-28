@@ -15,10 +15,16 @@ use MailPoet\Config\Installer;
 use MailPoet\Config\ServicesChecker;
 use MailPoet\EmailEditor\Integrations\MailPoet\EmailEditor as EditorInitController;
 use MailPoet\Entities\NewsletterEntity;
+use MailPoet\Features\FeaturesController;
 use MailPoet\Newsletter\NewslettersRepository;
+use MailPoet\Services\AuthorizedEmailsController;
+use MailPoet\Services\AuthorizedSenderDomainController;
+use MailPoet\Services\Bridge;
 use MailPoet\Settings\SettingsController as MailPoetSettings;
 use MailPoet\Settings\UserFlagsController;
 use MailPoet\Util\CdnAssetUrl;
+use MailPoet\Util\FreeDomains;
+use MailPoet\Util\License\Features\CapabilitiesManager;
 use MailPoet\Util\License\Features\Subscribers as SubscribersFeature;
 use MailPoet\WP\Functions as WPFunctions;
 
@@ -47,6 +53,16 @@ class EditorPageRenderer {
 
   private Analytics $analytics;
 
+  private Bridge $bridge;
+
+  private AuthorizedEmailsController $authorizedEmailsController;
+
+  private AuthorizedSenderDomainController $senderDomainController;
+
+  private FeaturesController $featuresController;
+
+  private CapabilitiesManager $capabilitiesManager;
+
   public function __construct(
     WPFunctions $wp,
     CdnAssetUrl $cdnAssetUrl,
@@ -56,7 +72,12 @@ class EditorPageRenderer {
     MailPoetSettings $mailpoetSettings,
     NewslettersRepository $newslettersRepository,
     UserFlagsController $userFlagsController,
-    Analytics $analytics
+    Analytics $analytics,
+    Bridge $bridge,
+    AuthorizedEmailsController $authorizedEmailsController,
+    AuthorizedSenderDomainController $senderDomainController,
+    FeaturesController $featuresController,
+    CapabilitiesManager $capabilitiesManager
   ) {
     $this->wp = $wp;
     $this->settingsController = Email_Editor_Container::container()->get(Settings_Controller::class);
@@ -70,6 +91,11 @@ class EditorPageRenderer {
     $this->newslettersRepository = $newslettersRepository;
     $this->userFlagsController = $userFlagsController;
     $this->analytics = $analytics;
+    $this->bridge = $bridge;
+    $this->authorizedEmailsController = $authorizedEmailsController;
+    $this->senderDomainController = $senderDomainController;
+    $this->featuresController = $featuresController;
+    $this->capabilitiesManager = $capabilitiesManager;
   }
 
   public function render() {
@@ -184,6 +210,14 @@ class EditorPageRenderer {
       'mailpoet_has_valid_api_key' => $this->subscribersFeature->hasValidApiKey(),
       'mailpoet_has_valid_premium_key' => $this->subscribersFeature->hasValidPremiumKey(),
       'mailpoet_has_premium_support' => $this->subscribersFeature->hasPremiumSupport(),
+      'mailpoet_mta_method' => $this->mailpoetSettings->get('mta.method'),
+      'mailpoet_mss_active' => $this->bridge->isMailpoetSendingServiceEnabled(),
+      'mailpoet_authorized_emails' => [],
+      'mailpoet_verified_sender_domains' => [],
+      'mailpoet_partially_verified_sender_domains' => [],
+      'mailpoet_all_sender_domains' => [],
+      'mailpoet_sender_restrictions' => [],
+      'mailpoet_free_domains' => FreeDomains::FREE_DOMAINS,
       'mailpoet_plugin_partial_key' => $this->servicesChecker->generatePartialApiKey(),
       'mailpoet_subscribers_count' => $this->subscribersFeature->getSubscribersCount(),
       'mailpoet_subscribers_limit' => $this->subscribersFeature->getSubscribersLimit(),
@@ -204,12 +238,30 @@ class EditorPageRenderer {
       ],
       'mailpoet_is_automation_newsletter' => $isAutomationNewsletter,
       'mailpoet_automation_id' => $automationId,
+      'mailpoet_feature_flags' => $this->featuresController->getAllFlags(),
+      'mailpoet_capabilities' => $this->capabilitiesManager->getCapabilities(),
       'mailpoet_ai_text_generation_available' => function_exists('wp_ai_client_prompt')
         && wp_ai_client_prompt('test')->is_supported_for_text_generation(),
     ];
+    if ($this->bridge->isMailpoetSendingServiceEnabled()) {
+      $inline_script_data['mailpoet_authorized_emails'] = $this->authorizedEmailsController->getAuthorizedEmailAddresses();
+      $inline_script_data['mailpoet_verified_sender_domains'] = $this->senderDomainController->getFullyVerifiedSenderDomains(true);
+      $inline_script_data['mailpoet_partially_verified_sender_domains'] = $this->senderDomainController->getPartiallyVerifiedSenderDomains(true);
+      $inline_script_data['mailpoet_all_sender_domains'] = $this->senderDomainController->getAllSenderDomains();
+      $inline_script_data['mailpoet_sender_restrictions'] = [
+        'lowerLimit' => AuthorizedSenderDomainController::LOWER_LIMIT,
+        'isAuthorizedDomainRequiredForNewCampaigns' => $this->senderDomainController->isAuthorizedDomainRequiredForNewCampaigns(),
+        'campaignTypes' => NewsletterEntity::CAMPAIGN_TYPES,
+        'skipAuthorization' => $this->senderDomainController->shouldSkipAuthorization(),
+      ];
+    }
+    $emailRegexScript = <<<'JS'
+var mailpoet_email_regex = /(?=^[+a-zA-Z0-9_.!#$%&'*\/=?^`{|}~-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z0-9]{2,63}$)(?=^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))/;
+JS;
     $inlineScript = implode('', array_map(function ($key) use ($inline_script_data) {
       return sprintf("var %s=%s;", $key, wp_json_encode($inline_script_data[$key], JSON_HEX_TAG | JSON_UNESCAPED_SLASHES));
     }, array_keys($inline_script_data)));
+    $inlineScript = $emailRegexScript . $inlineScript;
     $scriptHandles = [
       'email_editor_integration',
       'mailpoet-powered-by-mailpoet-block',

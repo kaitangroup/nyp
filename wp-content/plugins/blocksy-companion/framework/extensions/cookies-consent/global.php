@@ -118,7 +118,7 @@ blocksy_output_colors([
 	'variables' => [
 		'default' => [
 			'selector' => '.cookie-notification',
-			'variable' => 'backgroundColor'
+			'variable' => 'notice-background-color'
 		],
 	],
 ]);
@@ -126,6 +126,6 @@ blocksy_output_colors([
 $cookieMaxWidth = blocksy_companion_theme_functions()->blocksy_get_theme_mod( 'cookieMaxWidth', 400 );
 $css->put(
 	'.cookie-notification',
-	'--maxWidth: ' . $cookieMaxWidth . 'px'
+	'--notice-max-width: ' . $cookieMaxWidth . 'px'
 );
 

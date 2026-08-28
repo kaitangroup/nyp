@@ -34,20 +34,15 @@ class WelcomeWithDiscountEmailPattern extends Pattern {
       <!-- /wp:heading -->
 
       <!-- wp:paragraph -->
-      <p>' .
-      /* translators: %s: Customer full name personalization tag */
-      sprintf(__('Hi %s, we are so glad to have you onboard. As a thank you, here is a 10%% discount for your first purchase.', 'mailpoet'), '<!--[woocommerce/customer-full-name]-->') . '</p>
+      <p>' . __('We are so glad to have you onboard. As a thank you, here is a 10% discount for your first purchase.', 'mailpoet') . '</p>
       <!-- /wp:paragraph -->
 
       <!-- wp:paragraph -->
       <p>' .
-      /* translators: %s: Site description personalization tag */
       __('Use this code at checkout to redeem your discount:', 'mailpoet') . '</p>
       <!-- /wp:paragraph -->
 
-      <!-- wp:woocommerce/coupon-code {"align":"left","source":"createNew","discountType":"percent","amount":10,"expiryDay":10} -->
-      <div class="wp-block-woocommerce-coupon-code alignleft"></div>
-      <!-- /wp:woocommerce/coupon-code -->
+      ' . $this->getGeneratedCouponBlock('left', 10, 10) . '
 
       <!-- wp:buttons {"layout":{"type":"flex","justifyContent":"left"}} -->
       <div class="wp-block-buttons">

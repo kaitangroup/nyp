@@ -150,6 +150,11 @@ class UpdraftPlus_Tour {
 				'title' => __("More settings", 'updraftplus'),
 				'text' => __("Look through the other settings here, making any changes you’d like.", 'updraftplus')
 			),
+			'auto_backup' => array(
+				'title' => __('Automatic backups before update', 'updraftplus'),
+				'text' => __('Check this box to enable automatic backups whenever a plugin, theme, or the WordPress core is updated.', 'updraftplus'),
+				'enabled' => false,
+			),
 			'settings_save' => array(
 				'title' => __("Save", 'updraftplus'),
 				'text' => __('Press here to save your settings.', 'updraftplus')
@@ -201,6 +206,8 @@ class UpdraftPlus_Tour {
 					.'</div>'
 			);
 
+			$tour_data['auto_backup']['enabled'] = true;
+
 			if ($updraftplus_addons2->connection_status() && !is_wp_error($updraftplus_addons2->connection_status())) {
 				$tour_data['premium'] = array(
 					'title' => 'UpdraftPlus Premium',
@@ -213,7 +220,7 @@ class UpdraftPlus_Tour {
 					'title' => 'UpdraftPlus Premium',
 					'text' => __('Thank you for taking the tour.', 'updraftplus')
 						.'<div class="ud-notice">'
-						.'<h3>'.__('Connect to updraftplus.com', 'updraftplus').'</h3>'
+						.'<h3>'.__('Connect to teamupdraft.com', 'updraftplus').'</h3>'
 						.__('Log in here to enable all the features you have access to.', 'updraftplus')
 						.'</div>',
 					'attach_to' => '#updraftplus-addons_options_email right',

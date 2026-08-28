@@ -43,7 +43,7 @@ if ($field === 'woo:rating') {
 }
 
 if ($field === 'woo:brands') {
-	$value = blocksy_render_view(
+	$value = blocksy_companion_render_view(
 		dirname(__FILE__) . '/brands-grid.php',
 		[
 			'attributes' => $attributes

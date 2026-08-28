@@ -4,6 +4,9 @@
 	"name": "blocksy/breadcrumbs",
 	"category": "blocksy-blocks",
 	"attributes": {
+		"style": {
+			"type": "object"
+		},
 		"textColor": {
 			"type": "string"
 		},

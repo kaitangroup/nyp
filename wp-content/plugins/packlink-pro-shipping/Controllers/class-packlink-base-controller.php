@@ -31,7 +31,9 @@ class Packlink_Base_Controller {
 	protected static $SHOP_MANAGER_ALLOWED_ACTIONS = array(
 		'create_draft',
 		'is_manual_sync_enabled',
-		'get_draft_status'
+		'get_draft_status',
+		'get_label_pdf',
+		'bulk_print_labels_ajax'
 	);
 
 	/**

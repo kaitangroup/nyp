@@ -1,5 +1,9 @@
 <?php
 
+if (! defined('ABSPATH')) {
+	exit;
+}
+
 $config = [
 	'name' => __('Account', 'blocksy-companion'),
 

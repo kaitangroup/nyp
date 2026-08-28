@@ -64,6 +64,7 @@ if (!class_exists('Updraft_Deinstall_Dialog_v1')) {
 				'template_file' => plugin_dir_path(__FILE__).'templates/dialog.php',
 				'show_on_network_admin' => true,
 				'show_on_subsites' => true,
+				'custom_css' => false,
 			);
 
 			$this->options = array_merge($defaults, $options);
@@ -87,6 +88,9 @@ if (!class_exists('Updraft_Deinstall_Dialog_v1')) {
 			if ($this->options['dialog_type'] === 'thickbox') {
 				wp_enqueue_script('thickbox');
 				wp_enqueue_style('thickbox');
+				if (version_compare($GLOBALS['wp_version'], '3.9', '<')) {
+					wp_enqueue_style('deinstall-dialog-thickbox-css', plugins_url('assets/css/deinstall-dialog-thickbox.css', __FILE__), array('thickbox'), self::VERSION);
+				}
 				$file = plugins_url('assets/js/deinstall-dialog-thickbox.js', __FILE__);
 				$dependencies = array('jquery', 'thickbox');
 			} else {
@@ -104,6 +108,7 @@ if (!class_exists('Updraft_Deinstall_Dialog_v1')) {
 				'dialog_title' => $this->options['dialog_title'],
 				'deactivate_label' => $this->options['deactivate_label'],
 				'cancel_label' => $this->options['cancel_label'],
+				'custom_css' => $this->options['custom_css'],
 			);
 
 			wp_localize_script(
@@ -137,7 +142,7 @@ if (!class_exists('Updraft_Deinstall_Dialog_v1')) {
 		 * Verifies nonce and triggers the main deinstallation action for the plugin.
 		 */
 		public function handle_deinstall_confirm() {
-			if (!current_user_can('deactivate_plugins') && (!isset($_POST['_nonce']) || !wp_verify_nonce($_POST['_nonce'], $this->options['script_handler'].'_deinstall_nonce'))) {
+			if (!current_user_can('activate_plugins') || !isset($_POST['_nonce']) || !wp_verify_nonce($_POST['_nonce'], $this->options['script_handler'].'_deinstall_nonce')) {
 				wp_send_json_error(array('message' => 'Nonce and/or capability verification failed.'), 403);
 			}
 			
@@ -171,7 +176,7 @@ if (!class_exists('Updraft_Deinstall_Dialog_v1')) {
 
 					$links[$key] = preg_replace(
 						'/<a(.*?)href="(.*?)"(.*?)>/i', 
-						'<a$1href="$2"$3 onclick="window.updraft_deinstall_'.$this->options['dialog_type'].'_'.self::VERSION.'(event, \''.esc_attr($this->options['script_handler']).'\');">', 
+						'<a$1href="$2"$3 onclick="window.updraft_deinstall_'.esc_attr($this->options['dialog_type']).'_'.self::VERSION.'(event, \''.esc_attr($this->options['script_handler']).'\');">', 
 						$value
 					);
 				}

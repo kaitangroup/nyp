@@ -88,6 +88,11 @@
 			"default": "yes"
 		},
 
+		"has_slideshow_pills": {
+			"type": "string",
+			"default": "no"
+		},
+
 		"has_slideshow_autoplay": {
 			"type": "string",
 			"default": "no"
@@ -156,6 +161,7 @@
 
 		"has_slideshow": "has_slideshow",
 		"has_slideshow_arrows": "has_slideshow_arrows",
+		"has_slideshow_pills": "has_slideshow_pills",
 		"has_slideshow_autoplay": "has_slideshow_autoplay",
 		"has_slideshow_autoplay_speed": "has_slideshow_autoplay_speed",
 		"has_pagination": "has_pagination"

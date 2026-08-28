@@ -20,12 +20,17 @@ class SubscriberSegmentRepository extends Repository {
   /** @var WPFunctions */
   private $wp;
 
+  /** @var SegmentsCountRecalculator */
+  private $segmentsCountRecalculator;
+
   public function __construct(
     EntityManager $entityManager,
-    WPFunctions $wp
+    WPFunctions $wp,
+    SegmentsCountRecalculator $segmentsCountRecalculator
   ) {
     parent::__construct($entityManager);
     $this->wp = $wp;
+    $this->segmentsCountRecalculator = $segmentsCountRecalculator;
   }
 
   protected function getEntityClassName() {
@@ -53,6 +58,7 @@ class SubscriberSegmentRepository extends Repository {
       ->setParameter('subscriber', $subscriber)
       ->getQuery()
       ->execute();
+    $this->segmentsCountRecalculator->recalculateForSubscribers([(int)$subscriber->getId()]);
   }
 
   /**
@@ -69,10 +75,21 @@ class SubscriberSegmentRepository extends Repository {
           continue;
         }
 
-        $this->createOrUpdate($subscriber, $segment, SubscriberEntity::STATUS_UNSUBSCRIBED);
+        // Defer the recompute: there is a single recalculateForSubscribers()
+        // call for this subscriber at the end of the method.
+        $this->createOrUpdate($subscriber, $segment, SubscriberEntity::STATUS_UNSUBSCRIBED, false, true);
       }
       $this->entityManager->flush();
     } else {
+      $subscriberSegmentsToUnsubscribe = array_values(array_filter(
+        $subscriber->getSubscriberSegments()->toArray(),
+        function (SubscriberSegmentEntity $subscriberSegment): bool {
+          $segment = $subscriberSegment->getSegment();
+          return $subscriberSegment->getStatus() === SubscriberEntity::STATUS_SUBSCRIBED
+            && $segment instanceof SegmentEntity
+            && $segment->getType() !== SegmentEntity::TYPE_WP_USERS;
+        }
+      ));
       $subscriberSegmentTable = $this->entityManager->getClassMetadata(SubscriberSegmentEntity::class)->getTableName();
       $segmentTable = $this->entityManager->getClassMetadata(SegmentEntity::class)->getTableName();
       $this->entityManager->getConnection()->executeStatement("
@@ -89,7 +106,11 @@ class SubscriberSegmentRepository extends Repository {
       foreach ($subscriber->getSubscriberSegments() as $subscriberSegment) {
         $this->entityManager->refresh($subscriberSegment);
       }
+      foreach ($subscriberSegmentsToUnsubscribe as $subscriberSegment) {
+        $this->wp->doAction('mailpoet_segment_unsubscribed', $subscriberSegment);
+      }
     }
+    $this->segmentsCountRecalculator->recalculateForSubscribers([(int)$subscriber->getId()]);
   }
 
   public function resetSubscriptions(SubscriberEntity $subscriber, array $segments): void {
@@ -152,15 +173,19 @@ class SubscriberSegmentRepository extends Repository {
    */
   public function subscribeToSegments(SubscriberEntity $subscriber, array $segments, bool $skipHooks = false): void {
     foreach ($segments as $segment) {
-      $this->createOrUpdate($subscriber, $segment, SubscriberEntity::STATUS_SUBSCRIBED, $skipHooks);
+      // Defer the per-segment recompute: subscribing to N segments only changes
+      // this one subscriber's count, so recompute it once after the loop.
+      $this->createOrUpdate($subscriber, $segment, SubscriberEntity::STATUS_SUBSCRIBED, $skipHooks, true);
     }
+    $this->segmentsCountRecalculator->recalculateForSubscribers([(int)$subscriber->getId()]);
   }
 
   public function createOrUpdate(
     SubscriberEntity $subscriber,
     SegmentEntity $segment,
     string $status,
-    bool $skipHooks = false
+    bool $skipHooks = false,
+    bool $skipSegmentsCountRecalculation = false
   ): SubscriberSegmentEntity {
     $subscriberSegment = $this->findOneBy(['segment' => $segment, 'subscriber' => $subscriber]);
 
@@ -183,6 +208,22 @@ class SubscriberSegmentRepository extends Repository {
       && $oldStatus !== SubscriberEntity::STATUS_SUBSCRIBED
     ) {
       $this->wp->doAction('mailpoet_segment_subscribed', $subscriberSegment);
+    }
+    if (
+      !$skipHooks
+      && $oldStatus === SubscriberEntity::STATUS_SUBSCRIBED
+      && $subscriberSegment->getStatus() === SubscriberEntity::STATUS_UNSUBSCRIBED
+    ) {
+      $this->wp->doAction('mailpoet_segment_unsubscribed', $subscriberSegment);
+    }
+
+    // segments_count only counts 'subscribed' memberships, so it can only change
+    // when the status crosses the subscribed boundary. A transition between two
+    // non-subscribed statuses (e.g. unconfirmed -> bounced) leaves it untouched.
+    $crossesSubscribedBoundary = $oldStatus !== $status
+      && ($oldStatus === SubscriberEntity::STATUS_SUBSCRIBED || $status === SubscriberEntity::STATUS_SUBSCRIBED);
+    if ($crossesSubscribedBoundary && !$skipSegmentsCountRecalculation) {
+      $this->segmentsCountRecalculator->recalculateForSubscribers([(int)$subscriber->getId()]);
     }
 
     return $subscriberSegment;

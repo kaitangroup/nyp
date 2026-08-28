@@ -1,0 +1,29 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "blocksy/search",
+	"attributes": {
+		"style": {
+			"type": "object"
+		}
+	},
+	"supports": {
+		"spacing": {
+			"margin": true,
+			"__experimentalDefaultControls": {
+				"margin": true
+			}
+		},
+		"__experimentalBorder": {
+			"color": false,
+			"radius": true,
+			"width": false,
+			"__experimentalSkipSerialization": true,
+			"__experimentalDefaultControls": {
+				"color": false,
+				"radius": true,
+				"width": false
+			}
+		}
+	}
+}

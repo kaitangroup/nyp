@@ -191,7 +191,7 @@ class DemoInstallContentExport {
 		function wxr_cdata( $str ) {
 			$str = strval($str);
 			if ( ! seems_utf8( $str ) ) {
-				$str = utf8_encode( $str );
+				$str = mb_convert_encoding( $str, 'UTF-8', 'ISO-8859-1' );
 			}
 			// $str = ent2ncr(esc_html($str));
 			$str = '<![CDATA[' . str_replace( ']]>', ']]]]><![CDATA[>', $str ) . ']]>';

@@ -319,6 +319,7 @@ class TaxQuery {
 						[
 							'has_slideshow' => 'no',
 							'has_slideshow_arrows' => 'yes',
+							'has_slideshow_pills' => 'no',
 							'has_slideshow_autoplay' => 'no',
 							'has_slideshow_autoplay_speed' => 3,
 							'hide_empty' => 'yes',
@@ -329,6 +330,7 @@ class TaxQuery {
 					$is_slideshow_layout = $context['has_slideshow'] === 'yes';
 
 					$content = '';
+					$pills_count = 0;
 
 					$wrapper_attributes = get_block_wrapper_attributes();
 
@@ -404,14 +406,28 @@ class TaxQuery {
 						}
 
 						$content .= $single_item;
+						$pills_count++;
 
 						$blocksy_term_obj = null;
 					}
 
 					if ($is_slideshow_layout) {
 						$arrows = '';
+						$pills = '';
 
 						if ($context['has_slideshow_arrows'] === 'yes') {
+							/**
+							 * Filters the SVG icons used for Flexy slideshow navigation arrows.
+							 *
+							 * @since 2.0.98
+							 *
+							 * @param array $arrow_icons {
+							 *     SVG markup for slideshow navigation arrows.
+							 *
+							 *     @type string $prev Previous arrow SVG markup.
+							 *     @type string $next Next arrow SVG markup.
+							 * }
+							 */
 							$arrow_icons = apply_filters(
 								'blocksy:flexy:arrows',
 								[
@@ -422,6 +438,19 @@ class TaxQuery {
 
 							$arrows = '<span class="flexy-arrow-prev" data-position="outside">' . $arrow_icons['prev'] . '</span>
 								<span class="flexy-arrow-next" data-position="outside">' . $arrow_icons['next'] . '</span>';
+						}
+
+						if ($context['has_slideshow_pills'] === 'yes') {
+							ob_start();
+							blocksy_companion_theme_functions()->blocksy_flexy_pills([
+								'pills_count' => $pills_count,
+								'pills_container_attr' => [
+									'data-flexy' => $pills_count <= 5
+										? 'no:paused'
+										: 'no',
+								],
+							]);
+							$pills = ob_get_clean();
 						}
 
 						$content = blocksy_html_tag(
@@ -455,7 +484,7 @@ class TaxQuery {
 									)
 								) .
 								$arrows
-							)
+							) . $pills
 						);
 					}
 
@@ -503,7 +532,7 @@ class TaxQuery {
 				];
 
 				foreach ($tax_block_patterns as $tax_block_pattern) {
-					$pattern_data = blocksy_companion_theme_functions()->blocksy_get_variables_from_file(
+					$pattern_data = blocksy_companion_get_variables_from_file(
 						__DIR__ . '/block-patterns/' . $tax_block_pattern . '.php',
 						['pattern' => []]
 					);
@@ -584,6 +613,7 @@ class TaxQuery {
 				// yes | no
 				'has_slideshow' => 'no',
 				'has_slideshow_arrows' => 'yes',
+				'has_slideshow_pills' => 'no',
 				'has_slideshow_autoplay' => 'no',
 				'has_slideshow_autoplay_speed' => 3,
 
@@ -760,6 +790,14 @@ class TaxQuery {
 			$terms_query_args['offset'] = ($current_page - 1) * $per_page + $base_offset;
 		}
 
+		/**
+		 * Filters the term query arguments used by the Advanced Taxonomies block.
+		 *
+		 * @since 2.1.11
+		 *
+		 * @param array $terms_query_args Term query arguments prepared by the block.
+		 * @param array $attributes       Block attributes.
+		 */
 		return apply_filters(
 			'blocksy:general:blocks:tax-query:args',
 			$terms_query_args,

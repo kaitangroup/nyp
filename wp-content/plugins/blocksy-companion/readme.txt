@@ -1,11 +1,11 @@
 === Blocksy Companion ===
 Tags: widget, widgets
-Requires at least: 6.5
+Requires at least: 6.7
 Requires PHP: 7.0
-Tested up to: 7.0
+Tested up to: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.1.44
+Stable tag: 2.1.53
 
 The official companion plugin for Blocksy theme, packed with starter sites, extra features, and integrations.
 
@@ -67,6 +67,46 @@ Program. The Patchstack team help validate, triage and handle any security
 vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/blocksy-companion)
 
 == Changelog ==
+2.1.53: 2026-08-13
+- Improvement: Better support for WordPress 7.1 responsive block styles
+- Improvement: Cookies Consent - correctly display the message when submitting comments
+
+2.1.52: 2026-08-06
+- Improvement: Advanced Taxonomies block - correctly load additional pages with Infinite Scroll pagination type
+- Improvement: Dynamic Data block - correctly display archive page images when used in Content Blocks
+- Improvement: Dynamic data block - prevent script tags from rendering in dynamic content fields
+
+2.1.51: 2026-07-30
+- Improvement: Dynamic data block - make sure the excerpt source is properly outputted on shop archive page
+- Improvement: Variation swatches - smarter and more resilient check for out of stock variations
+
+2.1.50: 2026-07-23
+- Improvement: General fixes and improvements
+
+2.1.49: 2026-07-14
+- Improvement: Add navigation pills option to advanced posts and advanced taxonomies blocks
+- Improvement: Cookies notice - replace CSS camel case variables with dashed names
+- Improvement: Dynamic data block - support for image captions
+
+2.1.48: 2026-07-01
+- Improvement: Improved Polylang compatibility when saving conditions without configured languages
+- Fix: Product reviews - fix issues when saving review meta fields
+
+2.1.47: 2026-06-24
+- Improvement: Make communication between theme and companion more resilient and optimized
+- Improvement: Scope single-product WooCommerce classes correctly
+
+2.1.46: 2026-06-17
+- Improvement: Account modal - better handling for login verification and interstitial steps
+- Improvement: Account modal - support for "All in One WP Security" plugin
+- Improvement: Dynamic data block - prevent unnecessary `aria-label` on unlinked images
+- Improvement: Dynamic data block - support semantic date output with `<time>` tag
+- Improvement: Product reviews - ensure product description post meta field is correctly sanitized upon save and display in frontend
+- Fix: Newsletter subscribe - fix GDPR checkbox ID collisions
+
+2.1.45: 2026-06-11
+- Improvement: General fixes and improvements
+
 2.1.44: 2026-05-29
 - Improvement: General fixes and improvements
 

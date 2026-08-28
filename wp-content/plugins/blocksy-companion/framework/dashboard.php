@@ -91,7 +91,7 @@ class Dashboard {
 				&&
 				$blocksy_data['is_correct_theme']
 			) {
-				blocksy_render_view_e(
+				blocksy_companion_render_view_e(
 					dirname(__FILE__) . '/views/theme-mismatch.php',
 					[
 						'is_theme_version_ok' => $blocksy_data['is_theme_version_ok'],
@@ -216,7 +216,7 @@ class Dashboard {
 			blocksy_companion_fs()->add_action('connect/before', function () {
 				$path = dirname(__FILE__) . '/views/optin.php';
 
-				blocksy_render_view_e($path, []);
+				blocksy_companion_render_view_e($path, []);
 			});
 
 			blocksy_companion_fs()->add_action('connect/after', function () {
@@ -599,30 +599,3 @@ class Dashboard {
 	}
 }
 
-if (! function_exists('blocksy_render_view')) {
-	function blocksy_render_view(
-		$file_path,
-		$view_variables = [],
-		$default_value = ''
-	) {
-		if (! is_file($file_path)) {
-			return $default_value;
-		}
-
-		// phpcs:ignore WordPress.PHP.DontExtract.extract_extract
-		extract($view_variables, EXTR_REFS);
-		unset($view_variables);
-
-		ob_start();
-		require $file_path;
-
-		return ob_get_clean();
-	}
-}
-
-if (! function_exists('blocksy_render_view_e')) {
-	function blocksy_render_view_e($file_path, $view_variables = [], $default_value = '') {
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo blocksy_render_view($file_path, $view_variables, $default_value);
-	}
-}

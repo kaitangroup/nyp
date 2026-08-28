@@ -55,6 +55,7 @@ class Block_Checkout_Handler {
 		$response = [
 			'translations'                  => $this->get_checkout_translations(),
 			'selected_shipping_method'      => $selected_shipping_method = $this->get_selected_shipping_method(),
+			'selected_drop_off_id'          => $this->get_selected_drop_off_id(),
 			'method_details'                => [],
 			'no_drop_off_locations_message' => __( 'There are no drop-off locations available for the entered address', 'packlink-pro-shipping' )
 		];
@@ -114,7 +115,7 @@ class Block_Checkout_Handler {
 	 * @return void
 	 */
 	public function load_data() {
-		if ( is_checkout() ) {
+		if ( Checkout_Helper::is_packlink_checkout() ) {
 			Script_Loader::load_js(
 				array(
 					'js/packlink-block-checkout.js',
@@ -136,7 +137,7 @@ class Block_Checkout_Handler {
 	 * @return void
 	 */
     public function render_drop_off_markup() {
-        if ( ! is_checkout() ) {
+        if ( ! Checkout_Helper::is_packlink_checkout() ) {
             return;
         }
 
@@ -264,6 +265,23 @@ class Block_Checkout_Handler {
 		}
 
 		return explode( ':', reset( $chosen_shipping_methods ) )[1];
+	}
+
+	/**
+	 * Returns the saved drop-off location id, but only when it belongs to the
+	 * currently chosen shipping method; an empty string otherwise.
+	 *
+	 * @return string
+	 */
+	private function get_selected_drop_off_id() {
+		$chosen_methods = wc()->session->get( 'chosen_shipping_methods', array() );
+		$chosen         = ! empty( $chosen_methods ) ? reset( $chosen_methods ) : '';
+
+		if ( '' === $chosen || wc()->session->get( Shipping_Method_Helper::SHIPPING_ID, '' ) !== $chosen ) {
+			return '';
+		}
+
+		return (string) wc()->session->get( Shipping_Method_Helper::DROP_OFF_ID, '' );
 	}
 
 	/**

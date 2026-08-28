@@ -102,7 +102,7 @@ class UpdraftPlus_Manipulation_Functions {
 		
 		if (null !== $type) {
 			if (strtolower(gettype($putative_return)) !== strtolower($type)) {
-				throw new Exception('fetch_superglobal() was unable to return any value of the required type '.$type, 255);
+				throw new Exception('fetch_superglobal() was unable to return any value of the required type '.$type, 255);// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error messages should be escaped when caught and printed.
 			}
 		}
 		

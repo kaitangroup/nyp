@@ -1297,7 +1297,11 @@ class UpdraftPlus_S3 {
 				$type = explode(';', $type);
 				$type = trim(array_shift($type));
 			}
-			finfo_close($finfo);// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.finfo_closeFound -- The function finfo_close() is not present in PHP version 5.2 or earlier
+			if (version_compare(PHP_VERSION, '8.1', '<')) {
+				finfo_close($finfo);// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.finfo_closeFound -- The function finfo_close() is not present in PHP version 5.2 or earlier
+			} else {
+				unset($finfo); // On PHP 8.1+, finfo_close() is a no-op (deprecated in 8.5); unset the handle instead.
+			}
 
 		// If anyone is still using mime_content_type()
 		} elseif (function_exists('mime_content_type')) {

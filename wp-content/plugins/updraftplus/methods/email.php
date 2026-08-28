@@ -8,6 +8,18 @@ if (!class_exists('UpdraftPlus_BackupModule')) updraft_try_include_file('methods
 
 class UpdraftPlus_BackupModule_email extends UpdraftPlus_BackupModule {
 
+	/**
+	 * Input and option field mappings with default values and supported contexts.
+	 *
+	 * @var array
+	 */
+	protected $input_option_field_mappings = array(
+		'email_address' => array(
+			'default_value' => '',
+			'contexts' => array('input'),
+		),
+	);
+
 	public function backup($backup_array) {
 
 		global $updraftplus;
@@ -131,5 +143,21 @@ class UpdraftPlus_BackupModule_email extends UpdraftPlus_BackupModule {
 
 	public function delete($files, $data = null, $sizeinfo = array()) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Unused parameter is present because the caller uses 3 arguments.
 		return true;
+	}
+
+	/**
+	 * Retrieve a list of template properties by taking all the persistent variables and methods of the parent class and combining them with the ones that are unique to this module, also the necessary HTML element attributes and texts which are also unique only to this backup module
+	 * NOTE: Please sanitise all strings that are required to be shown as HTML content on the frontend side (i.e. wp_kses()), or any other technique to prevent XSS attacks that could come via WP hooks
+	 *
+	 * @return array an associative array keyed by names that describe themselves as they are
+	 */
+	public function get_template_properties() {
+		$properties = array(
+			'input_email_address_type' => 'email',
+			'input_email_address_label' => __('Email address', 'updraftplus'),
+			'input_email_address_placeholder' => __('Enter your email address', 'updraftplus')
+		);
+		
+		return wp_parse_args($properties, $this->get_persistent_variables_and_methods());
 	}
 }

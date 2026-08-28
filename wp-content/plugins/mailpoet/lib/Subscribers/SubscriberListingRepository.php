@@ -558,25 +558,44 @@ class SubscriberListingRepository extends ListingRepository {
       return;
     }
 
-    if (!in_array($group, [SubscriberEntity::STATUS_SUBSCRIBED, SubscriberEntity::STATUS_UNSUBSCRIBED])) {
+    $staticSegment = $this->getStaticSegmentFromDefinition();
+
+    if (in_array($group, [SubscriberEntity::STATUS_SUBSCRIBED, SubscriberEntity::STATUS_UNSUBSCRIBED]) && $staticSegment) {
+      $operator = $group === SubscriberEntity::STATUS_SUBSCRIBED ? 'AND' : 'OR';
       $queryBuilder
-        ->andWhere('s.status = :status')
+        ->andWhere('(s.status = :status ' . $operator . ' ss.status = :status)')
         ->setParameter('status', $group);
       return;
     }
 
-    $segment = $this->definition && array_key_exists('segment', $this->definition->getFilters()) ? $this->entityManager->find(SegmentEntity::class, (int)$this->definition->getFilters()['segment']) : null;
-    if (!$segment instanceof SegmentEntity || !$segment->isStatic()) {
-      $queryBuilder
-        ->andWhere('s.status = :status')
-        ->setParameter('status', $group);
-      return;
-    }
-
-    $operator = $group === SubscriberEntity::STATUS_SUBSCRIBED ? 'AND' : 'OR';
     $queryBuilder
-      ->andWhere('(s.status = :status ' . $operator . ' ss.status = :status)')
+      ->andWhere('s.status = :status')
       ->setParameter('status', $group);
+
+    // Under a static list, a member unsubscribed from THIS list belongs in the
+    // unsubscribed tab — not in inactive/unconfirmed/bounced. Excluding them here
+    // keeps the listed rows in step with the per-list statistics tab counts.
+    // ss.status is only ever subscribed/unsubscribed, so this is an equality
+    // (ss.status = subscribed) rather than != unsubscribed — same rows, but an
+    // equality seek the (segment_id, status, subscriber_id) index can use, and
+    // it mirrors the count query in SegmentSubscribersRepository.
+    if ($staticSegment) {
+      $queryBuilder
+        ->andWhere('ss.status = :ssSubscribed')
+        ->setParameter('ssSubscribed', SubscriberEntity::STATUS_SUBSCRIBED);
+    }
+  }
+
+  private function getStaticSegmentFromDefinition(): ?SegmentEntity {
+    if (!$this->definition) {
+      return null;
+    }
+    $filters = $this->definition->getFilters();
+    if (empty($filters['segment']) || $filters['segment'] === self::FILTER_WITHOUT_LIST) {
+      return null;
+    }
+    $segment = $this->entityManager->find(SegmentEntity::class, (int)$filters['segment']);
+    return ($segment instanceof SegmentEntity && $segment->isStatic()) ? $segment : null;
   }
 
   protected function applySearch(QueryBuilder $queryBuilder, string $search, array $parameters = []) {
@@ -791,21 +810,324 @@ class SubscriberListingRepository extends ListingRepository {
       $sortBy = self::DEFAULT_SORT_BY;
     }
     $queryBuilder->addOrderBy("s.$sortBy", $sortOrder);
+    if ($sortBy !== 'id') {
+      // Deterministic tiebreaker so pagination stays stable when the sorted
+      // column has duplicate values. created_at has per-second granularity, so
+      // large or imported lists tie often; pairing it with id also matches the
+      // deleted_at_created index (deleted_at, created_at + implicit id), which
+      // serves the default listing with the WHERE pinning deleted_at, keeping
+      // the sort index-backed.
+      $queryBuilder->addOrderBy('s.id', $sortOrder);
+    }
   }
 
   public function getGroups(ListingDefinition $definition): array {
+    return $this->formatGroups($this->getGroupCountsForDefinition($definition)['counts']);
+  }
+
+  /**
+   * Count and status groups from a single computation, so the listing endpoint
+   * can drop the separate getCount() query: on the non-segment path both come
+   * from one grouped scan, and the current group's count is read straight from
+   * the buckets.
+   *
+   * @return array{count: int, groups: array<int, array<string, mixed>>}
+   */
+  public function getCountAndGroups(ListingDefinition $definition): array {
+    $computed = $this->getGroupCountsForDefinition($definition);
+    return [
+      'count' => $this->countForCurrentGroup($definition, $computed['counts'], $computed['consolidated']),
+      'groups' => $this->formatGroups($computed['counts']),
+    ];
+  }
+
+  /**
+   * The status-tab counts, resolved through a three-tier cascade that prefers a
+   * cron-warmed cache and only computes live when nothing cheaper fits. Cheapest
+   * first:
+   *
+   *   1. Global cache — unfiltered "All Lists" view (no segment, no search, no
+   *      other filter). Served from the cron-warmed global status counts.
+   *   2. Per-segment cache — a plain single-list filter and nothing else. Served
+   *      from that segment's cron-warmed statistics.
+   *   3. Live fetch — anything narrower (search, tag, status, dates,
+   *      engagement...). No cache matches, so the counts are computed now: a
+   *      grouped scan on the non-segment path, or one count per status bucket
+   *      when a segment redefines the buckets.
+   *
+   * Why a segment can't share the non-segment grouped scan: a static segment
+   * redefines the subscribed/unsubscribed buckets in terms of the per-list
+   * status (s.status OR/AND ss.status), and a dynamic segment routes counts
+   * through an id subquery — neither is a single GROUP BY over s.status, so they
+   * fall back to one count per group (still cheap: scoped to one segment).
+   *
+   * 'consolidated' promises that the per-status buckets partition the whole
+   * non-deleted population exactly, so their sum IS the "all" total and
+   * countForCurrentGroup can skip a separate count. It is true only for the
+   * global/grouped scan; the live per-status path leaves it false because those
+   * ad-hoc counts are not guaranteed to add up to "all" (e.g. a segment member
+   * whose status lands in no displayed bucket).
+   *
+   * @return array{counts: array<string, int>, consolidated: bool}
+   */
+  private function getGroupCountsForDefinition(ListingDefinition $definition): array {
+    if (!$this->hasSegmentListFilter($definition)) {
+      // The unfiltered "All Lists" view maps to the cron-warmed global status
+      // counts — the default, most-loaded view, served from cache instead of a
+      // grouped scan over every subscriber on each page load.
+      if ($this->canUseGlobalStatisticsCache($definition)) {
+        return ['counts' => $this->globalStatisticsToCounts(), 'consolidated' => true];
+      }
+      return ['counts' => $this->getGroupCounts($definition), 'consolidated' => true];
+    }
+
+    // A plain list filter (no search, no other filter) maps exactly to the
+    // cron-warmed per-segment statistics — single source of truth, served from
+    // cache instead of recomputing a count per status tab on every page load.
+    if ($this->canUseSegmentStatisticsCache($definition)) {
+      $segment = $this->getSegmentFromDefinition($definition);
+      if ($segment instanceof SegmentEntity) {
+        // 'consolidated' stays false here even though the buckets do partition
+        // the members exactly: countForCurrentGroup recognises this same case
+        // via canUseSegmentStatisticsCache($definition), so the "all" tab still
+        // takes the sum-of-buckets path. The two conditions are equivalent for
+        // this branch — the flag would be redundant, not contradictory.
+        return ['counts' => $this->segmentStatisticsToCounts($segment), 'consolidated' => false];
+      }
+    }
+
+    // Search or an extra filter narrows the list beyond plain membership, so the
+    // cache can't answer it — compute live for that ad-hoc query.
+    return ['counts' => $this->getGroupCountsPerStatus($definition), 'consolidated' => false];
+  }
+
+  /**
+   * The per-segment statistics cache reflects plain list membership and status.
+   * It can stand in for the tab counts only when nothing else narrows the set —
+   * no search and no other active filter (tag, status, dates, engagement).
+   */
+  private function canUseSegmentStatisticsCache(ListingDefinition $definition): bool {
+    if ($this->isSearchActive($definition)) {
+      return false;
+    }
+    $filters = $definition->getFilters() ?: [];
+    unset($filters['segment']);
+    foreach ($filters as $value) {
+      if (!empty($value)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Map the cached per-segment statistics onto the listing's status-keyed counts
+   * array. "all" is read in formatGroups/countForCurrentGroup as the sum of the
+   * status buckets, which equals the cached "all" because the buckets partition
+   * the non-deleted members exactly.
+   *
+   * @return array<string, int>
+   */
+  private function segmentStatisticsToCounts(SegmentEntity $segment): array {
+    $stats = $this->subscribersCountsController->getSegmentStatisticsCount($segment);
+    $counts = array_fill_keys(self::$supportedStatuses, 0);
+    $counts['trash'] = 0;
+    foreach (self::$supportedStatuses as $status) {
+      $counts[$status] = (int)($stats[$status] ?? 0);
+    }
+    $counts['trash'] = (int)($stats['trash'] ?? 0);
+    return $counts;
+  }
+
+  private function getSegmentFromDefinition(ListingDefinition $definition): ?SegmentEntity {
+    $filters = $definition->getFilters();
+    if (empty($filters['segment']) || $filters['segment'] === self::FILTER_WITHOUT_LIST) {
+      return null;
+    }
+    $segment = $this->entityManager->find(SegmentEntity::class, (int)$filters['segment']);
+    return $segment instanceof SegmentEntity ? $segment : null;
+  }
+
+  private function isSearchActive(ListingDefinition $definition): bool {
+    $search = $definition->getSearch();
+    return $search !== null && strlen(trim($search)) > 0;
+  }
+
+  /**
+   * The global status counts cover the unfiltered listing only — no search and
+   * no active filter at all. Any filter (tag, status, dates, engagement) narrows
+   * the set below "all subscribers", so the cache no longer matches.
+   */
+  private function canUseGlobalStatisticsCache(ListingDefinition $definition): bool {
+    $search = $definition->getSearch();
+    if ($search !== null && strlen(trim($search)) > 0) {
+      return false;
+    }
+    $filters = $definition->getFilters() ?: [];
+    foreach ($filters as $value) {
+      if (!empty($value)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * @return array<string, int>
+   */
+  private function globalStatisticsToCounts(): array {
+    $stats = $this->subscribersCountsController->getGlobalStatusStatisticsCount();
+    $counts = array_fill_keys(self::$supportedStatuses, 0);
+    $counts['trash'] = 0;
+    foreach (self::$supportedStatuses as $status) {
+      $counts[$status] = (int)($stats[$status] ?? 0);
+    }
+    $counts['trash'] = (int)($stats['trash'] ?? 0);
+    return $counts;
+  }
+
+  /**
+   * The current group's count read from the precomputed buckets — identical to
+   * getCount($definition). The one case the buckets can't reproduce exactly is
+   * the "all" tab under a segment filter, where members pending in the list
+   * fall into no status bucket, so that defers to getCount.
+   *
+   * @param array<string, int> $counts
+   */
+  private function countForCurrentGroup(ListingDefinition $definition, array $counts, bool $consolidated): int {
+    $group = $definition->getGroup() ?: 'all';
+    if ($group === 'all') {
+      // When the counts come from the consolidated scan or the per-segment
+      // statistics cache, the status buckets partition the non-deleted members
+      // exactly, so their sum is the "all" total — no extra query needed.
+      if ($consolidated || $this->canUseSegmentStatisticsCache($definition)) {
+        $total = 0;
+        foreach (self::$supportedStatuses as $status) {
+          $total += $counts[$status];
+        }
+        return $total;
+      }
+      return $this->getCount($definition);
+    }
+    return array_key_exists($group, $counts) ? $counts[$group] : $this->getCount($definition);
+  }
+
+  /**
+   * @param array<string, int> $counts
+   * @return array<int, array<string, mixed>>
+   */
+  private function formatGroups(array $counts): array {
+    $totalCount = 0;
+    foreach (self::$supportedStatuses as $status) {
+      $totalCount += $counts[$status];
+    }
+
+    return [
+      [
+        'name' => 'all',
+        'label' => __('All', 'mailpoet'),
+        'count' => $totalCount,
+      ],
+      [
+        'name' => SubscriberEntity::STATUS_SUBSCRIBED,
+        'label' => __('Subscribed', 'mailpoet'),
+        'count' => $counts[SubscriberEntity::STATUS_SUBSCRIBED],
+      ],
+      [
+        'name' => SubscriberEntity::STATUS_UNCONFIRMED,
+        'label' => __('Unconfirmed', 'mailpoet'),
+        'count' => $counts[SubscriberEntity::STATUS_UNCONFIRMED],
+      ],
+      [
+        'name' => SubscriberEntity::STATUS_UNSUBSCRIBED,
+        'label' => __('Unsubscribed', 'mailpoet'),
+        'count' => $counts[SubscriberEntity::STATUS_UNSUBSCRIBED],
+      ],
+      [
+        'name' => SubscriberEntity::STATUS_INACTIVE,
+        'label' => __('Inactive', 'mailpoet'),
+        'count' => $counts[SubscriberEntity::STATUS_INACTIVE],
+      ],
+      [
+        'name' => SubscriberEntity::STATUS_BOUNCED,
+        'label' => __('Bounced', 'mailpoet'),
+        'count' => $counts[SubscriberEntity::STATUS_BOUNCED],
+      ],
+      [
+        'name' => 'trash',
+        'label' => __('Trash', 'mailpoet'),
+        'count' => $counts['trash'],
+      ],
+    ];
+  }
+
+  /**
+   * Count every status tab in a single grouped scan plus one trash count,
+   * instead of a separate COUNT per group. Valid whenever each group's
+   * predicate is a plain `s.status` (no static/dynamic segment list filter).
+   *
+   * @return array<string, int>
+   */
+  private function getGroupCounts(ListingDefinition $definition): array {
+    $counts = array_fill_keys(self::$supportedStatuses, 0);
+    $counts['trash'] = 0;
+
+    $statusQuery = $this->createGroupCountQueryBuilder($definition);
+    $statusQuery
+      ->andWhere('s.deletedAt IS NULL')
+      ->select('s.status AS status, COUNT(DISTINCT s.id) AS subscribersCount')
+      ->groupBy('s.status');
+    foreach ($statusQuery->getQuery()->getResult() as $row) {
+      if (array_key_exists($row['status'], $counts)) {
+        $counts[$row['status']] = (int)$row['subscribersCount'];
+      }
+    }
+
+    $trashQuery = $this->createGroupCountQueryBuilder($definition);
+    $trashQuery
+      ->andWhere('s.deletedAt IS NOT NULL')
+      ->select('COUNT(DISTINCT s.id)');
+    $counts['trash'] = (int)$trashQuery->getQuery()->getSingleScalarResult();
+
+    return $counts;
+  }
+
+  /**
+   * Shared FROM + active filters/search for the group counts. Deliberately
+   * skips applyGroup so a single query can bucket every status at once.
+   */
+  private function createGroupCountQueryBuilder(ListingDefinition $definition): QueryBuilder {
     $queryBuilder = clone $this->queryBuilder;
     $this->applyFromClause($queryBuilder);
 
-    $groupCounts = [
-      SubscriberEntity::STATUS_SUBSCRIBED => 0,
-      SubscriberEntity::STATUS_UNCONFIRMED => 0,
-      SubscriberEntity::STATUS_UNSUBSCRIBED => 0,
-      SubscriberEntity::STATUS_INACTIVE => 0,
-      SubscriberEntity::STATUS_BOUNCED => 0,
-      'trash' => 0,
-    ];
-    foreach (array_keys($groupCounts) as $group) {
+    $search = $definition->getSearch();
+    if ($search !== null && strlen(trim($search)) > 0) {
+      $this->applySearch($queryBuilder, $search, $definition->getParameters() ?: []);
+    }
+
+    $filters = $definition->getFilters();
+    if ($filters) {
+      $this->applyFilters($queryBuilder, $filters);
+    }
+
+    $parameters = $definition->getParameters();
+    if ($parameters) {
+      $this->applyParameters($queryBuilder, $parameters);
+    }
+
+    return $queryBuilder;
+  }
+
+  /**
+   * Fallback for static/dynamic segment filters, where a group's predicate is
+   * more than a plain `s.status`. One count per group, scoped to the segment.
+   *
+   * @return array<string, int>
+   */
+  private function getGroupCountsPerStatus(ListingDefinition $definition): array {
+    $counts = array_fill_keys(self::$supportedStatuses, 0);
+    $counts['trash'] = 0;
+    foreach (array_keys($counts) as $group) {
       $groupDefinition = $group === $definition->getGroup() ? $definition : new ListingDefinition(
         $group,
         $definition->getFilters(),
@@ -817,50 +1139,17 @@ class SubscriberListingRepository extends ListingRepository {
         $definition->getLimit(),
         $definition->getSelection()
       );
-      $groupCounts[$group] = $this->getCount($groupDefinition);
+      $counts[$group] = $this->getCount($groupDefinition);
     }
+    return $counts;
+  }
 
-    $trashedCount = $groupCounts['trash'];
-    unset($groupCounts['trash']);
-    $totalCount = (int)array_sum($groupCounts);
-
-    return [
-      [
-        'name' => 'all',
-        'label' => __('All', 'mailpoet'),
-        'count' => $totalCount,
-      ],
-      [
-        'name' => SubscriberEntity::STATUS_SUBSCRIBED,
-        'label' => __('Subscribed', 'mailpoet'),
-        'count' => $groupCounts[SubscriberEntity::STATUS_SUBSCRIBED],
-      ],
-      [
-        'name' => SubscriberEntity::STATUS_UNCONFIRMED,
-        'label' => __('Unconfirmed', 'mailpoet'),
-        'count' => $groupCounts[SubscriberEntity::STATUS_UNCONFIRMED],
-      ],
-      [
-        'name' => SubscriberEntity::STATUS_UNSUBSCRIBED,
-        'label' => __('Unsubscribed', 'mailpoet'),
-        'count' => $groupCounts[SubscriberEntity::STATUS_UNSUBSCRIBED],
-      ],
-      [
-        'name' => SubscriberEntity::STATUS_INACTIVE,
-        'label' => __('Inactive', 'mailpoet'),
-        'count' => $groupCounts[SubscriberEntity::STATUS_INACTIVE],
-      ],
-      [
-        'name' => SubscriberEntity::STATUS_BOUNCED,
-        'label' => __('Bounced', 'mailpoet'),
-        'count' => $groupCounts[SubscriberEntity::STATUS_BOUNCED],
-      ],
-      [
-        'name' => 'trash',
-        'label' => __('Trash', 'mailpoet'),
-        'count' => $trashedCount,
-      ],
-    ];
+  private function hasSegmentListFilter(ListingDefinition $definition): bool {
+    $filters = $definition->getFilters();
+    if (empty($filters['segment']) || $filters['segment'] === self::FILTER_WITHOUT_LIST) {
+      return false;
+    }
+    return $this->entityManager->find(SegmentEntity::class, (int)$filters['segment']) instanceof SegmentEntity;
   }
 
   public function getFilters(ListingDefinition $definition): array {
@@ -971,6 +1260,11 @@ class SubscriberListingRepository extends ListingRepository {
       ->from($subscribersTable);
     $subscribersIdsQuery = $this->applyConstraintsForDynamicSegment($subscribersIdsQuery, $definition, $segment);
     $subscribersIdsQuery->orderBy($this->getDynamicSegmentSortColumn($sortBy, $subscribersTable), $sortOrder);
+    if ($sortBy !== 'id') {
+      // The page boundary is cut here, so this query needs the same id
+      // tiebreaker as applySorting() for pagination to stay stable.
+      $subscribersIdsQuery->addOrderBy($this->getDynamicSegmentSortColumn('id', $subscribersTable), $sortOrder);
+    }
     $subscribersIdsQuery->setFirstResult($definition->getOffset());
     $subscribersIdsQuery->setMaxResults($definition->getLimit());
 

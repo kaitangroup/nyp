@@ -27,11 +27,13 @@ export class TUHTMLElement extends HTMLElement {
 			super.connectedCallback();
 		}
 
-		// If child nodes are already rendered, then run the renderer.
-		if (this.hasChildNodes() && this.render) {
+		// Try to render the component.
+		if (this.render) {
 			this.render();
-		} else {
-			// Else wait for any mutation of child.
+		}
+
+		// If no child nodes present, then observe for changes in the child nodes and run the renderer when they are rendered.
+		if (!this.hasChildNodes()) {
 			this.tuRenderObserver.observe(this, { subtree: true, childList: true, characterData: true });
 		}
 	}

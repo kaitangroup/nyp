@@ -20,7 +20,7 @@ class DynamicData {
 		add_filter('blocksy:block-editor:localized_data', function ($data) {
 			$options = blocksy_akg(
 				'options',
-				blocksy_companion_theme_functions()->blocksy_get_variables_from_file(
+				blocksy_companion_get_variables_from_file(
 					dirname(__FILE__) . '/options.php',
 					['options' => []]
 				)
@@ -141,6 +141,26 @@ class DynamicData {
 	}
 
 	public function render($attributes, $content, $block) {
+		$allowed_tag_names = [
+			'div',
+			'span',
+			'p',
+			'h1',
+			'h2',
+			'h3',
+			'h4',
+			'h5',
+			'h6',
+		];
+
+		$tag_name = blocksy_akg('tagName', $attributes, 'div');
+
+		$attributes['tagName'] = in_array(
+			$tag_name,
+			$allowed_tag_names,
+			true
+		) ? $tag_name : 'div';
+
 		if (
 			isset($attributes['lightbox'])
 			&&
@@ -164,7 +184,7 @@ class DynamicData {
 
 		$post_id = get_the_ID();
 
-		$maybe_special_post_id = blocksy_get_special_post_id([
+		$maybe_special_post_id = blocksy_companion_theme_functions()->blocksy_get_special_post_id([
 			'context' => 'local',
 			'block_context' => $block->context,
 		]);
@@ -180,7 +200,7 @@ class DynamicData {
 			setup_postdata($post);
 		}
 
-		$content = blocksy_render_view(
+		$content = blocksy_companion_render_view(
 			dirname(__FILE__) . '/view.php',
 			[
 				'attributes' => $attributes,
@@ -209,12 +229,6 @@ class DynamicData {
 			return '';
 		}
 
-		$styles = [
-			'desktop' => '',
-			'tablet' => '',
-			'mobile' => ''
-		];
-
 		$css = new \Blocksy_Css_Injector();
 		$tablet_css = new \Blocksy_Css_Injector();
 		$mobile_css = new \Blocksy_Css_Injector();
@@ -229,25 +243,10 @@ class DynamicData {
 				'chunk' => 'global'
 			]);
 
-		$styles['desktop'] .= $css->build_css_structure();
-		$styles['tablet'] .= $tablet_css->build_css_structure();
-		$styles['mobile'] .= $mobile_css->build_css_structure();
-
-		$final_css = '';
-
-		if (! empty($styles['desktop'])) {
-			$final_css .= $styles['desktop'];
-		}
-
-		if (! empty(trim($styles['tablet']))) {
-			$final_css .= '@media (max-width: 999.98px) {' . $styles['tablet'] . '}';
-		}
-
-		if (! empty(trim($styles['mobile']))) {
-			$final_css .= '@media (max-width: 689.98px) {' . $styles['mobile'] . '}';
-		}
-
-		return $final_css;
+		return blocksy_companion_assemble_dynamic_css([
+			'css' => $css,
+			'tablet_css' => $tablet_css,
+			'mobile_css' => $mobile_css,
+		]);
 	}
 }
-

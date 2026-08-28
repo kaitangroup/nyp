@@ -293,14 +293,14 @@ class UpdraftPlus_Search_Replace {
 			} catch (Exception $e) {
 				$log_message = 'An Exception ('.get_class($e).') occurred during the recursive search/replace. Exception message: '.$e->getMessage().' (Code: '.$e->getCode().', line '.$e->getLine().' in '.$e->getFile().')';
 				$report['errors'][] = $log_message;
-				error_log($log_message);
+				UpdraftPlus_Manipulation_Functions::error_log($log_message);
 				$updraftplus->log($log_message);
 				/* translators: 1: Exception class, 2: Exception message. */
 				$updraftplus->log(sprintf(__('A PHP exception (%1$s) has occurred: %2$s', 'updraftplus'), get_class($e), $e->getMessage()), 'warning-restore');
 			} catch (Error $e) {// phpcs:ignore PHPCompatibility.Classes.NewClasses.errorFound -- The Error class does not exist in PHP below 5.6.
 				$log_message = 'A PHP Fatal error (recoverable, '.get_class($e).') occurred during the recursive search/replace. Exception message: Error message: '.$e->getMessage().' (Code: '.$e->getCode().', line '.$e->getLine().' in '.$e->getFile().')';
 				$report['errors'][] = $log_message;
-				error_log($log_message);
+				UpdraftPlus_Manipulation_Functions::error_log($log_message);
 				$updraftplus->log($log_message);
 				/* translators: 1: Fatal error class, 2: Error message. */
 				$updraftplus->log(sprintf(__('A PHP fatal error (%1$s) has occurred: %2$s', 'updraftplus'), get_class($e), $e->getMessage()), 'warning-restore');

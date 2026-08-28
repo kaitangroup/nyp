@@ -148,6 +148,7 @@ body.udp-no-scroll {
 	background: #FFF;
 	background: var(--dialog-bg);
 	cursor: pointer;
+	height: auto;
 }
 
 .updraftplus-ui-deinstall-dialog .ui-dialog-buttonpane .ui-dialog-buttonset button:hover {
@@ -264,4 +265,54 @@ body.udp-no-scroll {
 
 .updraftplus-ui-deinstall-dialog .ui-dialog-titlebar-close {
 	font-size: 0 !important;
+}
+
+/* Deactivate button: loading / spinner state */
+
+@-webkit-keyframes udp-spin {
+	
+	to {
+		-webkit-transform: rotate(360deg);
+		        transform: rotate(360deg);
+	}
+	
+}
+
+@keyframes udp-spin {
+	
+	to {
+		-webkit-transform: rotate(360deg);
+		        transform: rotate(360deg);
+	}
+	
+}
+
+.updraftplus-ui-deinstall-dialog .ui-dialog-buttonset button:first-child.udp-loading {
+	display: -webkit-inline-box;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	grid-gap: 8px;
+	gap: 8px;
+	opacity: 0.8;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.updraftplus-ui-deinstall-dialog .ui-dialog-buttonset button:first-child .udp-spinner {
+	display: inline-block;
+	-ms-flex-negative: 0;
+	    flex-shrink: 0;
+	width: 14px;
+	height: 14px;
+	border: 2px solid rgba(255, 255, 255, 0.35);
+	border-top-color: #FFF;
+	border-radius: 50%;
+	-webkit-animation: udp-spin 0.7s linear infinite;
+	        animation: udp-spin 0.7s linear infinite;
 }

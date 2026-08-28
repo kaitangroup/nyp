@@ -17,6 +17,7 @@ use MailPoet\Settings\TrackingConfig;
 use MailPoet\Statistics\StatisticsClicksRepository;
 use MailPoet\Statistics\UserAgentsRepository;
 use MailPoet\Subscribers\SubscribersRepository;
+use MailPoet\Subscribers\TrackingConsentController;
 use MailPoet\Util\Cookies;
 use MailPoet\Util\Request;
 use MailPoet\WP\Functions as WPFunctions;
@@ -56,6 +57,9 @@ class Clicks {
   /** @var Request */
   private $request;
 
+  /** @var TrackingConsentController */
+  private $trackingConsentController;
+
   public function __construct(
     Cookies $cookies,
     SubscriberCookie $subscriberCookie,
@@ -66,7 +70,8 @@ class Clicks {
     LinkShortcodeCategory $linkShortcodeCategory,
     SubscribersRepository $subscribersRepository,
     TrackingConfig $trackingConfig,
-    Request $request
+    Request $request,
+    TrackingConsentController $trackingConsentController
   ) {
     $this->cookies = $cookies;
     $this->subscriberCookie = $subscriberCookie;
@@ -78,6 +83,7 @@ class Clicks {
     $this->subscribersRepository = $subscribersRepository;
     $this->trackingConfig = $trackingConfig;
     $this->request = $request;
+    $this->trackingConsentController = $trackingConsentController;
   }
 
   /**
@@ -96,9 +102,12 @@ class Clicks {
     /** @var NewsletterLinkEntity $link */
     $link = $data->link;
     $wpUserPreview = ($data->preview && ($subscriber->isWPUser()));
+    $trackingAllowed = $this->trackingConsentController->isTrackingAllowed($subscriber);
     // log statistics only if the action did not come from
     // a WP user previewing the newsletter
-    if (!$wpUserPreview) {
+    // No tracking consent (CNIL/Garante): skip all recording (stats, cookies,
+    // engagement) but keep the redirect below.
+    if (!$wpUserPreview && $trackingAllowed) {
       $userAgent = !empty($data->userAgent) ? $this->userAgentsRepository->findOrCreate($data->userAgent) : null;
       $statisticsClicks = $this->statisticsClicksRepository->createOrUpdateClickCount(
         $link,
@@ -129,7 +138,11 @@ class Clicks {
       $this->subscribersRepository->maybeUpdateLastClickAt($subscriber);
     }
     $url = $this->processUrl($link->getUrl(), $newsletter, $subscriber, $queue, $wpUserPreview);
-    do_action('mailpoet_link_clicked', $link, $subscriber, $wpUserPreview);
+    if ($trackingAllowed) {
+      // Consumers of this hook (e.g. automation "clicked link" triggers) use
+      // clicks for follow-up personalization — exactly what consent covers.
+      do_action('mailpoet_link_clicked', $link, $subscriber, $wpUserPreview);
+    }
     $this->redirectToUrl($url);
   }
 

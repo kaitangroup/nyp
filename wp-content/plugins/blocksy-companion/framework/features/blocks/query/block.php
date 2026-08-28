@@ -394,6 +394,7 @@ class Query {
 						[
 							'has_slideshow' => 'no',
 							'has_slideshow_arrows' => 'yes',
+							'has_slideshow_pills' => 'no',
 							'has_slideshow_autoplay' => 'no',
 							'has_slideshow_autoplay_speed' => 3,
 						]
@@ -475,8 +476,21 @@ class Query {
 
 					if ($is_slideshow_layout) {
 						$arrows = '';
+						$pills = '';
 
 						if ($context['has_slideshow_arrows'] === 'yes') {
+							/**
+							 * Filters the SVG icons used for Flexy slideshow navigation arrows.
+							 *
+							 * @since 2.0.98
+							 *
+							 * @param array $arrow_icons {
+							 *     SVG markup for slideshow navigation arrows.
+							 *
+							 *     @type string $prev Previous arrow SVG markup.
+							 *     @type string $next Next arrow SVG markup.
+							 * }
+							 */
 							$arrow_icons = apply_filters(
 								'blocksy:flexy:arrows',
 								[
@@ -487,6 +501,19 @@ class Query {
 
 							$arrows = '<span class="flexy-arrow-prev" data-position="outside">' . $arrow_icons['prev'] . '</span>
 								<span class="flexy-arrow-next" data-position="outside">' . $arrow_icons['next'] . '</span>';
+						}
+
+						if ($context['has_slideshow_pills'] === 'yes') {
+							ob_start();
+							blocksy_companion_theme_functions()->blocksy_flexy_pills([
+								'pills_count' => $query->post_count,
+								'pills_container_attr' => [
+									'data-flexy' => $query->post_count <= 5
+										? 'no:paused'
+										: 'no',
+								],
+							]);
+							$pills = ob_get_clean();
 						}
 
 						$content = blocksy_html_tag(
@@ -512,14 +539,13 @@ class Query {
 									blocksy_html_tag(
 										'div',
 										[
-											'class' => 'flexy-items',
-											'data-height' => 'dynamic'
+											'class' => 'flexy-items'
 										],
 										$content
 									)
 								) .
 								$arrows
-							)
+							) . $pills
 						);
 					}
 
@@ -573,7 +599,7 @@ class Query {
 				];
 
 				foreach ($posts_block_patterns as $posts_block_pattern) {
-					$pattern_data = blocksy_companion_theme_functions()->blocksy_get_variables_from_file(
+					$pattern_data = blocksy_companion_get_variables_from_file(
 						__DIR__ . '/block-patterns/' . $posts_block_pattern . '.php',
 						['pattern' => []]
 					);
@@ -651,6 +677,7 @@ class Query {
 				// yes | no
 				'has_slideshow' => 'no',
 				'has_slideshow_arrows' => 'yes',
+				'has_slideshow_pills' => 'no',
 				'has_slideshow_autoplay' => 'no',
 				'has_slideshow_autoplay_speed' => 3,
 
@@ -733,6 +760,7 @@ class Query {
 			'query' => $query,
 			'has_slideshow' => $attributes['has_slideshow'] === 'yes',
 			'has_slideshow_arrows' => $attributes['has_slideshow_arrows'] === 'yes',
+			'has_slideshow_pills' => $attributes['has_slideshow_pills'] === 'yes',
 			'has_slideshow_autoplay' => $attributes['has_slideshow_autoplay'] === 'yes',
 			'has_slideshow_autoplay_speed' => $attributes['has_slideshow_autoplay_speed'],
 			'has_pagination' => $attributes['has_pagination'] === 'yes' && $attributes['has_slideshow'] !== 'yes',
@@ -1038,6 +1066,17 @@ class Query {
 			add_action('pre_get_posts', [$this, 'pre_get_posts']);
 		}
 
+		/**
+		 * Filters the custom query instance used by the Advanced Posts block.
+		 *
+		 * Return a query instance to bypass the block's default query construction.
+		 *
+		 * @since 2.0.49
+		 *
+		 * @param \WP_Query|null $query      Custom query instance. Default null.
+		 * @param array          $query_args Query arguments prepared by the block.
+		 * @param array          $attributes Block attributes.
+		 */
 		$query = apply_filters(
 			'blocksy:general:blocks:query:custom',
 			null,
@@ -1048,6 +1087,14 @@ class Query {
 		if (! $query) {
 			$query = new \WP_Query();
 
+			/**
+			 * Filters the query arguments used by the Advanced Posts block.
+			 *
+			 * @since 2.0.49
+			 *
+			 * @param array $query_args Query arguments prepared by the block.
+			 * @param array $attributes Block attributes.
+			 */
 			$query->query(apply_filters(
 				'blocksy:general:blocks:query:args',
 				$query_args,
@@ -1085,7 +1132,7 @@ class Query {
 		$tablet_css = new \Blocksy_Css_Injector();
 		$mobile_css = new \Blocksy_Css_Injector();
 
-		blocksy_theme_get_dynamic_styles([
+		blocksy_companion_theme_functions()->blocksy_theme_get_dynamic_styles([
 			'name' => 'global/posts-listing',
 			'css' => $args['css'],
 			'mobile_css' => $args['mobile_css'],

@@ -1,7 +1,7 @@
 <?php
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct $wpdb query is required for this operation.
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching -- some query operations need to always receive the most up-to-date or actual data directly from the database, reducing the risk of serving stale information.
-if (!defined('UPDRAFTCENTRAL_CLIENT_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 /**
  * Handles Media Commands
@@ -77,7 +77,8 @@ class UpdraftCentral_Media_Commands extends UpdraftCentral_Commands {
 				$attachment_ids = $this->get_type_ids($params['category']);
 			}
 
-			$args['post__in'] = $attachment_ids;
+			// WP_Query ignores an empty 'post__in' and returns all attachments, so pass a non-matching ID to return an empty result set.
+			$args['post__in'] = !empty($attachment_ids) ? $attachment_ids : array(0);
 		}
 
 		if (!empty($params['date'])) {

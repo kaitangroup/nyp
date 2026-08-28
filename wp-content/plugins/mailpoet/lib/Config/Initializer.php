@@ -16,6 +16,7 @@ use MailPoet\Automation\Engine\Engine;
 use MailPoet\Automation\Engine\Hooks as AutomationHooks;
 use MailPoet\Automation\Integrations\MailPoet\MailPoetIntegration;
 use MailPoet\Automation\Integrations\WooCommerce\WooCommerceIntegration;
+use MailPoet\Cron\CliCommands\Cli as CronCli;
 use MailPoet\Cron\CronTrigger;
 use MailPoet\Cron\DaemonActionSchedulerRunner;
 use MailPoet\CustomFields\RestApi\Api as CustomFieldsRestApi;
@@ -24,6 +25,7 @@ use MailPoet\EmailEditor\Integrations\MailPoet\EmailEditor as MailpoetEmailEdito
 use MailPoet\EmailEditor\Integrations\MailPoet\Logger;
 use MailPoet\Form\RestApi\Api as FormsRestApi;
 use MailPoet\InvalidStateException;
+use MailPoet\Logging\LogsDownload;
 use MailPoet\Logging\RestApi\Api as LogsRestApi;
 use MailPoet\Migrator\Cli as MigratorCli;
 use MailPoet\Newsletter\RestApi\Api as NewslettersRestApi;
@@ -34,6 +36,7 @@ use MailPoet\Router;
 use MailPoet\Segments\RestApi\Api as SegmentsRestApi;
 use MailPoet\Settings\SettingsController;
 use MailPoet\Statistics\Track\SubscriberActivityTracker;
+use MailPoet\Subscribers\ImportExport\Import\Cli as ImportCli;
 use MailPoet\Subscribers\RestApi\Api as SubscribersRestApi;
 use MailPoet\Tags\RestApi\Api as TagsRestApi;
 use MailPoet\Util\ConflictResolver;
@@ -69,6 +72,12 @@ class Initializer {
 
   /** @var MigratorCli */
   private $migratorCli;
+
+  /** @var ImportCli */
+  private $importCli;
+
+  /** @var CronCli */
+  private $cronCli;
 
   /** @var Router\Router */
   private $router;
@@ -145,6 +154,9 @@ class Initializer {
   /** @var NewslettersRestApi */
   private $newslettersRestApi;
 
+  /** @var LogsDownload */
+  private $logsDownload;
+
   /** @var MailPoetIntegration */
   private $automationMailPoetIntegration;
 
@@ -182,6 +194,8 @@ class Initializer {
     Activator $activator,
     SettingsController $settings,
     MigratorCli $migratorCli,
+    ImportCli $importCli,
+    CronCli $cronCli,
     Router\Router $router,
     Hooks $hooks,
     Changelog $changelog,
@@ -213,6 +227,7 @@ class Initializer {
     LogsRestApi $logsRestApi,
     SubscribersRestApi $subscribersRestApi,
     NewslettersRestApi $newslettersRestApi,
+    LogsDownload $logsDownload,
     PublicEmailRoute $publicEmailRoute
   ) {
     $this->rendererFactory = $rendererFactory;
@@ -222,6 +237,8 @@ class Initializer {
     $this->activator = $activator;
     $this->settings = $settings;
     $this->migratorCli = $migratorCli;
+    $this->importCli = $importCli;
+    $this->cronCli = $cronCli;
     $this->router = $router;
     $this->hooks = $hooks;
     $this->changelog = $changelog;
@@ -253,6 +270,7 @@ class Initializer {
     $this->logsRestApi = $logsRestApi;
     $this->subscribersRestApi = $subscribersRestApi;
     $this->newslettersRestApi = $newslettersRestApi;
+    $this->logsDownload = $logsDownload;
     $this->publicEmailRoute = $publicEmailRoute;
 
     $emailEditorContainer = Email_Editor_Container::container();
@@ -404,6 +422,8 @@ class Initializer {
   public function initialize() {
     try {
       $this->migratorCli->initialize();
+      $this->importCli->initialize();
+      $this->cronCli->initialize();
       $this->setupInstaller();
       $this->setupUpdater();
 
@@ -434,6 +454,7 @@ class Initializer {
       $this->logsRestApi->initialize();
       $this->subscribersRestApi->initialize();
       $this->newslettersRestApi->initialize();
+      $this->logsDownload->initialize();
       $this->blockTypesController->initialize();
       $this->wpFunctions->doAction('mailpoet_initialized', MAILPOET_VERSION);
     } catch (InvalidStateException $e) {

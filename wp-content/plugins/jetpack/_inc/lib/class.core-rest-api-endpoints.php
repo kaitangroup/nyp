@@ -119,28 +119,6 @@ class Jetpack_Core_Json_Api_Endpoints {
 			)
 		);
 
-		// Test current connection status of Jetpack.
-		register_rest_route(
-			'jetpack/v4',
-			'/connection/test',
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => __CLASS__ . '::jetpack_connection_test',
-				'permission_callback' => __CLASS__ . '::manage_modules_permission_check',
-			)
-		);
-
-		// Endpoint specific for privileged servers to request detailed debug information.
-		register_rest_route(
-			'jetpack/v4',
-			'/connection/test-wpcom/',
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => __CLASS__ . '::jetpack_connection_test_for_external',
-				'permission_callback' => __CLASS__ . '::view_jetpack_connection_test_check',
-			)
-		);
-
 		register_rest_route(
 			'jetpack/v4',
 			'/rewind',
@@ -854,13 +832,22 @@ class Jetpack_Core_Json_Api_Endpoints {
 	public static function set_subscriber_cookie_and_redirect( $request ) {
 		require_once JETPACK__PLUGIN_DIR . 'extensions/blocks/premium-content/_inc/subscription-service/include.php';
 		$subscription_service = \Automattic\Jetpack\Extensions\Premium_Content\subscription_service();
-		$token                = $subscription_service->get_and_set_token_from_request();
-		$payload              = $subscription_service->decode_token( $token );
-		$is_valid_token       = ! empty( $payload );
-		if ( $is_valid_token ) {
-			return new WP_REST_Response( null, 302, array( 'location' => $request['redirect_url'] ) );
+		// Note: get_and_set_token_from_request() sets the subscriber cookie as a side effect.
+		// The cookie is set regardless of the redirect target below; only the redirect is gated.
+		$token          = $subscription_service->get_and_set_token_from_request();
+		$payload        = $subscription_service->decode_token( $token );
+		$is_valid_token = ! empty( $payload );
+		if ( ! $is_valid_token ) {
+			return new WP_Error( 'invalid-token', 'Invalid Token', array( 'status' => 403 ) );
 		}
-		return new WP_Error( 'invalid-token', 'Invalid Token' );
+
+		// Only redirect to the current site, not to an arbitrary host.
+		$redirect_url = wp_validate_redirect( $request['redirect_url'], '' );
+		if ( ! $redirect_url ) {
+			return new WP_Error( 'invalid-redirect', 'Invalid Redirect URL', array( 'status' => 400 ) );
+		}
+
+		return new WP_REST_Response( null, 302, array( 'location' => $redirect_url ) );
 	}
 
 	/**
@@ -1490,135 +1477,6 @@ class Jetpack_Core_Json_Api_Endpoints {
 	}
 
 	/**
-	 * Test connection status for this Jetpack site.
-	 *
-	 * @since 6.8.0
-	 *
-	 * @return array|WP_Error WP_Error returned if connection test does not succeed.
-	 */
-	public static function jetpack_connection_test() {
-		require_once JETPACK__PLUGIN_DIR . '_inc/lib/debugger.php';
-		$cxntests = new Jetpack_Cxn_Tests();
-
-		if ( $cxntests->pass() ) {
-			return rest_ensure_response(
-				array(
-					'code'    => 'success',
-					'message' => __( 'All connection tests passed.', 'jetpack' ),
-				)
-			);
-		} else {
-			return $cxntests->output_fails_as_wp_error();
-		}
-	}
-
-	/**
-	 * Test connection permission check method.
-	 *
-	 * @since 7.1.0
-	 *
-	 * @return bool
-	 */
-	public static function view_jetpack_connection_test_check() {
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- This is verifying the trusted caller via a shared private key and timestamp.
-		if ( ! isset( $_GET['signature'] ) || ! isset( $_GET['timestamp'] ) || ! isset( $_GET['url'] ) ) {
-			return false;
-		}
-		$signature = base64_decode( wp_unslash( $_GET['signature'] ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-
-		$signature_data = wp_json_encode(
-			array(
-				'rest_route' => isset( $_GET['rest_route'] ) ? filter_var( wp_unslash( $_GET['rest_route'] ) ) : null,
-				'timestamp'  => (int) $_GET['timestamp'],
-				'url'        => esc_url_raw( wp_unslash( $_GET['url'] ) ),
-			),
-			0 // phpcs:ignore Jetpack.Functions.JsonEncodeFlags.ZeroFound -- No `json_encode()` flags because this needs to match whatever is calculating the hash on the other end.
-		);
-
-		if (
-			! function_exists( 'openssl_verify' )
-			|| 1 !== openssl_verify(
-				$signature_data,
-				$signature,
-				JETPACK__DEBUGGER_PUBLIC_KEY
-			)
-		) {
-			return false;
-		}
-
-		// signature timestamp must be within 5min of current time.
-		if ( abs( time() - (int) $_GET['timestamp'] ) > 300 ) {
-			return false;
-		}
-
-		// phpcs:enable WordPress.Security.NonceVerification.Recommended
-
-		return true;
-	}
-
-	/**
-	 * Test connection status for this Jetpack site, encrypt the results for decryption by a third-party.
-	 *
-	 * @since 7.1.0
-	 *
-	 * @return array|mixed|object|WP_Error
-	 */
-	public static function jetpack_connection_test_for_external() {
-		// Since we are running this test for inclusion in the WP.com testing suite, let's not try to run them as part of these results.
-		add_filter( 'jetpack_debugger_run_self_test', '__return_false' );
-		require_once JETPACK__PLUGIN_DIR . '_inc/lib/debugger.php';
-		$cxntests = new Jetpack_Cxn_Tests();
-
-		if ( $cxntests->pass() ) {
-			$result = array(
-				'code'    => 'success',
-				'message' => __( 'All connection tests passed.', 'jetpack' ),
-			);
-		} else {
-			$error  = $cxntests->output_fails_as_wp_error(); // Using this so the output is similar both ways.
-			$errors = array();
-
-			// Borrowed from WP_REST_Server::error_to_response().
-			foreach ( (array) $error->errors as $code => $messages ) {
-				foreach ( (array) $messages as $message ) {
-					$errors[] = array(
-						'code'    => $code,
-						'message' => $message,
-						'data'    => $error->get_error_data( $code ),
-					);
-				}
-			}
-
-			$result = ( ! empty( $errors ) ) ? $errors[0] : null;
-			if ( count( $errors ) > 1 ) {
-				// Remove the primary error.
-				array_shift( $errors );
-				$result['additional_errors'] = $errors;
-			}
-		}
-
-		$result = wp_json_encode( $result, JSON_UNESCAPED_SLASHES );
-
-		$encrypted = $cxntests->encrypt_string_for_wpcom( $result );
-
-		if ( ! $encrypted || ! is_array( $encrypted ) ) {
-			return rest_ensure_response(
-				array(
-					'code'    => 'action_required',
-					'message' => 'Please request results from the in-plugin debugger',
-				)
-			);
-		}
-
-		return rest_ensure_response(
-			array(
-				'code'  => 'response',
-				'debug' => $encrypted,
-			)
-		);
-	}
-
-	/**
 	 * Fetch information about the Rewind status of the site.
 	 */
 	public static function rewind_data() {
@@ -1805,8 +1663,8 @@ class Jetpack_Core_Json_Api_Endpoints {
 	 * @return string|WP_Error A raw URL if the connection URL could be built; error message otherwise.
 	 */
 	public static function build_connect_url( $request = array() ) {
-		$from     = isset( $request['from'] ) ? $request['from'] : false;
-		$redirect = isset( $request['redirect'] ) ? $request['redirect'] : false;
+		$from     = $request['from'] ?? false;
+		$redirect = $request['redirect'] ?? false;
 
 		$url = Jetpack::init()->build_connect_url( true, $redirect, $from );
 		if ( $url ) {
@@ -2751,12 +2609,15 @@ class Jetpack_Core_Json_Api_Endpoints {
 				'jp_group'          => 'subscriptions',
 			),
 			'subscription_options'                      => array(
-				'description'       => esc_html__( 'Three options used in subscription email templates: \'invitation\', \'welcome\' and \'comment_follow\'.', 'jetpack' ),
+				'description'       => esc_html__( 'Options used in subscription email templates and the Subscribe block: \'invitation\', \'welcome\', \'comment_follow\', \'subscribe_modal_heading\', \'free_tier_description\' and \'hide_free_tier\'.', 'jetpack' ),
 				'type'              => 'object',
 				'default'           => array(
-					'invitation'     => '',
-					'welcome'        => '',
-					'comment_follow' => '',
+					'invitation'              => '',
+					'welcome'                 => '',
+					'comment_follow'          => '',
+					'subscribe_modal_heading' => '',
+					'free_tier_description'   => '',
+					'hide_free_tier'          => false,
 				),
 				'validate_callback' => __CLASS__ . '::validate_subscription_options',
 				'jp_group'          => 'subscriptions',
@@ -3096,6 +2957,30 @@ class Jetpack_Core_Json_Api_Endpoints {
 				'jp_group'          => 'seo-tools',
 				'validate_callback' => 'Jetpack_SEO_Titles::are_valid_title_formats',
 				'sanitize_callback' => 'Jetpack_SEO_Titles::sanitize_title_formats',
+			),
+
+			// AI tab (Jetpack > SEO). Plain option the SEO package reads to serve
+			// /llms.txt. The front-end behavior is gated inside the package; this
+			// only round-trips the persisted state alongside the other seo-tools
+			// settings.
+			'jetpack_seo_llms_txt_enabled'              => array(
+				'description'       => esc_html__( 'Generate an llms.txt file to guide AI assistants around your content.', 'jetpack' ),
+				'type'              => 'boolean',
+				'default'           => 0,
+				'validate_callback' => __CLASS__ . '::validate_boolean',
+				'jp_group'          => 'seo-tools',
+			),
+
+			// AI tab (Jetpack > SEO). Sparse per-crawler override map the SEO
+			// package reads to emit robots.txt directives for blocked AI crawlers.
+			// Stored as `slug => bool` (true = blocked); catalog validation and
+			// default-pruning happen in `Ai_Crawlers::get_overrides()`.
+			'jetpack_seo_ai_crawler_overrides'          => array(
+				'description'       => esc_html__( 'AI crawler allow/block overrides.', 'jetpack' ),
+				'type'              => 'object',
+				'default'           => array(),
+				'jp_group'          => 'seo-tools',
+				'sanitize_callback' => __CLASS__ . '::sanitize_ai_crawler_overrides',
 			),
 
 			// VideoPress.
@@ -3730,7 +3615,10 @@ class Jetpack_Core_Json_Api_Endpoints {
 	 * @return bool|WP_Error
 	 */
 	public static function validate_subscription_options( $values ) {
-		if ( is_object( $values ) ) {
+		// A REST "object" decodes to a PHP associative array. Reject any other
+		// type (object, string, int, null, ...) up front so the array_keys()
+		// loop below never runs against a non-array and triggers a PHP warning.
+		if ( ! is_array( $values ) ) {
 			return new WP_Error(
 				'invalid_param',
 				/* Translators: subscription_options is a variable name, and shouldn't be translated. */
@@ -3738,7 +3626,7 @@ class Jetpack_Core_Json_Api_Endpoints {
 			);
 		}
 		foreach ( array_keys( $values ) as $key ) {
-			if ( ! in_array( $key, array( 'welcome', 'invitation', 'comment_follow' ), true ) ) {
+			if ( ! in_array( $key, array( 'welcome', 'invitation', 'comment_follow', 'subscribe_modal_heading', 'free_tier_description', 'hide_free_tier' ), true ) ) {
 				return new WP_Error(
 					'invalid_param',
 					sprintf(
@@ -3790,6 +3678,29 @@ class Jetpack_Core_Json_Api_Endpoints {
 			return array( 'administrator' );
 		}
 		return $value;
+	}
+
+	/**
+	 * Sanitize the AI crawler override map.
+	 *
+	 * Keeps the value package-agnostic: each key is normalized with sanitize_key()
+	 * and each value cast to bool. Catalog validation and default-pruning happen in
+	 * `Automattic\Jetpack\SEO\Ai_Crawlers::get_overrides()`.
+	 *
+	 * @param mixed $value The submitted override map.
+	 *
+	 * @return array<string, bool> Sanitized `slug => bool` map.
+	 */
+	public static function sanitize_ai_crawler_overrides( $value ) {
+		if ( ! is_array( $value ) ) {
+			return array();
+		}
+
+		$sanitized = array();
+		foreach ( $value as $k => $v ) {
+			$sanitized[ sanitize_key( $k ) ] = (bool) $v;
+		}
+		return $sanitized;
 	}
 
 	/**
@@ -3853,6 +3764,38 @@ class Jetpack_Core_Json_Api_Endpoints {
 			$modules['extra']['news_sitemap_url'] = $news_sitemap_url;
 		}
 		return $modules;
+	}
+
+	/**
+	 * Remove options the current user cannot read.
+	 *
+	 * Covers every `jetpack_waf_*` option, plus the two Protect options that expose the
+	 * same data under a different name: `jetpack_protect_global_whitelist` is populated
+	 * from `jetpack_waf_ip_allow_list`, and `jetpack_protect_key` is a shared secret.
+	 *
+	 * @since $$next-version$$
+	 *
+	 * @param array $options Option definitions keyed by option name.
+	 * @return array
+	 */
+	public static function filter_options_for_response( $options ) {
+		if ( current_user_can( 'manage_options' ) ) {
+			return $options;
+		}
+
+		$restricted = array(
+			'jetpack_protect_key',
+			'jetpack_protect_global_whitelist',
+		);
+
+		return array_filter(
+			$options,
+			static function ( $option_name ) use ( $restricted ) {
+				return 0 !== strpos( $option_name, 'jetpack_waf_' )
+					&& ! in_array( $option_name, $restricted, true );
+			},
+			ARRAY_FILTER_USE_KEY
+		);
 	}
 
 	/**
@@ -3920,7 +3863,7 @@ class Jetpack_Core_Json_Api_Endpoints {
 				$options['sharing_services']['current_value'] = $sharer->get_blog_services();
 				$other_sharedaddy_options                     = array( 'jetpack-twitter-cards-site-tag', 'sharedaddy_disable_resources', 'sharing_delete_service' );
 				foreach ( $other_sharedaddy_options as $key ) {
-					$default_value                    = isset( $options[ $key ]['default'] ) ? $options[ $key ]['default'] : '';
+					$default_value                    = $options[ $key ]['default'] ?? '';
 					$current_value                    = get_option( $key, $default_value );
 					$options[ $key ]['current_value'] = self::cast_value( $current_value, $options[ $key ] );
 				}
@@ -3933,7 +3876,7 @@ class Jetpack_Core_Json_Api_Endpoints {
 			default:
 				// These option are just stored as plain WordPress options.
 				foreach ( $options as $key => $value ) {
-					$default_value                    = isset( $options[ $key ]['default'] ) ? $options[ $key ]['default'] : '';
+					$default_value                    = $options[ $key ]['default'] ?? '';
 					$current_value                    = get_option( $key, $default_value );
 					$options[ $key ]['current_value'] = self::cast_value( $current_value, $options[ $key ] );
 				}
@@ -3945,12 +3888,15 @@ class Jetpack_Core_Json_Api_Endpoints {
 			if ( isset( $options[ $key ]['validate_callback'] ) ) {
 				unset( $options[ $key ]['validate_callback'] );
 			}
-			$default_value = isset( $options[ $key ]['default'] ) ? $options[ $key ]['default'] : '';
+			$default_value = $options[ $key ]['default'] ?? '';
 			if ( ! array_key_exists( 'current_value', $options[ $key ] ) ) {
 				$options[ $key ]['current_value'] = self::cast_value( $default_value, $options[ $key ] );
 			}
 		}
-		return $options;
+
+		// Filter last: the switch above assigns current_value by key without isset(),
+		// so filtering earlier would let those assignments re-add a removed option.
+		return self::filter_options_for_response( $options );
 	}
 
 	/**

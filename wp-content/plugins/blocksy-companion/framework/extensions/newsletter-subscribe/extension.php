@@ -138,7 +138,7 @@ class BlocksyExtensionNewsletterSubscribe {
 					return $opts;
 				}
 
-				$opts['newsletter_subscribe_single_post_enabled'] = blocksy_get_options(
+				$opts['newsletter_subscribe_single_post_enabled'] = blocksy_companion_get_options(
 					dirname(__FILE__) . '/customizer.php',
 					[],
 					false
@@ -243,7 +243,7 @@ class BlocksyExtensionNewsletterSubscribe {
 
 				$options = blocksy_akg(
 					'options',
-					blocksy_companion_theme_functions()->blocksy_get_variables_from_file(
+					blocksy_companion_get_variables_from_file(
 						$options_file,
 						['options' => []]
 					)
@@ -254,6 +254,17 @@ class BlocksyExtensionNewsletterSubscribe {
 				return $data;
 			}
 		);
+
+		add_action('blocksy:single:page-elements:contained:before', function () {
+			if (get_post_type() === 'post') {
+				/**
+				 * Note to code reviewers: This line doesn't need to be escaped.
+				 * Function blocksy_companion_ext_newsletter_subscribe_form() used here escapes the value properly.
+				 */
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo blocksy_companion_ext_newsletter_subscribe_form();
+			}
+		});
 	}
 
 	public function render_block($attributes) {
@@ -263,13 +274,13 @@ class BlocksyExtensionNewsletterSubscribe {
 			return '<p>Default widget view. Please create a <i>view.php</i> file.</p>';
 		}
 
-		return blocksy_render_view($file_path, [
+		return blocksy_companion_render_view($file_path, [
 			'atts' => $attributes,
 		]);
 	}
 
 	public function blocksy_newsletter_block() {
-		register_block_type('blocksy/newsletter', [
+		register_block_type(BLOCKSY_PATH . '/framework/extensions/newsletter-subscribe/admin-static/js/newsletter-block/block.json', [
 			'render_callback' => [$this, 'render_block'],
 			'editor_style_handles' => [
 				'blocksy/newsletter',
@@ -308,7 +319,7 @@ class BlocksyExtensionNewsletterSubscribe {
 		);
 
 		$data = [
-			'has_cookies_checkbox' => function_exists('blocksy_ext_cookies_checkbox'),
+			'has_cookies_checkbox' => function_exists('blocksy_companion_ext_cookies_checkbox'),
 		];
 
 		wp_localize_script(
@@ -327,7 +338,7 @@ class BlocksyExtensionNewsletterSubscribe {
 	}
 
 	public static function add_global_styles($args) {
-		blocksy_theme_get_dynamic_styles(
+		blocksy_companion_theme_functions()->blocksy_theme_get_dynamic_styles(
 			array_merge(
 				[
 					'path' => dirname(__FILE__) . '/global.php',

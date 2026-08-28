@@ -24,6 +24,7 @@ use MailPoet\Subscribers\SubscribersRepository;
 use MailPoet\Subscription\Pages;
 use MailPoet\WP\Functions as WPFunctions;
 use MailPoetVendor\Carbon\CarbonImmutable;
+use Throwable;
 
 class Shortcodes {
   const DEFAULT_ARCHIVE_LIMIT = 100;
@@ -171,9 +172,13 @@ class Shortcodes {
         $this->subscribersRepository->countBy(['status' => SubscriberEntity::STATUS_SUBSCRIBED, 'deletedAt' => null])
       );
     } else {
-      return $this->wp->numberFormatI18n(
-        $this->segmentSubscribersRepository->getSubscribersCountBySegmentIds($segmentIds, SubscriberEntity::STATUS_SUBSCRIBED)
-      );
+      // A failed count must not break rendering of the email/shortcode.
+      try {
+        $count = $this->segmentSubscribersRepository->getSubscribersCountBySegmentIds($segmentIds, SubscriberEntity::STATUS_SUBSCRIBED);
+      } catch (Throwable $e) {
+        $count = 0;
+      }
+      return $this->wp->numberFormatI18n($count);
     }
   }
 

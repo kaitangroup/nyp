@@ -3,6 +3,8 @@ declare(strict_types = 1);
 namespace Automattic\WooCommerce\EmailEditor\Engine\PersonalizationTags;
 if (!defined('ABSPATH')) exit;
 class Personalization_Tag {
+ public const VALUE_TYPE_HTML = 'html';
+ public const VALUE_TYPE_TEXT = 'text';
  private string $name;
  private string $token;
  private string $category;
@@ -10,6 +12,7 @@ class Personalization_Tag {
  private array $attributes;
  private string $value_to_insert;
  private array $post_types;
+ private string $value_type;
  public function __construct(
  string $name,
  string $token,
@@ -17,7 +20,8 @@ class Personalization_Tag {
  callable $callback,
  array $attributes = array(),
  ?string $value_to_insert = null,
- array $post_types = array()
+ array $post_types = array(),
+ string $value_type = self::VALUE_TYPE_HTML
  ) {
  $this->name = $name;
  // Because Gutenberg does not wrap the token with square brackets, we need to add them here.
@@ -44,6 +48,7 @@ class Personalization_Tag {
  }
  $this->value_to_insert = $value_to_insert;
  $this->post_types = $post_types;
+ $this->value_type = in_array( $value_type, array( self::VALUE_TYPE_HTML, self::VALUE_TYPE_TEXT ), true ) ? $value_type : self::VALUE_TYPE_HTML;
  }
  public function __unserialize( array $data ): void {
  throw new \Exception( 'Deserialization of Personalization_Tag is not allowed for security reasons.' );
@@ -65,6 +70,9 @@ class Personalization_Tag {
  }
  public function get_post_types(): array {
  return $this->post_types;
+ }
+ public function get_value_type(): string {
+ return $this->value_type;
  }
  public function get_callback(): callable {
  return $this->callback;

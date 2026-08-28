@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "blocksy/newsletter",
+	"supports": {
+		"html": false,
+		"inserter": false,
+		"lock": false,
+		"__experimentalBorder": {
+			"color": false,
+			"radius": true,
+			"width": false,
+			"__experimentalSkipSerialization": true,
+			"__experimentalDefaultControls": {
+				"color": false,
+				"radius": true,
+				"width": false
+			}
+		}
+	}
+}

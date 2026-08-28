@@ -4,6 +4,7 @@ namespace Packlink\WooCommerce\Controllers;
 
 use Logeecom\Infrastructure\Configuration\Configuration;
 use Logeecom\Infrastructure\ServiceRegister;
+use Packlink\BusinessLogic\Http\Proxy;
 use Packlink\WooCommerce\Components\Services\Config_Service;
 
 /**
@@ -39,6 +40,18 @@ class Packlink_Support_Controller extends Packlink_Base_Controller {
 		$this->return_json( [ 'success' => true ] );
 	}
 
+	/**
+	 * Re-registers web-hook callback URL on the Packlink API.
+	 */
+	public function register_webhooks() {
+		$web_hook_url = $this->get_config_service()->getWebHookUrl();
+		if ( ! empty( $web_hook_url ) ) {
+			$this->get_proxy()->registerWebHookHandler( $web_hook_url );
+		}
+
+		$this->return_json( [ 'success' => true ] );
+	}
+
 	private function set_footer_height( $height ) {
 		if ( ! is_int( $height ) ) {
 			return;
@@ -57,5 +70,13 @@ class Packlink_Support_Controller extends Packlink_Base_Controller {
 
 		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $this->config_service;
+	}
+
+	/**
+	 * @return Proxy
+	 */
+	private function get_proxy() {
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
+		return ServiceRegister::getService( Proxy::CLASS_NAME );
 	}
 }

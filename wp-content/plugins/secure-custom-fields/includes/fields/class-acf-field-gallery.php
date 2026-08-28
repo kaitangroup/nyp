@@ -97,7 +97,7 @@ if ( ! class_exists( 'acf_field_gallery' ) ) :
 			);
 
 			// Validate request.
-			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'] ) ) {
+			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'], true, 'gallery' ) ) {
 				die();
 			}
 
@@ -115,9 +115,33 @@ if ( ! class_exists( 'acf_field_gallery' ) ) :
 				die();
 			}
 
+			// Load attachment.
+			$attachment = get_post( $args['id'] );
+			if ( ! $attachment || 'attachment' !== $attachment->post_type ) {
+				wp_die();
+			}
+
+			// Inherited attachments use their parent for visibility when available.
+			$visibility_post = $attachment;
+			if ( 'inherit' === $attachment->post_status && $attachment->post_parent > 0 ) {
+				$parent = get_post( $attachment->post_parent );
+				if ( $parent ) {
+					$visibility_post = $parent;
+				}
+			}
+
+			// Confirm the attachment or its visibility post can be read.
+			if (
+				! is_post_publicly_viewable( $visibility_post ) &&
+				! current_user_can( 'read_post', $attachment->ID ) &&
+				( $attachment->ID === $visibility_post->ID || ! current_user_can( 'read_post', $visibility_post->ID ) )
+			) {
+				wp_die();
+			}
+
 			// Render.
 			$this->render_attachment( $args['id'], $field );
-			die;
+			wp_die();
 		}
 
 		/**
@@ -135,7 +159,7 @@ if ( ! class_exists( 'acf_field_gallery' ) ) :
 				)
 			);
 
-			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'] ) ) {
+			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'], true, 'gallery' ) ) {
 				wp_send_json_error();
 			}
 
@@ -214,7 +238,7 @@ if ( ! class_exists( 'acf_field_gallery' ) ) :
 				)
 			);
 
-			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'] ) ) {
+			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'], true, 'gallery' ) ) {
 				wp_send_json_error();
 			}
 
@@ -389,7 +413,7 @@ if ( ! class_exists( 'acf_field_gallery' ) ) :
 				'data-mime_types'   => $field['mime_types'],
 				'data-insert'       => $field['insert'],
 				'data-columns'      => 4,
-				'data-nonce'        => wp_create_nonce( $field['key'] ),
+				'data-nonce'        => wp_create_nonce( 'acf_field_' . $this->name . '_' . $field['key'] ),
 			);
 
 			// Set gallery height with default of 400px and minimum of 200px.

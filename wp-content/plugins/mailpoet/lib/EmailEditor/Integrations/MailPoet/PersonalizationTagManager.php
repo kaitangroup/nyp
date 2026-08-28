@@ -10,45 +10,71 @@ use Automattic\WooCommerce\EmailEditor\Engine\PersonalizationTags\Personalizatio
 use Automattic\WooCommerce\EmailEditor\Engine\PersonalizationTags\Personalization_Tags_Registry;
 use MailPoet\Automation\Engine\Registry;
 use MailPoet\Automation\Engine\Storage\AutomationStorage;
+use MailPoet\CustomFields\CustomFieldsRepository;
+use MailPoet\EmailEditor\Integrations\MailPoet\PersonalizationTags\Date;
 use MailPoet\EmailEditor\Integrations\MailPoet\PersonalizationTags\Link;
 use MailPoet\EmailEditor\Integrations\MailPoet\PersonalizationTags\LinksToShortcodesConvertor;
+use MailPoet\EmailEditor\Integrations\MailPoet\PersonalizationTags\Newsletter;
 use MailPoet\EmailEditor\Integrations\MailPoet\PersonalizationTags\OrderReviewUrl;
 use MailPoet\EmailEditor\Integrations\MailPoet\PersonalizationTags\Site;
 use MailPoet\EmailEditor\Integrations\MailPoet\PersonalizationTags\Subscriber;
 use MailPoet\Newsletter\NewslettersRepository;
 use MailPoet\WP\Functions as WPFunctions;
+use MailPoetVendor\Doctrine\DBAL\Exception\InvalidFieldNameException;
+use MailPoetVendor\Doctrine\DBAL\Exception\TableNotFoundException;
 
 class PersonalizationTagManager {
+  /**
+   * URL tokens that don't depend on subscriber or order context and can be
+   * resolved before link tracking hashes hrefs. Context-dependent URL tokens
+   * (activation link, order URLs) must not be added here.
+   */
+  private const PRE_TRACKING_URL_TOKENS = [
+    '[mailpoet/site-homepage-url]',
+    '[woocommerce/site-homepage-url]',
+    '[woocommerce/store-url]',
+    '[woocommerce/my-account-url]',
+  ];
+
   private Subscriber $subscriber;
   private Site $site;
   private Link $link;
+  private Newsletter $newsletter;
+  private Date $date;
   private OrderReviewUrl $orderReviewUrl;
   private WPFunctions $wp;
   private LinksToShortcodesConvertor $linksToShortcodesConvertor;
   private AutomationStorage $automationStorage;
   private Registry $registry;
   private NewslettersRepository $newslettersRepository;
+  private CustomFieldsRepository $customFieldsRepository;
 
   public function __construct(
     Subscriber $subscriber,
     Site $site,
     Link $link,
+    Newsletter $newsletter,
+    Date $date,
     OrderReviewUrl $orderReviewUrl,
     WPFunctions $wp,
     LinksToShortcodesConvertor $linksToShortcodesConvertor,
     AutomationStorage $automationStorage,
     Registry $registry,
-    NewslettersRepository $newslettersRepository
+    NewslettersRepository $newslettersRepository,
+    CustomFieldsRepository $customFieldsRepository
   ) {
     $this->subscriber = $subscriber;
     $this->site = $site;
     $this->link = $link;
+    $this->newsletter = $newsletter;
+    $this->date = $date;
     $this->orderReviewUrl = $orderReviewUrl;
     $this->wp = $wp;
     $this->linksToShortcodesConvertor = $linksToShortcodesConvertor;
     $this->automationStorage = $automationStorage;
     $this->registry = $registry;
     $this->newslettersRepository = $newslettersRepository;
+    $this->customFieldsRepository = $customFieldsRepository;
   }
 
   /**
@@ -136,6 +162,92 @@ class PersonalizationTagManager {
         null,
         [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
       ));
+      $registry->register(new Personalization_Tag(
+        __('WordPress User Display Name', 'mailpoet'),
+        'mailpoet/subscriber-displayname',
+        __('Subscriber', 'mailpoet'),
+        [$this->subscriber, 'getDisplayName'],
+        ['default' => __('member', 'mailpoet')],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
+      $registry->register(new Personalization_Tag(
+        __('Total Number of Subscribers', 'mailpoet'),
+        'mailpoet/subscriber-count',
+        __('Subscriber', 'mailpoet'),
+        [$this->subscriber, 'getCount'],
+        [],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
+      $this->registerSubscriberCustomFieldTags($registry);
+
+      // Newsletter Personalization Tags
+      $registry->register(new Personalization_Tag(
+        __('Newsletter Subject', 'mailpoet'),
+        'mailpoet/newsletter-subject',
+        __('Newsletter', 'mailpoet'),
+        [$this->newsletter, 'getSubject'],
+        [],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
+
+      // Date Personalization Tags
+      $registry->register(new Personalization_Tag(
+        __('Current day of the month number', 'mailpoet'),
+        'mailpoet/date-day',
+        __('Date', 'mailpoet'),
+        [$this->date, 'getDay'],
+        [],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
+      $registry->register(new Personalization_Tag(
+        __('Current day of the month in ordinal form, i.e. 2nd, 3rd, 4th, etc.', 'mailpoet'),
+        'mailpoet/date-day-ordinal',
+        __('Date', 'mailpoet'),
+        [$this->date, 'getDayOrdinal'],
+        [],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
+      $registry->register(new Personalization_Tag(
+        __('Full name of current day', 'mailpoet'),
+        'mailpoet/date-day-name',
+        __('Date', 'mailpoet'),
+        [$this->date, 'getDayName'],
+        [],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
+      $registry->register(new Personalization_Tag(
+        __('Current month number', 'mailpoet'),
+        'mailpoet/date-month',
+        __('Date', 'mailpoet'),
+        [$this->date, 'getMonth'],
+        [],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
+      $registry->register(new Personalization_Tag(
+        __('Full name of current month', 'mailpoet'),
+        'mailpoet/date-month-name',
+        __('Date', 'mailpoet'),
+        [$this->date, 'getMonthName'],
+        [],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
+      $registry->register(new Personalization_Tag(
+        __('Year', 'mailpoet'),
+        'mailpoet/date-year',
+        __('Date', 'mailpoet'),
+        [$this->date, 'getYear'],
+        [],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
 
       // Site Personalization Tags
       $registry->register(new Personalization_Tag(
@@ -194,6 +306,15 @@ class PersonalizationTagManager {
         null,
         [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
       ));
+      $registry->register(new Personalization_Tag(
+        __('Tracking opt-out URL', 'mailpoet'),
+        'mailpoet/subscription-tracking-opt-out-url',
+        __('Link', 'mailpoet'),
+        [$this->link, 'getSubscriptionTrackingOptOutUrl'],
+        [],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
       return $registry;
     });
 
@@ -218,11 +339,39 @@ class PersonalizationTagManager {
     );
   }
 
+  private function registerSubscriberCustomFieldTags(Personalization_Tags_Registry $registry): void {
+    try {
+      $customFields = $this->customFieldsRepository->findAllActive();
+    } catch (InvalidFieldNameException | TableNotFoundException $e) {
+      // The custom_fields schema may be mid-migration during a plugin update (e.g. the deleted_at
+      // column added in 5.33.1). Skip custom-field tags for this request rather than fataling; they
+      // register on the next request once the migration completes.
+      return;
+    }
+    foreach ($customFields as $customField) {
+      $customFieldId = (int)$customField->getId();
+      $registry->register(new Personalization_Tag(
+        $customField->getName(),
+        'mailpoet/subscriber-cf-' . $customFieldId,
+        __('Subscriber', 'mailpoet'),
+        function (array $context, array $args = []) use ($customFieldId): string {
+          return $this->subscriber->getCustomField($customFieldId, $context, $args);
+        },
+        [],
+        null,
+        [EmailEditor::MAILPOET_EMAIL_POST_TYPE]
+      ));
+    }
+  }
+
   public function convertLinksToShortcodes(array $emailContent): array {
     if (!isset($emailContent['html'])) {
       return $emailContent;
     }
-    $emailContent['html'] = $this->linksToShortcodesConvertor->convertLinkTagsToShortcodes($emailContent['html']);
+    $emailContent['html'] = $this->linksToShortcodesConvertor->convertLinkTagsToShortcodes(
+      $emailContent['html'],
+      $this->getPreTrackingUrlTokens()
+    );
     return $emailContent;
   }
 
@@ -248,6 +397,27 @@ class PersonalizationTagManager {
     return [
       '[woocommerce/order-review-url]' => $this->orderReviewUrl->getUrl($context),
     ];
+  }
+
+  /**
+   * @return array<string, string>
+   */
+  private function getPreTrackingUrlTokens(): array {
+    $registry = Email_Editor_Container::container()->get(Personalization_Tags_Registry::class);
+    $tokens = [];
+    foreach (self::PRE_TRACKING_URL_TOKENS as $token) {
+      $tag = $registry->get_by_token($token);
+      if (!$tag) {
+        continue;
+      }
+      try {
+        $tokens[$token] = $tag->execute_callback([]);
+      } catch (\Throwable $e) {
+        // A broken tag callback must not block newsletter pre-processing
+        continue;
+      }
+    }
+    return $tokens;
   }
 
   /**

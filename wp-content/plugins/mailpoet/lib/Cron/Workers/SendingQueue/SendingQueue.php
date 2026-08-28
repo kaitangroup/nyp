@@ -32,6 +32,8 @@ use MailPoet\Tasks\Subscribers\BatchIterator;
 use MailPoet\WP\Functions as WPFunctions;
 use MailPoetVendor\Carbon\Carbon;
 use MailPoetVendor\Doctrine\DBAL\ArrayParameterType;
+use MailPoetVendor\Doctrine\DBAL\Exception\InvalidFieldNameException;
+use MailPoetVendor\Doctrine\DBAL\Exception\TableNotFoundException;
 use MailPoetVendor\Doctrine\ORM\EntityManager;
 use Throwable;
 
@@ -166,6 +168,13 @@ class SendingQueue {
       try {
         $this->scheduledTasksRepository->touchAllByIds([$task->getId()]);
         $this->processSending($task, (int)$timer);
+      } catch (InvalidFieldNameException | TableNotFoundException $e) {
+        // The subscribers schema may be mid-migration during a plugin update (e.g. the
+        // tracking_consent column added in STOMAIL-8268). Leave this task for the next
+        // cron run rather than crashing the sending worker; it resumes once the migration
+        // completes.
+        $this->stopProgress($task);
+        continue;
       } catch (\Exception $e) {
         $this->stopProgress($task);
         throw $e;
@@ -299,10 +308,42 @@ class SendingQueue {
         }
 
         $foundSubscribers = $queryBuilder->getQuery()->getResult();
-        $foundSubscribersIds = array_map(function(SubscriberEntity $subscriber) {
-          return $subscriber->getId();
-        }, $foundSubscribers);
       }
+
+      // Allow extensions to exclude subscribers from this specific send (e.g. custom
+      // frequency capping or cross-newsletter suppression). Excluded subscribers are
+      // dropped below via the same path used for "not found" subscribers, so queue
+      // counts and the scheduled task stay consistent.
+      $resolvedSubscribersById = [];
+      foreach ($foundSubscribers as $subscriber) {
+        $resolvedSubscribersById[$subscriber->getId()] = $subscriber;
+      }
+      $filteredSubscribers = $this->wp->applyFilters(
+        'mailpoet_sending_queue_subscribers_to_process',
+        $foundSubscribers,
+        $newsletter,
+        $task
+      );
+
+      if (is_array($filteredSubscribers)) {
+        $foundSubscribers = [];
+        foreach ($filteredSubscribers as $filteredSubscriber) {
+          if (!$filteredSubscriber instanceof SubscriberEntity) {
+            continue;
+          }
+          $subscriberId = $filteredSubscriber->getId();
+          // Keep only subscribers that were already in the resolved batch (by id), and
+          // use the original entity instance rather than trusting whatever the filter returned.
+          if (isset($resolvedSubscribersById[$subscriberId])) {
+            $foundSubscribers[$subscriberId] = $resolvedSubscribersById[$subscriberId];
+          }
+        }
+        $foundSubscribers = array_values($foundSubscribers);
+      }
+
+      $foundSubscribersIds = array_map(function(SubscriberEntity $subscriber) {
+        return $subscriber->getId();
+      }, $foundSubscribers);
 
       // if some subscribers weren't found, remove them from the processing list
       if (count($foundSubscribersIds) !== count($subscribersToProcessIds)) {

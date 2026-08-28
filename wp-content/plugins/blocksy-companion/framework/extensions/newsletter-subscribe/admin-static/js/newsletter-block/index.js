@@ -8,6 +8,7 @@ import Edit from './Edit'
 import { getAttributesFromOptions, getOptionsForBlock } from 'blocksy-options'
 
 import { colorsDefaults } from './colors'
+import metadata from './block.json'
 
 export const options = getOptionsForBlock('newsletter')
 export const defaultAttributes = getAttributesFromOptions(options)
@@ -44,7 +45,7 @@ addFilter(
 )
 
 registerBlockType('blocksy/newsletter', {
-	apiVersion: 3,
+	...metadata,
 	title: __('Newsletter Controls', 'blocksy-companion'),
 	icon: {
 		src: (
@@ -57,23 +58,6 @@ registerBlockType('blocksy/newsletter', {
 		),
 	},
 	category: 'widgets',
-	supports: {
-		html: false,
-		inserter: false,
-		lock: false,
-
-		__experimentalBorder: {
-			color: false,
-			radius: true,
-			width: false,
-			__experimentalSkipSerialization: true,
-			__experimentalDefaultControls: {
-				color: false,
-				radius: true,
-				width: false,
-			},
-		},
-	},
 	parent: ['blocksy/widgets-wrapper'],
 	attributes: { ...defaultAttributes, ...colorsDefaults },
 	edit: (props) => <Edit {...props} />,

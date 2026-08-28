@@ -10,9 +10,10 @@ export const defaultAttributes = getAttributesFromOptions(options)
 
 import { colorsDefaults } from './colors'
 import Edit from './Edit'
+import metadata from './block.json'
 
 registerBlockType('blocksy/search', {
-	apiVersion: 3,
+	...metadata,
 	title: __('Advanced Search', 'blocksy-companion'),
 	description: __(
 		'Quickly find specific content on your site.',
@@ -32,25 +33,6 @@ registerBlockType('blocksy/search', {
 	attributes: {
 		...defaultAttributes,
 		...colorsDefaults,
-	},
-	supports: {
-		spacing: {
-			margin: true,
-			__experimentalDefaultControls: {
-				margin: true,
-			},
-		},
-		__experimentalBorder: {
-			color: false,
-			radius: true,
-			width: false,
-			__experimentalSkipSerialization: true,
-			__experimentalDefaultControls: {
-				color: false,
-				radius: true,
-				width: false,
-			},
-		},
 	},
 	edit: (props) => <Edit {...props} />,
 	save: function () {

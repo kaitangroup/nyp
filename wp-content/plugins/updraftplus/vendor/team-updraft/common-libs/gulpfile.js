@@ -12,15 +12,14 @@ const clean = require('gulp-clean');
 const plumber = require('gulp-plumber');
 const sass = require('gulp-sass')(require('sass'));
 const notify = require('gulp-notify')
-const modernizr = require('gulp-modernizr');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 
-/*== Specify Paths for various UpdraftCentral Files ==*/
+const outputPath = 'dist/src';
 
 // set clean paths
 const cleanPaths = [
-	'updraft-theme/*',
+	'dist/*',
 	'composer.lock',
 	'package-lock.json'
 ];
@@ -34,24 +33,31 @@ const handlebarsPaths = [
 ];
 
 const jsWatchPaths = [
-	'src/updraft-theme/**/*.js',
+	'./src/**/*.js',
 ];
 
-const jsPaths = {
-	'theme': './src/updraft-theme/theme.js',
+const jsToBeCompiledPaths = {
+	'updraft-theme/theme': './src/updraft-theme/theme.js',
 };
 
+const jsPaths = [
+	'./src/**/*.js',
+	...(
+		Object.keys(jsToBeCompiledPaths).map(name => name.split('/')[0]).map(folder => `!./src/${folder}/**/*.js`)
+	)
+];
+
 const phpPaths = [
-	'src/updraft-theme/*.php'
+	'src/**/*.php'
 ];
 
 const svgsPaths = [
-	'src/updraft-theme/**/*.svg'
+	'src/**/*.svg'
 ];
 
 var fontPaths = [
-	'src/updraft-theme/**/*.woff2',
-	'src/updraft-theme/**/*.ttf'
+	'src/**/*.woff2',
+	'src/**/*.ttf'
 ];
 
 const scssWatchPaths = [
@@ -63,8 +69,16 @@ const scssPaths = [
 	'src/updraft-theme/theme-colors.scss',
 ];
 
+const cssWatchPaths = [
+	'src/**/*.css',
+];
+
+const cssPaths = [
+	'src/**/*.css',
+];
+
 const htmlPaths = [
-	'src/updraft-theme/**/*.html'
+	'src/**/*.html'
 ];
 
 /* ==Start Gulp Process== */
@@ -78,109 +92,82 @@ gulp.copy = function(src,dest) {
 gulp.task('svgs_move', function(){
 	return gulp.src(svgsPaths)
 	.pipe(plumber(reportError))
-	.pipe(gulp.dest('updraft-theme'));
+	.pipe(gulp.dest(outputPath));
 })
 
 /* ==Fonts=== */
 gulp.task('fonts_move', function(){
 	return gulp.src(fontPaths)
 	.pipe(plumber(reportError))
-	.pipe(gulp.dest('updraft-theme'));
+	.pipe(gulp.dest(outputPath));
 });
 
 /* ==Sorting HTML=== */
 gulp.task('html_move', function(){
 	return gulp.src(htmlPaths)
 	.pipe(plumber(reportError))
-	.pipe(gulp.dest('updraft-theme'));
+	.pipe(gulp.dest(outputPath));
 });
 
 /* ===Sorting SCSS=== */
 gulp.task('scss_compile', function(){
-	return gulp.src(scssPaths)
+	return gulp.src(scssPaths, { base: 'src' })
 	.pipe(plumber(reportError))
 	.pipe(sourcemaps.init())
 	.pipe(sass({silenceDeprecations: ['legacy-js-api', 'mixed-decls', 'color-functions', 'global-builtin', 'import']}))
 	.pipe(postcss([ autoprefixer({ browsers: ['last 2 versions'] }) ]))
 	.pipe(plumber(reportError))
-	.pipe(gulp.dest('updraft-theme'))
+	.pipe(gulp.dest(outputPath))
 	.pipe(uglifycss({'maxLineLen': 0, 'uglyComments': true}).on('error', console.error))
 	.pipe(rename({suffix: '.min'}))
 	.pipe(sourcemaps.write('.'))
 	.pipe(plumber.stop())
-	.pipe(gulp.dest('updraft-theme'));
-})
+	.pipe(gulp.dest(outputPath));
+});
+
+gulp.task('copy_css', function () {
+	return gulp.src(cssPaths, { base: './src' })
+	.pipe(gulp.dest(outputPath));
+});
 
 /* ===Sorting JS=== */
 gulp.task('js_compile', function(){
 	return webpackStream({
             mode: 'production',
-			entry: jsPaths,
+			entry: jsToBeCompiledPaths,
             output: {
                 filename: '[name].js',
             },
         }, webpack)
-        .pipe(gulp.dest('updraft-theme'));
+        .pipe(gulp.dest(outputPath));
+});
+
+gulp.task('copy_plain_js', function () {
+	return gulp.src(jsPaths, { base: './src' })
+	.pipe(gulp.dest(outputPath));
 });
 
 /* ====Sorting PHP======= */
 gulp.task('php_move', function(){
 	return gulp.src(phpPaths)
 	.pipe(plumber(reportError))
-	.pipe(gulp.dest('updraft-theme'));
+	.pipe(gulp.dest(outputPath));
 })
 
-//Modernizer settings
-const modernizerSettings = { 
-	"options": [
-	"domPrefixes",
-	"prefixes",
-	"addTest",
-	"atRule",
-	"hasEvent",
-	"mq",
-	"prefixed",
-	"prefixedCSS",
-	"prefixedCSSValue",
-	"testAllProps",
-	"testProp",
-	"testStyles",
-	"html5printshiv",
-	"setClasses"
-	],
-	"tests": [
-	"eventlistener",
-	"lastchild",
-	"inputtypes"
-	],
-	"excludeTests": [
-	"supports"
-	],
-	"uglify": false
-};
-
-//normal version
-gulp.task('modernizr', function() {
-  return gulp.src('./src/updraft-theme/js/*.js')
-  	.pipe(plumber(reportError))
-    .pipe(modernizr('modernizr-custom.js', modernizerSettings))
-    .pipe(gulp.dest('updraft-theme/js/modernizr/'))
-});
-
-//minified version
-gulp.task('modernizr_min', function() {
-
-  return gulp.src('./src/updraft-theme/js/*.js')
-  	.pipe(plumber(reportError))
-    .pipe(modernizr('modernizr-custom.min.js', modernizerSettings))
-    .pipe(uglify().on('error', console.error))
-    .pipe(gulp.dest('updraft-theme/js/modernizr/'))
-});
-
-gulp.task('handlebar', function(){
+gulp.task('copy_handlebar_to_updraft_theme', function(){
 	return gulp.src(handlebarsPaths)
 	.pipe(plumber(reportError))
-	.pipe(gulp.dest('updraft-theme/handlebar-library'));
+	.pipe(gulp.dest(outputPath + '/updraft-theme/handlebar-library'));
+});
+
+gulp.task('copy_readme', function () {
+	return gulp.src('README.md')
+		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('copy_composer_json', function () {
+	return gulp.src('composer.json')
+		.pipe(gulp.dest('dist'));
 });
 
 /*== Clean theme build ==*/
@@ -193,10 +180,11 @@ gulp.task('clean', function(){
 /*== Building the files ==*/
 gulp.task('build', function(done){
 	runSequence('clean',
-				['js_compile'],
+				['js_compile', 'copy_plain_js'],
 				['php_move'],
-				['html_move', 'scss_compile', 'svgs_move', 'fonts_move'],
-				['handlebar'],
+				['html_move', 'copy_css', 'scss_compile', 'svgs_move', 'fonts_move'],
+				['copy_handlebar_to_updraft_theme'],
+				['copy_readme', 'copy_composer_json'],
 				done
 	);
 });
@@ -213,11 +201,15 @@ gulp.task('php', function(done){
 });
 
 gulp.task('js', function(done) {
-	runSequence('js_compile', done);
+	runSequence('js_compile', 'copy_plain_js', done);
 });
 
 gulp.task('scss', function(done) {
 	runSequence('scss_compile', done);
+});
+
+gulp.task('css', function(done) {
+	runSequence('copy_css', done);
 });
 
 gulp.task('html', function(done){
@@ -226,6 +218,7 @@ gulp.task('html', function(done){
 
 gulp.task('watch', function(){
 	gulp.watch(scssWatchPaths, gulp.series(['scss']));
+	gulp.watch(cssWatchPaths, gulp.series(['css']));
 	gulp.watch(jsWatchPaths, gulp.series(['js']));
 	gulp.watch(phpPaths, gulp.series(['php']));
 	gulp.watch('src/updraft-theme/**/*.handlebars.html', gulp.series(['html']));

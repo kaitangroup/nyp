@@ -106,12 +106,19 @@ $data = $this->resolve_view_arguments();
                     getDataUrl: "<?php echo Shop_Helper::get_controller_url( 'Cash_On_Delivery', 'get_data' ); //phpcs:ignore ?>",
                     submitDataUrl: "<?php echo Shop_Helper::get_controller_url( 'Cash_On_Delivery', 'save_data' );//phpcs:ignore ?>",
                 },
+                'customs': {
+                    getUrl: "<?php echo Shop_Helper::get_controller_url( 'Customs', 'get_data' ); //phpcs:ignore ?>",
+                    submitUrl: "<?php echo Shop_Helper::get_controller_url( 'Customs', 'save_data' ); //phpcs:ignore ?>",
+                    getSupportedCountriesUrl: "<?php echo Shop_Helper::get_controller_url( 'Customs', 'get_countries' ); //phpcs:ignore ?>",
+                    getCustomData: "<?php echo Shop_Helper::get_controller_url( 'Customs', 'get_mapping_fields_options' ); //phpcs:ignore ?>",
+                },
 				'manual-sync': {
 					getUrl: "<?php echo Shop_Helper::get_controller_url( 'Manual_Sync', 'is_manual_sync_enabled' ); //phpcs:ignore ?>",
 					submitUrl: "<?php echo Shop_Helper::get_controller_url( 'Manual_Sync', 'set_manual_sync_enabled' ); //phpcs:ignore ?>",
 				},
 				'configuration': {
-					getDataUrl: "<?php echo Shop_Helper::get_controller_url( 'Configuration', 'get' ); //phpcs:ignore ?>"
+					getDataUrl: "<?php echo Shop_Helper::get_controller_url( 'Configuration', 'get' ); //phpcs:ignore ?>",
+					getPromotionalBannerUrl: "<?php echo Shop_Helper::get_controller_url( 'Subscription', 'get_promotional_banner' ); //phpcs:ignore ?>"
 				},
 				'system-info': {
 					getStatusUrl: "<?php echo Shop_Helper::get_controller_url( 'Debug', 'get_status' ); //phpcs:ignore ?>",
@@ -125,7 +132,9 @@ $data = $this->resolve_view_arguments();
 					getServicesUrl: "<?php echo Shop_Helper::get_controller_url( 'My_Shipping_Services', 'get' ); //phpcs:ignore ?>",
 					deleteServiceUrl: "<?php echo Shop_Helper::get_controller_url( 'My_Shipping_Services', 'deactivate' ); //phpcs:ignore ?>",
 					getCurrencyDetailsUrl: "<?php echo Shop_Helper::get_controller_url( 'System_Info', 'get' ); //phpcs:ignore ?>",
-					systemId: "<?php echo System_Info_Service::SYSTEM_ID; ?>"
+					systemId: "<?php echo System_Info_Service::SYSTEM_ID; ?>",
+					getSubscriptionPlanUrl: "<?php echo Shop_Helper::get_controller_url( 'Subscription', 'get_plan' ); //phpcs:ignore ?>",
+					getPromotionalBannerUrl: "<?php echo Shop_Helper::get_controller_url( 'Subscription', 'get_promotional_banner' ); //phpcs:ignore ?>"
 				},
 				'pick-shipping-service': {
 					getActiveServicesUrl: "<?php echo Shop_Helper::get_controller_url( 'Shipping_Service', 'get_active' ); //phpcs:ignore ?>",
@@ -136,7 +145,9 @@ $data = $this->resolve_view_arguments();
 					getCurrencyDetailsUrl: "<?php echo Shop_Helper::get_controller_url( 'System_Info', 'get' ); //phpcs:ignore ?>",
 					systemId: "<?php echo System_Info_Service::SYSTEM_ID; ?>",
 					enqueue: "<?php echo Shop_Helper::get_controller_url('Manual_Refresh_Service', 'refresh'); //phpcs:ignore ?>",
-					getTaskStatus: "<?php echo Shop_Helper::get_controller_url('Manual_Refresh_Service', 'get_task_status'); //phpcs:ignore ?>"
+					getTaskStatus: "<?php echo Shop_Helper::get_controller_url('Manual_Refresh_Service', 'get_task_status'); //phpcs:ignore ?>",
+					getSubscriptionPlanUrl: "<?php echo Shop_Helper::get_controller_url( 'Subscription', 'get_plan' ); //phpcs:ignore ?>",
+					getPromotionalBannerUrl: "<?php echo Shop_Helper::get_controller_url( 'Subscription', 'get_promotional_banner' ); //phpcs:ignore ?>"
 				},
 				'edit-service': {
 					getServiceUrl: "<?php echo Shop_Helper::get_controller_url( 'Edit_Service', 'get_service' ); //phpcs:ignore ?>",
@@ -212,6 +223,9 @@ $data = $this->resolve_view_arguments();
 						'pl-countries-selection-modal': <?php echo $data['templates']['countries-selection-modal']; //phpcs:ignore ?>,
                         'pl-cod-page': {
                             'pl-main-page-holder': <?php echo $data['templates']['cash-on-delivery']; //phpcs:ignore ?>
+                        },
+                        'pl-customs-page': {
+                            'pl-main-page-holder': <?php echo $data['templates']['customs']; //phpcs:ignore ?>
                         },
 					}
 				}

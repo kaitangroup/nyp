@@ -35,3 +35,44 @@
 	}
 }
 
+.pl-label-actions {
+	display: inline-flex;
+	gap: 4px;
+	flex-wrap: wrap;
+}
+
+.pl-label-actions .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	min-height: 28px;
+	height: 28px;
+	padding: 0 10px;
+	line-height: 1;
+}
+
+.pl-label-actions .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pl-label-action-text {
+	line-height: 1;
+}
+
+.pl-label-actions.pl-label-printed .button {
+	opacity: 0.55;
+	color: #555;
+	border-color: #ccc;
+	background: #f1f1f1;
+}
+
+.pl-label-actions.pl-label-printed .button:hover {
+	opacity: 0.8;
+}
+

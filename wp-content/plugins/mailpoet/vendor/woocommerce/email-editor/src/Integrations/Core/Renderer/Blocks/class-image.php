@@ -98,20 +98,36 @@ class Image extends Abstract_Block_Renderer {
  }
  }
  }
- // Fallback to wp_getimagesize if we still don't have a size.
+ // Fall back to reading the local image file if we still don't have a size.
  if ( ! isset( $image_size ) ) {
- $upload_dir = wp_upload_dir();
- $image_path = str_replace( $upload_dir['baseurl'], $upload_dir['basedir'], $image_url );
- $result = wp_getimagesize( $image_path );
- if ( $result ) {
- $image_size = (int) $result[0];
- }
+ $image_size = $this->get_local_image_width( $image_url );
  }
  }
  // Use the found image size or fall back to max_width.
  $width = isset( $image_size ) ? min( $image_size, $max_width ) : $max_width;
  $parsed_block['attrs']['width'] = "{$width}px";
  return $parsed_block;
+ }
+ private function get_local_image_width( string $image_url ): ?int {
+ $upload_dir = wp_upload_dir();
+ $base_url = trailingslashit( $upload_dir['baseurl'] );
+ // Only measure images served from the uploads directory.
+ if ( ! str_starts_with( $image_url, $base_url ) ) {
+ return null;
+ }
+ $base_dir = realpath( $upload_dir['basedir'] );
+ $image_path = realpath( $upload_dir['basedir'] . '/' . substr( $image_url, strlen( $base_url ) ) );
+ if ( false === $base_dir || false === $image_path ) {
+ return null;
+ }
+ // Make sure the resolved file stays inside the uploads directory.
+ $base_dir = trailingslashit( wp_normalize_path( $base_dir ) );
+ $image_path = wp_normalize_path( $image_path );
+ if ( ! str_starts_with( $image_path, $base_dir ) ) {
+ return null;
+ }
+ $result = wp_getimagesize( $image_path );
+ return $result ? (int) $result[0] : null;
  }
  private function apply_image_border_style( string $block_content, array $parsed_block, string $class_name ): string {
  // Getting individual border properties.
@@ -128,11 +144,22 @@ class Image extends Abstract_Block_Renderer {
  'class_name' => 'email-image-border-cell',
  );
  $content_with_border_styles = $this->add_style_to_element( $block_content, $border_element_tag, \WP_Style_Engine::compile_css( $border_styles, '' ) );
- // Remove border styles from the image HTML tag.
+ // Remove border styles from the image HTML tag. The border is applied on the wrapper cell.
  $content_with_border_styles = $this->remove_style_attribute_from_element( $content_with_border_styles, array( 'tag_name' => 'img' ), 'border-style' );
  $content_with_border_styles = $this->remove_style_attribute_from_element( $content_with_border_styles, array( 'tag_name' => 'img' ), 'border-width' );
  $content_with_border_styles = $this->remove_style_attribute_from_element( $content_with_border_styles, array( 'tag_name' => 'img' ), 'border-color' );
  $content_with_border_styles = $this->remove_style_attribute_from_element( $content_with_border_styles, array( 'tag_name' => 'img' ), 'border-radius' );
+ $content_with_border_styles = $this->remove_style_attribute_from_element( $content_with_border_styles, array( 'tag_name' => 'img' ), 'border-top-left-radius' );
+ $content_with_border_styles = $this->remove_style_attribute_from_element( $content_with_border_styles, array( 'tag_name' => 'img' ), 'border-top-right-radius' );
+ $content_with_border_styles = $this->remove_style_attribute_from_element( $content_with_border_styles, array( 'tag_name' => 'img' ), 'border-bottom-left-radius' );
+ $content_with_border_styles = $this->remove_style_attribute_from_element( $content_with_border_styles, array( 'tag_name' => 'img' ), 'border-bottom-right-radius' );
+ // The border sits on the wrapper cell, so the image needs a smaller radius to stay flush
+ // inside it. With equal radii the border width would leave a gap in the corners, so we
+ // subtract the border width from the image radius (clamped to 0).
+ $inner_radius = $this->get_inner_image_border_radius( $parsed_block );
+ if ( '' !== $inner_radius ) {
+ $content_with_border_styles = $this->add_style_to_element( $content_with_border_styles, array( 'tag_name' => 'img' ), 'border-radius:' . $inner_radius . ';' );
+ }
  // Add Border related classes to proper element. This is required for inlined border-color styles when defined via class.
  $border_classes = array_filter(
  explode( ' ', $class_name ),
@@ -147,6 +174,49 @@ class Image extends Abstract_Block_Renderer {
  $html->set_attribute( 'class', implode( ' ', $border_classes ) );
  }
  return $html->get_updated_html();
+ }
+ private function get_inner_image_border_radius( array $parsed_block ): string {
+ $border = $parsed_block['attrs']['style']['border'] ?? array();
+ $class_name = $parsed_block['attrs']['className'] ?? '';
+ $is_rounded = strpos( $class_name, 'is-style-rounded' ) !== false;
+ $radius = $border['radius'] ?? null;
+ if ( $is_rounded ) {
+ $radius = '9999px'; // Matches the circle radius applied by apply_rounded_style().
+ }
+ if ( empty( $radius ) ) {
+ return '';
+ }
+ // Use the widest border side so the image never pokes out past the border on any corner.
+ $border_width = $this->get_max_border_width( $border );
+ if ( is_array( $radius ) ) {
+ $top_left = $this->reduce_radius_by_border_width( $radius['topLeft'] ?? null, $border_width );
+ $top_right = $this->reduce_radius_by_border_width( $radius['topRight'] ?? null, $border_width );
+ $bottom_right = $this->reduce_radius_by_border_width( $radius['bottomRight'] ?? null, $border_width );
+ $bottom_left = $this->reduce_radius_by_border_width( $radius['bottomLeft'] ?? null, $border_width );
+ if ( $top_left === $top_right && $top_right === $bottom_right && $bottom_right === $bottom_left ) {
+ return $top_left;
+ }
+ return "{$top_left} {$top_right} {$bottom_right} {$bottom_left}";
+ }
+ return $this->reduce_radius_by_border_width( $radius, $border_width );
+ }
+ private function get_max_border_width( array $border ): float {
+ $max = isset( $border['width'] ) ? Styles_Helper::parse_value( (string) $border['width'] ) : 0.0;
+ foreach ( array( 'top', 'right', 'bottom', 'left' ) as $side ) {
+ if ( isset( $border[ $side ]['width'] ) ) {
+ $max = max( $max, Styles_Helper::parse_value( (string) $border[ $side ]['width'] ) );
+ }
+ }
+ return $max;
+ }
+ private function reduce_radius_by_border_width( $radius, float $border_width ): string {
+ $radius = is_scalar( $radius ) ? trim( (string) $radius ) : '';
+ // Non-px units can't be combined with a px border width, so keep them unchanged.
+ if ( '' !== $radius && ! str_ends_with( $radius, 'px' ) && ! is_numeric( $radius ) ) {
+ return $radius;
+ }
+ $inner = max( 0.0, Styles_Helper::parse_value( $radius ) - $border_width );
+ return $inner . 'px';
  }
  private function add_image_dimensions( string $block_content, array $parsed_block ): string {
  $html = new \WP_HTML_Tag_Processor( $block_content );

@@ -67,8 +67,10 @@ use WooCommerce\PayPalCommerce\Settings\Service\Migration\PaymentSettingsMigrati
 use WooCommerce\PayPalCommerce\Settings\Service\Migration\SettingsTabMigration;
 use WooCommerce\PayPalCommerce\Settings\Service\Migration\StylingSettingsMigration;
 use WooCommerce\PayPalCommerce\Settings\Service\Migration\FastlaneSettingsMigration;
+use WooCommerce\PayPalCommerce\Settings\Service\OnboardingNotices;
 use WooCommerce\PayPalCommerce\Settings\Service\OnboardingUrlManager;
 use WooCommerce\PayPalCommerce\Settings\Service\SellerTypeResolver;
+use WooCommerce\PayPalCommerce\Settings\Service\MerchantDataResolver;
 use WooCommerce\PayPalCommerce\Settings\Service\PaymentMethodsEligibilityService;
 use WooCommerce\PayPalCommerce\Settings\Service\ScriptDataHandler;
 use WooCommerce\PayPalCommerce\Settings\Service\TodosEligibilityService;
@@ -80,13 +82,12 @@ use WooCommerce\PayPalCommerce\Settings\Data\Definition\PaymentMethodsDefinition
 use WooCommerce\PayPalCommerce\PayLaterConfigurator\Factory\ConfigFactory;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\CardButtonGateway;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\CreditCardGateway;
-use WooCommerce\PayPalCommerce\WcGateway\Gateway\OXXO\OXXO;
+use WooCommerce\PayPalCommerce\LocalAlternativePaymentMethods\OXXOGateway;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\PayPalGateway;
-use WooCommerce\PayPalCommerce\WcGateway\Gateway\PayUponInvoice\PayUponInvoiceGateway;
+use WooCommerce\PayPalCommerce\LocalAlternativePaymentMethods\PayUponInvoice\PayUponInvoiceGateway;
 use WooCommerce\PayPalCommerce\PayLaterConfigurator\Endpoint\SaveConfig;
 use WooCommerce\PayPalCommerce\WcGateway\Helper\Environment;
 use WooCommerce\PayPalCommerce\WcGateway\Helper\ConnectionState;
-use WooCommerce\PayPalCommerce\Settings\Service\InternalRestService;
 use WooCommerce\PayPalCommerce\WcGateway\Helper\MerchantDetails;
 return array(
     'settings.asset_getter' => static function (ContainerInterface $container): AssetGetter {
@@ -181,7 +182,7 @@ return array(
         return new OnboardingRestEndpoint($container->get('settings.data.onboarding'));
     },
     'settings.rest.common' => static function (ContainerInterface $container): CommonRestEndpoint {
-        return new CommonRestEndpoint($container->get('settings.data.general'), $container->get('api.endpoint.partners'));
+        return new CommonRestEndpoint($container->get('settings.data.general'), $container->get('api.endpoint.partners'), $container->get('settings.service.onboarding-notices'));
     },
     'settings.rest.payment' => static function (ContainerInterface $container): PaymentRestEndpoint {
         return new PaymentRestEndpoint($container->get('settings.data.payment'), $container->get('settings.data.definition.methods'), $container->get('settings.data.definition.method_dependencies'));
@@ -190,13 +191,13 @@ return array(
         return new StylingRestEndpoint($container->get('settings.data.styling'), $container->get('settings.service.sanitizer'));
     },
     'settings.rest.refresh_feature_status' => static function (ContainerInterface $container): RefreshFeatureStatusEndpoint {
-        return new RefreshFeatureStatusEndpoint(new Cache('ppcp-timeout'), $container->get('woocommerce.logger.woocommerce'));
+        return new RefreshFeatureStatusEndpoint(new Cache('ppcp-timeout'), $container->get('woocommerce.logger.woocommerce'), $container->get('settings.service.seller-type-resolver'), $container->get('settings.data.general'), $container->get('api.endpoint.partners'));
     },
     'settings.rest.authentication' => static function (ContainerInterface $container): AuthenticationRestEndpoint {
         return new AuthenticationRestEndpoint($container->get('settings.service.authentication_manager'), $container->get('settings.service.data-manager'), $container->get('woocommerce.logger.woocommerce'));
     },
     'settings.rest.login_link' => static function (ContainerInterface $container): LoginLinkRestEndpoint {
-        return new LoginLinkRestEndpoint($container->get('settings.service.connection-url-generator'));
+        return new LoginLinkRestEndpoint($container->get('settings.service.connection-url-generator'), $container->get('woocommerce.logger.woocommerce'));
     },
     'settings.rest.webhooks' => static function (ContainerInterface $container): WebhookSettingsEndpoint {
         return new WebhookSettingsEndpoint($container->get('api.endpoint.webhook'), $container->get('webhook.registrar'), $container->get('webhook.status.simulation'));
@@ -222,7 +223,10 @@ return array(
         return in_array($country, $eligible_countries, \true);
     },
     'settings.handler.connection-listener' => static function (ContainerInterface $container): ConnectionListener {
-        return new ConnectionListener($container->get('wcgateway.is-plugin-settings-page'), $container->get('settings.service.onboarding-url-manager'), $container->get('settings.service.authentication_manager'), $container->get('http.redirector'), $container->get('woocommerce.logger.woocommerce'));
+        return new ConnectionListener($container->get('wcgateway.is-plugin-settings-page'), $container->get('settings.service.onboarding-url-manager'), $container->get('settings.service.authentication_manager'), $container->get('http.redirector'), $container->get('settings.service.onboarding-notices'), $container->get('woocommerce.logger.woocommerce'));
+    },
+    'settings.service.onboarding-notices' => static function (ContainerInterface $container): OnboardingNotices {
+        return new OnboardingNotices();
     },
     'settings.service.signup-link-cache' => static function (ContainerInterface $container): Cache {
         return new Cache('ppcp-paypal-signup-link');
@@ -234,10 +238,7 @@ return array(
         return new ConnectionUrlGenerator($container->get('api.env.endpoint.partner-referrals'), $container->get('api.repository.partner-referrals-data'), $container->get('settings.service.onboarding-url-manager'), $container->get('woocommerce.logger.woocommerce'));
     },
     'settings.service.authentication_manager' => static function (ContainerInterface $container): AuthenticationManager {
-        return new AuthenticationManager($container->get('settings.data.general'), $container->get('api.env.paypal-host'), $container->get('api.env.endpoint.login-seller'), $container->get('api.repository.partner-referrals-data'), $container->get('settings.connection-state'), $container->get('settings.service.rest-service'), $container->get('woocommerce.logger.woocommerce'));
-    },
-    'settings.service.rest-service' => static function (ContainerInterface $container): InternalRestService {
-        return new InternalRestService($container->get('woocommerce.logger.woocommerce'));
+        return new AuthenticationManager($container->get('settings.data.general'), $container->get('api.env.paypal-host'), $container->get('api.env.endpoint.login-seller'), $container->get('settings.connection-state'), $container->get('api.factory.paypal-bearer'), $container->get('woocommerce.logger.woocommerce'));
     },
     'settings.service.sanitizer' => static function (ContainerInterface $container): DataSanitizer {
         return new DataSanitizer();
@@ -258,6 +259,7 @@ return array(
     'settings.service.data-migration.styling' => static fn(ContainerInterface $c): StylingSettingsMigration => new StylingSettingsMigration((array) get_option('woocommerce-ppcp-settings', array()), $c->get('settings.data.styling')),
     'settings.service.data-migration.payment-settings' => static fn(ContainerInterface $c): PaymentSettingsMigration => new PaymentSettingsMigration((array) get_option('woocommerce-ppcp-settings', array()), $c->get('settings.data.payment'), $c->get('api.helpers.dccapplies'), $c->get('wcgateway.helper.dcc-product-status'), $c->get('wcgateway.configuration.card-configuration'), $c->get('ppcp-local-apms.payment-methods')),
     'settings.service.seller-type-resolver' => static fn(): SellerTypeResolver => new SellerTypeResolver(),
+    'settings.service.merchant-data-resolver' => static fn(ContainerInterface $container): MerchantDataResolver => new MerchantDataResolver($container->get('settings.data.general'), $container->get('api.factory.partners-endpoint'), $container->get('woocommerce.logger.woocommerce')),
     'settings.service.data-migration.general-settings' => static fn(ContainerInterface $c): SettingsMigration => new SettingsMigration((array) get_option('woocommerce-ppcp-settings', array()), $c->get('settings.data.general'), $c->get('api.endpoint.partners'), $c->get('woocommerce.logger.woocommerce'), $c->get('settings.service.seller-type-resolver')),
     'settings.service.data-migration.fastlane' => static fn(ContainerInterface $c): FastlaneSettingsMigration => new FastlaneSettingsMigration((array) get_option('woocommerce-ppcp-settings', array()), $c->get('settings.data.fastlane')),
     'settings.rest.todos' => static function (ContainerInterface $container): TodosRestEndpoint {
@@ -273,7 +275,7 @@ return array(
         return new PaymentMethodsDefinition($container->get('settings.data.payment'), $container->get('settings.data.general'), $container->get('axo.checkout-config-notice.raw'), $container->get('axo.incompatible-plugins-notice.raw'));
     },
     'settings.data.definition.method_dependencies' => static function (ContainerInterface $container): PaymentMethodsDependenciesDefinition {
-        return new PaymentMethodsDependenciesDefinition();
+        return new PaymentMethodsDependenciesDefinition($container->get('settings.settings-provider'));
     },
     'settings.service.pay_later_status' => static function (ContainerInterface $container): array {
         $pay_later_endpoint = $container->get('settings.rest.pay_later_messaging');
@@ -426,7 +428,7 @@ return array(
             // Pay with Crypto eligibility.
             FeaturesDefinition::FEATURE_PAY_UPON_INVOICE => $capabilities[FeaturesDefinition::FEATURE_PAY_UPON_INVOICE],
         );
-        return new FeaturesDefinition($container->get('settings.service.features_eligibilities'), $container->get('settings.data.general'), $merchant_capabilities, $container->get('settings.data.settings'), $container->get('woocommerce.logger.woocommerce'));
+        return new FeaturesDefinition($container->get('settings.service.features_eligibilities'), $container->get('settings.data.general'), $merchant_capabilities, $container->get('woocommerce.logger.woocommerce'), $container->get('settings.settings-provider'));
     },
     'settings.service.features_eligibilities' => static function (ContainerInterface $container): FeaturesEligibilityService {
         $messages_apply = $container->get('button.helper.messages-apply');
@@ -475,7 +477,7 @@ return array(
      * @returns string[] The list of all gateway IDs.
      */
     'settings.config.all-gateway-ids' => static function (): array {
-        return array(PayPalGateway::ID, CardButtonGateway::ID, CreditCardGateway::ID, AxoGateway::ID, ApplePayGateway::ID, GooglePayGateway::ID, PWCGateway::ID, BancontactGateway::ID, BlikGateway::ID, EPSGateway::ID, IDealGateway::ID, MyBankGateway::ID, P24Gateway::ID, TrustlyGateway::ID, MultibancoGateway::ID, PayUponInvoiceGateway::ID, OXXO::ID);
+        return array(PayPalGateway::ID, CardButtonGateway::ID, CreditCardGateway::ID, AxoGateway::ID, ApplePayGateway::ID, GooglePayGateway::ID, PWCGateway::ID, BancontactGateway::ID, BlikGateway::ID, EPSGateway::ID, IDealGateway::ID, MyBankGateway::ID, P24Gateway::ID, TrustlyGateway::ID, MultibancoGateway::ID, PayUponInvoiceGateway::ID, OXXOGateway::ID);
     },
     'settings.service.branded-experience.activation-detector' => static function (): ActivationDetector {
         return new ActivationDetector();

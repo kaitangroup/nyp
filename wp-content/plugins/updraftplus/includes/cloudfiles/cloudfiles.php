@@ -1998,7 +1998,11 @@ class UpdraftPlus_CF_Object
                 if ($ct && $ct != 'application/octet-stream')
                     $this->content_type = $ct;
 
-                @finfo_close($finfo);
+                if (version_compare(PHP_VERSION, '8.1', '<')) {
+                    finfo_close($finfo);
+                } else {
+                    unset($finfo); // On PHP 8.1+, finfo_close() is a no-op (deprecated in 8.5); unset the handle instead.
+                }
             }
         }
 

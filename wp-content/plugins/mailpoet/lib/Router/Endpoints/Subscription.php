@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) exit;
 
 use MailPoet\Config\AccessControl;
 use MailPoet\Entities\StatisticsUnsubscribeEntity;
+use MailPoet\Entities\SubscriberEntity;
 use MailPoet\Subscription as UserSubscription;
 use MailPoet\Util\Request;
 use MailPoet\WP\Functions as WPFunctions;
@@ -19,6 +20,7 @@ class Subscription {
   const ACTION_UNSUBSCRIBE_REASON = 'unsubscribeReason';
   const ACTION_CONFIRM_UNSUBSCRIBE = 'confirmUnsubscribe';
   const ACTION_RE_ENGAGEMENT = 'reEngagement';
+  const ACTION_TRACKING_OPT_OUT = 'trackingOptOut';
 
   public $allowedActions = [
     self::ACTION_CONFIRM,
@@ -27,6 +29,7 @@ class Subscription {
     self::ACTION_UNSUBSCRIBE_REASON,
     self::ACTION_CONFIRM_UNSUBSCRIBE,
     self::ACTION_RE_ENGAGEMENT,
+    self::ACTION_TRACKING_OPT_OUT,
   ];
 
   public $permissions = [
@@ -121,6 +124,23 @@ class Subscription {
 
   public function reEngagement($data) {
     $this->initSubscriptionPage(UserSubscription\Pages::ACTION_RE_ENGAGEMENT, $data);
+  }
+
+  public function trackingOptOut($data) {
+    $subscription = $this->initSubscriptionPage(UserSubscription\Pages::ACTION_TRACKING_OPT_OUT, $data);
+    if ($this->isPostRequest()) {
+      $nonce = $this->request->getStringParam('_wpnonce');
+      if (!$this->wp->wpVerifyNonce($nonce, 'mailpoet_tracking_opt_out')) {
+        $this->wp->wpDie(__('Security check failed.', 'mailpoet'), '', ['response' => 403]);
+        exit;
+      }
+      $subscription->trackingOptOut(
+        SubscriberEntity::TRACKING_CONSENT_METHOD_FOOTER_LINK,
+        UserSubscription\Pages::getTrackingOptOutConsentCopy()
+      );
+    }
+    // GET renders the confirmation page; after POST the same page renders
+    // its "done" state via getTrackingOptOutContent().
   }
 
   private function initSubscriptionPage($action, $data) {

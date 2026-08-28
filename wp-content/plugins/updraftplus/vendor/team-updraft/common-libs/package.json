@@ -1,12 +1,13 @@
 {
   "name": "@team-updraft/common-libs",
-  "version": "0.1",
+  "version": "0.0.1",
   "description": "These are the common libs used across all of our projects",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "gulp build",
+    "gulp": "gulp",
     "dev": "gulp build && gulp watch"
   },
   "author": "Team Updraft",
@@ -22,7 +23,6 @@
     "gulp-fn": "0.0.2",
     "gulp-handlebars": "^5.0.2",
     "gulp-jsdoc3": "^1.0.1",
-    "gulp-modernizr": "2.0.0",
     "gulp-notify": "^3.0.0",
     "gulp-plumber": "^1.1.0",
     "gulp-postcss": "^7.0.1",

@@ -10,10 +10,12 @@ use MailPoet\Captcha\ReCaptchaHooks;
 use MailPoet\Captcha\TurnstileHooks;
 use MailPoet\Cron\CronTrigger;
 use MailPoet\EmailEditor\Integrations\MailPoet\Coupons\CouponBlockGenerator;
+use MailPoet\EmailEditor\Integrations\MailPoet\ProductCollection\ProductCollectionEmailRendererRegistrar;
 use MailPoet\Form\DisplayFormInWPContent;
 use MailPoet\Mailer\WordPress\WordpressMailerReplacer;
 use MailPoet\Newsletter\Scheduler\PostNotificationScheduler;
 use MailPoet\Segments\WP;
+use MailPoet\Segments\WPUserDeleteNotice;
 use MailPoet\Settings\SettingsController;
 use MailPoet\Statistics\Track\SubscriberHandler;
 use MailPoet\Subscribers\SubscriberLimitNotificationScheduler;
@@ -75,6 +77,9 @@ class Hooks {
   /** @var WP */
   private $wpSegment;
 
+  /** @var WPUserDeleteNotice */
+  private $wpUserDeleteNotice;
+
   /** @var SubscriberHandler */
   private $subscriberHandler;
 
@@ -116,6 +121,8 @@ class Hooks {
 
   private CouponBlockGenerator $couponBlockGenerator;
 
+  private ProductCollectionEmailRendererRegistrar $productCollectionEmailRendererRegistrar;
+
   public function __construct(
     Form $subscriptionForm,
     Comment $subscriptionComment,
@@ -127,6 +134,7 @@ class Hooks {
     WordpressMailerReplacer $wordpressMailerReplacer,
     DisplayFormInWPContent $displayFormInWPContent,
     WP $wpSegment,
+    WPUserDeleteNotice $wpUserDeleteNotice,
     SubscriberHandler $subscriberHandler,
     HooksWooCommerce $hooksWooCommerce,
     SubscriberChangesNotifier $subscriberChangesNotifier,
@@ -140,7 +148,8 @@ class Hooks {
     CronTrigger $cronTrigger,
     WooHelper $wooHelper,
     AdminUserSubscription $adminUserSubscription,
-    CouponBlockGenerator $couponBlockGenerator
+    CouponBlockGenerator $couponBlockGenerator,
+    ProductCollectionEmailRendererRegistrar $productCollectionEmailRendererRegistrar
   ) {
     $this->subscriptionForm = $subscriptionForm;
     $this->subscriptionComment = $subscriptionComment;
@@ -152,6 +161,7 @@ class Hooks {
     $this->wordpressMailerReplacer = $wordpressMailerReplacer;
     $this->displayFormInWPContent = $displayFormInWPContent;
     $this->wpSegment = $wpSegment;
+    $this->wpUserDeleteNotice = $wpUserDeleteNotice;
     $this->subscriberHandler = $subscriberHandler;
     $this->hooksWooCommerce = $hooksWooCommerce;
     $this->captchaHooks = $captchaHooks;
@@ -166,21 +176,23 @@ class Hooks {
     $this->wooHelper = $wooHelper;
     $this->adminUserSubscription = $adminUserSubscription;
     $this->couponBlockGenerator = $couponBlockGenerator;
+    $this->productCollectionEmailRendererRegistrar = $productCollectionEmailRendererRegistrar;
   }
 
   public function init() {
     $this->setupWPUsers();
     $this->setupWooCommerceUsers();
     $this->setupWooCommercePurchases();
+    $this->setupWooCommerceOrderAttribution();
     $this->setupWooCommerceSubscriberEngagement();
     $this->setupWooCommerceTracking();
-    $this->setupListing();
     $this->setupSubscriptionEvents();
     $this->setupWooCommerceSubscriptionEvents();
     $this->setupAutomateWooSubscriptionEvents();
     $this->setupPostNotifications();
     $this->setupWooCommerceSettings();
     $this->couponBlockGenerator->init();
+    $this->productCollectionEmailRendererRegistrar->init();
     $this->setupWoocommerceSystemInfo();
     $this->setupFooter();
     $this->setupSettingsLinkInPluginPage();
@@ -419,6 +431,9 @@ class Hooks {
       1
     );
 
+    // Warn on the delete-user confirmation screen that the subscriber is kept.
+    $this->wpUserDeleteNotice->setupHooks();
+
     // login
     $this->wp->addAction(
       'wp_login',
@@ -526,6 +541,41 @@ class Hooks {
     );
   }
 
+  public function setupWooCommerceOrderAttribution() {
+    // The reconciliation boundary must be persisted before any post-activation
+    // order exists, and on the init hook because this setup runs on
+    // plugins_loaded, where WooCommerce may not be loaded yet
+    $this->wp->addAction(
+      'init',
+      [$this->hooksWooCommerce, 'markAttributionWritesStarted']
+    );
+    // After Woo's own priority-10 handler so the resolved values overwrite
+    // the empty placeholders Woo persists from the checkout form
+    $this->wp->addAction(
+      'woocommerce_order_save_attribution_data',
+      [$this->hooksWooCommerce, 'writeOrderAttribution'],
+      20
+    );
+    // Admin and REST orders; gated inside to stay out of storefront checkout
+    $this->wp->addAction(
+      'woocommerce_new_order',
+      [$this->hooksWooCommerce, 'writeOrderAttributionForNewOrder'],
+      20
+    );
+    $this->wp->addAction(
+      'woocommerce_order_status_changed',
+      [$this->hooksWooCommerce, 'writeOrderAttribution'],
+      10,
+      1
+    );
+    // After WC_Meta_Box_Order_Data::save (priority 40) so the billing email is saved
+    $this->wp->addAction(
+      'woocommerce_process_shop_order_meta',
+      [$this->hooksWooCommerce, 'writeOrderAttribution'],
+      50
+    );
+  }
+
   public function setupWooCommerceSubscriberEngagement() {
     $this->wp->addAction(
       'woocommerce_new_order',
@@ -546,23 +596,6 @@ class Hooks {
       [$this->hooksWooCommerce, 'addTrackingData'],
       10
     );
-  }
-
-  public function setupListing() {
-    $this->wp->addFilter(
-      'set-screen-option',
-      [$this, 'setScreenOption'],
-      10,
-      3
-    );
-  }
-
-  public function setScreenOption($status, $option, $value) {
-    if (preg_match('/^mailpoet_(.*)_per_page$/', $option)) {
-      return $value;
-    } else {
-      return $status;
-    }
   }
 
   public function setupPostNotifications() {

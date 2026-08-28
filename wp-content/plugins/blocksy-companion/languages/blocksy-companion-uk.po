@@ -182,7 +182,7 @@ msgstr "Детальну інформацію про те, як згенерув
 
 #: framework/premium/extensions/white-label/dashboard-static/js/AdvancedTab.js:149
 msgid "White Label Extension"
-msgstr "Розшир��ння White Label"
+msgstr "Розш��рення White Label"
 
 #: framework/premium/extensions/white-label/dashboard-static/js/AdvancedTab.js:161
 msgid "Please note that disabling this option will hide the white-label extension. To restore it, press the SHIFT key while clicking the dashboard logo."
@@ -417,7 +417,7 @@ msgstr "Цей файл, ймовірно, не є допустимим файл
 
 #: framework/features/svg.php:37
 msgid "SVG files cannot contain PHP code."
-msgstr "Файли SVG не повинні м��стити PHP-код."
+msgstr "Файли SVG не повинні містити PHP-код."
 
 #: framework/helpers/exts-configs.php:403,
 #: framework/premium/extensions/woocommerce-extra/features/cart-reserved-timer/options.php:4
@@ -1983,7 +1983,7 @@ msgstr "Колір межі контейнера"
 
 #: framework/extensions/newsletter-subscribe/admin-static/js/newsletter-block/Edit.js:197
 msgid "Container Background Color"
-msgstr "Колір фону контейнера"
+msgstr "Колір ��ону контейнера"
 
 #: framework/extensions/newsletter-subscribe/dashboard-static/js/EditCredentials.js:188
 msgid "API Version"
@@ -2061,7 +2061,7 @@ msgstr "Ваш сайт налаштований неправильно, і AJAX
 
 #: static/js/dashboard/screens/DemoInstall.js:201
 msgid "Failed to retrieve starter sites list.<br> Error code - %s"
-msgstr "Не вдалося отримати список стартових сайтів. <br>Код помилки — %s"
+msgstr "Не вдалося отримати спис��к стартових сайтів. <br>Код помилки — %s"
 
 #: static/js/dashboard/screens/DemoInstall/Installer/useInstaller.js:129
 msgid "Installing %s"
@@ -2536,7 +2536,7 @@ msgstr "Супутні"
 #: static/js/editor/blocks/query/index.js:13
 #: static/js/editor/blocks/tax-query/index.js:13
 msgid "Create advanced queries based on your specified criterias."
-msgstr "��творення розширених запитів на основі заданих критеріїв."
+msgstr "Створення розширених запитів на основі заданих критеріїв."
 
 #: static/js/editor/blocks/search/Edit.js:163
 msgid "Button Outside"
@@ -2648,7 +2648,7 @@ msgstr "Скинути всі"
 
 #: static/js/options/ConditionsManager/ExpireCondition.js:119
 msgid "The expiration date cannot be set earlier than the start date."
-msgstr "Дата закінчення ��ерміну не може бути раніше дати початку дії."
+msgstr "Дата закінчення терміну не може бути раніше дати початку дії."
 
 #: framework/features/blocks/about-me/options.php:207,
 #: framework/features/blocks/share-box/options.php:66,
@@ -3751,7 +3751,7 @@ msgstr "Отримання..."
 
 #: framework/premium/extensions/adobe-typekit/dashboard-static/js/AdobeTypekit.js:164
 msgid "Please enter a valid Project ID to get all fonts."
-msgstr "Вве��іть дійсний ID проекту, щоб отримати всі шрифти."
+msgstr "Введіть дійсний ID проекту, щоб отримати всі шрифти."
 
 #: framework/extensions/newsletter-subscribe/dashboard-static/js/EditCredentials.js:302
 msgid "This provider is used only for testing purposes. It doesnt register any real subscribers."
@@ -4122,7 +4122,7 @@ msgstr "Кошик"
 
 #: framework/premium/extensions/woocommerce-extra/features/offcanvas-cart/feature.php:172
 msgid "Close cart drawer"
-msgstr "Закрити випадаючий кошик"
+msgstr "Закрити випад��ючий кошик"
 
 #: framework/premium/extensions/woocommerce-extra/features/offcanvas-filters/feature.php:157,
 #: framework/premium/extensions/woocommerce-extra/features/offcanvas-filters/options.php:563
@@ -4221,7 +4221,7 @@ msgstr "Картка"
 
 #: framework/premium/extensions/woocommerce-extra/features/quick-view/options.php:91
 msgid "Modal Width"
-msgstr "Ширина модального вікна"
+msgstr "Шир��на модального вікна"
 
 #: framework/premium/extensions/woocommerce-extra/features/quick-view/options.php:102
 msgid "Product Navigation"
@@ -4877,7 +4877,7 @@ msgstr "Відображення мінімалістичного відеопл
 
 #: framework/premium/features/performance-typography/feature.php:130
 msgid "Preconnect Google Fonts"
-msgstr "Попереднє підключення шрифтів Google"
+msgstr "П��переднє підключення шрифтів Google"
 
 #: framework/premium/features/performance-typography/feature.php:141
 msgid "Preconnect Adobe Typekit Fonts"
@@ -9029,7 +9029,7 @@ msgstr "Додати варіацію"
 
 #: framework/premium/extensions/local-google-fonts/dashboard-static/js/LocalGoogleFonts.js:258
 msgid "Download a font and serve it directly from your server, this is handy for those who want to comply with GDPR regulations or serve the font via CDN."
-msgstr "Завантажте шрифт і за��антажуйте його прямо зі свого сервера. Це зручно для тих, хто хоче дотримуватися правил GDPR або розповсюджувати шрифт через CDN."
+msgstr "Завантажте шрифт �� завантажуйте його прямо зі свого сервера. Це зручно для тих, хто хоче дотримуватися правил GDPR або розповсюджувати шрифт через CDN."
 
 #: framework/premium/extensions/mega-menu/static/js/SettingsManager.js:200
 msgid "Item Settings"

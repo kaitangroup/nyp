@@ -37,13 +37,23 @@ class TU_Theme {
 	}
 
 	/**
-	 * Constructor.
+	 * Load the components on the front-end of the site.
 	 *
-	 * @return self
+	 * @return void
 	 */
-	public function __construct() {
+	public function load_assets_on_frontend() {
 		add_action('wp_enqueue_scripts', array($this, 'load_css'), 20);
 		add_action('wp_enqueue_scripts', array($this, 'load_js'), 20);
+	}
+
+	/**
+	 * Load the components on the wp-admin(backend) of the site.
+	 *
+	 * @return void
+	 */
+	public function load_assets_on_backend() {
+		add_action('admin_enqueue_scripts', array($this, 'load_css'), 20);
+		add_action('admin_enqueue_scripts', array($this, 'load_js'), 20);
 	}
 
 	/**

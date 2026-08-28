@@ -7,9 +7,13 @@ if (!defined('ABSPATH')) exit;
 
 use MailPoet\EmailEditor\Integrations\MailPoet\EmailEditor;
 use MailPoet\EmailEditor\Integrations\MailPoet\Patterns\Pattern;
+use MailPoet\EmailEditor\Integrations\MailPoet\ProductCollection\OrderProductCollectionProcessor;
 
 /**
  * First purchase thank you email pattern.
+ *
+ * The product grid uses the order cross-sells collection: at send time it shows
+ * cross-sells of the purchased products (or their related products as backup).
  */
 class FirstPurchaseThankYouPattern extends Pattern {
   protected $name = 'first-purchase-thank-you';
@@ -33,7 +37,10 @@ class FirstPurchaseThankYouPattern extends Pattern {
   }
 
   public function get_email_content(): string { // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-    return $this->buildContent($this->getRecommendedProductCollectionBlock('best-sellers', 'popularity'));
+    return $this->buildContent($this->getRecommendedProductCollectionBlock(
+      OrderProductCollectionProcessor::COLLECTION_ORDER_CROSS_SELLS,
+      'popularity'
+    ));
   }
 
   private function buildContent(string $productSection): string {

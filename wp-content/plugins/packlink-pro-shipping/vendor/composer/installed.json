@@ -59,17 +59,17 @@
         },
         {
             "name": "packlink/integration-core",
-            "version": "v4.1.1",
-            "version_normalized": "4.1.1.0",
+            "version": "v4.3.0",
+            "version_normalized": "4.3.0.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:packlink-dev/ecommerce_module_core.git",
-                "reference": "41253aef6257e7976bfe9a063d8188f35bdb1062"
+                "reference": "670da1d99430f45b3a86b71c4351b2bd3695d012"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/packlink-dev/ecommerce_module_core/zipball/41253aef6257e7976bfe9a063d8188f35bdb1062",
-                "reference": "41253aef6257e7976bfe9a063d8188f35bdb1062",
+                "url": "https://api.github.com/repos/packlink-dev/ecommerce_module_core/zipball/670da1d99430f45b3a86b71c4351b2bd3695d012",
+                "reference": "670da1d99430f45b3a86b71c4351b2bd3695d012",
                 "shasum": ""
             },
             "require": {
@@ -78,11 +78,10 @@
                 "php": ">=7.0"
             },
             "require-dev": {
-                "codacy/coverage": "dev-master",
                 "leafo/scssphp": "0.0.12",
-                "phpunit/phpunit": "^4.8"
+                "phpunit/phpunit": "^4.8 || ^9.6 || ^11.0"
             },
-            "time": "2026-04-29T10:37:26+00:00",
+            "time": "2026-07-29T13:01:59+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -97,7 +96,10 @@
                     "Logeecom\\Tests\\Infrastructure\\": "tests/Infrastructure",
                     "Logeecom\\Tests\\BusinessLogic\\": "tests/BusinessLogic",
                     "Logeecom\\Tests\\Brands\\": "tests/Brands"
-                }
+                },
+                "exclude-from-classmap": [
+                    "tests/Infrastructure/Common/compat/"
+                ]
             },
             "scripts": {
                 "post-update-cmd": [

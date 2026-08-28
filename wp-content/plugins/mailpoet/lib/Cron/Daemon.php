@@ -102,9 +102,9 @@ class Daemon {
     yield $this->workersFactory->createExportFilesCleanupWorker();
     yield $this->workersFactory->createLogCleanupWorker();
     yield $this->workersFactory->createSendingTaskSubscribersCleanupWorker();
+    yield $this->workersFactory->createBounceTaskSubscribersCleanupWorker();
     yield $this->workersFactory->createSendingQueueBodyCleanupWorker();
-    yield $this->workersFactory->createSubscribersEmailCountsWorker();
-    yield $this->workersFactory->createInactiveSubscribersWorker();
+    yield $this->workersFactory->createInactiveSubscribersMaintenanceWorker();
     yield $this->workersFactory->createUnconfirmedSubscribersCleanupWorker();
     yield $this->workersFactory->createUnsubscribeTokensWorker();
     yield $this->workersFactory->createWooCommerceSyncWorker();
@@ -112,17 +112,18 @@ class Daemon {
     yield $this->workersFactory->createWooCommercePastOrdersWorker();
     yield $this->workersFactory->createStatsNotificationsWorkerForAutomatedEmails();
     yield $this->workersFactory->createSubscriberLinkTokensWorker();
-    yield $this->workersFactory->createSubscribersEngagementScoreWorker();
     yield $this->workersFactory->createSubscribersLastEngagementWorker();
     yield $this->workersFactory->createSubscribersCountCacheRecalculationWorker();
     yield $this->workersFactory->createReEngagementEmailsSchedulerWorker();
     yield $this->workersFactory->createNewsletterTemplateThumbnailsWorker();
     yield $this->workersFactory->createAbandonedCartWorker();
     yield $this->workersFactory->createBackfillEngagementDataWorker();
+    yield $this->workersFactory->createSubscribersSegmentsCountSyncWorker();
     yield $this->workersFactory->createMixpanelWorker();
     yield $this->workersFactory->createTracksWorker();
     yield $this->workersFactory->createStatisticsExportWorker();
     yield $this->workersFactory->createBulkConfirmationEmailResendWorker();
     yield $this->workersFactory->createSubscriberLimitNotificationWorker();
+    yield $this->workersFactory->createSubscribersEngagementScoreWorker();
   }
 }

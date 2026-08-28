@@ -19,13 +19,14 @@ class LinksToShortcodesConvertor {
     '[mailpoet/subscription-unsubscribe-url]' => '[link:subscription_unsubscribe_url]',
     '[mailpoet/subscription-manage-url]' => '[link:subscription_manage_url]',
     '[mailpoet/newsletter-view-in-browser-url]' => '[link:newsletter_view_in_browser_url]',
+    '[mailpoet/subscription-tracking-opt-out-url]' => '[link:subscription_tracking_opt_out_url]',
   ];
 
   private const PERSONALIZED_URL_TOKENS = [
     '[woocommerce/order-review-url]' => true,
   ];
 
-  public function convertLinkTagsToShortcodes(string $content): string {
+  public function convertLinkTagsToShortcodes(string $content, array $resolvedUrlTokens = []): string {
     $contentProcessor = new HTML_Tag_Processor($content);
     while ($contentProcessor->next_token()) {
       if ($contentProcessor->get_token_type() !== '#tag' || $contentProcessor->get_tag() !== 'A') {
@@ -33,32 +34,14 @@ class LinksToShortcodesConvertor {
       }
 
       $href = $contentProcessor->get_attribute('data-link-href');
-      if (is_string($href)) {
-        if (isset(self::TOKEN_MAP[$href])) {
-          $contentProcessor->set_attribute('href', 'http://' . self::TOKEN_MAP[$href]);
-          $contentProcessor->remove_attribute('data-link-href');
-          $contentProcessor->remove_attribute('contenteditable');
-          continue;
-        }
-
-        $personalizedUrlToken = $this->normalizePersonalizedUrlToken($href);
-        if ($personalizedUrlToken !== null) {
-          $contentProcessor->set_attribute('data-link-href', $personalizedUrlToken);
-          $contentProcessor->remove_attribute('href');
-        }
-        continue;
+      if (!is_string($href)) {
+        $href = $contentProcessor->get_attribute('href');
       }
-
-      $href = $contentProcessor->get_attribute('href');
       if (!is_string($href)) {
         continue;
       }
 
-      $personalizedUrlToken = $this->normalizePersonalizedUrlToken($href);
-      if ($personalizedUrlToken !== null) {
-        $contentProcessor->set_attribute('data-link-href', $personalizedUrlToken);
-        $contentProcessor->remove_attribute('href');
-      }
+      $this->convertLinkToken($contentProcessor, $href, $resolvedUrlTokens);
     }
     $contentProcessor->flush_updates();
     $updated = $contentProcessor->get_updated_html();
@@ -128,14 +111,65 @@ class LinksToShortcodesConvertor {
     return $content;
   }
 
+  private function convertLinkToken(HTML_Tag_Processor $contentProcessor, string $href, array $resolvedUrlTokens): void {
+    $shortcode = $this->getShortcodeForUrlToken($href);
+    if ($shortcode !== null) {
+      $contentProcessor->set_attribute('href', 'http://' . $shortcode);
+      $contentProcessor->remove_attribute('data-link-href');
+      $contentProcessor->remove_attribute('contenteditable');
+      return;
+    }
+
+    $personalizedUrlToken = $this->normalizePersonalizedUrlToken($href);
+    if ($personalizedUrlToken !== null) {
+      $contentProcessor->set_attribute('data-link-href', $personalizedUrlToken);
+      $contentProcessor->remove_attribute('href');
+      return;
+    }
+
+    $resolvedUrl = $this->getResolvedUrlToken($href, $resolvedUrlTokens);
+    if ($resolvedUrl !== null) {
+      $contentProcessor->set_attribute('href', $resolvedUrl);
+      $contentProcessor->remove_attribute('data-link-href');
+      $contentProcessor->remove_attribute('contenteditable');
+    }
+  }
+
   private function normalizePersonalizedUrlToken(string $url): ?string {
-    $decodedUrl = rawurldecode($url);
-    foreach (array_keys(self::PERSONALIZED_URL_TOKENS) as $token) {
+    return $this->normalizeUrlToken($url, array_keys(self::PERSONALIZED_URL_TOKENS));
+  }
+
+  private function getShortcodeForUrlToken(string $url): ?string {
+    $token = $this->normalizeUrlToken($url, array_keys(self::TOKEN_MAP));
+    if ($token === null) {
+      return null;
+    }
+    return self::TOKEN_MAP[$token];
+  }
+
+  private function getResolvedUrlToken(string $url, array $resolvedUrlTokens): ?string {
+    $token = $this->normalizeUrlToken($url, array_keys($resolvedUrlTokens));
+    if ($token === null) {
+      return null;
+    }
+
+    $resolvedUrl = $resolvedUrlTokens[$token];
+    return $resolvedUrl === '' ? null : $resolvedUrl;
+  }
+
+  private function normalizeUrlToken(string $url, array $tokens): ?string {
+    $decodedUrl = trim($this->decodeUrl($url));
+    foreach ($tokens as $token) {
       if ($decodedUrl === $token || $decodedUrl === 'http://' . $token || $decodedUrl === 'https://' . $token) {
         return $token;
       }
     }
+
     return null;
+  }
+
+  private function decodeUrl(string $url): string {
+    return html_entity_decode(rawurldecode($url), ENT_QUOTES, 'UTF-8');
   }
 
   /**

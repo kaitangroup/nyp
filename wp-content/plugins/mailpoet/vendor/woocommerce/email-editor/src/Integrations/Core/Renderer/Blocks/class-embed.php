@@ -11,6 +11,13 @@ use Automattic\WooCommerce\EmailEditor\Integrations\Utils\Table_Wrapper_Helper;
 class Embed extends Abstract_Block_Renderer {
  private const MAX_EMBED_FETCHES = 5;
  private int $embed_fetch_count = 0;
+ private function may_attempt_embed_fetch(): bool {
+ if ( $this->embed_fetch_count >= self::MAX_EMBED_FETCHES ) {
+ return false;
+ }
+ ++$this->embed_fetch_count;
+ return true;
+ }
  private const AUDIO_PROVIDERS = array(
  'pocket-casts' => array(
  'domains' => array( 'pca.st' ),
@@ -41,6 +48,18 @@ class Embed extends Abstract_Block_Renderer {
  'videopress' => array(
  'domains' => array( 'videopress.com', 'video.wordpress.com' ),
  'base_url' => 'https://videopress.com/',
+ ),
+ 'vimeo' => array(
+ 'domains' => array( 'vimeo.com', 'player.vimeo.com' ),
+ 'base_url' => 'https://vimeo.com/',
+ ),
+ 'tiktok' => array(
+ 'domains' => array( 'tiktok.com' ),
+ 'base_url' => 'https://www.tiktok.com/',
+ ),
+ 'dailymotion' => array(
+ 'domains' => array( 'dailymotion.com', 'dai.ly' ),
+ 'base_url' => 'https://www.dailymotion.com/',
  ),
  );
  private function get_all_supported_providers(): array {
@@ -75,6 +94,13 @@ class Embed extends Abstract_Block_Renderer {
  ! class_exists( '\Automattic\WooCommerce\EmailEditor\Integrations\Utils\Table_Wrapper_Helper' ) ) {
  return '';
  }
+ $rendered = $this->render_embed( $block_content, $parsed_block, $rendering_context );
+ if ( '' === $rendered ) {
+ return '';
+ }
+ return $rendered . $this->render_caption( $block_content );
+ }
+ private function render_embed( string $block_content, array $parsed_block, Rendering_Context $rendering_context ): string {
  $attr = $parsed_block['attrs'];
  // Check if this is a supported audio or video provider embed and has a valid URL.
  $provider = $this->get_supported_provider( $attr, $block_content );
@@ -85,15 +111,11 @@ class Embed extends Abstract_Block_Renderer {
  $url = $this->extract_provider_url( $attr, $block_content );
  $is_wp_embed = isset( $attr['type'] ) && 'wp-embed' === $attr['type'];
  if ( ! empty( $url ) && $is_wp_embed ) {
- if ( $this->embed_fetch_count >= self::MAX_EMBED_FETCHES ) {
- return $this->render_compact_link_card( $url, $parsed_block, $rendering_context );
- }
- ++$this->embed_fetch_count;
  $card_result = $this->render_link_embed_card( $url, $parsed_block, $rendering_context );
  if ( ! empty( $card_result ) ) {
  return $card_result;
  }
- // Fetch failed — render as compact link card instead of plain link.
+ // Fetch failed or over the fetch cap — render as compact link card instead of plain link.
  return $this->render_compact_link_card( $url, $parsed_block, $rendering_context );
  }
  return $this->render_link_fallback( $attr, $block_content, $parsed_block, $rendering_context );
@@ -105,6 +127,16 @@ class Embed extends Abstract_Block_Renderer {
  }
  // If we have a valid audio or video provider embed, proceed with normal rendering.
  return $this->render_content( $block_content, $parsed_block, $rendering_context );
+ }
+ private function render_caption( string $block_content ): string {
+ if ( ! preg_match( '/<figcaption[^>]*>(.*?)<\/figcaption>/is', $block_content, $matches ) ) {
+ return '';
+ }
+ $caption = trim( $matches[1] );
+ if ( '' === $caption ) {
+ return '';
+ }
+ return '<div style="text-align: center; margin-top: 8px;">' . Html_Processing_Helper::sanitize_caption_html( $caption ) . '</div>';
  }
  protected function render_content( string $block_content, array $parsed_block, Rendering_Context $rendering_context ): string { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
  $attr = $parsed_block['attrs'] ?? array();
@@ -209,6 +241,12 @@ class Embed extends Abstract_Block_Renderer {
  return __( 'Watch on YouTube', 'woocommerce' );
  case 'videopress':
  return __( 'Watch on VideoPress', 'woocommerce' );
+ case 'vimeo':
+ return __( 'Watch on Vimeo', 'woocommerce' );
+ case 'tiktok':
+ return __( 'Watch on TikTok', 'woocommerce' );
+ case 'dailymotion':
+ return __( 'Watch on Dailymotion', 'woocommerce' );
  default:
  return __( 'Listen to the audio', 'woocommerce' );
  }
@@ -339,20 +377,26 @@ class Embed extends Abstract_Block_Renderer {
  return $video_result;
  }
  private function get_video_thumbnail_url( string $url, string $provider ): string {
+ // YouTube thumbnails follow a predictable URL pattern, so no HTTP request is needed.
  if ( 'youtube' === $provider ) {
- return $this->get_youtube_thumbnail( $url );
+ $thumbnail = $this->get_youtube_thumbnail( $url );
+ if ( '' !== $thumbnail ) {
+ return $thumbnail;
  }
- if ( 'videopress' === $provider ) {
- return $this->get_videopress_thumbnail( $url );
+ // YouTube URLs without an extractable video ID (e.g. playlists)
+ // fall through to the oEmbed thumbnail lookup below.
  }
- // For other providers, we don't have thumbnail extraction implemented.
- // Return empty to trigger link fallback.
- return '';
+ // All other supported video providers (VideoPress, Vimeo, TikTok, Dailymotion)
+ // expose their thumbnails through the WordPress oEmbed API.
+ // Returns empty string on failure, which triggers the link fallback.
+ return $this->get_oembed_thumbnail( $url );
  }
  private function get_youtube_thumbnail( string $url ): string {
- // Extract video ID from various YouTube URL formats.
+ // Extract video ID from various YouTube URL formats. The `videoseries`
+ // token (used by playlist embed URLs like /embed/videoseries?list=…) is
+ // not a real video ID, so it is excluded to fall through to oEmbed.
  $video_id = '';
- if ( preg_match( '/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', $url, $matches ) ) {
+ if ( preg_match( '/(?:youtube\.com\/(?:watch\?v=|shorts\/|live\/|embed\/)|youtu\.be\/)(?!videoseries\b)([a-zA-Z0-9_-]+)/i', $url, $matches ) ) {
  $video_id = $matches[1];
  }
  if ( empty( $video_id ) ) {
@@ -362,8 +406,9 @@ class Embed extends Abstract_Block_Renderer {
  // Using 0.jpg format as shown in the example.
  return 'https://img.youtube.com/vi/' . $video_id . '/0.jpg';
  }
- private function get_videopress_thumbnail( string $url ): string {
+ private function get_oembed_thumbnail( string $url ): string {
  // Generate a cache key based on the URL.
+ // The legacy "vp" prefix is kept so existing VideoPress caches survive; the key is used for all oEmbed video thumbnails.
  $cache_key = 'wc_email_vp_thumb_' . md5( $url );
  // Check for cached thumbnail URL.
  $cached_thumbnail = get_transient( $cache_key );
@@ -371,9 +416,14 @@ class Embed extends Abstract_Block_Renderer {
  // Return cached value (empty string means previous lookup failed).
  return is_string( $cached_thumbnail ) ? $cached_thumbnail : '';
  }
+ // Enforce the per-render fetch cap before making an HTTP request.
+ // The result is intentionally not cached here, so the thumbnail can still be fetched on a later render.
+ if ( ! $this->may_attempt_embed_fetch() ) {
+ return '';
+ }
  // Use WP_oEmbed::get_data() to fetch thumbnail from oEmbed endpoint.
  // URL is pre-validated by render_video_embed() via url_matches_provider(),
- // ensuring only VideoPress domains reach this point (SSRF mitigation).
+ // ensuring only the matched provider's domains reach this point (SSRF mitigation).
  $oembed = new \WP_oEmbed();
  $oembed_data = $oembed->get_data( $url );
  // Default TTL matches WordPress oEmbed cache (1 day).
@@ -392,7 +442,7 @@ class Embed extends Abstract_Block_Renderer {
  }
  $thumbnail_url = $oembed_data->thumbnail_url;
  // Validate the thumbnail URL.
- if ( ! empty( $thumbnail_url ) && $this->is_valid_url( $thumbnail_url ) ) {
+ if ( is_string( $thumbnail_url ) && '' !== $thumbnail_url && $this->is_valid_url( $thumbnail_url ) ) {
  // Cache the valid thumbnail URL.
  set_transient( $cache_key, $thumbnail_url, $cache_ttl );
  return $thumbnail_url;
@@ -439,6 +489,11 @@ class Embed extends Abstract_Block_Renderer {
  }
  if ( is_string( $cached ) ) {
  // Negative cache (empty string from previous failure).
+ return $empty_result;
+ }
+ // Enforce the per-render fetch cap before making an HTTP request.
+ // The result is intentionally not cached, so the page can still be fetched on a later render.
+ if ( ! $this->may_attempt_embed_fetch() ) {
  return $empty_result;
  }
  $cache_ttl = (int) apply_filters( 'oembed_ttl', DAY_IN_SECONDS, $url, array(), '' );

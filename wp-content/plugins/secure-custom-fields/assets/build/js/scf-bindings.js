@@ -24,8 +24,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./constants */ "./assets/src/js/bindings/constants.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./utils */ "./assets/src/js/bindings/utils.js");
 /* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./hooks */ "./assets/src/js/bindings/hooks.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
 /**
  * WordPress dependencies
  */
@@ -48,7 +46,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @since 6.5.0
  */
-
 const withCustomControls = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.createHigherOrderComponent)(BlockEdit => {
   return props => {
     const bindableAttributes = (0,_utils__WEBPACK_IMPORTED_MODULE_7__.getBindableAttributes)(props.name);
@@ -141,50 +138,39 @@ const withCustomControls = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.cr
       return allFieldOptions.length > 0 && bindableAttributes && bindableAttributes.length > 0;
     }, [isSiteEditor, allFieldOptions, bindableAttributes]);
     if (!shouldShowPanel) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(BlockEdit, {
-        ...props
-      });
+      return /*#__PURE__*/React.createElement(BlockEdit, props);
     }
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
-        ...props,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalToolsPanel, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Connect to a field', 'secure-custom-fields'),
-          resetAll: handleReset,
-          children: canUseAllAttributesMode ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalToolsPanelItem, {
-            hasValue: () => !!boundFields[bindableAttributes[0]],
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('All attributes', 'secure-custom-fields'),
-            onDeselect: () => handleFieldChange(bindableAttributes, null),
-            isShownByDefault: true,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ComboboxControl, {
-              label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Field', 'secure-custom-fields'),
-              placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Select a field', 'secure-custom-fields'),
-              options: getAttributeFieldOptions(),
-              value: boundFields[bindableAttributes[0]] || '',
-              onChange: value => handleFieldChange(bindableAttributes, value),
-              __next40pxDefaultSize: true,
-              __nextHasNoMarginBottom: true
-            })
-          }) : bindableAttributes.map(attribute => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalToolsPanelItem, {
-            hasValue: () => !!boundFields[attribute],
-            label: attribute,
-            onDeselect: () => handleFieldChange(attribute, null),
-            isShownByDefault: true,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ComboboxControl, {
-              label: attribute,
-              placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Select a field', 'secure-custom-fields'),
-              options: getAttributeFieldOptions(attribute),
-              value: boundFields[attribute] || '',
-              onChange: value => handleFieldChange(attribute, value),
-              __next40pxDefaultSize: true,
-              __nextHasNoMarginBottom: true
-            })
-          }, `scf-binding-${attribute}`))
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(BlockEdit, {
-        ...props
-      })]
-    });
+    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, props, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalToolsPanel, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Connect to a field', 'secure-custom-fields'),
+      resetAll: handleReset
+    }, canUseAllAttributesMode ? /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalToolsPanelItem, {
+      hasValue: () => !!boundFields[bindableAttributes[0]],
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('All attributes', 'secure-custom-fields'),
+      onDeselect: () => handleFieldChange(bindableAttributes, null),
+      isShownByDefault: true
+    }, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ComboboxControl, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Field', 'secure-custom-fields'),
+      placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Select a field', 'secure-custom-fields'),
+      options: getAttributeFieldOptions(),
+      value: boundFields[bindableAttributes[0]] || '',
+      onChange: value => handleFieldChange(bindableAttributes, value),
+      __next40pxDefaultSize: true,
+      __nextHasNoMarginBottom: true
+    })) : bindableAttributes.map(attribute => /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalToolsPanelItem, {
+      key: `scf-binding-${attribute}`,
+      hasValue: () => !!boundFields[attribute],
+      label: attribute,
+      onDeselect: () => handleFieldChange(attribute, null),
+      isShownByDefault: true
+    }, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ComboboxControl, {
+      label: attribute,
+      placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Select a field', 'secure-custom-fields'),
+      options: getAttributeFieldOptions(attribute),
+      value: boundFields[attribute] || '',
+      onChange: value => handleFieldChange(attribute, value),
+      __next40pxDefaultSize: true,
+      __nextHasNoMarginBottom: true
+    }))))), /*#__PURE__*/React.createElement(BlockEdit, props));
   };
 }, 'withCustomControls');
 (0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__.addFilter)('editor.BlockEdit', 'secure-custom-fields/with-custom-controls', withCustomControls);
@@ -1059,16 +1045,6 @@ module.exports = window["wp"]["i18n"];
 /***/ ((module) => {
 
 module.exports = window["wp"]["url"];
-
-/***/ }),
-
-/***/ "react/jsx-runtime":
-/*!**********************************!*\
-  !*** external "ReactJSXRuntime" ***!
-  \**********************************/
-/***/ ((module) => {
-
-module.exports = window["ReactJSXRuntime"];
 
 /***/ })
 

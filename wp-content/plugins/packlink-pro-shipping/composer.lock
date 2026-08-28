@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "27c22521b3fe202dfd4a7f007dab72b8",
+    "content-hash": "0b50a664a002b5fdb493d64ff3e01a87",
     "packages": [
         {
             "name": "iio/libmergepdf",
@@ -62,16 +62,16 @@
         },
         {
             "name": "packlink/integration-core",
-            "version": "v4.1.1",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:packlink-dev/ecommerce_module_core.git",
-                "reference": "41253aef6257e7976bfe9a063d8188f35bdb1062"
+                "reference": "670da1d99430f45b3a86b71c4351b2bd3695d012"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/packlink-dev/ecommerce_module_core/zipball/41253aef6257e7976bfe9a063d8188f35bdb1062",
-                "reference": "41253aef6257e7976bfe9a063d8188f35bdb1062",
+                "url": "https://api.github.com/repos/packlink-dev/ecommerce_module_core/zipball/670da1d99430f45b3a86b71c4351b2bd3695d012",
+                "reference": "670da1d99430f45b3a86b71c4351b2bd3695d012",
                 "shasum": ""
             },
             "require": {
@@ -80,9 +80,8 @@
                 "php": ">=7.0"
             },
             "require-dev": {
-                "codacy/coverage": "dev-master",
                 "leafo/scssphp": "0.0.12",
-                "phpunit/phpunit": "^4.8"
+                "phpunit/phpunit": "^4.8 || ^9.6 || ^11.0"
             },
             "type": "library",
             "autoload": {
@@ -97,7 +96,10 @@
                     "Logeecom\\Tests\\Infrastructure\\": "tests/Infrastructure",
                     "Logeecom\\Tests\\BusinessLogic\\": "tests/BusinessLogic",
                     "Logeecom\\Tests\\Brands\\": "tests/Brands"
-                }
+                },
+                "exclude-from-classmap": [
+                    "tests/Infrastructure/Common/compat/"
+                ]
             },
             "scripts": {
                 "post-update-cmd": [
@@ -111,7 +113,7 @@
                 "proprietary"
             ],
             "description": "Packlink integrations core library",
-            "time": "2026-04-29T10:37:26+00:00"
+            "time": "2026-07-29T13:01:59+00:00"
         },
         {
             "name": "setasign/fpdf",
@@ -874,7 +876,6 @@
                 "issues": "https://github.com/sebastianbergmann/php-token-stream/issues",
                 "source": "https://github.com/sebastianbergmann/php-token-stream/tree/1.4"
             },
-            "abandoned": true,
             "time": "2017-12-04T08:55:13+00:00"
         },
         {

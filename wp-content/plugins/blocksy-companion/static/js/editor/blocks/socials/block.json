@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "blocksy/socials",
+	"attributes": {
+		"style": {
+			"type": "object"
+		}
+	},
+	"supports": {
+		"html": false,
+		"inserter": false,
+		"lock": false
+	}
+}

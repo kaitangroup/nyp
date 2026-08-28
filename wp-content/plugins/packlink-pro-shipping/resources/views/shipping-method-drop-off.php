@@ -52,13 +52,13 @@ if ( ! is_cart() ) {
 ?>
 
 <script style="display: none;">
-	Packlink.checkout.setLocale('<?php echo $locale; ?>');
+	Packlink.checkout.setLocale('<?php echo esc_js( $locale ); ?>');
 	Packlink.checkout.setTranslations(<?php echo wp_json_encode( $translations ); ?>);
 	Packlink.checkout.setIsCart(<?php echo is_cart() ? 'true' : 'false'; ?>);
 	Packlink.checkout.setLocations(<?php echo wp_json_encode( $locations ); ?>);
-	Packlink.checkout.setSelectedLocationId('<?php echo $id_value; ?>');
-	Packlink.checkout.setSaveEndpoint('<?php echo Shop_Helper::get_controller_url( 'Checkout', 'save_selected' ); ?>');
-	Packlink.checkout.setNoDropOffLocationsMessage('<?php echo $no_drop_off_locations_message; ?>');
+	Packlink.checkout.setSelectedLocationId('<?php echo esc_js( $id_value ); ?>');
+	Packlink.checkout.setSaveEndpoint('<?php echo esc_url_raw( Shop_Helper::get_controller_url( 'Checkout', 'save_selected' ) ); ?>');
+	Packlink.checkout.setNoDropOffLocationsMessage('<?php echo esc_js( $no_drop_off_locations_message ); ?>');
 	<?php if ( ! is_cart() ) : ?>
 	Packlink.checkout.setDropOffAddress();
 	<?php endif; ?>

@@ -12,7 +12,7 @@ use MailPoet\Util\Helpers;
 use MailPoet\WP\Functions as WPFunctions;
 
 abstract class FormTemplate {
-  const DEFAULT_STYLES = <<<EOL
+  const DEFAULT_STYLES = <<<'EOL'
 /* form */
 .mailpoet_form {
 }

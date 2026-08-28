@@ -6,11 +6,22 @@ if (!defined('ABSPATH')) exit;
 
 
 use MailPoet\Entities\FormEntity;
+use MailPoet\Listing\ListingDateRangeFilterTrait;
 use MailPoet\Listing\ListingDefinition;
 use MailPoet\Listing\ListingRepository;
 use MailPoetVendor\Doctrine\ORM\QueryBuilder;
 
 class FormListingRepository extends ListingRepository {
+  use ListingDateRangeFilterTrait;
+
+  // Keys are the camelCased sort field (ListingRepository::getData converts the
+  // request's snake_case `sort_by` before calling applySorting).
+  private const SORT_FIELDS = [
+    'name' => 'name',
+    'createdAt' => 'createdAt',
+    'updatedAt' => 'updatedAt',
+  ];
+
   public function getGroups(ListingDefinition $definition): array {
     $queryBuilder = clone $this->queryBuilder;
     $this->applyFromClause($queryBuilder);
@@ -60,7 +71,9 @@ class FormListingRepository extends ListingRepository {
   }
 
   protected function applySorting(QueryBuilder $queryBuilder, string $sortBy, string $sortOrder) {
-    $queryBuilder->addOrderBy("f.$sortBy", $sortOrder);
+    $field = self::SORT_FIELDS[$sortBy] ?? 'updatedAt';
+    $queryBuilder->addOrderBy("f.$field", $sortOrder);
+    $queryBuilder->addOrderBy('f.id', 'asc');
   }
 
   protected function applySearch(QueryBuilder $queryBuilder, string $search, array $parameters = []) {
@@ -86,7 +99,22 @@ class FormListingRepository extends ListingRepository {
   }
 
   protected function applyFilters(QueryBuilder $queryBuilder, array $filters) {
-    // the parent class requires this method, but forms listing doesn't currently support this feature.
+    $statuses = $filters['status'] ?? null;
+    if (!empty($statuses)) {
+      $statuses = is_array($statuses) ? $statuses : [$statuses];
+      $statuses = array_values(array_intersect(
+        $statuses,
+        [FormEntity::STATUS_ENABLED, FormEntity::STATUS_DISABLED]
+      ));
+      if ($statuses) {
+        $queryBuilder
+          ->andWhere('f.status IN (:statuses)')
+          ->setParameter('statuses', $statuses);
+      }
+    }
+
+    $this->applyDateRangeFilter($queryBuilder, 'f.createdAt', $filters, 'created_from', 'created_to');
+    $this->applyDateRangeFilter($queryBuilder, 'f.updatedAt', $filters, 'updated_from', 'updated_to');
   }
 
   protected function applyParameters(QueryBuilder $queryBuilder, array $parameters) {

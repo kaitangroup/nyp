@@ -51,7 +51,9 @@
 			letter-spacing: 0.03em;
 			cursor: pointer;
 			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-			transition: opacity 0.1s ease, background 0.1s ease;
+			transition:
+				opacity 0.1s ease,
+				background 0.1s ease;
 
 			&.active {
 				border-bottom-color: transparent;
@@ -118,7 +120,7 @@
 		display: flex;
 		justify-content: space-between;
 
-		@include functions.media-breakpoint-down (sm) {
+		@include functions.media-breakpoint-down(sm) {
 			flex-direction: column;
 			row-gap: 10px;
 		}
@@ -176,7 +178,6 @@
 
 	[class*='ct-form-notification'],
 	.woocommerce-privacy-policy-text {
-
 		a:not(:hover) {
 			text-decoration: underline;
 		}
@@ -195,7 +196,6 @@
 
 // captcha plugins integration
 .ct-account-modal {
-
 	div.g-recaptcha,
 	.anr_captcha_field {
 		margin: var(--theme-content-spacing) 0 !important;
@@ -217,15 +217,15 @@
 
 // two factor plugin integrationo
 .ct-account-modal {
-
-	[name="validate_2fa_form"] + [name="loginform"] {
+	
+	[name='validate_2fa_form'] + [name='loginform'],
+	[name='itsec-2fa'] + [name='loginform'] {
 		display: none;
 	}
 }
 
 // jetpack integration
 .ct-account-modal #loginform {
-
 	div:has(#jetpack_protect_answer) {
 		display: flex;
 		padding-top: 5px;
@@ -239,10 +239,10 @@
 			margin: 0;
 		}
 
-		input[type="number"] {
+		input[type='number'] {
 			padding-inline: 8px;
 			-moz-appearance: textfield;
-			
+
 			&::-webkit-inner-spin-button,
 			&::-webkit-outer-spin-button {
 				-webkit-appearance: none;
@@ -253,7 +253,6 @@
 
 // Google Site Kit integration
 .ct-account-modal #loginform {
-
 	.googlesitekit-sign-in-with-google__frontend-output-button {
 		max-width: initial;
 		margin-block-start: var(--theme-content-spacing);

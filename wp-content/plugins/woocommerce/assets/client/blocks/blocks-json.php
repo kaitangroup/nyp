@@ -659,13 +659,32 @@ return array(
 		'ancestor' => array(
 			'woocommerce/add-to-cart-with-options-variation-selector'
 		),
+		'attributes' => array(
+			'displayStyle' => array(
+				'type' => 'string',
+				'default' => 'woocommerce/product-filter-chips'
+			),
+			'autoselect' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
+			'disabledAttributesAction' => array(
+				'type' => 'string',
+				'enum' => array(
+					'disable',
+					'hide'
+				),
+				'default' => 'disable'
+			)
+		),
 		'textdomain' => 'woocommerce',
 		'apiVersion' => 3,
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'supports' => array(
 			'inserter' => false,
 			'interactivity' => true
-		)
+		),
+		'style' => 'file:../woocommerce/add-to-cart-with-options-variation-selector-attribute-style.css'
 	),
 	'add-to-cart-with-options-variation-selector-attribute-name' => array(
 		'name' => 'woocommerce/add-to-cart-with-options-variation-selector-attribute-name',
@@ -736,52 +755,47 @@ return array(
 		),
 		'style' => 'file:../woocommerce/add-to-cart-with-options-variation-selector-attribute-name-style.css'
 	),
-	'add-to-cart-with-options-variation-selector-attribute-options' => array(
-		'name' => 'woocommerce/add-to-cart-with-options-variation-selector-attribute-options',
-		'title' => 'Variation Selector: Attribute Options (Beta)',
-		'description' => 'Display the attribute options associated with a variable product.',
-		'category' => 'woocommerce-product-elements',
+	'add-to-wishlist-button' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'woocommerce/add-to-wishlist-button',
+		'version' => '1.0.0',
+		'title' => 'Add to Wishlist Button',
+		'description' => 'Lets shoppers add the current product to their wishlist from the single-product page.',
+		'category' => 'woocommerce',
 		'keywords' => array(
-			'WooCommerce'
-		),
-		'ancestor' => array(
-			'woocommerce/add-to-cart-with-options-variation-selector-attribute'
-		),
-		'attributes' => array(
-			'optionStyle' => array(
-				'type' => 'string',
-				'enum' => array(
-					'pills',
-					'dropdown'
-				),
-				'default' => 'pills'
-			),
-			'autoselect' => array(
-				'type' => 'boolean',
-				'default' => false
-			),
-			'disabledAttributesAction' => array(
-				'type' => 'string',
-				'enum' => array(
-					'disable',
-					'hide'
-				),
-				'default' => 'disable'
-			)
+			'WooCommerce',
+			'Wishlist'
 		),
 		'textdomain' => 'woocommerce',
-		'apiVersion' => 3,
-		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'supports' => array(
-			'inserter' => false,
-			'interactivity' => true
-		),
 		'usesContext' => array(
-			'woocommerce/attributeId',
-			'woocommerce/attributeName',
-			'woocommerce/attributeTerms'
+			'postId'
 		),
-		'style' => 'file:../woocommerce/add-to-cart-with-options-variation-selector-attribute-options-style.css'
+		'ancestor' => array(
+			'woocommerce/add-to-cart-with-options'
+		),
+		'supports' => array(
+			'interactivity' => true,
+			'html' => false,
+			'reusable' => false,
+			'multiple' => false,
+			'spacing' => array(
+				'margin' => true,
+				'padding' => true
+			),
+			'typography' => array(
+				'fontSize' => true,
+				'lineHeight' => true
+			),
+			'color' => array(
+				'text' => true,
+				'background' => true
+			)
+		),
+		'viewScriptModule' => 'woocommerce/add-to-wishlist-button',
+		'style' => array(
+			'file:../woocommerce/add-to-wishlist-button-style.css'
+		)
 	),
 	'all-products' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -1020,9 +1034,7 @@ return array(
 			'WooCommerce'
 		),
 		'supports' => array(
-			'interactivity' => array(
-				'clientNavigation' => true
-			),
+			'interactivity' => true,
 			'color' => array(
 				'text' => true,
 				'background' => false
@@ -1031,6 +1043,7 @@ return array(
 				'fontSize' => true
 			)
 		),
+		'viewScriptModule' => 'woocommerce/catalog-sorting',
 		'attributes' => array(
 			'fontSize' => array(
 				'type' => 'string',
@@ -1389,6 +1402,37 @@ return array(
 		'textdomain' => 'woocommerce',
 		'apiVersion' => 3,
 		'$schema' => 'https://schemas.wp.org/trunk/block.json'
+	),
+	'dropdown' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'name' => 'woocommerce/dropdown',
+		'title' => 'Dropdown',
+		'description' => 'Display options in a dropdown.',
+		'category' => 'woocommerce',
+		'keywords' => array(
+			'WooCommerce'
+		),
+		'textdomain' => 'woocommerce',
+		'apiVersion' => 3,
+		'ancestor' => array(
+			'woocommerce/add-to-cart-with-options-variation-selector-attribute'
+		),
+		'supports' => array(
+			'interactivity' => true,
+			'woocommerce' => array(
+				'innerBlockDisplayStyle' => true
+			)
+		),
+		'usesContext' => array(
+			'woocommerce/selectableItems',
+			'woocommerce/attributeId'
+		),
+		'attributes' => array(
+			
+		),
+		'viewScriptModule' => 'woocommerce/dropdown',
+		'style' => 'file:../woocommerce/dropdown-style.css',
+		'editorStyle' => 'file:../woocommerce/dropdown-editor.css'
 	),
 	'email-content' => array(
 		'name' => 'woocommerce/email-content',
@@ -3205,7 +3249,8 @@ return array(
 				'default' => false
 			),
 			'__privatePreviewState' => array(
-				'type' => 'object'
+				'type' => 'object',
+				'role' => 'local'
 			)
 		),
 		'providesContext' => array(
@@ -3215,6 +3260,7 @@ return array(
 			'dimensions' => 'dimensions',
 			'queryContextIncludes' => 'queryContextIncludes',
 			'collection' => 'collection',
+			'forcePageReload' => 'forcePageReload',
 			'__privateProductCollectionPreviewState' => '__privatePreviewState'
 		),
 		'usesContext' => array(
@@ -3401,7 +3447,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-active',
 		'title' => 'Active Filters',
-		'description' => 'Display the currently active filters.',
+		'description' => 'Display all active filters.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3445,7 +3491,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-attribute',
 		'title' => 'Attribute Filter',
-		'description' => 'Enable customers to filter the product grid by selecting one or more attributes, such as color.',
+		'description' => 'Let shoppers filter products by attribute.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3549,7 +3595,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-checkbox-list',
 		'title' => 'List',
-		'description' => 'Display a list of filter options.',
+		'description' => 'Display filter options as a list.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3563,10 +3609,13 @@ return array(
 			'woocommerce/product-filter-rating'
 		),
 		'supports' => array(
-			'interactivity' => true
+			'interactivity' => true,
+			'woocommerce' => array(
+				'innerBlockDisplayStyle' => true
+			)
 		),
 		'usesContext' => array(
-			'filterData'
+			'woocommerce/selectableItems'
 		),
 		'attributes' => array(
 			'optionElementBorder' => array(
@@ -3620,13 +3669,18 @@ return array(
 		'ancestor' => array(
 			'woocommerce/product-filter-attribute',
 			'woocommerce/product-filter-taxonomy',
-			'woocommerce/product-filter-status'
+			'woocommerce/product-filter-status',
+			'woocommerce/add-to-cart-with-options-variation-selector-attribute'
 		),
 		'supports' => array(
-			'interactivity' => true
+			'interactivity' => true,
+			'woocommerce' => array(
+				'innerBlockDisplayStyle' => true
+			)
 		),
 		'usesContext' => array(
-			'filterData'
+			'woocommerce/selectableItems',
+			'woocommerce/attributeId'
 		),
 		'attributes' => array(
 			'chipText' => array(
@@ -3674,7 +3728,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-clear-button',
 		'title' => 'Clear filters',
-		'description' => 'Allows shoppers to clear active filters.',
+		'description' => 'Let shoppers clear any active filters.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce',
@@ -3686,7 +3740,7 @@ return array(
 			'woocommerce/product-filter-active'
 		),
 		'usesContext' => array(
-			'filterData'
+			'woocommerce/removableItems'
 		),
 		'supports' => array(
 			'interactivity' => true,
@@ -3697,7 +3751,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-price',
 		'title' => 'Price Filter',
-		'description' => 'Let shoppers filter products by choosing a price range.',
+		'description' => 'Let shoppers filter products by price.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3720,7 +3774,7 @@ return array(
 	'product-filter-price-slider' => array(
 		'name' => 'woocommerce/product-filter-price-slider',
 		'title' => 'Price Slider',
-		'description' => 'A slider helps shopper choose a price range.',
+		'description' => 'Let shoppers choose a price range with a slider.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3772,7 +3826,7 @@ return array(
 			'woocommerce/product-filter-price'
 		),
 		'usesContext' => array(
-			'filterData'
+			'woocommerce/rangeInput'
 		),
 		'textdomain' => 'woocommerce',
 		'apiVersion' => 3,
@@ -3783,7 +3837,7 @@ return array(
 	'product-filter-rating' => array(
 		'name' => 'woocommerce/product-filter-rating',
 		'title' => 'Rating Filter',
-		'description' => 'Enable customers to filter the product collection by rating.',
+		'description' => 'Let shoppers filter products by rating.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			
@@ -3828,7 +3882,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-removable-chips',
 		'title' => 'Chips',
-		'description' => 'Display removable active filters as chips.',
+		'description' => 'Display active filters as removable chips.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3851,7 +3905,7 @@ return array(
 		),
 		'usesContext' => array(
 			'queryId',
-			'filterData'
+			'woocommerce/removableItems'
 		),
 		'attributes' => array(
 			'chipText' => array(
@@ -3877,8 +3931,8 @@ return array(
 	),
 	'product-filter-status' => array(
 		'name' => 'woocommerce/product-filter-status',
-		'title' => 'Status Filter',
-		'description' => 'Let shoppers filter products by choosing stock status.',
+		'title' => 'Availability Filter',
+		'description' => 'Let shoppers filter products by availability.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3966,7 +4020,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-taxonomy',
 		'title' => 'Taxonomy Filter',
-		'description' => 'Enable customers to filter the product collection by selecting one or more taxonomy terms, such as categories, brands, or tags.',
+		'description' => 'Let shoppers filter products by category, brand, or tag.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -4062,7 +4116,7 @@ return array(
 		'apiVersion' => 3,
 		'name' => 'woocommerce/product-filters',
 		'title' => 'Product Filters',
-		'description' => 'Let shoppers filter products displayed on the page.',
+		'description' => 'Add a set of filters shoppers can use.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -4076,7 +4130,6 @@ return array(
 				'enableContrastChecker' => false,
 				'button' => true
 			),
-			'multiple' => true,
 			'inserter' => true,
 			'interactivity' => true,
 			'typography' => array(
@@ -4099,12 +4152,17 @@ return array(
 		'usesContext' => array(
 			'postId',
 			'query',
-			'queryId'
+			'queryId',
+			'forcePageReload'
 		),
 		'attributes' => array(
 			'isPreview' => array(
 				'type' => 'boolean',
 				'default' => false
+			),
+			'showFilterDrawer' => array(
+				'type' => 'boolean',
+				'default' => true
 			)
 		),
 		'example' => array(
@@ -4167,6 +4225,7 @@ return array(
 			
 		),
 		'viewScriptModule' => 'woocommerce/product-gallery',
+		'editorStyle' => 'file:../woocommerce/product-gallery-editor.css',
 		'style' => 'file:../woocommerce/product-gallery-style.css'
 	),
 	'product-gallery-large-image' => array(
@@ -4684,7 +4743,6 @@ return array(
 			'woocommerce/product-template',
 			'core/post-template'
 		),
-		'viewScriptModule' => 'product-price',
 		'style' => 'file:../product-price.css',
 		'$schema' => 'https://schemas.wp.org/trunk/block.json'
 	),
@@ -6509,6 +6567,58 @@ return array(
 			)
 		)
 	),
+	'saved-for-later' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'woocommerce/saved-for-later',
+		'version' => '1.0.0',
+		'title' => 'Saved for Later',
+		'description' => 'Display items the shopper has saved from their cart for later.',
+		'category' => 'woocommerce',
+		'keywords' => array(
+			'WooCommerce',
+			'Saved for Later'
+		),
+		'textdomain' => 'woocommerce',
+		'attributes' => array(
+			'columnCount' => array(
+				'type' => 'number',
+				'default' => 5
+			)
+		),
+		'allowedBlocks' => array(
+			'core/heading'
+		),
+		'supports' => array(
+			'align' => array(
+				'wide',
+				'full'
+			),
+			'interactivity' => true,
+			'html' => false,
+			'reusable' => false,
+			'spacing' => array(
+				'margin' => true,
+				'padding' => true,
+				'blockGap' => true
+			),
+			'typography' => array(
+				'fontSize' => true,
+				'lineHeight' => true
+			),
+			'color' => array(
+				'text' => true,
+				'background' => true
+			)
+		),
+		'viewScriptModule' => 'woocommerce/saved-for-later',
+		'style' => array(
+			'file:../woocommerce/saved-for-later-style.css',
+			'wc-blocks-style-product-image',
+			'woocommerce-product-price-style',
+			'woocommerce-product-button-style'
+		)
+	),
 	'single-product' => array(
 		'name' => 'woocommerce/single-product',
 		'icon' => 'info',
@@ -6527,18 +6637,12 @@ return array(
 			)
 		),
 		'attributes' => array(
-			'isPreview' => array(
-				'type' => 'boolean',
-				'default' => false
-			),
 			'productId' => array(
 				'type' => 'number'
 			)
 		),
 		'example' => array(
-			'attributes' => array(
-				'isPreview' => true
-			)
+			
 		),
 		'usesContext' => array(
 			'postId',
@@ -6632,6 +6736,58 @@ return array(
 		'textdomain' => 'woocommerce',
 		'apiVersion' => 3,
 		'$schema' => 'https://schemas.wp.org/trunk/block.json'
+	),
+	'wishlist' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'woocommerce/wishlist',
+		'version' => '1.0.0',
+		'title' => 'Wishlist',
+		'description' => 'Display the shopper\'s wishlist.',
+		'category' => 'woocommerce',
+		'keywords' => array(
+			'WooCommerce',
+			'Wishlist'
+		),
+		'textdomain' => 'woocommerce',
+		'attributes' => array(
+			'columnCount' => array(
+				'type' => 'number',
+				'default' => 5
+			)
+		),
+		'allowedBlocks' => array(
+			'core/heading'
+		),
+		'supports' => array(
+			'align' => array(
+				'wide',
+				'full'
+			),
+			'interactivity' => true,
+			'html' => false,
+			'reusable' => false,
+			'spacing' => array(
+				'margin' => true,
+				'padding' => true,
+				'blockGap' => true
+			),
+			'typography' => array(
+				'fontSize' => true,
+				'lineHeight' => true
+			),
+			'color' => array(
+				'text' => true,
+				'background' => true
+			)
+		),
+		'viewScriptModule' => 'woocommerce/wishlist',
+		'style' => array(
+			'file:../woocommerce/wishlist-style.css',
+			'wc-blocks-style-product-image',
+			'woocommerce-product-price-style',
+			'woocommerce-product-button-style'
+		)
 	),
 	'cart-accepted-payment-methods-block' => array(
 		'name' => 'woocommerce/cart-accepted-payment-methods-block',

@@ -29,7 +29,7 @@ msgstr "Mỗi 12 giờ"
 
 #: framework/premium/extensions/woocommerce-extra/features/cart-reserved-timer/feature.php:417
 msgid "<p><strong>🔥 Hurry up! Your selected items are reserved for {time} minutes.</strong></p>"
-msgstr "<p><strong>🔥 Nhanh tay lên! Các món bạn chọn đang được gi��� chỗ trong {time} phút.</strong></p>"
+msgstr "<p><strong>🔥 Nhanh tay lên! Các món bạn chọn đang được giữ chỗ trong {time} phút.</strong></p>"
 
 #: framework/premium/extensions/woocommerce-extra/features/cart-reserved-timer/options.php:28
 msgid "Countdown Duration"
@@ -110,7 +110,7 @@ msgstr "Tái tạo bảng thủ công"
 
 #: framework/premium/extensions/woocommerce-extra/features/filters/includes/taxonomies-products-lookup-table.php:533
 msgid "This tool will abort the regenerate product taxonomies lookup table regeneration. After this is done the process can be either started over, or resumed to continue where it stopped."
-msgstr "Công cụ này sẽ hủy bỏ quá trình tái tạo bảng tra cứu phân loại sản phẩm. Sau khi hủy, quy trình có thể được bắt đầu lại từ đầu hoặc tiếp tục từ điểm đã dừng."
+msgstr "Công cụ này sẽ hủy bỏ quá trình tái tạo b���ng tra cứu phân loại sản phẩm. Sau khi hủy, quy trình có thể được bắt đầu lại từ đầu hoặc tiếp tục từ điểm đã dừng."
 
 #: framework/premium/extensions/woocommerce-extra/features/product-waitlist/includes/waitlist-layer.php:63
 msgid "user"
@@ -264,7 +264,7 @@ msgstr "Cộng đồng Facebook"
 
 #: static/js/dashboard/helpers/SubmitSupport.js:35
 msgid "Share ideas, help others, ask questions and discuss your next project in our friendly community."
-msgstr "Chia s��� ý tưởng, giúp đỡ người khác, đặt câu hỏi và thảo luận về dự án tiếp theo của bạn trong cộng đồng thân thiện của chúng tôi."
+msgstr "Chia sẻ ý tưởng, giúp đỡ người khác, đặt câu hỏi và thảo luận về dự án tiếp theo của bạn trong cộng đồng thân thiện của chúng tôi."
 
 #: static/js/dashboard/helpers/SubmitSupport.js:43
 msgid "Join Our Community"
@@ -424,7 +424,7 @@ msgstr "Bộ đếm ngược giữ giỏ hàng"
 
 #: framework/helpers/exts-configs.php:404
 msgid "Display a countdown timer for reserved cart items, encouraging users to complete their purchase before the timer expires."
-msgstr "Hiển thị đồng hồ đếm ngược cho các món hàng đang được giữ chỗ, thúc đẩy người dùng hoàn tất mua hàng trước khi hết giờ."
+msgstr "Hiển thị đồng hồ đếm ngược cho các món hàng đang được giữ chỗ, thúc đẩy người dùng hoàn tất mua hàng trước khi hết gi��."
 
 #: framework/extensions/cookies-consent/config.php:6
 msgid "Display a simple consent banner to inform users about the use of cookies on the website."
@@ -612,7 +612,7 @@ msgstr "Đã có phiên bản mới của trình nhập này. Vui lòng cập nh
 
 #: framework/features/demo-install/wp-importer.php:1489
 msgid "Howdy! Upload your WordPress eXtended RSS (WXR) file and we&#8217;ll import the posts, pages, comments, custom fields, categories, and tags into this site."
-msgstr "Chào bạn! Hãy tải lên tệp WordPress eXtended RSS (WXR) của bạn và chúng tôi sẽ nhập bài vi��t, trang, bình luận, trường tùy chỉnh, chuyên mục và thẻ vào trang web này."
+msgstr "Chào bạn! Hãy tải lên tệp WordPress eXtended RSS (WXR) của bạn và chúng tôi sẽ nhập bài viết, trang, bình luận, trường tùy chỉnh, chuyên mục và thẻ vào trang web này."
 
 #: framework/features/demo-install/wp-importer.php:1490
 msgid "Choose a WXR (.xml) file to upload, then click Upload file and import."
@@ -1261,7 +1261,7 @@ msgstr "Xem thêm thông tin về cách tạo danh sách trong FluentCRM %stại
 
 #: framework/premium/extensions/custom-fonts/dashboard-static/js/AllFonts.js:123
 msgid "Modern Font Stack"
-msgstr "Bộ phông chữ hiện đại"
+msgstr "Bộ phông chữ hi��n đại"
 
 #: framework/premium/extensions/custom-fonts/dashboard-static/js/CustomFonts.js:142
 #: framework/premium/extensions/custom-fonts/dashboard-static/js/Uploader.js:330
@@ -1997,7 +1997,7 @@ msgstr "Hiển thị các bộ lọc hiện đang hoạt động."
 
 #: framework/premium/extensions/woocommerce-extra/static/js/blocks/active-filters/index.js:52
 msgid "Category 1"
-msgstr "Danh m��c 1"
+msgstr "Danh mục 1"
 
 #: framework/premium/extensions/woocommerce-extra/static/js/blocks/active-filters/index.js:58
 msgid "Category 2"
@@ -2324,7 +2324,7 @@ msgstr "Mục phân loại"
 #: static/js/editor/blocks/dynamic-data/hooks/use-dynamic-data-descriptor.js:88
 #: static/js/editor/blocks/dynamic-data/preview-parts/WpFieldPreview.js:73
 msgid "Archive Title"
-msgstr "Tiêu đề lưu tr��"
+msgstr "Tiêu đề lưu trữ"
 
 #: static/js/editor/blocks/dynamic-data/hooks/use-dynamic-data-descriptor.js:93
 #: static/js/editor/blocks/dynamic-data/preview-parts/WpFieldPreview.js:77
@@ -3445,7 +3445,7 @@ msgstr "Đại lý"
 #: static/js/dashboard/helpers/useUpsellModal.js:11
 #: static/js/dashboard/screens/DemoInstall/filters/DemoListFilters.js:14
 msgid "Free"
-msgstr "Mi��n phí"
+msgstr "Miễn phí"
 
 #: static/js/dashboard/helpers/useUpsellModal.js:119
 msgid "Compare Plans"
@@ -3522,7 +3522,7 @@ msgstr "Tiện ích để lọc vòng lặp sản phẩm WooCommerce theo danh m
 
 #: framework/premium/static/js/blocks/ContentBlock.js:27
 msgid "Insert a specific Content Block anywhere on the site."
-msgstr "Chèn một Khối nội dung cụ th�� ở bất kỳ đâu trên trang web."
+msgstr "Chèn một Khối nội dung cụ thể ở bất kỳ đâu trên trang web."
 
 #: framework/premium/static/js/hooks/CreateHook.js:156
 msgid "Nothing Found Template"
@@ -7527,7 +7527,7 @@ msgstr "Sau sản phẩm đơn"
 
 #: framework/premium/features/content-blocks/hooks-manager.php:696
 msgid "Before single product excerpt"
-msgstr "Trước đo���n trích sản phẩm đơn"
+msgstr "Trước đoạn trích sản phẩm đơn"
 
 #: framework/premium/features/content-blocks/hooks-manager.php:701
 msgid "After single product excerpt"
@@ -11172,7 +11172,7 @@ msgstr "Quay lại đăng nhập"
 
 #: framework/features/header/header-options.php:11
 msgid "Sticky Functionality"
-msgstr "Chức năng ghim"
+msgstr "Ch��c năng ghim"
 
 #: framework/features/header/header-options.php:37
 msgid "Only Main Row"

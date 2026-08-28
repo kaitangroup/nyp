@@ -1,5 +1,9 @@
 <?php
 
+if (! defined('ABSPATH')) {
+	exit;
+}
+
 $config = [
 	//  translators: This is a brand name. Preferably to not be translated
 	'name' => _x('Newsletter Subscribe', 'Extension Brand Name', 'blocksy-companion'),

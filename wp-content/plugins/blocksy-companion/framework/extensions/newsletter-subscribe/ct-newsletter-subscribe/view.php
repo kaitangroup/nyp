@@ -197,6 +197,7 @@ $view_type = blocksy_default_akg(
 );
 
 $fields_number = '2';
+$gdpr_checkbox_id_suffix = substr(blocksy_rand_md5(), 0, 3);
 
 if ($has_name) {
 	$fields_number = '3';
@@ -315,9 +316,12 @@ foreach ($button_colors as $key => $value) {
 		</div>
 
 		<?php
-			if (function_exists('blocksy_ext_cookies_checkbox')) {
+			if (function_exists('blocksy_companion_ext_cookies_checkbox')) {
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo blocksy_ext_cookies_checkbox('newsletter-subscribe');
+				echo blocksy_companion_ext_cookies_checkbox(
+					'newsletter-subscribe',
+					$gdpr_checkbox_id_suffix
+				);
 			}
 		?>
 

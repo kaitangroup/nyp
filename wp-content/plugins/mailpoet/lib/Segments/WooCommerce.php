@@ -11,6 +11,7 @@ use MailPoet\Entities\SubscriberEntity;
 use MailPoet\Entities\SubscriberSegmentEntity;
 use MailPoet\Services\Validator;
 use MailPoet\Settings\SettingsController;
+use MailPoet\Subscribers\SegmentsCountRecalculator;
 use MailPoet\Subscribers\Source;
 use MailPoet\Subscribers\SubscriberSaveController;
 use MailPoet\Subscribers\SubscriberSegmentRepository;
@@ -67,6 +68,9 @@ class WooCommerce {
   /** @var Validator */
   private $validator;
 
+  /** @var SegmentsCountRecalculator */
+  private $segmentsCountRecalculator;
+
   public function __construct(
     SettingsController $settings,
     WPFunctions $wp,
@@ -79,7 +83,8 @@ class WooCommerce {
     EntityManager $entityManager,
     Connection $connection,
     SubscriberChangesNotifier $subscriberChangesNotifier,
-    Validator $validator
+    Validator $validator,
+    SegmentsCountRecalculator $segmentsCountRecalculator
   ) {
     $this->settings = $settings;
     $this->wp = $wp;
@@ -93,16 +98,11 @@ class WooCommerce {
     $this->connection = $connection;
     $this->subscriberChangesNotifier = $subscriberChangesNotifier;
     $this->validator = $validator;
+    $this->segmentsCountRecalculator = $segmentsCountRecalculator;
   }
 
   public function shouldShowWooCommerceSegment(): bool {
-    $isWoocommerceActive = $this->woocommerceHelper->isWooCommerceActive();
-    $woocommerceUserExists = $this->subscribersRepository->woocommerceUserExists();
-
-    if (!$isWoocommerceActive && !$woocommerceUserExists) {
-      return false;
-    }
-    return true;
+    return $this->woocommerceHelper->isWooCommerceActive();
   }
 
   public function synchronizeRegisteredCustomer(int $wpUserId, ?string $currentFilter = null): bool {
@@ -112,6 +112,8 @@ class WooCommerce {
     switch ($currentFilter) {
       case 'woocommerce_delete_customer':
         // subscriber should be already deleted in WP users sync
+        // unsubscribeUsersFromSegment() recomputes segments_count for the rows it
+        // removes, so no whole-segment sweep is needed here.
         $this->unsubscribeUsersFromSegment(); // remove leftover association
         break;
       case 'woocommerce_new_customer':
@@ -215,6 +217,11 @@ class WooCommerce {
       $this->removeOrphanedSubscribers();
       $this->updateStatus();
       $this->updateGlobalStatus();
+      // The bulk operations above add/remove/restatus the WooCommerce segment's
+      // memberships en masse via raw SQL, so refresh segments_count for all
+      // members regardless of status — some may have just transitioned away
+      // from subscribed and must be recomputed too.
+      $this->segmentsCountRecalculator->recalculateForSegment((int)$this->segmentsRepository->getWooCommerceSegment()->getId(), false);
     }
 
     $this->subscribersRepository->invalidateTotalSubscribersCache();
@@ -461,6 +468,22 @@ class WooCommerce {
     $wcSegment = $this->segmentsRepository->getWooCommerceSegment();
     $subscribersTable = $this->entityManager->getClassMetadata(SubscriberEntity::class)->getTableName();
     $subscriberSegmentsTable = $this->entityManager->getClassMetadata(SubscriberSegmentEntity::class)->getTableName();
+
+    // Capture the affected subscriber ids before the DELETE: once the membership
+    // rows are gone, recalculateForSegment() can no longer see these subscribers,
+    // so a surviving subscriber would keep a stale segments_count. Recompute them
+    // explicitly afterwards (same pattern as SegmentsRepository::bulkDelete()).
+    $affectedIds = $this->connection->executeQuery(
+      "
+      SELECT mpss.subscriber_id FROM {$subscriberSegmentsTable} mpss
+      LEFT JOIN {$subscribersTable} mps ON mpss.subscriber_id = mps.id
+      WHERE mpss.segment_id = :segmentId AND mpss.status = :subscribedStatus
+        AND (mps.is_woocommerce_user = 0 OR mps.email = '' OR mps.email IS NULL)
+    ",
+      ['segmentId' => $wcSegment->getId(), 'subscribedStatus' => SubscriberEntity::STATUS_SUBSCRIBED],
+      ['segmentId' => ParameterType::INTEGER, 'subscribedStatus' => ParameterType::STRING]
+    )->fetchFirstColumn();
+
     // Unsubscribe non-WC or invalid users from segment
     $this->connection->executeQuery(
       "
@@ -471,6 +494,11 @@ class WooCommerce {
       ['segmentId' => $wcSegment->getId()],
       ['segmentId' => ParameterType::INTEGER]
     );
+
+    $subscriberIds = array_map(function ($id): int {
+      return is_numeric($id) ? (int)$id : 0;
+    }, $affectedIds);
+    $this->segmentsCountRecalculator->recalculateForSubscribers($subscriberIds);
   }
 
   private function updateGlobalStatus(): void {

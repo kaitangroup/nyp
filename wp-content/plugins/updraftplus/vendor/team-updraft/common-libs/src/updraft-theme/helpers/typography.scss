@@ -24,6 +24,138 @@ $typography: (
             "desktop": 0,
         )
     ),
+    "h2": (
+        "font-size": (
+            "mobile": 32px,
+            "desktop": 32px,
+        ),
+        "font-weight": (
+            "mobile": 600,
+            "desktop": 600,
+        ),
+        "font-style": (
+            "mobile": normal,
+            "desktop": normal,
+        ),
+        "line-height": (
+            "mobile": 130%,
+            "desktop": 130%,
+        ),
+        "letter-spacing": (
+            "mobile": 0,
+            "desktop": 0,
+        )
+    ),
+    "h3": (
+        "font-size": (
+            "mobile": 28px,
+            "desktop": 28px,
+        ),
+        "font-weight": (
+            "mobile": 600,
+            "desktop": 600,
+        ),
+        "font-style": (
+            "mobile": normal,
+            "desktop": normal,
+        ),
+        "line-height": (
+            "mobile": 130%,
+            "desktop": 130%,
+        ),
+        "letter-spacing": (
+            "mobile": 0,
+            "desktop": 0,
+        )
+    ),
+    "h6": (
+        "font-size": (
+            "mobile": 16px,
+            "desktop": 16px,
+        ),
+        "font-weight": (
+            "mobile": 600,
+            "desktop": 600,
+        ),
+        "font-style": (
+            "mobile": normal,
+            "desktop": normal,
+        ),
+        "line-height": (
+            "mobile": 130%,
+            "desktop": 130%,
+        ),
+        "letter-spacing": (
+            "mobile": 0,
+            "desktop": 0,
+        )
+    ),
+    "body-large": (
+        "font-size": (
+            "mobile": 16px,
+            "desktop": 16px,
+        ),
+        "font-weight": (
+            "mobile": 500,
+            "desktop": 500,
+        ),
+        "font-style": (
+            "mobile": normal,
+            "desktop": normal,
+        ),
+        "line-height": (
+            "mobile": 140%,
+            "desktop": 140%,
+        ),
+        "letter-spacing": (
+            "mobile": 0.15px,
+            "desktop": 0.15px,
+        )
+    ),
+    "body-small": (
+        "font-size": (
+            "mobile": 14px,
+            "desktop": 14px,
+        ),
+        "font-weight": (
+            "mobile": 400,
+            "desktop": 400,
+        ),
+        "font-style": (
+            "mobile": normal,
+            "desktop": normal,
+        ),
+        "line-height": (
+            "mobile": 140%,
+            "desktop": 140%,
+        ),
+        "letter-spacing": (
+            "mobile": 0.15px,
+            "desktop": 0.15px,
+        )
+    ),
+    "body-2-regular": (
+        "font-size": (
+            "mobile": 14px,
+            "desktop": 14px,
+        ),
+        "font-weight": (
+            "mobile": regular,
+            "desktop": regular,
+        ),
+        "font-style": (
+            "mobile": normal,
+            "desktop": normal,
+        ),
+        "line-height": (
+            "mobile": 140%,
+            "desktop": 140%,
+        ),
+        "letter-spacing": (
+            "mobile": 0.15px,
+            "desktop": 0.15px,
+        )
+    ),
     "button-large": (
         "font-size": (
             "mobile": 16px,

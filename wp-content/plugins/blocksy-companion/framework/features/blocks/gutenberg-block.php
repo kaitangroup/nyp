@@ -67,7 +67,7 @@ class GutenbergBlock {
 			return '';
 		}
 
-		return blocksy_render_view($file_path, [
+		return blocksy_companion_render_view($file_path, [
 			'atts' => $attributes,
 		]);
 	}
@@ -91,7 +91,14 @@ class GutenbergBlock {
 			$block_data['attributes'] = $this->config['attributes'];
 		}
 
-		register_block_type('blocksy/' . $this->name, $block_data);
+		$block_json_path = BLOCKSY_PATH . '/static/js/editor/blocks/' . $this->name . '/block.json';
+
+		register_block_type(
+			file_exists($block_json_path)
+				? $block_json_path
+				: 'blocksy/' . $this->name,
+			$block_data
+		);
 	}
 
 	public function localize_data() {
@@ -106,7 +113,7 @@ class GutenbergBlock {
 			function ($data) use ($options_file) {
 				$options = blocksy_akg(
 					'options',
-					blocksy_companion_theme_functions()->blocksy_get_variables_from_file(
+					blocksy_companion_get_variables_from_file(
 						$options_file,
 						['options' => []]
 					)

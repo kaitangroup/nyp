@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTCENTRAL_CLIENT_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No access.');
 
 class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 
@@ -393,7 +393,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to manage and edit
 		// WP options then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'manage_options')) {
+		if (!$this->current_user_can_for_site($blog_id, 'manage_options')) {
 			$result = array('error' => true, 'message' => 'insufficient_permission');
 			return $this->_response($result);
 		}
@@ -464,7 +464,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to manage and edit
 		// WP options then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'manage_options')) {
+		if (!$this->current_user_can_for_site($blog_id, 'manage_options')) {
 			$result = array('error' => true, 'message' => 'insufficient_permission');
 			return $this->_response($result);
 		}
@@ -514,7 +514,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to moderate or edit
 		// a comment then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'moderate_comments')) {
+		if (!$this->current_user_can_for_site($blog_id, 'moderate_comments')) {
 			$result = array('error' => true, 'message' => 'insufficient_permission');
 			return $this->_response($result);
 		}
@@ -566,7 +566,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to moderate or edit
 		// a comment then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'moderate_comments')) {
+		if (!$this->current_user_can_for_site($blog_id, 'moderate_comments')) {
 			$result = array('error' => true, 'message' => 'comment_reply_no_permission');
 			return $this->_response($result);
 		}
@@ -660,7 +660,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to moderate or edit
 		// a comment then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'moderate_comments')) {
+		if (!$this->current_user_can_for_site($blog_id, 'moderate_comments')) {
 			$result = array('error' => true, 'message' => 'comment_edit_no_permission');
 			return $this->_response($result);
 		}
@@ -742,7 +742,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to moderate or edit
 		// a comment then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'moderate_comments')) {
+		if (!$this->current_user_can_for_site($blog_id, 'moderate_comments')) {
 			$result = array('error' => true, 'message' => 'comment_change_status_no_permission');
 			return $this->_response($result);
 		}
@@ -838,5 +838,22 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		}
 		
 		return $this->_response($result);
+	}
+	/**
+	 * Check if the current user has a specific capability for a given site.
+	 *
+	 * Uses current_user_can_for_site() when available (newer WordPress versions),
+	 * otherwise falls back to current_user_can_for_blog() for backward compatibility.
+	 *
+	 * @param int    $blog_id    The site/blog ID to check against.
+	 * @param string $capability The capability to verify.
+	 *
+	 * @return bool True if the user has the specified capability, false otherwise.
+	 */
+	private function current_user_can_for_site($blog_id, $capability) {
+		if (function_exists('current_user_can_for_site')) {
+			return current_user_can_for_site($blog_id, $capability);
+		}
+		return current_user_can_for_blog($blog_id, $capability);
 	}
 }

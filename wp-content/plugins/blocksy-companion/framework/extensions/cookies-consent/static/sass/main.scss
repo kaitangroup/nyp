@@ -26,7 +26,7 @@
 	// type 1
 	&[data-type='type-1'] {
 		@include functions.media-breakpoint-down (sm) {
-			background: var(--backgroundColor);
+			background: var(--notice-background-color, var(--theme-palette-color-8));
 		}
 
 		@include functions.media-breakpoint-up (md) {
@@ -42,11 +42,11 @@
 			}
 
 			@include functions.media-breakpoint-up (md) {
-				background: var(--backgroundColor);
+				background: var(--notice-background-color, var(--theme-palette-color-8));
 				box-shadow: 0px 5px 30px -5px rgba(34, 56, 101, 0.15);
 				padding: 30px;
 				border-radius: 3px;
-				max-width: var(--maxWidth);
+				max-width: var(--notice-max-width);
 			}
 		}
 	}
@@ -56,7 +56,7 @@
 	&[data-type='type-2'] {
 		inset-inline-end: var(--theme-frame-size, 0px);
 		padding-inline-end: var(--scrollbar-width, 0px);
-		background: var(--backgroundColor);
+		background: var(--notice-background-color, var(--theme-palette-color-8));
 
 		@include functions.media-breakpoint-up (md) {
 			.ct-container {

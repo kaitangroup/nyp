@@ -12,6 +12,7 @@ use MailPoet\Entities\SendingQueueEntity;
 use MailPoet\Logging\LoggerFactory;
 use MailPoet\Logging\LogRepository;
 use MailPoet\Newsletter\NewslettersRepository;
+use MailPoet\Newsletter\Sending\NewsletterReplayMetadata;
 use MailPoet\Newsletter\Sending\SendingQueuesRepository;
 use MailPoet\Newsletter\Sending\TimeZoneCampaignScheduler;
 use MailPoet\Newsletter\Sharing\ShareVisibility;
@@ -170,7 +171,11 @@ class NewslettersResponseBuilder {
     $data = [];
     foreach ($newsletters as $newsletter) {
       $id = $newsletter->getId();
-      $data[] = $this->buildListingItem($newsletter, $statistics[$id] ?? null, $latestQueues[$id] ?? null);
+      $data[] = $this->buildListingItem(
+        $newsletter,
+        $statistics[$id] ?? null,
+        $latestQueues[$id] ?? null
+      );
     }
     return $data;
   }
@@ -181,7 +186,11 @@ class NewslettersResponseBuilder {
    * @param SendingQueueEntity|null $latestQueue
    * @return array<string, mixed>
    */
-  private function buildListingItem(NewsletterEntity $newsletter, ?NewsletterStatistics $statistics = null, ?SendingQueueEntity $latestQueue = null): array {
+  private function buildListingItem(
+    NewsletterEntity $newsletter,
+    ?NewsletterStatistics $statistics = null,
+    ?SendingQueueEntity $latestQueue = null
+  ): array {
     $couponBlockLogs = array_map(function ($item) {
       return "Coupon block: $item";
     }, $this->logRepository->getRawMessagesForNewsletter($newsletter, LoggerFactory::TOPIC_COUPONS));
@@ -214,7 +223,15 @@ class NewslettersResponseBuilder {
 
     if ($newsletter->getType() === NewsletterEntity::TYPE_STANDARD) {
       $data['segments'] = $this->buildSegments($newsletter);
-      $data['queue'] = $latestQueue ? $this->buildQueue($latestQueue) : false; // false for BC
+      // For a sent newsletter the listing shows recipients across all completed queues,
+      // including "Send latest newsletter" replays. The statistics' total sent count already
+      // aggregates that (SUM of completed queues' count_processed), and for completed queues
+      // count_processed == count_total with count_to_process == 0, so it serves as all three
+      // queue counts below.
+      $sentCount = ($statistics && $newsletter->getStatus() === NewsletterEntity::STATUS_SENT)
+        ? $statistics->getTotalSentCount()
+        : null;
+      $data['queue'] = $latestQueue ? $this->buildQueue($latestQueue, $sentCount) : false; // false for BC
       $data['options'] = $this->buildOptions($newsletter);
     } elseif (in_array($newsletter->getType(), [NewsletterEntity::TYPE_WELCOME, NewsletterEntity::TYPE_AUTOMATIC], true)) {
       $data['segments'] = [];
@@ -302,7 +319,11 @@ class NewslettersResponseBuilder {
     ];
   }
 
-  private function buildQueue(SendingQueueEntity $queue) {
+  /**
+   * @param int|null $sentCount Total recipients across all completed queues (incl. replays);
+   *   when set it overrides this single queue's counts for a fully-sent newsletter.
+   */
+  private function buildQueue(SendingQueueEntity $queue, ?int $sentCount = null) {
     $task = $queue->getTask();
     if ($task === null) {
       return null;
@@ -316,6 +337,9 @@ class NewslettersResponseBuilder {
       : null;
     $scheduledAt = $aggregateData ? $aggregateData['scheduledAt'] : $task->getScheduledAt();
     $processedAt = $aggregateData ? $aggregateData['processedAt'] : $task->getProcessedAt();
+    $countTotal = $sentCount ?? $queue->getCountTotal();
+    $countProcessed = $sentCount ?? $queue->getCountProcessed();
+    $countToProcess = $sentCount !== null ? 0 : $queue->getCountToProcess();
 
     return [
       'id' => (string)$queue->getId(), // (string) for BC
@@ -331,21 +355,23 @@ class NewslettersResponseBuilder {
       'task_id' => (string)$task->getId(), // (string) for BC
       'newsletter_id' => ($newsletter = $queue->getNewsletter()) ? (string)$newsletter->getId() : null, // (string) for BC
       'newsletter_rendered_subject' => $this->processPersonalizationTags($queue->getNewsletterRenderedSubject()),
-      'count_total' => (string)($aggregateData ? $aggregateData['countTotal'] : $queue->getCountTotal()), // (string) for BC
-      'count_processed' => (string)($aggregateData ? $aggregateData['countProcessed'] : $queue->getCountProcessed()), // (string) for BC
-      'count_to_process' => (string)($aggregateData ? $aggregateData['countToProcess'] : $queue->getCountToProcess()), // (string) for BC
+      'count_total' => (string)($aggregateData ? $aggregateData['countTotal'] : $countTotal), // (string) for BC
+      'count_processed' => (string)($aggregateData ? $aggregateData['countProcessed'] : $countProcessed), // (string) for BC
+      'count_to_process' => (string)($aggregateData ? $aggregateData['countToProcess'] : $countToProcess), // (string) for BC
     ];
   }
 
   private function getBatchLatestQueuesWithTasks(array $newsletters): array {
-    // this implements the same logic as NewsletterEntity::getLatestQueue() but for a batch of $newsletters
+    // This batches NewsletterEntity::getLatestQueue() for listings, but skips replay queues for display metadata.
 
     $subqueryQueryBuilder = $this->entityManager->createQueryBuilder();
     $subquery = $subqueryQueryBuilder
       ->select('MAX(subSq.id) AS maxId')
       ->from(SendingQueueEntity::class, 'subSq')
       ->where('subSq.newsletter IN (:newsletters)')
+      ->andWhere('subSq.meta IS NULL OR subSq.meta NOT LIKE :latestNewsletterReplayMeta')
       ->setParameter('newsletters', $newsletters)
+      ->setParameter('latestNewsletterReplayMeta', NewsletterReplayMetadata::getMetaLikePattern())
       ->groupBy('subSq.newsletter')
       ->getQuery();
     $latestQueueIds = array_column($subquery->getResult(), 'maxId');

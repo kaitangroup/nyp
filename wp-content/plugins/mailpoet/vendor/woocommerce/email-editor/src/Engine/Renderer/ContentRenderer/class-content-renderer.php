@@ -110,6 +110,9 @@ class Content_Renderer {
  // calculations involve round() and division that may produce imprecision.
  if ( $post_content_num < $content_size_num - 0.01 ) {
  unset( $styles['spacing']['padding']['left'], $styles['spacing']['padding']['right'] );
+ // Constrain user blocks to the (inset) post-content width so they
+ // fit inside it instead of overflowing at the full contentSize.
+ $layout['contentSize'] = $this->post_content_width;
  }
  // Pass container padding from the first pass so the
  // Spacing_Preprocessor can distribute it to user blocks.
@@ -255,7 +258,17 @@ class Content_Renderer {
  $this->backup_post = $post;
  $_wp_current_template_id = $template->id;
  $_wp_current_template_content = $template->content;
+ if ( $email_post->ID > 0 ) {
  $wp_query = new \WP_Query( array( 'p' => $email_post->ID ) ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- We need to set the query for correct rendering the blocks.
+ } else {
+ // Synthetic post (e.g. file-template rendering): querying `p => 0` would
+ // run a real "latest posts" query, so populate an empty query manually.
+ $wp_query = new \WP_Query(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- We need to set the query for correct rendering the blocks.
+ $wp_query->post = $email_post;
+ $wp_query->posts = array( $email_post );
+ $wp_query->post_count = 1;
+ $wp_query->found_posts = 1;
+ }
  $post = $email_post; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- We need to set the post for correct rendering the blocks.
  }
  private function reset(): void {

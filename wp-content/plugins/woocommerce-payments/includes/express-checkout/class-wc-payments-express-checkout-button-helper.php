@@ -16,6 +16,13 @@ use WCPay\PaymentMethods\Configs\Definitions\AmazonPayDefinition;
  */
 class WC_Payments_Express_Checkout_Button_Helper {
 	/**
+	 * Nonce action securing the tokenized cart Store API requests. Created
+	 * client-side and verified on each tokenized-cart entry point, so it lives
+	 * here as the single source of truth shared across those call sites.
+	 */
+	const TOKENIZED_CART_NONCE_ACTION = 'woopayments_tokenized_cart_nonce';
+
+	/**
 	 * WC_Payment_Gateway_WCPay instance.
 	 *
 	 * @var WC_Payment_Gateway_WCPay
@@ -28,6 +35,30 @@ class WC_Payments_Express_Checkout_Button_Helper {
 	 * @var WC_Payments_Account
 	 */
 	private $account;
+
+	/**
+	 * Whether the [product_page] shortcode context has been worked out for this request.
+	 *
+	 * Only ever set once the main query and its host post are available, so a caller that
+	 * asks before WordPress has parsed the request cannot pin a "no" for the whole request.
+	 *
+	 * @var bool
+	 */
+	private $shortcode_context_resolved = false;
+
+	/**
+	 * Whether the host post embeds a [product_page] shortcode, however it resolves.
+	 *
+	 * @var bool
+	 */
+	private $has_product_page_shortcode = false;
+
+	/**
+	 * The product that shortcode embeds, or null when it names one that no longer exists.
+	 *
+	 * @var WC_Product|null
+	 */
+	private $shortcode_product = null;
 
 	/**
 	 * Initialize class actions.
@@ -72,7 +103,13 @@ class WC_Payments_Express_Checkout_Button_Helper {
 		$discounts = 0;
 		$currency  = get_woocommerce_currency();
 
-		// Default show only subtotal instead of itemization.
+		/**
+		 * Filters whether to hide itemization and show only the subtotal in Express Checkout.
+		 *
+		 * @since 2.1.0
+		 *
+		 * @param bool $hide_itemization Whether to hide itemized display items.
+		 */
 		if ( ! apply_filters( 'wcpay_payment_request_hide_itemization', ! $itemized_display_items ) ) {
 			foreach ( WC()->cart->get_cart() as $cart_item ) {
 				$amount         = $cart_item['line_subtotal'];
@@ -149,6 +186,15 @@ class WC_Payments_Express_Checkout_Button_Helper {
 			'displayItems' => $items,
 			'total'        => [
 				'label'   => $this->get_total_label(),
+				/**
+				 * Filters the calculated total for the Express Checkout request.
+				 *
+				 * @since 2.1.0
+				 *
+				 * @param int      $prepared_total The prepared (Stripe-formatted) order total.
+				 * @param string   $order_total    The raw cart total, as a numeric string.
+				 * @param WC_Cart  $cart           The WooCommerce cart object.
+				 */
 				'amount'  => max( 0, apply_filters( 'wcpay_calculated_total', WC_Payments_Utils::prepare_amount( $order_total, $currency ), $order_total, WC()->cart ) ),
 				'pending' => false,
 			],
@@ -173,20 +219,29 @@ class WC_Payments_Express_Checkout_Button_Helper {
 	public function get_total_label() {
 		// Get statement descriptor from API/cached account data.
 		$statement_descriptor = $this->account->get_statement_descriptor();
+		/**
+		 * Filters the suffix appended to the Express Checkout total label.
+		 *
+		 * @since 2.1.0
+		 *
+		 * @param string $suffix The total label suffix.
+		 */
 		return str_replace( "'", '', $statement_descriptor ) . apply_filters( 'wcpay_payment_request_total_label_suffix', ' (via WooCommerce)' );
 	}
 
 	/**
 	 * Gets quantity from request.
 	 *
-	 * @return int
+	 * @return float|int
 	 */
 	public function get_quantity() {
 		// Express Checkout Element sends the quantity as qty. WooPay sends it as quantity.
+		// wc_stock_amount() respects the store's decimal-quantity setting; wc_format_decimal()
+		// normalizes localized separators ("0,25") before the cast so fractions survive.
 		if ( isset( $_POST['quantity'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			return absint( $_POST['quantity'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return max( 0, wc_stock_amount( (float) wc_format_decimal( wc_clean( wp_unslash( $_POST['quantity'] ) ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		} elseif ( isset( $_POST['qty'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			return absint( $_POST['qty'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return max( 0, wc_stock_amount( (float) wc_format_decimal( wc_clean( wp_unslash( $_POST['qty'] ) ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		} else {
 			return 1;
 		}
@@ -198,7 +253,9 @@ class WC_Payments_Express_Checkout_Button_Helper {
 	 * @return boolean
 	 */
 	public function is_product() {
-		return is_product() || wc_post_content_has_shortcode( 'product_page' );
+		$this->resolve_shortcode_context();
+
+		return is_product() || $this->has_product_page_shortcode;
 	}
 
 	/**
@@ -238,18 +295,22 @@ class WC_Payments_Express_Checkout_Button_Helper {
 	 * @return boolean
 	 */
 	public function is_express_checkout_method_enabled_at( $location, $method_id ) {
-		// The "pay for order" page is a checkout page, but we want to use the "checkout" location for settings.
-		if ( 'pay_for_order' === $location ) {
-			$location = 'checkout';
-		}
+		return in_array( $method_id, $this->get_methods_enabled_at( $location ), true );
+	}
 
-		$enabled_methods = $this->gateway->get_option( "express_checkout_{$location}_methods" );
-
-		if ( $enabled_methods && is_array( $enabled_methods ) ) {
-			return in_array( $method_id, $enabled_methods, true );
-		}
-
-		return false;
+	/**
+	 * Returns the methods the merchant enabled at the current page's location,
+	 * straight from the location settings — without the currency or availability
+	 * gating that `get_enabled_express_checkout_methods_for_context()` applies.
+	 *
+	 * The Store API cart response is currency-fresh but location-blind, so the
+	 * client intersects it with this list to keep location gating intact when a
+	 * method's currency availability changes after page load.
+	 *
+	 * @return string[] Method ids (e.g. ['payment_request', 'amazon_pay']).
+	 */
+	public function get_methods_enabled_at_current_location() {
+		return $this->get_methods_enabled_at( $this->get_button_context() );
 	}
 
 	/**
@@ -271,6 +332,15 @@ class WC_Payments_Express_Checkout_Button_Helper {
 
 		if ( $this->is_checkout() || $this->is_cart() ) {
 			if ( WC_Subscriptions_Cart::cart_contains_subscription() ) {
+				return true;
+			}
+			if ( function_exists( 'wcs_cart_contains_renewal' ) && wcs_cart_contains_renewal() ) {
+				return true;
+			}
+			if ( function_exists( 'wcs_cart_contains_resubscribe' ) && wcs_cart_contains_resubscribe() ) {
+				return true;
+			}
+			if ( function_exists( 'wcs_cart_contains_switches' ) && wcs_cart_contains_switches() ) {
 				return true;
 			}
 		}
@@ -424,19 +494,22 @@ class WC_Payments_Express_Checkout_Button_Helper {
 	public function get_product() {
 		global $post;
 
+		// The button markup goes out on woocommerce_after_add_to_cart_form, which only fires
+		// from inside a single-product loop - the product template's and the [product_page]
+		// shortcode's alike. WooCommerce has already set up the global product by then, so
+		// take its answer rather than deriving a second one. Narrow to that hook: elsewhere
+		// the global can be left over from an archive, cross-sell or [products] loop.
+		if ( doing_action( 'woocommerce_after_add_to_cart_form' ) && isset( $GLOBALS['product'] ) && $GLOBALS['product'] instanceof WC_Product ) {
+			return $GLOBALS['product'];
+		}
+
 		if ( is_product() ) {
 			return wc_get_product( $post->ID );
 		}
 
-		if ( wc_post_content_has_shortcode( 'product_page' ) ) {
-			// Get id from product_page shortcode.
-			preg_match( '/\[product_page id="(?<id>\d+)"\]/', $post->post_content, $shortcode_match );
-			if ( isset( $shortcode_match['id'] ) ) {
-				return wc_get_product( $shortcode_match['id'] );
-			}
-		}
+		$this->resolve_shortcode_context();
 
-		return null;
+		return $this->shortcode_product;
 	}
 
 	/**
@@ -470,6 +543,34 @@ class WC_Payments_Express_Checkout_Button_Helper {
 		return 'subscription' === $product->get_type()
 			|| 'subscription_variation' === $product->get_type()
 			|| 'variable-subscription' === $product->get_type();
+	}
+
+	/**
+	 * Whether the resolvable product can be added to the cart.
+	 *
+	 * Returns false when no product can be resolved (e.g. off a product page,
+	 * where get_product() returns null), so callers must gate with
+	 * `is_product() && ! is_product_purchasable()` to avoid affecting the cart
+	 * or checkout contexts. On a product page, a product that is not purchasable
+	 * or out of stock can't be added to the cart, so the express buttons should
+	 * not show.
+	 *
+	 * Variable products report the parent's aggregate status: is_purchasable()
+	 * and is_in_stock() are true when at least one variation is buyable, so this
+	 * only filters out wholly-unavailable products. A specific out-of-stock or
+	 * unavailable variation is still handled at click time, where the express
+	 * button prompts the shopper to pick a valid combination.
+	 *
+	 * @return bool
+	 */
+	public function is_product_purchasable(): bool {
+		$product = $this->get_product();
+
+		if ( ! $product instanceof WC_Product ) {
+			return false;
+		}
+
+		return $product->is_purchasable() && $product->is_in_stock();
 	}
 
 	/**
@@ -510,6 +611,12 @@ class WC_Payments_Express_Checkout_Button_Helper {
 		// Product page, but has unsupported product type.
 		if ( $this->is_product() && ! $this->is_product_supported() ) {
 			Logger::log( 'Product page has unsupported product type ( Express Checkout Element button disabled )' );
+			return false;
+		}
+
+		// Product page, but the product can't be added to the cart (not purchasable or out of stock).
+		if ( $this->is_product() && ! $this->is_product_purchasable() ) {
+			Logger::log( 'Product is not purchasable ( Express Checkout Element button disabled )' );
 			return false;
 		}
 
@@ -577,6 +684,13 @@ class WC_Payments_Express_Checkout_Button_Helper {
 	 * @return  array
 	 */
 	public function supported_product_types() {
+		/**
+		 * Filters the product types supported by Express Checkout.
+		 *
+		 * @since 2.1.0
+		 *
+		 * @param string[] $supported_types The list of supported product types.
+		 */
 		return apply_filters(
 			'wcpay_payment_request_supported_types',
 			[
@@ -608,6 +722,7 @@ class WC_Payments_Express_Checkout_Button_Helper {
 		}
 
 		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+			// phpcs:ignore WooCommerce.Commenting.CommentHooks.MissingHookComment -- WooCommerce core hook, not defined by WooPayments.
 			$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 
 			if ( ! in_array( $_product->get_type(), $this->supported_product_types(), true ) ) {
@@ -714,6 +829,13 @@ class WC_Payments_Express_Checkout_Button_Helper {
 
 		$data['displayItems'] = $items;
 		$data['total']        = [
+			/**
+			 * Filters the label shown for the order total in the Express Checkout request.
+			 *
+			 * @since 2.1.0
+			 *
+			 * @param string $total_label The order total label.
+			 */
 			'label'   => apply_filters( 'wcpay_payment_request_total_label', $this->get_total_label() ),
 			'amount'  => WC_Payments_Utils::prepare_amount( $price + $total_tax, $currency ),
 			'pending' => true,
@@ -724,12 +846,92 @@ class WC_Payments_Express_Checkout_Button_Helper {
 		$data['country_code']   = substr( get_option( 'woocommerce_default_country' ), 0, 2 );
 		$data['product_type']   = $product->get_type();
 
+		/**
+		 * Filters the product data sent to the Express Checkout request.
+		 *
+		 * @since 2.1.0
+		 *
+		 * @param array      $data    The product data for the Express Checkout request.
+		 * @param WC_Product $product The product object.
+		 */
 		return apply_filters( 'wcpay_payment_request_product_data', $data, $product );
 	}
 
 	/**
-	 * The Store API doesn't allow checkout without the billing email address present on the order data.
-	 * https://github.com/woocommerce/woocommerce/issues/48540
+	 * Works out, once per request, whether the current page embeds a [product_page]
+	 * shortcode and which product it names.
+	 *
+	 * Reads the host post off the main query rather than the $post / $wp_query globals:
+	 * the shortcode renders in its own loop, so by the time the button markup goes out
+	 * those globals point at the embedded product instead of at the page.
+	 *
+	 * @return void
+	 */
+	private function resolve_shortcode_context() {
+		if ( $this->shortcode_context_resolved ) {
+			return;
+		}
+
+		// A caller can reach this before WordPress has parsed the request - is_product() is
+		// public, so anything on init can - and the answer would be a meaningless "no".
+		// Leave the context unresolved so the next caller works it out for real.
+		$main_query = $GLOBALS['wp_the_query'] ?? null;
+		if ( ! $main_query instanceof WP_Query || ! $main_query->is_singular() ) {
+			return;
+		}
+
+		$host = $main_query->get_queried_object();
+		if ( ! $host instanceof WP_Post ) {
+			return;
+		}
+
+		$this->shortcode_context_resolved = true;
+
+		// WordPress's own shortcode regex, narrowed to this one tag: it hands back the raw
+		// attributes in the same pass and marks escaped [[product_page]] tags, which
+		// do_shortcode() skips too.
+		if ( ! preg_match_all( '/' . get_shortcode_regex( [ 'product_page' ] ) . '/', $host->post_content, $matches, PREG_SET_ORDER ) ) {
+			return;
+		}
+
+		$atts = null;
+		foreach ( $matches as $match ) {
+			if ( '[' === $match[1] && ']' === $match[6] ) {
+				continue;
+			}
+
+			$atts = shortcode_parse_atts( $match[3] );
+			break;
+		}
+
+		if ( null === $atts ) {
+			return;
+		}
+
+		// Presence is recorded whatever the attributes point at: is_product() has always
+		// answered "does this page embed the shortcode", and a shortcode naming a product
+		// that no longer exists must not turn that into a "no".
+		$this->has_product_page_shortcode = true;
+
+		$product_id = 0;
+		if ( ! empty( $atts['id'] ) ) {
+			$product_id = absint( $atts['id'] );
+		} elseif ( ! empty( $atts['sku'] ) ) {
+			$product_id = wc_get_product_id_by_sku( $atts['sku'] );
+		}
+
+		$product = $product_id ? wc_get_product( $product_id ) : null;
+
+		$this->shortcode_product = $product instanceof WC_Product ? $product : null;
+	}
+
+	/**
+	 * Determines whether the current Pay for Order page can be paid via the Express Checkout button.
+	 *
+	 * An order can be created without a billing email (e.g. by the merchant). The Store API requires
+	 * one to process the payment, but the email is captured from the wallet (Apple Pay / Google Pay)
+	 * and forwarded to the checkout request, so a pre-existing order email is not required to offer
+	 * the button. See https://github.com/woocommerce/woocommerce/issues/48540
 	 *
 	 * @return bool
 	 */
@@ -744,15 +946,7 @@ class WC_Payments_Express_Checkout_Button_Helper {
 			return false;
 		}
 
-		// we don't need to check its validity or value, we just need to ensure a billing email is present.
-		$billing_email = $order->get_billing_email();
-		if ( ! empty( $billing_email ) ) {
-			return true;
-		}
-
-		Logger::log( 'Billing email not present ( Express Checkout Element button disabled )' );
-
-		return false;
+		return true;
 	}
 
 	/**
@@ -788,7 +982,32 @@ class WC_Payments_Express_Checkout_Button_Helper {
 			}
 		}
 
+		/**
+		 * Filters whether the current product is supported for Express Checkout.
+		 *
+		 * @since 3.4.0
+		 *
+		 * @param bool            $is_supported Whether the product is supported.
+		 * @param WC_Product|null $product      The product object, or null.
+		 */
 		return apply_filters( 'wcpay_payment_request_is_product_supported', $is_supported, $product );
+	}
+
+	/**
+	 * Reads the raw location settings for a page location.
+	 *
+	 * @param string $location Location (product, cart, checkout, pay_for_order).
+	 * @return string[] Method ids enabled at that location.
+	 */
+	private function get_methods_enabled_at( $location ) {
+		// The "pay for order" page is a checkout page, but we want to use the "checkout" location for settings.
+		if ( 'pay_for_order' === $location ) {
+			$location = 'checkout';
+		}
+
+		$enabled_methods = $this->gateway->get_option( "express_checkout_{$location}_methods" );
+
+		return is_array( $enabled_methods ) ? $enabled_methods : [];
 	}
 
 	/**
@@ -881,11 +1100,11 @@ class WC_Payments_Express_Checkout_Button_Helper {
 	/**
 	 * Sanitize string for comparison.
 	 *
-	 * @param string $string String to be sanitized.
+	 * @param string $value String to be sanitized.
 	 *
 	 * @return string The sanitized string.
 	 */
-	public function sanitize_string( $string ) {
-		return trim( wc_strtolower( remove_accents( $string ) ) );
+	public function sanitize_string( $value ) {
+		return trim( wc_strtolower( remove_accents( $value ) ) );
 	}
 }

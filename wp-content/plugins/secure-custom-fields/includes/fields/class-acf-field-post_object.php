@@ -78,7 +78,7 @@ if ( ! class_exists( 'acf_field_post_object' ) ) :
 				$key   = '';
 			}
 
-			if ( ! acf_verify_ajax( $nonce, $key, ! $conditional_logic ) ) {
+			if ( ! acf_verify_ajax( $nonce, $key, ! $conditional_logic, 'post_object' ) ) {
 				die();
 			}
 
@@ -179,7 +179,7 @@ if ( ! class_exists( 'acf_field_post_object' ) ) :
 			$args = apply_filters( 'acf/fields/post_object/query/key=' . $field['key'], $args, $field, $options['post_id'] );
 
 			// get posts grouped by post type
-			$groups = acf_get_grouped_posts( $args );
+			$groups = acf_get_grouped_posts( $args, true );
 
 			// bail early if no posts
 			if ( empty( $groups ) ) {
@@ -409,7 +409,7 @@ if ( ! class_exists( 'acf_field_post_object' ) ) :
 				$field,
 				array(
 					'label'        => __( 'Select Multiple', 'secure-custom-fields' ),
-					'instructions' => 'Allow content editors to select multiple values',
+					'instructions' => __( 'Allow content editors to select multiple values', 'secure-custom-fields' ),
 					'name'         => 'multiple',
 					'type'         => 'true_false',
 					'ui'           => 1,

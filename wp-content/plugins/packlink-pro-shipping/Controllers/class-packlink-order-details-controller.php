@@ -13,9 +13,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Logeecom\Infrastructure\ORM\Exceptions\QueryFilterInvalidParamException;
 use Logeecom\Infrastructure\ORM\Exceptions\RepositoryNotRegisteredException;
+use Logeecom\Infrastructure\ORM\RepositoryRegistry;
 use Logeecom\Infrastructure\ServiceRegister;
 use Packlink\BusinessLogic\Configuration;
+use Packlink\BusinessLogic\Http\Interfaces\Proxy;
+use Packlink\BusinessLogic\Order\OrderService;
+use Packlink\BusinessLogic\OrderShipmentDetails\Models\OrderShipmentDetails;
 use Packlink\BusinessLogic\OrderShipmentDetails\OrderShipmentDetailsService;
+use Packlink\BusinessLogic\ShipmentDocument\DTO\ShipmentDocument;
+use Packlink\BusinessLogic\ShipmentDocument\Interfaces\ShipmentDocumentServiceInterface;
+use Packlink\BusinessLogic\ShipmentDocument\ShipmentDocumentType;
 use Packlink\BusinessLogic\ShipmentDraft\Interfaces\ShipmentDraftServiceInterface;
 use Packlink\WooCommerce\Components\ShippingMethod\Shipping_Method_Helper;
 use Packlink\WooCommerce\Components\Utility\Script_Loader;
@@ -47,6 +54,7 @@ class Packlink_Order_Details_Controller extends Packlink_Base_Controller {
 				'packlink/js/StateUUIDService.js',
 				'packlink/js/ResponseService.js',
 				'packlink/js/AjaxService.js',
+				'packlink/js/PrintService.js',
 				'js/packlink-order-details.js',
 			)
 		);
@@ -74,6 +82,69 @@ class Packlink_Order_Details_Controller extends Packlink_Base_Controller {
 		}
 
 		$integration_active = ServiceRegister::getService(Configuration::CLASS_NAME)->isIntegrationActive();
+
+		if ( $order_details ) {
+			/** @var OrderService $order_service */ // phpcs:ignore
+			$order_service = ServiceRegister::getService( OrderService::CLASS_NAME );
+			if ( empty( $order_details->getShipmentLabels() )
+				 && $order_service->isReadyToFetchShipmentLabels( $order_details->getShippingStatus() ) ) {
+				$labels = $order_service->getShipmentLabels( $order_details->getReference() );
+				if ( ! empty( $labels ) ) {
+					$order_details->setShipmentLabels( $labels );
+					RepositoryRegistry::getRepository( OrderShipmentDetails::CLASS_NAME )->update( $order_details );
+				}
+			}
+		}
+
+		/** @var ShipmentDocumentServiceInterface $document_service */ // phpcs:ignore
+		$document_service = ServiceRegister::getService( ShipmentDocumentServiceInterface::CLASS_NAME );
+		$order_documents  = $order_details ? $document_service->getDocumentsForOrder( (string) $id ) : array();
+
+		$shipping_label_documents = array_values(
+			array_filter(
+				$order_documents,
+				function ( ShipmentDocument $document ) {
+					return ShipmentDocumentType::SHIPPING_LABEL === $document->getType();
+				}
+			)
+		);
+
+		$customs_invoice_documents = array_values(
+			array_filter(
+				$order_documents,
+				function ( ShipmentDocument $document ) {
+					return ShipmentDocumentType::CUSTOMS_INVOICE === $document->getType();
+				}
+			)
+		);
+
+		$label_proxy_url    = Shop_Helper::get_controller_url(
+			'Order_Overview',
+			'get_label_pdf',
+			array( 'order_id' => $id )
+		);
+		$label_download_url = Shop_Helper::get_controller_url(
+			'Order_Overview',
+			'get_label_pdf',
+			array(
+				'order_id'    => $id,
+				'disposition' => 'attachment',
+			)
+		);
+
+		$public_tracking_url = '';
+		if ( $order_details && ! $shipment_deleted && $order_details->getReference() ) {
+			try {
+				/** @var Proxy $proxy */ // phpcs:ignore
+				$proxy               = ServiceRegister::getService( Proxy::CLASS_NAME );
+				$public_tracking_url = (string) $proxy->getPublicTrackingUrl(
+					$order_details->getReference(),
+					Shop_Helper::get_tracking_locale()
+				);
+			} catch ( \Exception $e ) {
+				$public_tracking_url = '';
+			}
+		}
 
 		include dirname( __DIR__ ) . '/resources/views/meta-post-box.php';
 	}

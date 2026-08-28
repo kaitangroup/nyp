@@ -13,7 +13,7 @@ $form_views = [
 foreach ($form_views as $form_key => $value) {
 	$form_views[$form_key] = apply_filters(
 		'blocksy:header:account-modal:views:' . $form_key . '-form',
-		blocksy_render_view(
+		blocksy_companion_render_view(
 			dirname(__FILE__) . '/modal/' . $form_key . '.php',
 			[]
 		)

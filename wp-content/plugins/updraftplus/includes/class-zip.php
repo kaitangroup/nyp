@@ -204,7 +204,7 @@ class UpdraftPlus_PclZip {
 		
 		// This also prevents CI complaining about an unused parameter
 		if ($flags) {
-			error_log("A call to UpdraftPlus_PclZip::getFromIndex() set flags=$flags, but this is not implemented");
+			UpdraftPlus_Manipulation_Functions::error_log("A call to UpdraftPlus_PclZip::getFromIndex() set flags=$flags, but this is not implemented");
 		}
 		
 		if (!is_array($contents)) {

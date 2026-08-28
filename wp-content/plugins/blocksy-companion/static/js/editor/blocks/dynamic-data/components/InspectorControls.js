@@ -595,6 +595,15 @@ const DynamicDataInspectorControls = ({
 										  }
 										: {}),
 
+									has_image_caption: {
+										type: 'ct-switch',
+										label: __(
+											'Show Caption',
+											'blocksy-companion'
+										),
+										value: 'no',
+									},
+
 									image_hover_effect: {
 										label: __(
 											'Image Hover Effect',

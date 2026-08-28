@@ -17,6 +17,8 @@ $src = Shop_Helper::get_plugin_base_url() . 'resources/images/logo.png';
 		   value="<?php echo Shop_Helper::get_controller_url( 'Manual_Sync', 'is_manual_sync_enabled' ); ?>"/>
 	<input type="hidden" id="pl-check-status"
 		   value="<?php echo Shop_Helper::get_controller_url( 'Order_Overview', 'get_draft_status' ); ?>"/>
+	<input type="hidden" id="pl-bulk-print-ajax-url"
+		   value="<?php echo esc_url( Shop_Helper::get_controller_url( 'Order_Overview', 'bulk_print_labels_ajax' ) ); ?>"/>
 
 	<input type="hidden" id="pl-draft-in-progress"
 		   value="<?php echo __( 'Draft is currently being created.', 'packlink-pro-shipping' ) ?>"/>

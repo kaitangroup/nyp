@@ -5466,7 +5466,7 @@ msgstr ""
 
 #: framework/helpers/exts-configs.php:263
 msgid "A set of features that lets you create easily your dream products wishlists and share them with friends and family."
-msgstr "دسته‌ای از امکانات که به شما اجازه ��ی‌دهد به سادگی لیست علاقه‌مندی‌های محصول دلخواه خود را بسازید و آن‌ها را با دوستان و خانواده به اشتراک بگذارید."
+msgstr "دسته‌ای از امکانات که به شما اجازه می‌دهد به سادگی لیست علاقه‌مندی‌های محصول دلخواه خود را بسازید و آن‌ها را با دوستان و خانواده به اشتراک بگذارید."
 
 #: framework/helpers/exts-configs.php:270
 msgid "Compare View"
@@ -10849,7 +10849,7 @@ msgstr "مشاهده‌ی نقد و بررسی محصول"
 
 #: framework/extensions/product-reviews/extension.php:551
 msgid "Add New Product Review"
-msgstr "افزودن نقد و بررسی محصول جدید"
+msgstr "افزودن نقد و بررسی محصول ��دید"
 
 #: framework/extensions/product-reviews/extension.php:552
 msgid "Add New Review"

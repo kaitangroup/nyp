@@ -295,7 +295,7 @@ function updraft_remote_storage_tabs_setup() {
 	var servicecheckbox = jQuery('.updraft_servicecheckbox');
 	if (typeof servicecheckbox.labelauty === 'function') {
 		servicecheckbox.labelauty();
-		var $vault_label = jQuery('label[for=updraft_servicecheckbox_updraftvault]');
+		var $vault_label = jQuery('label[for=updraft_servicecheckbox_updraftvault] .labelauty-unchecked');
 		var $vault_info = jQuery('<div class="udp-info"><span class="info-trigger">?</span><div class="info-content-wrapper"><div class="info-content">'+updraftlion.updraftvault_info+'</div></div></div>');
 		$vault_label.append($vault_info);
 	}
@@ -1931,9 +1931,9 @@ function convert_numeric_size_to_text(bytes) {
  * @param {Integer} backupnow_nofiles         Indicate whether any files should be backed up: valid values are 0, 1
  * @param {Integer} backupnow_nocloud         Indicate whether the backup should be uploaded to cloud storage: valid values are 0, 1
  * @param {String}  onlythesefileentities     A csv list of file entities to be backed up
- * @param {String}  onlythesetableentities    A csv list of table entities to be backed up
  * @param {Array}   extradata                 any extra data to be added
  * @param {String}  label                     A optional label to be added to a backup
+ * @param {String}  onlythesetableentities    A csv list of table entities to be backed up
  * @param {String}  only_these_cloud_services An array of remote sorage locations to be backed up to
  */
 function updraft_backupnow_go(backupnow_nodb, backupnow_nofiles, backupnow_nocloud, onlythesefileentities, extradata, label, onlythesetableentities, only_these_cloud_services) {
@@ -3002,7 +3002,6 @@ jQuery(function($) {
 	 * This method will get the default options and compile a template with them
 	 *
 	 * @param {string} method - the remote storage name
-	 * @param {boolean} first_instance - indicates if this is the first instance of this type
 	 */
 	function add_new_instance(method) {
 		var template = Handlebars.compile(updraftlion.remote_storage_templates[method]);
@@ -5982,6 +5981,502 @@ jQuery(function($) {
 		if (!heartbeat_data.updraftplus.hasOwnProperty('time_now')) return;
 		// Set the 'Time Now' status in the UI to the current time
 		jQuery('body.settings_page_updraftplus #updraft-navtab-backups-content .updraft_time_now_wrapper .updraft_time_now').empty().html(heartbeat_data.updraftplus.time_now);
+	});
+});
+
+// Simple Migration Module
+jQuery(function ($) {
+	var $migration_container = $('#updraft-navtab-migrate-content .updraft_simple_migrate_widget_module_content');
+	var $migration_inprogress = false;
+
+	window.onbeforeunload = function(e) {
+		if ($migration_inprogress) return updraftlion.migration_running_message;
+	}
+
+	/**
+	 * Validate URL format.
+	 *
+	 * @param {string} url The URL string to validate.
+	 * @returns {boolean} True if valid, false otherwise
+	 */
+	function is_valid_migration_url(url) {
+		var pattern = /^(https?:\/\/)[^\s$.?#].[^\s]*$/i;
+		return pattern.test(url);
+	}
+
+	/**
+	 * Display an error message in the status panel.
+	 *
+	 * @param {string} message The error message to display.
+	 */
+	function show_migration_status_error(message) {
+		var $status = $migration_container.find('.updraftplus_migration_status');
+		var $b = $('<b></b>').text(updraftlion.error);
+		var $span = $('<span></span>').text(' ' + message);
+
+		$status.empty().append($b).append($span).show();
+	}
+
+	/**
+	 * Handle login to TeamUpdraft.com for simple migration.
+	 *
+	 * @param {object} options Login form data (email, password, 2FA).
+	 */
+	function migration_submit(options) {
+
+		var $login_status = $migration_container.find('.updraftplus_com_login_status');
+		var $spinner = $migration_container.find('.updraftplus_com_login .updraftplus_spinner.spinner');
+
+		$login_status.html('').hide();
+		$spinner.addClass('visible');
+
+		updraft_send_command('process_updraftplus_migration_login', options, function (response) {
+
+			try {
+				$spinner.removeClass('visible');
+
+				// Error message
+				if (response.hasOwnProperty('status') && 'error' == response.status) {
+					$login_status.text(response.message).show();
+					$migration_container.find('.updraft_migrate_widget_migration_stage1 .tfa_fields').hide();
+					$migration_container.find('.updraft_migrate_widget_migration_stage1 .non_tfa_fields').show();
+					$migration_container.find('#migration_options_two_factor_code').val('');
+					return;
+				}
+
+				// Show 2FA field
+				if (response.hasOwnProperty('tfa_enabled') && true == response.tfa_enabled) {
+					$migration_container.find('.updraft_migrate_widget_migration_stage1 .non_tfa_fields').hide();
+					$migration_container.find('.updraft_migrate_widget_migration_stage1 .tfa_fields').show();
+					$migration_container.find('.updraft_migrate_widget_migration_stage1 input#migration_options_two_factor_code').trigger('focus');
+					return;
+				}
+
+				// Successful authentication
+				if ('authenticated' === response.status) {
+					// Reset login form data.
+					$migration_container.find('#migration_options_email').val('');
+					$migration_container.find('#migration_options_password').val('');
+					$migration_container.find('#migration_options_two_factor_code').val('');
+					$migration_container.find('.migration_terms_and_conditions').prop('checked', false);
+
+					$migration_container.find('.updraft_migrate_widget_migration_stage1').hide();
+					$migration_container.find('.updraft_migrate_widget_migration_stage1 .non_tfa_fields').show();
+					$migration_container.find('.updraft_migrate_widget_migration_stage1 .tfa_fields').hide();
+					$migration_container.find('.updraft_migrate_widget_migration_stage2').show().html(response.html);
+				}
+			} catch (err) {
+				/*
+				 * The err object contains only DOM manipulation or response parsing error details.
+				 */
+				$login_status.text('Migration login processing error:' + err).show();
+				console.error('Migration login processing error:', err);
+			}
+
+		});
+	}
+
+	/**
+	 * Begin migration process after confirmation.
+	 *
+	 * @param {object} options Migration form data.
+	 */
+	function migration_process_start(options) {
+
+		var migration_confirmation = ('import' === options.form_data.migrate_type) ? updraftlion.migration_confirm_import_message : updraftlion.migration_confirm_export_message;
+		if (!confirm(migration_confirmation)) {
+			reset_migration_ui(false);
+			return;
+		}
+
+		updraft_send_command(
+			'process_updraftplus_migration_start',
+			options,
+			function (response) {
+
+				if (!response || !response.data) {
+					show_migration_status_error(response.message);
+					reset_migration_ui(false);
+					return;
+				}
+
+				if (response.data.hasOwnProperty('identifier')) {
+					options.form_data.extendify_access_token = response.token;
+					migration_process_status(response.data.identifier, options);
+					return;
+				}
+
+				if (response.data.hasOwnProperty('status') && 'error' == response.data.status) {
+					show_migration_status_error(response.data.message);
+					reset_migration_ui(false);
+				}
+			},
+			{
+				alert_on_error: false,
+				error_callback: function (response, status, error_code, resp) {
+
+					var error_message;
+
+					if (typeof resp !== 'undefined' && resp.hasOwnProperty('fatal_error')) {
+						error_message = resp.fatal_error;
+						// No sensitive data is logged here, only API response error details.
+						console.error(resp.fatal_error_message);
+					} else {
+						// No sensitive data is logged here, only API response and status data.
+						error_message = 'updraft_send_command: error: ' + status + ' (' + error_code + ')';
+						console.log(error_message);
+						console.log(response);
+					}
+
+					show_migration_status_error(error_message);
+					reset_migration_ui(false);
+				}
+			}
+		);
+	}
+
+	/**
+	 * Get migration job status every 2 seconds.
+	 *
+	 * @param {string} identifier Migration job ID.
+	 * @param {object} options Migration form data.
+	 */
+	function migration_process_status(identifier, options) {
+
+		setTimeout(function () {
+
+			$migration_inprogress = true;
+
+			var status_request_data = {
+				identifier: identifier,
+				migration_id: options.form_data.migration_id,
+				secret_token: options.form_data.secret_token,
+				migrate_type: options.form_data.migrate_type
+			};
+
+			// Pass Extendify access token if available
+			if (options.form_data.extendify_access_token) {
+				status_request_data.extendify_access_token = options.form_data.extendify_access_token;
+			}
+
+			updraft_send_command(
+				'process_updraftplus_migration_status',
+				status_request_data,
+				function (response) {
+
+					try {
+
+						$migration_container.find('.updraftplus_migration_status').hide();
+
+						if (typeof response === 'string' && (response.indexOf('<!DOCTYPE') !== -1 || response.indexOf('<html') !== -1)) {
+							$migration_inprogress = false;
+							var redirect_url = updraftlion.updraft_settings_url+'&updraft_migration_completed=1';
+							if (options.form_data.extendify_access_token) {
+								redirect_url += '&source=extendify';
+							}
+							window.location.href = redirect_url;
+							return;
+						}
+
+						if (!response || !response.data) {
+							throw new Error('Invalid migration status response.');
+						}
+
+						var status_message = response.data.status_message || response.data.status;
+						// FAILED
+						if (response.data.hasOwnProperty('status') && response.data.status.indexOf('FAILED') !== -1) {
+							if ($migration_container.find('.updraft_migration_progress_container .updraft_percentage').length > 0) {
+								$migration_container.find('.updraft_migration_progress_container .updraft_percentage').css('background-color', '#ff4d4d');
+								$migration_container.find('.updraft_migration_progress_container .progress-content').html(status_message + ' (' + updraftlion.migration_status_error_message + ')');
+							} else {
+								show_migration_status_error(status_message + ' (' + updraftlion.migration_status_error_message + ')');
+							}
+							reset_migration_ui(false);
+							return;
+						}
+
+						/**
+						 * Handle import completion based on migration progress reaching 100%.
+						 *
+						 * In import flows, once `migration_progress` reaches 100%, the restore process
+						 * on the destination site starts immediately and may replace the current page
+						 * or interrupt further status updates. Because of this, relying solely on
+						 * status values is unreliable.
+						 *
+						 * To ensure a consistent user experience, we treat `migration_progress === 100`
+						 * as the completion point for the import flow, show the success message, and
+						 * reload the page so the user can log in to the newly imported site.
+						 */
+						if ('import' === options.form_data.migrate_type && response.data.hasOwnProperty('migration_progress') && 100 === response.data.migration_progress) {
+							updraft_show_success_modal({
+								message: updraftlion.migration_success_import_message,
+								icon: 'updates',
+								classes: 'warning'
+							});
+							setTimeout(function() {
+								var redirect_url = updraftlion.updraft_settings_url+'&updraft_migration_completed=1';
+								if (options.form_data.extendify_access_token) {
+									redirect_url += '&source=extendify';
+								}
+								window.location.href = redirect_url;
+							}, 3000);
+							reset_migration_ui(true);
+							return;
+						}
+
+						// Process Completed
+						if (response.data.hasOwnProperty('status') && 'SUCCESS' === response.data.status) {
+							updraft_show_success_modal(updraftlion.migration_success_export_message);
+							reset_migration_ui(true);
+							return;
+						}
+
+						if (response.data.overall_progress) {
+							status_message = $('<div />').text(status_message).html();
+							var overall_progress = parseInt(response.data.overall_progress);
+							if (isNaN(overall_progress)) {
+								overall_progress = 0;
+							}
+							var progress_html = '<div class="curstage"><span class="progress-content">' + status_message + '</span><div class="updraft_percentage" style="height: 100%; width: ' + overall_progress + '%;"></div></div>';
+							$migration_container.find('.updraft_migration_progress_container').html(progress_html).show();
+							$migration_container.find('.updraftplus-migration-process-notice').show();
+						} else {
+							var $b = $('<b></b>').text(updraftlion.migration_status);
+							var $span = $('<span></span>').text(' ' + status_message);
+							$migration_container.find('.updraftplus_migration_status').empty().append($b).append($span).show();
+						}
+
+						migration_process_status(identifier, options);
+						return;
+
+					} catch (err) {
+						reset_migration_ui(false);
+						if ($migration_container.find('.updraft_migration_progress_container .updraft_percentage').length > 0) {
+							$migration_container.find('.updraft_migration_progress_container .updraft_percentage').css('background-color', '#ff4d4d');
+							$migration_container.find('.updraft_migration_progress_container .progress-content').text('Error reading migration status: ' + err);
+						} else {
+							show_migration_status_error('Error reading migration status: ' + err);
+						}
+						console.error('Error reading migration status:', err);
+					}
+
+				},
+				{
+					alert_on_error: false,
+					error_callback: function (response, status, error_code, resp) {
+
+						if (typeof response === 'string' && (response.indexOf('<!DOCTYPE') !== -1 || response.indexOf('<html') !== -1)) {
+							$migration_inprogress = false;
+							var redirect_url = updraftlion.updraft_settings_url+'&updraft_migration_completed=1';
+							if (options.form_data.extendify_access_token) {
+								redirect_url += '&source=extendify';
+							}
+							window.location.href = redirect_url;
+							return;
+						}
+
+						var error_message;
+
+						if (typeof resp !== 'undefined' && resp.hasOwnProperty('fatal_error')) {
+							error_message = resp.fatal_error;
+							console.error(resp.fatal_error_message);
+						} else {
+							error_message = 'updraft_send_command: error: ' + status + ' (' + error_code + ')';
+							console.log(error_message);
+							console.log(response);
+						}
+
+						show_migration_status_error(error_message);
+						reset_migration_ui(false);
+					}
+				}
+			);
+
+		}, 2000);
+	}
+
+	/**
+	 * Reset the migration UI to its default state.
+	 *
+	 * This function is used after:
+	 * - Migration completion (success or failure)
+	 * - Migration cancellation by the user
+	 *
+	 * @param {boolean} reset_full_migration_screen Whether to reset the migration UI to its starting layout.
+	 */
+	function reset_migration_ui(reset_full_migration_screen) {
+
+		$migration_inprogress = false;
+
+		if (updraftlion.is_extendify_migration_active) {
+			$migration_container.find('#updraftplus_start_extendify_migration').prop('disabled', false);
+		} else {
+			$migration_container.find('#updraftplus_start_migration').prop('disabled', false);
+		}
+		$migration_container.find('.updraftplus_spinner.spinner').removeClass('visible');
+		$migration_container.find('.updraftplus-migration-process-warning').hide();
+		$migration_container.find('.updraftplus-migration-process-notice').hide();
+
+		if (reset_full_migration_screen) {
+			$migration_container.removeClass('opened');
+			$migration_container.find('.updraft_migrate_widget_migration_stage0').show();
+			$migration_container.find('.migration_show_step_1').show();
+			$migration_container.find('.updraft_migrate_widget_migration_stage1').hide();
+			$migration_container.find('.updraft_migrate_widget_migration_stage2').html('').hide();
+		}
+	}
+
+	/**
+	 * ------------------------------------
+	 * Event Handlers
+	 * ------------------------------------
+	 */
+
+	// Show Stage 1 panel
+	$migration_container.on('click', '.migration_show_step_1', function () {
+		$migration_container.addClass('opened');
+		$migration_container.find('.migration_show_step_1').hide();
+		$migration_container.find('.updraft_migrate_widget_migration_stage1').show();
+		$migration_container.find('.updraft_migrate_widget_migration_stage0').hide();
+	});
+
+	// Toggle Stage 0 visibility
+	$migration_container.on('click', '.updraft_migrate_widget_migration_show_stage0', function (e) {
+		e.preventDefault();
+		$migration_container.find('.updraft_migrate_widget_migration_stage0').toggle();
+	});
+
+	// Login submit
+	$migration_container.on('click', '.updraftplus_com_login .ud_connectsubmit', function (e) {
+		e.preventDefault();
+
+		var email = $migration_container.find('#migration_options_email').val();
+		var password = $migration_container.find('#migration_options_password').val();
+		var tfa = $migration_container.find('#migration_options_two_factor_code').val();
+		var consent = $migration_container.find('.migration_terms_and_conditions').is(':checked') ? 1 : 0;
+
+		var $login_status = $migration_container.find('.updraftplus_com_login_status');
+		if (!email || !password) {
+			$login_status
+			.html(
+				'<b>' + $('<div />').text(updraftlion.error).html() + '</b> '
+				+ $('<div />').text(updraftlion.username_password_required).html()
+			)
+			.show();
+			return;
+		}
+
+		if (0 === consent) {
+			$login_status
+			.html(
+				'<b>' + $('<div />').text(updraftlion.error).html() + '</b> '
+				+ $('<div />').text(updraftlion.migration_terms_and_conditions_required).html()
+			)
+			.show();
+			return;
+		}
+
+		migration_submit({
+			form_data: {
+				email: email,
+				password: password,
+				two_factor_code: tfa,
+				consent: consent
+			}
+		});
+	});
+
+	// Start migration
+	$migration_container.on('click', '#updraftplus_start_migration', function (e) {
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		var migrate_type = $migration_container.find('input[name="updraftplus_migration_type"]:checked').val();
+		var site_url = $migration_container.find('#updraftplus_migration_site_url').val();
+		var admin_email = $migration_container.find('#updraftplus_migration_admin_email').val();
+		var admin_password = $migration_container.find('#updraftplus_migration_admin_password').val();
+		var secret_token = $(this).data('secret_token');
+		var migration_id = $(this).data('migration_id');
+		var current_site_login_url = $migration_container.find('#updraftplus_migration_current_site_login_url').val();
+		var remote_site_login_url = $migration_container.find('#updraftplus_migration_remote_site_login_url').val();
+
+		if (!migrate_type) return show_migration_status_error(updraftlion.migration_type_required);
+		if (!site_url) return show_migration_status_error(updraftlion.migration_site_url_required);
+		if (!is_valid_migration_url(site_url)) return show_migration_status_error(updraftlion.migration_site_url_invalid);
+		if (!admin_email) return show_migration_status_error(updraftlion.migration_email_required);
+		if (!admin_password) return show_migration_status_error(updraftlion.migration_password_required);
+
+		$(this).prop('disabled', true);
+		$migration_container.find('.updraftplus_spinner.spinner').addClass('visible');
+		$migration_container.find('.updraftplus-migration-process-warning').show();
+
+		migration_process_start({
+			form_data: {
+				migrate_type: migrate_type,
+				secret_token: secret_token,
+				migration_id: migration_id,
+				site_url: site_url,
+				admin_email: admin_email,
+				admin_password: admin_password,
+				current_site_login_url: current_site_login_url,
+				remote_site_login_url: remote_site_login_url
+			}
+		});
+	});
+
+	// Auto-open migration tab if Extendify migration is active
+	if (updraftlion.is_extendify_migration_active && !updraftlion.is_updraft_migration_completed) {
+		$('#updraft-navtab-migrate').trigger('click');
+		$('html, body').animate({
+			scrollTop: $('#updraftplus-migration').offset().top
+		}, 600);
+	}
+
+	// Start extendify migration
+	$migration_container.on('click', '#updraftplus_start_extendify_migration', function (e) {
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		var site_url = $migration_container.find('#updraftplus_migration_site_url').val();
+		var admin_email = $migration_container.find('#updraftplus_migration_admin_email').val();
+		var admin_password = $migration_container.find('#updraftplus_migration_admin_password').val();
+		var current_site_login_url = $migration_container.find('#updraftplus_migration_current_site_login_url').val();
+		var remote_site_login_url = $migration_container.find('#updraftplus_migration_remote_site_login_url').val();
+
+		if (!site_url) return show_migration_status_error(updraftlion.migration_site_url_required);
+		if (!is_valid_migration_url(site_url)) return show_migration_status_error(updraftlion.migration_site_url_invalid);
+		if (!admin_email) return show_migration_status_error(updraftlion.migration_email_required);
+		if (!admin_password) return show_migration_status_error(updraftlion.migration_password_required);
+
+		$(this).prop('disabled', true);
+		$migration_container.find('.updraftplus_spinner.spinner').addClass('visible');
+		$migration_container.find('.updraftplus-migration-process-warning').show();
+
+		migration_process_start({
+			form_data: {
+				migrate_type: 'import',
+				site_url: site_url,
+				admin_email: admin_email,
+				admin_password: admin_password,
+				current_site_login_url: current_site_login_url,
+				remote_site_login_url: remote_site_login_url,
+				is_extendify_migration_active: updraftlion.is_extendify_migration_active
+			}
+		});
+	});
+
+	// Toggle advanced options
+	$migration_container.on('click', '#updraftplus_migration_advanced_options_toggle', function (e) {
+		e.preventDefault();
+		if ($migration_container.find('#updraftplus_migration_advanced_options').is(':visible')) {
+			$migration_container.find('#updraftplus_migration_current_site_login_url').val('');
+			$migration_container.find('#updraftplus_migration_remote_site_login_url').val('');
+			$migration_container.find('#updraftplus_migration_advanced_options').hide();
+		} else {
+			$migration_container.find('#updraftplus_migration_advanced_options').show();
+		}
 	});
 });
 

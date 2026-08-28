@@ -26,6 +26,19 @@ class BreadCrumbs {
 				$data = json_decode(file_get_contents('php://input'), true);
 
 				if (! isset($data['post_id'])) {
+					/**
+					 * Filters the breadcrumbs block preview data sent to the block editor.
+					 *
+					 * @since 2.1.0
+					 *
+					 * @param array $data {
+					 *     Breadcrumbs preview data.
+					 *
+					 *     @type int|null $post_id   The previewed post ID. Default null.
+					 *     @type string   $post_type The previewed post type. Default 'post'.
+					 *     @type string   $render    Rendered breadcrumbs markup. Omitted when no post is selected.
+					 * }
+					 */
 					wp_send_json_success(apply_filters(
 						'blocksy:general:blocks:breadcrumbs:data',
 						[
@@ -106,6 +119,19 @@ class BreadCrumbs {
 					'is_frontend' => false,
 				]);
 
+				/**
+				 * Filters the breadcrumbs block preview data sent to the block editor.
+				 *
+				 * @since 2.1.0
+				 *
+				 * @param array $data {
+				 *     Breadcrumbs preview data.
+				 *
+				 *     @type int|null $post_id   The previewed post ID. Default null.
+				 *     @type string   $post_type The previewed post type. Default 'post'.
+				 *     @type string   $render    Rendered breadcrumbs markup. Omitted when no post is selected.
+				 * }
+				 */
 				wp_send_json_success(apply_filters(
 					'blocksy:general:blocks:breadcrumbs:data',
 					[
@@ -124,7 +150,6 @@ class BreadCrumbs {
 
 	public function blocksy_breadcrumbs_block() {
 		$block_data = [
-			'api_version' => 3,
 			'render_callback' => function ($attributes, $content) {
 				$attributes = wp_parse_args(
 					$attributes,
@@ -194,6 +219,9 @@ class BreadCrumbs {
 			}
 		];
 
-		register_block_type('blocksy/breadcrumbs', $block_data);
+		register_block_type(
+			BLOCKSY_PATH . '/static/js/editor/blocks/breadcrumbs/block.json',
+			$block_data
+		);
 	}
 }

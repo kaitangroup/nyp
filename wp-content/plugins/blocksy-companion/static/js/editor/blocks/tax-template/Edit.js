@@ -22,7 +22,7 @@ import {
 
 import { useTaxBlockData } from '../tax-query/hooks/use-tax-block-data'
 import RangeControl from '../../components/RangeControl'
-import { SlideshowArrows } from '../post-template/Edit'
+import { SlideshowArrows, SlideshowPills } from '../post-template/Edit'
 import { getVariablesDefinitions } from './variables'
 
 import { getStylesForBlock } from '../../utils/css'
@@ -128,7 +128,13 @@ const Edit = ({
 	context,
 	__unstableLayoutClassNames,
 }) => {
-	const { postId, has_slideshow, has_slideshow_arrows, uniqueId } = context
+	const {
+		postId,
+		has_slideshow,
+		has_slideshow_arrows,
+		has_slideshow_pills,
+		uniqueId,
+	} = context
 
 	const [activeBlockContextId, setActiveBlockContextId] = useState()
 
@@ -160,6 +166,7 @@ const Edit = ({
 
 	const sliderDescriptor = useFlexySlider({
 		isSlideshow,
+		hasSlideshowPills: has_slideshow_pills === 'yes',
 		attributes,
 		context,
 		toWatch: blockData ? blockData.all_terms : {},
@@ -377,6 +384,14 @@ const Edit = ({
 								sliderDescriptor={sliderDescriptor}
 							/>
 						</div>
+
+						<SlideshowPills
+							has_slideshow_pills={
+								has_slideshow_pills === 'yes'
+							}
+							sliderDescriptor={sliderDescriptor}
+							pillsCount={blockContexts.length}
+						/>
 					</div>
 				)}
 			</div>

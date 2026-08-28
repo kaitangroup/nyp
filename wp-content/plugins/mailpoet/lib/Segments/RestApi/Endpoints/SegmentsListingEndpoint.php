@@ -59,6 +59,10 @@ class SegmentsListingEndpoint extends AbstractSegmentsListingEndpoint {
     return true;
   }
 
+  protected function getAllowedFilters(): array {
+    return ['created_from', 'created_to', 'score_min', 'score_max'];
+  }
+
   protected function getDefaultParameters(): array {
     return ['lists'];
   }

@@ -1198,7 +1198,7 @@ class Updraft_Restorer {
 
 			if (is_array($decrypted_file)) {
 				$this->skin->feedback($this->strings['decrypted_database']);
-				if (!copy($decrypted_file['fullpath'], $working_dir.'/backup.db.gz')) {
+				if (!copy($decrypted_file['fullpath'], $working_dir.'/backup.db.gz')) { // phpcs:ignore PluginCheck.CodeAnalysis.WriteFile.PluginDirectoryWrite -- False positive: the 'copy()' function doesn't put the file in the plugin directory, it puts it in the 'upgrade' directory instead.
 					return new WP_Error('write_failed', __('Failed to write out the decrypted database to the filesystem', 'updraftplus'));
 				} else {
 					unlink($decrypted_file['fullpath']);
@@ -2925,7 +2925,7 @@ class Updraft_Restorer {
 			if ($this->use_mysqli) {
 				@mysqli_query($this->mysql_dbh, 'SET SESSION query_cache_type = OFF;');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.DB.RestrictedFunctions.mysql_mysqli_query -- Silenced to suppress errors that may arise because of the function.
 			} else {
-				@mysql_query('SET SESSION query_cache_type = OFF;', $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, Generic.PHP.NoSilencedErrors.Discouraged -- Legacy compatibility for very old PHP versions, silenced to suppress errors that may arise because of the function.
+				@mysql_query('SET SESSION query_cache_type = OFF;', $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, Generic.PHP.NoSilencedErrors.Discouraged, WordPress.DB.RestrictedFunctions.mysql_mysql_query -- Legacy compatibility for very old PHP versions, silenced to suppress errors that may arise because of the function, direct mysql function used for low-level database operations outside of $wpdb.
 			}
 		}
 
@@ -2969,35 +2969,36 @@ class Updraft_Restorer {
 		$this->last_error = '';
 		$random_table_name = 'updraft_tmp_'.wp_rand(0, 9999999).md5(microtime(true));
 		$renamed_random_table_name = 'updraft_tmp_'.wp_rand(0, 9999999).md5(microtime(true));
+		$escaped_random_table_name = UpdraftPlus_Database_Utility::escape_table_name($random_table_name);
 		$last_created_generated_columns_table = '';
 
 		// The only purpose in funnelling queries directly here is to be able to get the error number
 		if ($this->use_wpdb()) {
 		
-			$req = $wpdb->query("CREATE TABLE $random_table_name (test INT)");// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- Direct schema change is required here and handled carefully.
+			$req = $wpdb->query("CREATE TABLE $escaped_random_table_name (test INT)");// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Direct schema change is required here and handled carefully. Table name is safely escaped via UpdraftPlus_Database_Utility::escape_table_name()., SQL identifiers cannot be parameterized with $wpdb->prepare().
 			// WPDB, for several query types, returns the number of rows changed; in distinction from an error, indicated by (bool)false
 			if (0 === $req) $req = true;
 			if (!$req) $this->last_error = $wpdb->last_error;
 			$this->last_error_no = false;
 
-			if ($req && false !== $wpdb->query("CREATE TRIGGER test_trigger BEFORE INSERT ON $random_table_name FOR EACH ROW SET @sum = @sum + NEW.test")) $this->db_permissons_forbidden['triggers'] = false;// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- Direct schema change is required here and handled carefully.
+			if ($req && false !== $wpdb->query("CREATE TRIGGER test_trigger BEFORE INSERT ON $escaped_random_table_name FOR EACH ROW SET @sum = @sum + NEW.test")) $this->db_permissons_forbidden['triggers'] = false;// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Direct schema change is required here and handled carefully. Table name is safely escaped via UpdraftPlus_Database_Utility::escape_table_name()., SQL identifiers cannot be parameterized with $wpdb->prepare().
 
 		} else {
 		
 			if ($this->use_mysqli) {
-				$req = mysqli_query($this->mysql_dbh, "CREATE TABLE $random_table_name (test INT)"); // phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_query -- Direct mysqli used for low-level restore operations outside of $wpdb
+				$req = mysqli_query($this->mysql_dbh, "CREATE TABLE $escaped_random_table_name (test INT)"); // phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_query -- Direct mysqli used for low-level restore operations outside of $wpdb
 			} else {
-				$req = mysql_unbuffered_query("CREATE TABLE $random_table_name (test INT)", $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Legacy compatibility for very old PHP versions.
+				$req = mysql_unbuffered_query("CREATE TABLE $escaped_random_table_name (test INT)", $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysql_unbuffered_query -- Legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
 			}
 			
 			if (!$req) {
-				$this->last_error = $this->use_mysqli ? mysqli_error($this->mysql_dbh) : mysql_error($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Legacy compatibility for very old PHP versions.
-				$this->last_error_no = $this->use_mysqli ? mysqli_errno($this->mysql_dbh) : mysql_errno($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Legacy compatibility for very old PHP versions.
+				$this->last_error = $this->use_mysqli ? mysqli_error($this->mysql_dbh) : mysql_error($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysqli_error, WordPress.DB.RestrictedFunctions.mysql_mysql_error -- Legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
+				$this->last_error_no = $this->use_mysqli ? mysqli_errno($this->mysql_dbh) : mysql_errno($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysqli_errno, WordPress.DB.RestrictedFunctions.mysql_mysql_errno -- Legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
 			} else {
 				if ($this->use_mysqli) {
-					$reqtrigger = mysqli_query($this->mysql_dbh, "CREATE TRIGGER test_trigger BEFORE INSERT ON $random_table_name FOR EACH ROW SET @sum = @sum + NEW.test"); // phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_query -- Direct mysqli used for low-level restore operations outside of $wpdb
+					$reqtrigger = mysqli_query($this->mysql_dbh, "CREATE TRIGGER test_trigger BEFORE INSERT ON $escaped_random_table_name FOR EACH ROW SET @sum = @sum + NEW.test"); // phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_query -- Direct mysqli used for low-level restore operations outside of $wpdb
 				} else {
-					$reqtrigger = mysql_unbuffered_query("CREATE TRIGGER test_trigger BEFORE INSERT ON $random_table_name FOR EACH ROW SET @sum = @sum + NEW.test", $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Legacy compatibility for very old PHP versions.
+					$reqtrigger = mysql_unbuffered_query("CREATE TRIGGER test_trigger BEFORE INSERT ON $escaped_random_table_name FOR EACH ROW SET @sum = @sum + NEW.test", $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysql_unbuffered_query -- Legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
 				}
 				if ($reqtrigger) $this->db_permissons_forbidden['triggers'] = false;
 			}
@@ -3026,6 +3027,7 @@ class Updraft_Restorer {
 			} else {
 				// We renamed the table so update the $random_table_name
 				$random_table_name = $renamed_random_table_name;
+				$escaped_random_table_name = UpdraftPlus_Database_Utility::escape_table_name($random_table_name);
 			}
 		
 			if (1142 === $this->lock_table($random_table_name)) {
@@ -3034,7 +3036,7 @@ class Updraft_Restorer {
 			}
 		
 			if ($this->use_wpdb()) {
-				$req = $wpdb->query("DROP TABLE $random_table_name");// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- Direct schema change is required here and handled carefully.
+				$req = $wpdb->query("DROP TABLE $escaped_random_table_name");// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Direct schema change is required here and handled carefully. Table name is safely escaped via UpdraftPlus_Database_Utility::escape_table_name()., SQL identifiers cannot be parameterized with $wpdb->prepare().
 				// WPDB, for several query types, returns the number of rows changed; in distinction from an error, indicated by (bool)false
 				if (0 === $req) {
 					$req = true;
@@ -3043,13 +3045,13 @@ class Updraft_Restorer {
 				$this->last_error_no = false;
 			} else {
 				if ($this->use_mysqli) {
-					$req = mysqli_query($this->mysql_dbh, "DROP TABLE $random_table_name"); // phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_query -- Direct mysqli used for low-level restore operations outside of $wpdb
+					$req = mysqli_query($this->mysql_dbh, "DROP TABLE $escaped_random_table_name"); // phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_query -- Direct mysqli used for low-level restore operations outside of $wpdb
 				} else {
-					$req = mysql_unbuffered_query("DROP TABLE $random_table_name", $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Legacy compatibility for very old PHP versions.
+					$req = mysql_unbuffered_query("DROP TABLE $escaped_random_table_name", $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysql_unbuffered_query -- Legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
 				}
 				if (!$req) {
-					$this->last_error = ($this->use_mysqli) ? mysqli_error($this->mysql_dbh) : mysql_error($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Legacy compatibility for very old PHP versions.
-					$this->last_error_no = ($this->use_mysqli) ? mysqli_errno($this->mysql_dbh) : mysql_errno($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Legacy compatibility for very old PHP versions.
+					$this->last_error = ($this->use_mysqli) ? mysqli_error($this->mysql_dbh) : mysql_error($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysqli_error, WordPress.DB.RestrictedFunctions.mysql_mysql_error -- Legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
+					$this->last_error_no = ($this->use_mysqli) ? mysqli_errno($this->mysql_dbh) : mysql_errno($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysqli_errno, WordPress.DB.RestrictedFunctions.mysql_mysql_errno -- Legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
 				}
 			}
 			if (!$req && ($this->use_wpdb() || 1142 === $this->last_error_no)) {
@@ -3847,15 +3849,15 @@ class Updraft_Restorer {
 		$table = UpdraftPlus_Manipulation_Functions::backquote($table);
 		
 		if ($this->use_wpdb()) {
-			$req = $wpdb->query("LOCK TABLES $table WRITE;");// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Function isnt being used yet. $table is safely escaped via backquote().
+			$req = $wpdb->query("LOCK TABLES $table WRITE;");// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Function isnt being used yet, $table is safely escaped via backquote(), SQL identifiers cannot be parameterized with $wpdb->prepare().
 		} else {
 			if ($this->use_mysqli) {
 				$req = mysqli_query($this->mysql_dbh, "LOCK TABLES $table WRITE;"); // phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_query, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Direct mysqli used for low-level restore operations outside of $wpdb. $table is safely escaped via backquote().
 			} else {
-				$req = mysql_unbuffered_query("LOCK TABLES $table WRITE;", $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Legacy compatibility for very old PHP versions. $table is safely escaped via backquote().
+				$req = mysql_unbuffered_query("LOCK TABLES $table WRITE;", $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.RestrictedFunctions.mysql_mysql_unbuffered_query -- Legacy compatibility for very old PHP versions. $table is safely escaped via backquote(), direct mysql function used for low-level database operations outside of $wpdb.
 			}
 			if (!$req) {
-				$lock_error_no = $this->use_mysqli ? mysqli_errno($this->mysql_dbh) : mysql_errno($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Legacy compatibility for very old PHP versions.
+				$lock_error_no = $this->use_mysqli ? mysqli_errno($this->mysql_dbh) : mysql_errno($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysqli_errno, WordPress.DB.RestrictedFunctions.mysql_mysql_errno -- Legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
 			}
 		}
 		if (!$req && ($this->use_wpdb() || 1142 === $lock_error_no)) {
@@ -3873,7 +3875,7 @@ class Updraft_Restorer {
 		} elseif ($this->use_mysqli) {
 			$req = mysqli_query($this->mysql_dbh, "UNLOCK TABLES;");// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable, WordPress.DB.RestrictedFunctions.mysql_mysqli_query -- Function isnt being used yet, Direct mysqli used for low-level restore operations outside of $wpdb, direct mysqli used for low-level restore operations outside of $wpdb
 		} else {
-			$req = mysql_unbuffered_query("UNLOCK TABLES;");// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable, PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Variable isnt being used yet, legacy compatibility for very old PHP versions.
+			$req = mysql_unbuffered_query("UNLOCK TABLES;");// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable, PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysql_unbuffered_query -- Variable isnt being used yet, legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
 		}
 	}
 
@@ -4076,7 +4078,7 @@ class Updraft_Restorer {
 			}
 
 			if ($this->use_wpdb()) {
-				// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql_line is constructed as necessary throughout the database restoration process. Each specific SQL statement is sanitized or prepared appropriately before being added to $sql_line.
+				// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared -- $sql_line is constructed as necessary throughout the database restoration process. Each specific SQL statement is sanitized or prepared appropriately before being added to $sql_line.
 				$req = $wpdb->query($sql_line);
 				// WPDB, for several query types, returns the number of rows changed; in distinction from an error, indicated by (bool)false
 				if (0 === $req) {
@@ -4088,8 +4090,8 @@ class Updraft_Restorer {
 					$req = mysqli_query($this->mysql_dbh, $sql_line); // phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_query -- Direct mysqli used for low-level restore operations outside of $wpdb
 					if (!$req) $this->last_error = mysqli_error($this->mysql_dbh); // phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_error -- Direct mysqli used for low-level restore operations outside of $wpdb
 				} else {
-					$req = mysql_unbuffered_query($sql_line, $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Legacy compatibility for very old PHP versions.
-					if (!$req) $this->last_error = mysql_error($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Legacy compatibility for very old PHP versions.
+					$req = mysql_unbuffered_query($sql_line, $this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysql_unbuffered_query -- Legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
+					if (!$req) $this->last_error = mysql_error($this->mysql_dbh);// phpcs:ignore PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved, WordPress.DB.RestrictedFunctions.mysql_mysql_error -- Legacy compatibility for very old PHP versions, direct mysql function used for low-level database operations outside of $wpdb.
 				}
 			}
 			if (3 == $sql_type) $this->insert_statements_run++;
@@ -4421,6 +4423,8 @@ class Updraft_Restorer {
 
 			$errors_occurred = false;
 
+			$escaped_table_name = UpdraftPlus_Database_Utility::escape_table_name("{$import_table_prefix}usermeta");
+
 			if (false === strpos($old_table_prefix, '_')) {
 				// Old, slow way: do it row-by-row
 				// By Jul 2015, doing this on the updraftplus.com database took 20 minutes on a slow test machine
@@ -4430,24 +4434,22 @@ class Updraft_Restorer {
 					FROM {$import_table_prefix}usermeta 
 					WHERE meta_key 
 					LIKE '".UpdraftPlus_Database_Utility::esc_like($old_table_prefix)."%'";
-				// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- $um_sql is constructed above with escaped parameters and cannot be parameterized further.
+				// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared -- $um_sql is constructed above with escaped parameters and cannot be parameterized further.
 				$meta_keys = $wpdb->get_results($um_sql);
 
 				foreach ($meta_keys as $meta_key) {
 					// Create new meta key
 					$new_meta_key = $import_table_prefix . substr($meta_key->meta_key, $old_prefix_length);
 					
-					$query = "UPDATE " . $import_table_prefix . "usermeta 
-						SET meta_key='".$new_meta_key."' 
-						WHERE umeta_id=".$meta_key->umeta_id;
+					$query = $wpdb->prepare("UPDATE {$escaped_table_name} SET meta_key=%s WHERE umeta_id=%s", $new_meta_key, $meta_key->umeta_id);// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely escaped via UpdraftPlus_Database_Utility::escape_table_name().
 
-					// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- $query is constructed above with escaped parameters and cannot be parameterized further.
+					// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared -- $query is constructed above with escaped parameters and cannot be parameterized further.
 					if (false === $wpdb->query($query)) $errors_occurred = true;
 				}
 			} else {
 				// New, fast way: do it in a single query
 				$sql = "UPDATE {$import_table_prefix}usermeta SET meta_key = REPLACE(meta_key, '$old_table_prefix', '{$import_table_prefix}') WHERE meta_key LIKE '".UpdraftPlus_Database_Utility::esc_like($old_table_prefix)."%';";
-				// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql is constructed above with escaped parameters and cannot be parameterized further.
+				// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared -- $sql is constructed above with escaped parameters and cannot be parameterized further.
 				if (false === $wpdb->query($sql)) $errors_occurred = true;
 			}
 
@@ -4555,16 +4557,18 @@ class Updraft_Restorer {
 
 			while (true) {
 				// Loop over and get each sites active plugins
-				$blogs = $wpdb->get_results("SELECT blog_id FROM {$wpdb->blogs} LIMIT {$offset}, {$limit}", ARRAY_A);
+				$blogs = $wpdb->get_results($wpdb->prepare("SELECT blog_id FROM {$wpdb->blogs} LIMIT %d, %d", $offset, $limit), ARRAY_A);
 
 				if (empty($blogs)) break;
 				
 				foreach ($blogs as $row) {
 					if (!apply_filters('updraftplus_restore_this_site', true, $row['blog_id'], '', $this->restore_options)) continue;
 					$safe_blog_id = absint($row['blog_id']);
+					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- The 'get_blog_prefix()' method returns a safe table prefix.
 					$plugins = $wpdb->get_row("SELECT option_value FROM ".$wpdb->get_blog_prefix($safe_blog_id)."options WHERE option_name = 'active_plugins'");
 					if (empty($plugins->option_value)) continue;
 					$plugins = $this->deactivate_missing_plugins($plugins->option_value);
+					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- The 'get_blog_prefix()' method returns a safe table prefix.
 					$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->get_blog_prefix($safe_blog_id)."options SET option_value=%s WHERE option_name='active_plugins'", $plugins));
 				}
 
@@ -4630,7 +4634,7 @@ class Updraft_Restorer {
 		while (true) {
 			$random_string = UpdraftPlus_Manipulation_Functions::generate_random_string(2). '_';
 			if ($string != $random_string) {
-				if (0 === $wpdb->query("SHOW TABLES LIKE '".esc_sql($wpdb->esc_like($random_string))."%'")) return $random_string; // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- $random_string is properly escaped via esc_sql($wpdb->esc_like()).
+				if (0 === $wpdb->query("SHOW TABLES LIKE '".esc_sql(UpdraftPlus_Database_Utility::esc_like($random_string))."%'")) return $random_string; // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- $random_string is properly escaped via esc_sql($wpdb->esc_like()).
 			}
 		}
 	}

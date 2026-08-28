@@ -11,6 +11,7 @@ use MailPoet\Entities\NewsletterEntity;
 use MailPoet\InvalidStateException;
 use MailPoet\Util\Helpers;
 use MailPoetVendor\Carbon\Carbon;
+use MailPoetVendor\Doctrine\DBAL\ArrayParameterType;
 use MailPoetVendor\Doctrine\DBAL\ParameterType;
 
 /**
@@ -93,6 +94,30 @@ class LogRepository extends Repository {
     return $query->getQuery()->getResult();
   }
 
+  /**
+   * Distinct log names (sources), used to populate the listing's name filter.
+   *
+   * @return string[]
+   */
+  public function getDistinctNames(): array {
+    $rows = $this->entityManager->createQueryBuilder()
+      ->select('DISTINCT l.name')
+      ->from(LogEntity::class, 'l')
+      ->where('l.name IS NOT NULL')
+      ->andWhere("l.name != ''")
+      ->orderBy('l.name', 'asc')
+      ->getQuery()
+      ->getSingleColumnResult();
+
+    $names = [];
+    foreach ($rows as $row) {
+      if (is_string($row)) {
+        $names[] = $row;
+      }
+    }
+    return $names;
+  }
+
   public function purgeOldLogs(int $daysToKeepLogs, int $limit = 1000): int {
     $logsTable = $this->entityManager->getClassMetadata(LogEntity::class)->getTableName();
     $result = $this->entityManager->getConnection()->executeStatement(
@@ -113,6 +138,112 @@ class LogRepository extends Repository {
     );
 
     return (int)$result;
+  }
+
+  /**
+   * Delete logs matching the listing's filter shape (`from`/`to`/`name`/`level`)
+   * and free-text search, so a deletion removes exactly what the filtered
+   * listing shows. Deletes in batches to keep each statement bounded on large
+   * log tables, mirroring purgeOldLogs().
+   *
+   * @param array{from?: string, to?: string, name?: string[], level?: int[]} $filter
+   */
+  public function deleteLogs(array $filter, ?string $search = null, int $batchSize = 1000): int {
+    $logsTable = $this->entityManager->getClassMetadata(LogEntity::class)->getTableName();
+    [$where, $parameters, $types] = $this->buildFilterSql($filter, $search);
+    $parameters['batch_limit'] = $batchSize;
+    $types['batch_limit'] = ParameterType::INTEGER;
+
+    $sql = "DELETE FROM `{$logsTable}`{$where} ORDER BY `created_at` ASC, `id` ASC LIMIT :batch_limit";
+    $connection = $this->entityManager->getConnection();
+
+    $deleted = 0;
+    do {
+      $affected = (int)$connection->executeStatement($sql, $parameters, $types);
+      $deleted += $affected;
+    } while ($affected === $batchSize);
+
+    return $deleted;
+  }
+
+  /**
+   * Fetch logs matching the listing's filter shape (`from`/`to`/`name`/`level`)
+   * and free-text search for export, so a download contains exactly the rows the
+   * filtered listing shows. Mirrors deleteLogs()'s WHERE clause and is capped by
+   * $limit.
+   *
+   * Yields rows in batches via keyset pagination on (`created_at`, `id`) rather
+   * than one big result set. MailPoet's WPDB-backed Doctrine driver buffers an
+   * entire result in memory (see Doctrine\WPDB\Result), so a single
+   * `LIMIT 50000` query would load every row at once and can exhaust PHP's
+   * memory on large installs. Paging keeps peak memory at one batch.
+   *
+   * @param array{from?: string, to?: string, name?: string[], level?: int[]} $filter
+   * @return iterable<int, array{created_at: string, name: string|null, message: string|null}>
+   */
+  public function getLogsForExport(array $filter, ?string $search = null, int $limit = 50000, int $batchSize = 1000): iterable {
+    $logsTable = $this->entityManager->getClassMetadata(LogEntity::class)->getTableName();
+    [$where, $baseParameters, $baseTypes] = $this->buildFilterSql($filter, $search);
+
+    $batchSize = $batchSize > 0 ? $batchSize : 1000;
+    $remaining = $limit;
+    $lastCreatedAt = null;
+    $lastId = null;
+
+    while ($remaining > 0) {
+      $batch = (int)min($batchSize, $remaining);
+      $parameters = $baseParameters;
+      $types = $baseTypes;
+      $conditions = $where;
+
+      if ($lastCreatedAt !== null) {
+        // Keyset cursor: continue strictly after the last row in the same
+        // (`created_at` DESC, `id` DESC) order. Stable even while new rows are
+        // inserted at the top of the table during the export.
+        $keyset = '(`created_at` < :ks_created_at OR (`created_at` = :ks_created_at AND `id` < :ks_id))';
+        $conditions = $conditions === '' ? ' WHERE ' . $keyset : $conditions . ' AND ' . $keyset;
+        $parameters['ks_created_at'] = $lastCreatedAt;
+        $parameters['ks_id'] = $lastId;
+        $types['ks_created_at'] = ParameterType::STRING;
+        $types['ks_id'] = ParameterType::INTEGER;
+      }
+
+      $parameters['batch_limit'] = $batch;
+      $types['batch_limit'] = ParameterType::INTEGER;
+
+      $sql = "SELECT `id`, `created_at`, `name`, `message` FROM `{$logsTable}`{$conditions} ORDER BY `created_at` DESC, `id` DESC LIMIT :batch_limit";
+
+      $rows = $this->entityManager->getConnection()
+        ->executeQuery($sql, $parameters, $types)
+        ->fetchAllAssociative();
+
+      if ($rows === []) {
+        break;
+      }
+
+      foreach ($rows as $row) {
+        $lastCreatedAt = $this->castToNullableString($row['created_at']);
+        $lastId = (int)$this->castToNullableString($row['id']);
+        yield [
+          'created_at' => $this->castToNullableString($row['created_at']) ?? '',
+          'name' => $this->castToNullableString($row['name']),
+          'message' => $this->castToNullableString($row['message']),
+        ];
+        $remaining--;
+      }
+
+      // A short page means the table is exhausted; stop before an empty query.
+      if (count($rows) < $batch) {
+        break;
+      }
+    }
+  }
+
+  /**
+   * @param mixed $value
+   */
+  private function castToNullableString($value): ?string {
+    return is_scalar($value) ? (string)$value : null;
   }
 
   public function getRawMessagesForNewsletter(NewsletterEntity $newsletter, string $topic): array {
@@ -138,5 +269,51 @@ class LogRepository extends Repository {
 
   protected function getEntityClassName() {
     return LogEntity::class;
+  }
+
+  /**
+   * Build the WHERE clause shared by log deletion. Day boundaries
+   * (`00:00:00`–`23:59:59`) and the literal LOCATE() search match
+   * LogListingRepository so deleting honours the same rows the listing shows.
+   *
+   * @param array{from?: string, to?: string, name?: string[], level?: int[]} $filter
+   * @return array{0: string, 1: array<string, mixed>, 2: array<string, int>}
+   */
+  private function buildFilterSql(array $filter, ?string $search): array {
+    $conditions = [];
+    $parameters = [];
+    $types = [];
+
+    if (!empty($filter['from'])) {
+      $conditions[] = '`created_at` >= :date_from';
+      $parameters['date_from'] = $filter['from'] . ' 00:00:00';
+      $types['date_from'] = ParameterType::STRING;
+    }
+    if (!empty($filter['to'])) {
+      $conditions[] = '`created_at` <= :date_to';
+      $parameters['date_to'] = $filter['to'] . ' 23:59:59';
+      $types['date_to'] = ParameterType::STRING;
+    }
+    if (!empty($filter['name'])) {
+      $conditions[] = '`name` IN (:names)';
+      $parameters['names'] = array_values($filter['name']);
+      $types['names'] = ArrayParameterType::STRING;
+    }
+    if (!empty($filter['level'])) {
+      $conditions[] = '`level` IN (:levels)';
+      $parameters['levels'] = array_values($filter['level']);
+      $types['levels'] = ArrayParameterType::INTEGER;
+    }
+    if ($search !== null && trim($search) !== '') {
+      $conditions[] = '(LOCATE(:search, `name`) > 0 OR LOCATE(:search, `message`) > 0)';
+      $parameters['search'] = trim($search);
+      $types['search'] = ParameterType::STRING;
+    }
+
+    return [
+      $conditions === [] ? '' : ' WHERE ' . implode(' AND ', $conditions),
+      $parameters,
+      $types,
+    ];
   }
 }

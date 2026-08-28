@@ -1,7 +1,7 @@
 <?php
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Direct $wpdb query is required for this operation, legacy compatibility for very old PHP versions.
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching -- some query operations need to always receive the most up-to-date or actual data directly from the database, reducing the risk of serving stale information.
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 class UpdraftPlus_Database_Utility {
 
@@ -140,9 +140,9 @@ class UpdraftPlus_Database_Utility {
 
 		$sql = "SET SESSION %s='%s'";
 		if ($is_mysqli) {
-			$res = @mysqli_query($db_handle, sprintf($sql, mysqli_real_escape_string($db_handle, $variable), mysqli_real_escape_string($db_handle, $value)));// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
+			$res = @mysqli_query($db_handle, sprintf($sql, mysqli_real_escape_string($db_handle, $variable), mysqli_real_escape_string($db_handle, $value)));// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.DB.RestrictedFunctions.mysql_mysqli_query, WordPress.DB.RestrictedFunctions.mysql_mysqli_real_escape_string -- Silenced to suppress errors that may arise because of the function, direct mysql function used for low-level database operations outside of $wpdb.
 		} else {
-			$res = @mysql_query(sprintf($sql, mysql_real_escape_string($variable, $db_handle), mysql_real_escape_string($value, $db_handle)), $db_handle);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
+			$res = @mysql_query(sprintf($sql, mysql_real_escape_string($variable, $db_handle), mysql_real_escape_string($value, $db_handle)), $db_handle);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.DB.RestrictedFunctions.mysql_mysql_query, WordPress.DB.RestrictedFunctions.mysql_mysql_real_escape_string -- Silenced to suppress errors that may arise because of the function, direct mysql function used for low-level database operations outside of $wpdb.
 		}
 
 		return $res;
@@ -163,20 +163,20 @@ class UpdraftPlus_Database_Utility {
 		$sql = 'SELECT @@SESSION.%s';
 
 		if ($is_mysqli) {
-			$res = @mysqli_query($db_handle, sprintf($sql, mysqli_real_escape_string($db_handle, $variable)));// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
+			$res = @mysqli_query($db_handle, sprintf($sql, mysqli_real_escape_string($db_handle, $variable)));// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.DB.RestrictedFunctions.mysql_mysqli_query, WordPress.DB.RestrictedFunctions.mysql_mysqli_real_escape_string -- Silenced to suppress errors that may arise because of the function, direct mysql function used for low-level database operations outside of $wpdb.
 		} else {
-			$res = @mysql_query(sprintf($sql, mysql_real_escape_string($variable, $db_handle)), $db_handle);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
+			$res = @mysql_query(sprintf($sql, mysql_real_escape_string($variable, $db_handle)), $db_handle);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.DB.RestrictedFunctions.mysql_mysql_query, WordPress.DB.RestrictedFunctions.mysql_mysql_real_escape_string -- Silenced to suppress errors that may arise because of the function, direct mysql function used for low-level database operations outside of $wpdb.
 		}
 		if (false === $res) {
 			return $res;
 		}
 		if ($is_mysqli) {
 			// @codingStandardsIgnoreLine
-			$res = mysqli_fetch_array($res);
+			$res = mysqli_fetch_array($res);// phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_fetch_array -- direct mysql function used for low-level database operations outside of $wpdb.
 			return isset($res[0]) ? $res[0] : null;
 		} else {
 			// @codingStandardsIgnoreLine
-			$res = mysql_result($res, 0);
+			$res = mysql_result($res, 0);// phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysql_result -- direct mysql function used for low-level database operations outside of $wpdb.
 			return false === $res ? null : $res;
 		}
 	}
@@ -677,7 +677,7 @@ class UpdraftPlus_Database_Utility {
 				$routine_name = $routine['Name'];
 				// Since routine name can include backquotes and routine name is typically enclosed with backquotes as well, the backquote escaping for the routine name can be done by adding a leading backquote
 				$quoted_escaped_routine_name = UpdraftPlus_Manipulation_Functions::backquote(str_replace('`', '``', $routine_name));
-				$routine = $wpdb->get_results($wpdb->prepare('SHOW CREATE %1$s %2$s', $routine['Type'], $quoted_escaped_routine_name), ARRAY_A);// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- No direct schema change here; this is a false positive.
+				$routine = $wpdb->get_results($wpdb->prepare('SHOW CREATE %1$s %2$s', $routine['Type'], $quoted_escaped_routine_name), ARRAY_A);// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder -- No direct schema change here; this is a false positive. We use the unquoted placeholders because they are used for identifiers (the routine name and type).
 				/* translators: 1: Last database error, 2: Last executed SQL query. */
 				if (!empty($wpdb->last_error)) throw new Exception(sprintf(__('An error occurred while attempting to retrieve the routine SQL/DDL statement (%1$s %2$s)', 'updraftplus'), $wpdb->last_error.' -', $wpdb->last_query), 1);
 				$stored_routines[$key] = array_merge($stored_routines[$key], $routine ? $routine[0] : array());

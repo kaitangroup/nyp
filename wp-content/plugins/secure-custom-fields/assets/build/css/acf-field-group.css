@@ -67,27 +67,23 @@
 *----------------------------------------------------------------------------*/
 #acf-field-group-fields {
   border: 0 none;
-  /* links */
-  /* Field type */
-  /* table header */
-  /* show keys */
-  /* hide tabs */
-  /* fields */
 }
-
 #acf-field-group-fields .inside {
   border-top-width: 0;
   border-top-style: none;
 }
-
+#acf-field-group-fields {
+  /* links */
+}
 #acf-field-group-fields a {
   text-decoration: none;
 }
-
+#acf-field-group-fields {
+  /* Field type */
+}
 #acf-field-group-fields .li-field-type .field-type-icon {
   margin-right: 8px;
 }
-
 @media screen and (max-width: 600px) {
   #acf-field-group-fields .li-field-type .field-type-icon {
     display: none;
@@ -96,22 +92,13 @@
 #acf-field-group-fields .li-field-type .field-type-label {
   display: flex;
 }
-
-#acf-field-group-fields .li-field-type .acf-pro-label-field-type {
-  position: relative;
-  top: -3px;
-  margin-left: 8px;
+#acf-field-group-fields {
+  /* table header */
 }
-
-#acf-field-group-fields .li-field-type .acf-pro-label-field-type img {
-  max-width: 34px;
-}
-
 #acf-field-group-fields .li-field-order {
   width: 64px;
   justify-content: center;
 }
-
 @media screen and (max-width: 880px) {
   #acf-field-group-fields .li-field-order {
     width: 32px;
@@ -120,95 +107,82 @@
 #acf-field-group-fields .li-field-label {
   width: calc(50% - 64px);
 }
-
 #acf-field-group-fields .li-field-name {
   width: 25%;
   word-break: break-word;
 }
-
 #acf-field-group-fields .li-field-key {
   display: none;
 }
-
 #acf-field-group-fields .li-field-type {
   width: 25%;
 }
-
+#acf-field-group-fields {
+  /* show keys */
+}
 #acf-field-group-fields.show-field-keys .li-field-label {
   width: calc(35% - 64px);
 }
-
 #acf-field-group-fields.show-field-keys .li-field-name {
   width: 15%;
 }
-
 #acf-field-group-fields.show-field-keys .li-field-key {
   width: 25%;
   display: flex;
 }
-
 #acf-field-group-fields.show-field-keys .li-field-type {
   width: 25%;
 }
-
+#acf-field-group-fields {
+  /* hide tabs */
+}
 #acf-field-group-fields.hide-tabs .acf-field-settings-tab-bar {
   display: none;
 }
-
 #acf-field-group-fields.hide-tabs .acf-field-settings-main {
   padding: 0;
 }
-
 #acf-field-group-fields.hide-tabs .acf-field-settings-main.acf-field-settings-main-general {
   padding-top: 32px;
 }
-
 #acf-field-group-fields.hide-tabs .acf-field-settings-main .acf-field {
   margin-bottom: 32px;
 }
-
 #acf-field-group-fields.hide-tabs .acf-field-settings-main .acf-field-setting-wrapper {
   padding-top: 0;
   border-top: none;
 }
-
 #acf-field-group-fields.hide-tabs .acf-field-settings-main .acf-field-settings-split .acf-field {
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-bottom-color: #EAECF0;
 }
-
 #acf-field-group-fields.hide-tabs .acf-field-settings-main .acf-field-setting-first_day {
   padding-top: 0;
   border-top: none;
 }
-
 #acf-field-group-fields.hide-tabs .acf-field-settings-footer {
   margin-top: 32px;
 }
-
+#acf-field-group-fields {
+  /* fields */
+}
 #acf-field-group-fields .acf-field-list-wrap {
   border: #ccd0d4 solid 1px;
 }
-
 #acf-field-group-fields .acf-field-list {
   background: #f5f5f5;
   margin-top: -1px;
-  /* no fields */
-  /* empty */
 }
-
 #acf-field-group-fields .acf-field-list .acf-tbody > .li-field-name,
 #acf-field-group-fields .acf-field-list .acf-tbody > .li-field-key {
   align-items: flex-start;
 }
-
 #acf-field-group-fields .acf-field-list .copyable:not(.input-copyable, .copy-unsupported) {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
 }
-
 #acf-field-group-fields .acf-field-list .copyable:not(.input-copyable, .copy-unsupported):hover:after {
   content: "";
   padding-left: 5px;
@@ -231,38 +205,31 @@
   mask-image: url("../../images/icons/icon-copy.svg");
   background-size: cover;
 }
-
 #acf-field-group-fields .acf-field-list .copyable:not(.input-copyable, .copy-unsupported).sub-label {
   padding-right: 22px;
 }
-
 #acf-field-group-fields .acf-field-list .copyable:not(.input-copyable, .copy-unsupported).sub-label:hover {
   padding-right: 0;
 }
-
 #acf-field-group-fields .acf-field-list .copyable:not(.input-copyable, .copy-unsupported).sub-label:hover:after {
   width: 14px;
   height: 14px;
   padding-left: 8px;
 }
-
 #acf-field-group-fields .acf-field-list .copyable:not(.input-copyable, .copy-unsupported).copied:hover:after {
   -webkit-mask-image: url("../../images/icons/icon-check-circle-solid.svg");
   mask-image: url("../../images/icons/icon-check-circle-solid.svg");
   background-color: #49ad52;
 }
-
 #acf-field-group-fields .acf-field-list .copyable.input-copyable:not(.copy-unsupported) {
   cursor: pointer;
   display: block;
   position: relative;
   align-items: center;
 }
-
 #acf-field-group-fields .acf-field-list .copyable.input-copyable:not(.copy-unsupported) input {
   padding-right: 40px;
 }
-
 #acf-field-group-fields .acf-field-list .copyable.input-copyable:not(.copy-unsupported) .acf-input-wrap:after {
   content: "";
   padding-left: 5px;
@@ -287,23 +254,25 @@
   mask-image: url("../../images/icons/icon-copy.svg");
   background-size: cover;
 }
-
 #acf-field-group-fields .acf-field-list .copyable.input-copyable:not(.copy-unsupported).copied .acf-input-wrap:after {
   -webkit-mask-image: url("../../images/icons/icon-check-circle-solid.svg");
   mask-image: url("../../images/icons/icon-check-circle-solid.svg");
   background-color: #49ad52;
 }
-
+#acf-field-group-fields .acf-field-list {
+  /* no fields */
+}
 #acf-field-group-fields .acf-field-list .no-fields-message {
   padding: 15px 15px;
   background: #fff;
   display: none;
 }
-
+#acf-field-group-fields .acf-field-list {
+  /* empty */
+}
 #acf-field-group-fields .acf-field-list.-empty .no-fields-message {
   display: block;
 }
-
 .acf-admin-3-8 #acf-field-group-fields .acf-field-list-wrap {
   border-color: #dfdfdf;
 }
@@ -318,9 +287,100 @@
   border-top: #eeeeee solid 1px;
   background: #fff;
   /* sortable */
+}
+.acf-field-object.ui-sortable-helper {
+  overflow: hidden !important;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #A5D2E7 !important;
+  border-radius: 8px;
+  filter: drop-shadow(0px 10px 20px rgba(16, 24, 40, 0.14)) drop-shadow(0px 1px 3px rgba(16, 24, 40, 0.1));
+}
+.acf-field-object.ui-sortable-helper:before {
+  display: none !important;
+}
+.acf-field-object.ui-sortable-placeholder {
+  box-shadow: 0 -1px 0 0 #DFDFDF;
+  visibility: visible !important;
+  background: #F9F9F9;
+  border-top-color: transparent;
+  min-height: 54px;
+}
+.acf-field-object.ui-sortable-placeholder:after, .acf-field-object.ui-sortable-placeholder:before {
+  visibility: hidden;
+}
+.acf-field-object {
   /* meta */
+}
+.acf-field-object > .meta {
+  display: none;
+}
+.acf-field-object {
   /* handle */
+}
+.acf-field-object > .handle a {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+.acf-field-object > .handle li {
+  word-wrap: break-word;
+}
+.acf-field-object > .handle strong {
+  display: block;
+  padding-bottom: 0;
+  font-size: 14px;
+  line-height: 14px;
+  min-height: 14px;
+}
+.acf-field-object > .handle .row-options {
+  display: block;
+  opacity: 0;
+  margin-top: 5px;
+}
+@media screen and (max-width: 880px) {
+  .acf-field-object > .handle .row-options {
+    opacity: 1;
+    margin-bottom: 0;
+  }
+}
+.acf-field-object > .handle .row-options a {
+  margin-right: 4px;
+}
+.acf-field-object > .handle .row-options a:hover {
+  color: rgb(4.0632911392, 71.1075949367, 102.9367088608);
+}
+.acf-field-object > .handle .row-options a.delete-field {
+  color: #a00;
+}
+.acf-field-object > .handle .row-options a.delete-field:hover {
+  color: #f00;
+}
+.acf-field-object > .handle .row-options.active {
+  visibility: visible;
+}
+.acf-field-object {
   /* open */
+}
+.acf-field-object.open + .acf-field-object {
+  border-top-color: #E1E1E1;
+}
+.acf-field-object.open > .handle {
+  background: #2a9bd9;
+  border: rgb(37.6669322709, 149.6764940239, 211.1330677291) solid 1px;
+  text-shadow: #268FBB 0 1px 0;
+  color: #fff;
+  position: relative;
+  margin: 0 -1px 0 -1px;
+}
+.acf-field-object.open > .handle a {
+  color: #fff !important;
+}
+.acf-field-object.open > .handle a:hover {
+  text-decoration: underline !important;
+}
+.acf-field-object {
   /*
   	// debug
   	&[data-save="meta"] {
@@ -336,125 +396,24 @@
   	}
   */
   /* hover */
-  /* settings */
-  /* conditional logic */
 }
-
-.acf-field-object.ui-sortable-helper {
-  overflow: hidden !important;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #A5D2E7 !important;
-  border-radius: 8px;
-  filter: drop-shadow(0px 10px 20px rgba(16, 24, 40, 0.14)) drop-shadow(0px 1px 3px rgba(16, 24, 40, 0.1));
-}
-
-.acf-field-object.ui-sortable-helper:before {
-  display: none !important;
-}
-
-.acf-field-object.ui-sortable-placeholder {
-  box-shadow: 0 -1px 0 0 #DFDFDF;
-  visibility: visible !important;
-  background: #F9F9F9;
-  border-top-color: transparent;
-  min-height: 54px;
-}
-
-.acf-field-object.ui-sortable-placeholder:after, .acf-field-object.ui-sortable-placeholder:before {
-  visibility: hidden;
-}
-
-.acf-field-object > .meta {
-  display: none;
-}
-
-.acf-field-object > .handle a {
-  -webkit-transition: none;
-  -moz-transition: none;
-  -o-transition: none;
-  transition: none;
-}
-
-.acf-field-object > .handle li {
-  word-wrap: break-word;
-}
-
-.acf-field-object > .handle strong {
-  display: block;
-  padding-bottom: 0;
-  font-size: 14px;
-  line-height: 14px;
-  min-height: 14px;
-}
-
-.acf-field-object > .handle .row-options {
-  display: block;
-  opacity: 0;
-  margin-top: 5px;
-}
-
-@media screen and (max-width: 880px) {
-  .acf-field-object > .handle .row-options {
-    opacity: 1;
-    margin-bottom: 0;
-  }
-}
-.acf-field-object > .handle .row-options a {
-  margin-right: 4px;
-}
-
-.acf-field-object > .handle .row-options a:hover {
-  color: #044767;
-}
-
-.acf-field-object > .handle .row-options a.delete-field {
-  color: #a00;
-}
-
-.acf-field-object > .handle .row-options a.delete-field:hover {
-  color: #f00;
-}
-
-.acf-field-object > .handle .row-options.active {
-  visibility: visible;
-}
-
-.acf-field-object.open + .acf-field-object {
-  border-top-color: #E1E1E1;
-}
-
-.acf-field-object.open > .handle {
-  background: #2a9bd9;
-  border: #2696d3 solid 1px;
-  text-shadow: #268FBB 0 1px 0;
-  color: #fff;
-  position: relative;
-  margin: 0 -1px 0 -1px;
-}
-
-.acf-field-object.open > .handle a {
-  color: #fff !important;
-}
-
-.acf-field-object.open > .handle a:hover {
-  text-decoration: underline !important;
-}
-
 .acf-field-object:hover > .handle .row-options, .acf-field-object.-hover > .handle .row-options, .acf-field-object:focus-within > .handle .row-options {
   opacity: 1;
   margin-bottom: 0;
 }
-
+.acf-field-object {
+  /* settings */
+}
 .acf-field-object > .settings {
   display: none;
   width: 100%;
 }
-
 .acf-field-object > .settings > .acf-table {
   border: none;
 }
-
+.acf-field-object {
+  /* conditional logic */
+}
 .acf-field-object .rule-groups {
   margin-top: 20px;
 }
@@ -467,52 +426,41 @@
 .rule-groups h4 {
   margin: 3px 0;
 }
-
 .rule-groups .rule-group {
   margin: 0 0 5px;
 }
-
 .rule-groups .rule-group h4 {
   margin: 0 0 3px;
 }
-
 .rule-groups .rule-group td.param {
   width: 35%;
 }
-
 .rule-groups .rule-group td.operator {
   width: 20%;
 }
-
 .rule-groups .rule-group td.add {
   width: 40px;
 }
-
 .rule-groups .rule-group td.remove {
   width: 28px;
   vertical-align: middle;
 }
-
 .rule-groups .rule-group td.remove a {
   width: 22px;
   height: 22px;
   visibility: hidden;
 }
-
 .rule-groups .rule-group td.remove a:before {
   position: relative;
   top: -2px;
   font-size: 16px;
 }
-
 .rule-groups .rule-group tr:hover td.remove a {
   visibility: visible;
 }
-
 .rule-groups .rule-group select:empty {
   background: #f8f8f8;
 }
-
 .rule-groups:not(.rule-groups-multiple) .rule-group:first-child tr:first-child td.remove a {
   /* Don't allow user to delete the only rule group */
   visibility: hidden !important;
@@ -562,15 +510,12 @@ table.conditional-logic-rules tbody td {
 .acf-field-object-tab .acf-field-setting-wrapper {
   display: none;
 }
-
 .acf-field-object-tab .li-field-name {
   visibility: hidden;
 }
-
 .acf-field-object-tab p:first-child {
   margin: 0.5em 0;
 }
-
 .acf-field-object-tab li.acf-settings-type-presentation,
 .acf-field-object-tab .acf-field-settings-main-presentation {
   display: none !important;
@@ -588,15 +533,12 @@ table.conditional-logic-rules tbody td {
 .acf-field-object-accordion .acf-field-setting-wrapper {
   display: none;
 }
-
 .acf-field-object-accordion .li-field-name {
   visibility: hidden;
 }
-
 .acf-field-object-accordion p:first-child {
   margin: 0.5em 0;
 }
-
 .acf-field-object-accordion .acf-field-setting-instructions {
   display: block;
 }
@@ -612,10 +554,14 @@ table.conditional-logic-rules tbody td {
   display: none !important;
 }
 
+.acf-field-object-message .acf-field-setting-name,
+.acf-field-object-message .acf-field-setting-instructions,
+.acf-field-object-message .acf-field-setting-required {
+  display: none !important;
+}
 .acf-field-object-message .li-field-name {
   visibility: hidden;
 }
-
 .acf-field-object-message textarea {
   height: 175px !important;
 }
@@ -641,14 +587,12 @@ table.conditional-logic-rules tbody td {
 .acf-field-object-date-time-picker .acf-radio-list li {
   line-height: 25px;
 }
-
 .acf-field-object-date-picker .acf-radio-list span,
 .acf-field-object-time-picker .acf-radio-list span,
 .acf-field-object-date-time-picker .acf-radio-list span {
   display: inline-block;
   min-width: 10em;
 }
-
 .acf-field-object-date-picker .acf-radio-list input[type=text],
 .acf-field-object-time-picker .acf-radio-list input[type=text],
 .acf-field-object-date-time-picker .acf-radio-list input[type=text] {
@@ -658,7 +602,6 @@ table.conditional-logic-rules tbody td {
 .acf-field-object-date-time-picker .acf-radio-list span {
   min-width: 15em;
 }
-
 .acf-field-object-date-time-picker .acf-radio-list input[type=text] {
   width: 200px;
 }
@@ -672,7 +615,6 @@ table.conditional-logic-rules tbody td {
   padding: 12px;
   margin: 0;
 }
-
 #slugdiv input[type=text] {
   width: 100%;
   height: 28px;
@@ -772,35 +714,21 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-admin-page .p1 {
   font-size: 15px;
 }
-
 .acf-admin-page .p2, .acf-admin-page .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner p, .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner .acf-admin-page p {
   font-size: 14px;
 }
-
 .acf-admin-page .p3 {
   font-size: 13.5px;
 }
-
-.acf-admin-page .p4,
-.acf-admin-page .post-type-acf-field-group .acf-thead li,
-.post-type-acf-field-group .acf-thead .acf-admin-page li,
-.acf-admin-page .post-type-acf-field-group .acf-field-object .handle li,
-.post-type-acf-field-group .acf-field-object .handle .acf-admin-page li,
-.acf-admin-page .post-type-acf-field-group .acf-field-object .handle li.li-field-label a.edit-field,
-.post-type-acf-field-group .acf-field-object .handle li.li-field-label .acf-admin-page a.edit-field,
-.acf-admin-page .acf-field-list .acf-sortable-handle,
-.acf-field-list .acf-admin-page .acf-sortable-handle,
-.acf-admin-page input[type=text],
+.acf-admin-page .p4, .acf-admin-page .post-type-acf-field-group .acf-thead li, .post-type-acf-field-group .acf-thead .acf-admin-page li, .acf-admin-page .post-type-acf-field-group .acf-field-object .handle li, .post-type-acf-field-group .acf-field-object .handle .acf-admin-page li, .acf-admin-page .post-type-acf-field-group .acf-field-object .handle li.li-field-label a.edit-field, .post-type-acf-field-group .acf-field-object .handle li.li-field-label .acf-admin-page a.edit-field, .acf-admin-page .acf-field-list .acf-sortable-handle, .acf-field-list .acf-admin-page .acf-sortable-handle, .acf-admin-page input[type=text],
 .acf-admin-page input[type=search],
 .acf-admin-page input[type=number],
 .acf-admin-page textarea,
-.acf-admin-page select {
+.acf-admin-page select, .acf-admin-page .button, .acf-admin-page .acf-input .select2-container.-acf .select2-selection__rendered,
+.acf-admin-page .rule-groups .select2-container.-acf .select2-selection__rendered {
   font-size: 13px;
 }
-
-.acf-admin-page .p5,
-.acf-admin-page .acf-fields .acf-field-settings-tab-bar li a,
-.acf-fields .acf-field-settings-tab-bar li .acf-admin-page a,
+.acf-admin-page .p5, .acf-admin-page .acf-fields .acf-field-settings-tab-bar li a, .acf-fields .acf-field-settings-tab-bar li .acf-admin-page a,
 .acf-admin-page .acf-fields .acf-tab-wrap .acf-tab-group li a,
 .acf-fields .acf-tab-wrap .acf-tab-group li .acf-admin-page a,
 .acf-admin-page.acf-internal-post-type .acf-field-settings-tab-bar li a,
@@ -808,29 +736,17 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-admin-page .acf-browse-fields-modal-wrap .acf-field-settings-tab-bar li a,
 .acf-browse-fields-modal-wrap .acf-field-settings-tab-bar li .acf-admin-page a,
 .acf-admin-page .acf-browse-fields-modal-wrap .acf-tab-wrap .acf-tab-group li a,
-.acf-browse-fields-modal-wrap .acf-tab-wrap .acf-tab-group li .acf-admin-page a,
-.acf-admin-page .acf-field-group-settings-footer .acf-created-on,
-.acf-field-group-settings-footer .acf-admin-page .acf-created-on,
-.acf-admin-page .acf-field-setting-display_format .acf-radio-list li label code,
-.acf-field-setting-display_format .acf-radio-list li label .acf-admin-page code,
+.acf-browse-fields-modal-wrap .acf-tab-wrap .acf-tab-group li .acf-admin-page a, .acf-admin-page .acf-field-group-settings-footer .acf-created-on, .acf-field-group-settings-footer .acf-admin-page .acf-created-on, .acf-admin-page .acf-field-setting-display_format .acf-radio-list li label code, .acf-field-setting-display_format .acf-radio-list li label .acf-admin-page code,
 .acf-admin-page .acf-field-setting-return_format .acf-radio-list li label code,
 .acf-field-setting-return_format .acf-radio-list li label .acf-admin-page code {
   font-size: 12.5px;
 }
-
-.acf-admin-page .p6,
-.acf-admin-page .post-type-acf-field-group .acf-field-object .handle li.li-field-label .row-options a,
-.post-type-acf-field-group .acf-field-object .handle li.li-field-label .row-options .acf-admin-page a,
-.acf-admin-page .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner p.acf-small,
-.post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner .acf-admin-page p.acf-small,
-.acf-admin-page .acf-small {
+.acf-admin-page .p6, .acf-admin-page .post-type-acf-field-group .acf-field-object .handle li.li-field-label .row-options a, .post-type-acf-field-group .acf-field-object .handle li.li-field-label .row-options .acf-admin-page a, .acf-admin-page .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner p.acf-small, .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner .acf-admin-page p.acf-small, .acf-admin-page .acf-small {
   font-size: 12px;
 }
-
 .acf-admin-page .p7 {
   font-size: 11.5px;
 }
-
 .acf-admin-page .p8 {
   font-size: 11px;
 }
@@ -852,8 +768,7 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-admin-page .acf-settings-wrap h1 {
   display: none !important;
 }
-
-.acf-admin-page #acf-admin-tools h1 {
+.acf-admin-page #acf-admin-tools h1:not(.acf-field-group-pro-features-title, .acf-field-group-pro-features-title-sm) {
   display: none !important;
 }
 
@@ -871,7 +786,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   box-shadow: none;
   outline: none;
 }
-
 .acf-admin-page a:focus-visible {
   box-shadow: 0 0 0 1px #4f94d4, 0 0 2px 1px rgba(79, 148, 212, 0.8);
   outline: 1px solid transparent;
@@ -883,89 +797,7 @@ html[dir=rtl] .acf-field-object.open > .handle {
   *  All Inputs
   *
   *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Read only text inputs
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Number fields
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Textarea
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Select
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Radio Button & Checkbox base styling
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Radio Buttons
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Checkboxes
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Radio Buttons & Checkbox lists
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  ACF Switch
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  File input button
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Action Buttons
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Edit field group header
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Select2 inputs
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  ACF label
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  Tooltip for field name field setting (result of a fix for keyboard navigation)
-  *
-  *---------------------------------------------------------------------------------------------*/
-  /* Field Type Selection select2 */
-  /*---------------------------------------------------------------------------------------------
-  *
-  *  RTL arrow position
-  *
-  *---------------------------------------------------------------------------------------------*/
 }
-
 .acf-admin-page input[type=text],
 .acf-admin-page input[type=search],
 .acf-admin-page input[type=number],
@@ -982,7 +814,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
   color: #344054;
 }
-
 .acf-admin-page input[type=text]:focus,
 .acf-admin-page input[type=search]:focus,
 .acf-admin-page input[type=number]:focus,
@@ -991,16 +822,14 @@ html[dir=rtl] .acf-field-object.open > .handle {
   outline: 3px solid #EBF5FA;
   border-color: #399CCB;
 }
-
 .acf-admin-page input[type=text]:disabled,
 .acf-admin-page input[type=search]:disabled,
 .acf-admin-page input[type=number]:disabled,
 .acf-admin-page textarea:disabled,
 .acf-admin-page select:disabled {
   background-color: #F9FAFB;
-  color: #808a9e;
+  color: rgb(128.2255319149, 137.7574468085, 157.7744680851);
 }
-
 .acf-admin-page input[type=text]::placeholder,
 .acf-admin-page input[type=search]::placeholder,
 .acf-admin-page input[type=number]::placeholder,
@@ -1008,17 +837,35 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-admin-page select::placeholder {
   color: #98A2B3;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Read only text inputs
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page input[type=text]:read-only {
   background-color: #F9FAFB;
   color: #98A2B3;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Number fields
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page .acf-field.acf-field-number .acf-label,
 .acf-admin-page .acf-field.acf-field-number .acf-input input[type=number] {
   max-width: 180px;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Textarea
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page textarea {
   box-sizing: border-box;
   padding-top: 10px;
@@ -1026,7 +873,13 @@ html[dir=rtl] .acf-field-object.open > .handle {
   height: 80px;
   min-height: 56px;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Select
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page select {
   min-width: 160px;
   max-width: 100%;
@@ -1036,11 +889,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background-position: right 10px top 50%;
   background-size: 20px;
 }
-
 .acf-admin-page select:hover, .acf-admin-page select:focus {
   color: #0783BE;
 }
-
 .acf-admin-page select::before {
   content: "";
   display: block;
@@ -1050,13 +901,18 @@ html[dir=rtl] .acf-field-object.open > .handle {
   width: 20px;
   height: 20px;
 }
-
 .acf-admin-page.rtl select {
   padding-right: 12px;
   padding-left: 40px;
   background-position: left 10px top 50%;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Radio Button & Checkbox base styling
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page input[type=radio],
 .acf-admin-page input[type=checkbox] {
   box-sizing: border-box;
@@ -1069,20 +925,17 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background: #fff;
   box-shadow: none;
 }
-
 .acf-admin-page input[type=radio]:hover,
 .acf-admin-page input[type=checkbox]:hover {
   background-color: #EBF5FA;
   border-color: #0783BE;
 }
-
 .acf-admin-page input[type=radio]:checked, .acf-admin-page input[type=radio]:focus-visible,
 .acf-admin-page input[type=checkbox]:checked,
 .acf-admin-page input[type=checkbox]:focus-visible {
   background-color: #EBF5FA;
   border-color: #0783BE;
 }
-
 .acf-admin-page input[type=radio]:checked:before, .acf-admin-page input[type=radio]:focus-visible:before,
 .acf-admin-page input[type=checkbox]:checked:before,
 .acf-admin-page input[type=checkbox]:focus-visible:before {
@@ -1099,56 +952,74 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background-repeat: no-repeat;
   background-position: center;
 }
-
 .acf-admin-page input[type=radio]:active,
 .acf-admin-page input[type=checkbox]:active {
   box-shadow: 0px 0px 0px 3px #EBF5FA, 0px 0px 0px rgba(255, 54, 54, 0.25);
 }
-
 .acf-admin-page input[type=radio]:disabled,
 .acf-admin-page input[type=checkbox]:disabled {
   background-color: #F9FAFB;
   border-color: #D0D5DD;
 }
-
 .acf-admin-page.rtl input[type=radio]:checked:before, .acf-admin-page.rtl input[type=radio]:focus-visible:before,
 .acf-admin-page.rtl input[type=checkbox]:checked:before,
 .acf-admin-page.rtl input[type=checkbox]:focus-visible:before {
   left: 1px;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Radio Buttons
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page input[type=radio]:checked:before, .acf-admin-page input[type=radio]:focus:before {
   background-image: url("../../images/field-states/radio-active.svg");
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Checkboxes
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page input[type=checkbox]:checked:before, .acf-admin-page input[type=checkbox]:focus:before {
   background-image: url("../../images/field-states/checkbox-active.svg");
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Radio Buttons & Checkbox lists
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page .acf-radio-list li input[type=radio],
 .acf-admin-page .acf-radio-list li input[type=checkbox],
 .acf-admin-page .acf-checkbox-list li input[type=radio],
 .acf-admin-page .acf-checkbox-list li input[type=checkbox] {
   margin-right: 6px;
 }
-
 .acf-admin-page .acf-radio-list.acf-bl li,
 .acf-admin-page .acf-checkbox-list.acf-bl li {
   margin-bottom: 8px;
 }
-
 .acf-admin-page .acf-radio-list.acf-bl li:last-of-type,
 .acf-admin-page .acf-checkbox-list.acf-bl li:last-of-type {
   margin-bottom: 0;
 }
-
 .acf-admin-page .acf-radio-list label,
 .acf-admin-page .acf-checkbox-list label {
   display: flex;
   align-items: center;
   align-content: center;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  ACF Switch
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page .acf-switch {
   width: 42px;
   height: 24px;
@@ -1156,32 +1027,25 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background-color: #D0D5DD;
   border-radius: 12px;
 }
-
 .acf-admin-page .acf-switch:hover {
   background-color: #98A2B3;
 }
-
 .acf-admin-page .acf-switch:active {
   box-shadow: 0px 0px 0px 3px #EBF5FA, 0px 0px 0px rgba(255, 54, 54, 0.25);
 }
-
 .acf-admin-page .acf-switch.-on {
   background-color: #0783BE;
 }
-
 .acf-admin-page .acf-switch.-on:hover {
   background-color: #066998;
 }
-
 .acf-admin-page .acf-switch.-on .acf-switch-slider {
   left: 20px;
 }
-
 .acf-admin-page .acf-switch .acf-switch-off,
 .acf-admin-page .acf-switch .acf-switch-on {
   visibility: hidden;
 }
-
 .acf-admin-page .acf-switch .acf-switch-slider {
   width: 20px;
   height: 20px;
@@ -1189,12 +1053,10 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-radius: 100px;
   box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
 }
-
 .acf-admin-page .acf-field-true-false {
   display: flex;
   align-items: flex-start;
 }
-
 .acf-admin-page .acf-field-true-false .acf-label {
   order: 2;
   display: block;
@@ -1204,31 +1066,32 @@ html[dir=rtl] .acf-field-object.open > .handle {
   margin-bottom: 0;
   margin-left: 12px;
 }
-
 .acf-admin-page .acf-field-true-false .acf-label label {
   margin-bottom: 0;
 }
-
 .acf-admin-page .acf-field-true-false .acf-label .acf-tip {
   margin-left: 12px;
 }
-
 .acf-admin-page .acf-field-true-false .acf-label .description {
   display: block;
   margin-top: 2px;
   margin-left: 0;
 }
-
 .acf-admin-page.rtl .acf-field-true-false .acf-label {
   margin-right: 12px;
   margin-left: 0;
 }
-
 .acf-admin-page.rtl .acf-field-true-false .acf-tip {
   margin-right: 12px;
   margin-left: 0;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  File input button
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page input::file-selector-button {
   box-sizing: border-box;
   min-height: 40px;
@@ -1245,13 +1108,18 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-color: #0783BE;
   text-decoration: none;
 }
-
 .acf-admin-page input::file-selector-button:hover {
   border-color: #066998;
   cursor: pointer;
   color: #066998 !important;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Action Buttons
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page .button {
   display: inline-flex;
   align-items: center;
@@ -1265,29 +1133,38 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-radius: 6px;
   color: #0783BE;
 }
-
 .acf-admin-page .button:hover {
-  background-color: #f3f9fc;
+  background-color: rgb(243.16, 249.08, 252.04);
   border-color: #0783BE;
   color: #0783BE;
 }
-
 .acf-admin-page .button:focus {
-  background-color: #f3f9fc;
+  background-color: rgb(243.16, 249.08, 252.04);
   outline: 3px solid #EBF5FA;
   color: #0783BE;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Edit field group header
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page .edit-field-group-header {
   display: block !important;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Select2 inputs
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page .acf-input .select2-container.-acf .select2-selection,
 .acf-admin-page .rule-groups .select2-container.-acf .select2-selection {
   border: none;
   line-height: 1;
 }
-
 .acf-admin-page .acf-input .select2-container.-acf .select2-selection__rendered,
 .acf-admin-page .rule-groups .select2-container.-acf .select2-selection__rendered {
   box-sizing: border-box;
@@ -1302,7 +1179,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
   color: #344054;
 }
-
 .acf-admin-page .acf-input .acf-conditional-select-name,
 .acf-admin-page .rule-groups .acf-conditional-select-name {
   min-width: 180px;
@@ -1310,58 +1186,48 @@ html[dir=rtl] .acf-field-object.open > .handle {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .acf-admin-page .acf-input .acf-conditional-select-id,
 .acf-admin-page .rule-groups .acf-conditional-select-id {
   padding-right: 30px;
 }
-
 .acf-admin-page .acf-input .value .select2-container--focus,
 .acf-admin-page .rule-groups .value .select2-container--focus {
   height: 40px;
 }
-
 .acf-admin-page .acf-input .value .select2-container--open .select2-selection__rendered,
 .acf-admin-page .rule-groups .value .select2-container--open .select2-selection__rendered {
   border-color: #399CCB;
 }
-
 .acf-admin-page .acf-input .select2-container--focus,
 .acf-admin-page .rule-groups .select2-container--focus {
   outline: 3px solid #EBF5FA;
   border-color: #399CCB;
   border-radius: 6px;
 }
-
 .acf-admin-page .acf-input .select2-container--focus .select2-selection__rendered,
 .acf-admin-page .rule-groups .select2-container--focus .select2-selection__rendered {
   border-color: #399CCB !important;
 }
-
 .acf-admin-page .acf-input .select2-container--focus.select2-container--below.select2-container--open .select2-selection__rendered,
 .acf-admin-page .rule-groups .select2-container--focus.select2-container--below.select2-container--open .select2-selection__rendered {
   border-bottom-right-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
-
 .acf-admin-page .acf-input .select2-container--focus.select2-container--above.select2-container--open .select2-selection__rendered,
 .acf-admin-page .rule-groups .select2-container--focus.select2-container--above.select2-container--open .select2-selection__rendered {
   border-top-right-radius: 0 !important;
   border-top-left-radius: 0 !important;
 }
-
 .acf-admin-page .acf-input .select2-container .select2-search--inline .select2-search__field,
 .acf-admin-page .rule-groups .select2-container .select2-search--inline .select2-search__field {
   margin: 0;
   padding-left: 6px;
 }
-
 .acf-admin-page .acf-input .select2-container .select2-search--inline .select2-search__field:focus,
 .acf-admin-page .rule-groups .select2-container .select2-search--inline .select2-search__field:focus {
   outline: none;
   border: none;
 }
-
 .acf-admin-page .acf-input .select2-container--default .select2-selection--multiple .select2-selection__rendered,
 .acf-admin-page .rule-groups .select2-container--default .select2-selection--multiple .select2-selection__rendered {
   padding-top: 0;
@@ -1369,7 +1235,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-bottom: 0;
   padding-left: 6px;
 }
-
 .acf-admin-page .acf-input .select2-selection__clear,
 .acf-admin-page .rule-groups .select2-selection__clear {
   width: 18px;
@@ -1381,7 +1246,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   overflow: hidden;
   color: #fff;
 }
-
 .acf-admin-page .acf-input .select2-selection__clear:before,
 .acf-admin-page .rule-groups .select2-selection__clear:before {
   content: "";
@@ -1402,39 +1266,46 @@ html[dir=rtl] .acf-field-object.open > .handle {
   mask-image: url("../../images/icons/icon-close.svg");
   background-color: #98A2B3;
 }
-
 .acf-admin-page .acf-input .select2-selection__clear:hover::before,
 .acf-admin-page .rule-groups .select2-selection__clear:hover::before {
   background-color: #0783BE;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  ACF label
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page .acf-label {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
 .acf-admin-page .acf-label .acf-icon-help {
   width: 18px;
   height: 18px;
   background-color: #98A2B3;
 }
-
 .acf-admin-page .acf-label label {
   margin-bottom: 0;
 }
-
 .acf-admin-page .acf-label .description {
   margin-top: 2px;
 }
-
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  Tooltip for field name field setting (result of a fix for keyboard navigation)
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page .acf-field-setting-name .acf-tip {
   position: absolute;
   top: 0;
   left: 654px;
   color: #98A2B3;
 }
-
 .rtl.acf-admin-page .acf-field-setting-name .acf-tip {
   left: auto;
   right: 654px;
@@ -1444,7 +1315,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   width: 18px;
   height: 18px;
 }
-
+.acf-admin-page {
+  /* Field Type Selection select2 */
+}
 .acf-admin-page .acf-field-setting-type .select2-container.-acf,
 .acf-admin-page .acf-field-permalink-rewrite .select2-container.-acf,
 .acf-admin-page .acf-field-query-var .select2-container.-acf,
@@ -1459,7 +1332,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-admin-page .rule-groups .select2-container.-acf {
   min-height: 40px;
 }
-
 .acf-admin-page .acf-field-setting-type .select2-container--default .select2-selection--single .select2-selection__rendered,
 .acf-admin-page .acf-field-permalink-rewrite .select2-container--default .select2-selection--single .select2-selection__rendered,
 .acf-admin-page .acf-field-query-var .select2-container--default .select2-selection--single .select2-selection__rendered,
@@ -1482,7 +1354,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-bottom: 0;
   padding-left: 12px;
 }
-
 .acf-admin-page .acf-field-setting-type .select2-container--default .select2-selection--single .field-type-icon,
 .acf-admin-page .acf-field-permalink-rewrite .select2-container--default .select2-selection--single .field-type-icon,
 .acf-admin-page .acf-field-query-var .select2-container--default .select2-selection--single .field-type-icon,
@@ -1500,7 +1371,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   height: 18px;
   margin-right: 2px;
 }
-
 .acf-admin-page .acf-field-setting-type .select2-container--default .select2-selection--single .field-type-icon:before,
 .acf-admin-page .acf-field-permalink-rewrite .select2-container--default .select2-selection--single .field-type-icon:before,
 .acf-admin-page .acf-field-query-var .select2-container--default .select2-selection--single .field-type-icon:before,
@@ -1516,7 +1386,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   width: 9px;
   height: 9px;
 }
-
 .acf-admin-page .acf-field-setting-type .select2-container--open .select2-selection__rendered,
 .acf-admin-page .acf-field-permalink-rewrite .select2-container--open .select2-selection__rendered,
 .acf-admin-page .acf-field-query-var .select2-container--open .select2-selection__rendered,
@@ -1532,7 +1401,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-color: #6BB5D8 !important;
   border-bottom-color: #D0D5DD !important;
 }
-
 .acf-admin-page .acf-field-setting-type .select2-container--open.select2-container--below .select2-selection__rendered,
 .acf-admin-page .acf-field-permalink-rewrite .select2-container--open.select2-container--below .select2-selection__rendered,
 .acf-admin-page .acf-field-query-var .select2-container--open.select2-container--below .select2-selection__rendered,
@@ -1548,7 +1416,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-bottom-right-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
-
 .acf-admin-page .acf-field-setting-type .select2-container--open.select2-container--above .select2-selection__rendered,
 .acf-admin-page .acf-field-permalink-rewrite .select2-container--open.select2-container--above .select2-selection__rendered,
 .acf-admin-page .acf-field-query-var .select2-container--open.select2-container--above .select2-selection__rendered,
@@ -1566,7 +1433,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-bottom-color: #6BB5D8 !important;
   border-top-color: #D0D5DD !important;
 }
-
 .acf-admin-page .acf-field-setting-type .acf-selection.has-icon,
 .acf-admin-page .acf-field-permalink-rewrite .acf-selection.has-icon,
 .acf-admin-page .acf-field-query-var .acf-selection.has-icon,
@@ -1581,7 +1447,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-admin-page .rule-groups .acf-selection.has-icon {
   margin-left: 6px;
 }
-
 .rtl.acf-admin-page .acf-field-setting-type .acf-selection.has-icon, .acf-admin-page .acf-field-permalink-rewrite .acf-selection.has-icon, .acf-admin-page .acf-field-query-var .acf-selection.has-icon, .acf-admin-page .acf-field-capability .acf-selection.has-icon, .acf-admin-page .acf-field-parent-slug .acf-selection.has-icon, .acf-admin-page .acf-field-data-storage .acf-selection.has-icon, .acf-admin-page .acf-field-manage-terms .acf-selection.has-icon, .acf-admin-page .acf-field-edit-terms .acf-selection.has-icon, .acf-admin-page .acf-field-delete-terms .acf-selection.has-icon, .acf-admin-page .acf-field-assign-terms .acf-selection.has-icon, .acf-admin-page .acf-field-meta-box .acf-selection.has-icon, .acf-admin-page .rule-groups .acf-selection.has-icon {
   margin-right: 6px;
 }
@@ -1604,7 +1469,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   right: 12px;
   background-color: transparent;
 }
-
 .acf-admin-page .acf-field-setting-type .select2-selection__arrow:after,
 .acf-admin-page .acf-field-permalink-rewrite .select2-selection__arrow:after,
 .acf-admin-page .acf-field-query-var .select2-selection__arrow:after,
@@ -1640,7 +1504,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   white-space: nowrap;
   overflow: hidden;
 }
-
 .acf-admin-page .acf-field-setting-type .select2-selection__arrow b[role=presentation],
 .acf-admin-page .acf-field-permalink-rewrite .select2-selection__arrow b[role=presentation],
 .acf-admin-page .acf-field-query-var .select2-selection__arrow b[role=presentation],
@@ -1655,7 +1518,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-admin-page .rule-groups .select2-selection__arrow b[role=presentation] {
   display: none;
 }
-
 .acf-admin-page .acf-field-setting-type .select2-container--open .select2-selection__arrow:after,
 .acf-admin-page .acf-field-permalink-rewrite .select2-container--open .select2-selection__arrow:after,
 .acf-admin-page .acf-field-query-var .select2-container--open .select2-selection__arrow:after,
@@ -1671,7 +1533,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   -webkit-mask-image: url("../../images/icons/icon-chevron-up.svg");
   mask-image: url("../../images/icons/icon-chevron-up.svg");
 }
-
 .acf-admin-page .acf-term-search-term-name {
   background-color: #F9FAFB;
   border-top: 1px solid #EAECF0;
@@ -1683,42 +1544,51 @@ html[dir=rtl] .acf-field-object.open > .handle {
   display: block;
   font-weight: 300;
 }
-
-.acf-admin-page .field-type-select-results {
+.acf-admin-page .field-type-select-results, .acf-admin-page .schema-property-select-results,
+.acf-admin-page .schema-type-select-results,
+.acf-admin-page .schema-output-format-select-results {
   position: relative;
   top: 4px;
   z-index: 1002;
   border-radius: 0 0 6px 6px;
   box-shadow: 0px 8px 24px 4px rgba(16, 24, 40, 0.12);
 }
-
-.acf-admin-page .field-type-select-results.select2-dropdown--above {
+.acf-admin-page .field-type-select-results.select2-dropdown--above, .acf-admin-page .select2-dropdown--above.schema-property-select-results,
+.acf-admin-page .select2-dropdown--above.schema-type-select-results,
+.acf-admin-page .select2-dropdown--above.schema-output-format-select-results {
   display: flex;
   flex-direction: column-reverse;
   top: 0;
   border-radius: 6px 6px 0 0;
   z-index: 99999;
 }
-
-.select2-container.select2-container--open.acf-admin-page .field-type-select-results {
+.select2-container.select2-container--open.acf-admin-page .field-type-select-results, .select2-container.select2-container--open.acf-admin-page .schema-property-select-results,
+.select2-container.select2-container--open.acf-admin-page .schema-type-select-results,
+.select2-container.select2-container--open.acf-admin-page .schema-output-format-select-results {
   box-shadow: 0px 0px 0px 3px #EBF5FA, 0px 8px 24px 4px rgba(16, 24, 40, 0.12);
 }
 
-.acf-admin-page .field-type-select-results .acf-selection.has-icon {
+.acf-admin-page .field-type-select-results .acf-selection.has-icon, .acf-admin-page .schema-property-select-results .acf-selection.has-icon,
+.acf-admin-page .schema-type-select-results .acf-selection.has-icon,
+.acf-admin-page .schema-output-format-select-results .acf-selection.has-icon {
   margin-left: 6px;
 }
-
-.rtl.acf-admin-page .field-type-select-results .acf-selection.has-icon {
+.rtl.acf-admin-page .field-type-select-results .acf-selection.has-icon, .rtl.acf-admin-page .schema-property-select-results .acf-selection.has-icon,
+.rtl.acf-admin-page .schema-type-select-results .acf-selection.has-icon,
+.rtl.acf-admin-page .schema-output-format-select-results .acf-selection.has-icon {
   margin-right: 6px;
 }
 
-.acf-admin-page .field-type-select-results .select2-search {
+.acf-admin-page .field-type-select-results .select2-search, .acf-admin-page .schema-property-select-results .select2-search,
+.acf-admin-page .schema-type-select-results .select2-search,
+.acf-admin-page .schema-output-format-select-results .select2-search {
   position: relative;
   margin: 0;
   padding: 0;
 }
-
-.acf-admin-page .field-type-select-results .select2-search--dropdown:after {
+.acf-admin-page .field-type-select-results .select2-search--dropdown:after, .acf-admin-page .schema-property-select-results .select2-search--dropdown:after,
+.acf-admin-page .schema-type-select-results .select2-search--dropdown:after,
+.acf-admin-page .schema-output-format-select-results .select2-search--dropdown:after {
   content: "";
   display: block;
   position: absolute;
@@ -1741,40 +1611,49 @@ html[dir=rtl] .acf-field-object.open > .handle {
   white-space: nowrap;
   overflow: hidden;
 }
-
-.rtl.acf-admin-page .field-type-select-results .select2-search--dropdown:after {
+.rtl.acf-admin-page .field-type-select-results .select2-search--dropdown:after, .rtl.acf-admin-page .schema-property-select-results .select2-search--dropdown:after,
+.rtl.acf-admin-page .schema-type-select-results .select2-search--dropdown:after,
+.rtl.acf-admin-page .schema-output-format-select-results .select2-search--dropdown:after {
   right: 12px;
   left: auto;
 }
 
-.acf-admin-page .field-type-select-results .select2-search .select2-search__field {
+.acf-admin-page .field-type-select-results .select2-search .select2-search__field, .acf-admin-page .schema-property-select-results .select2-search .select2-search__field,
+.acf-admin-page .schema-type-select-results .select2-search .select2-search__field,
+.acf-admin-page .schema-output-format-select-results .select2-search .select2-search__field {
   padding-left: 38px;
   border-right: 0;
   border-bottom: 0;
   border-left: 0;
   border-radius: 0;
 }
-
-.rtl.acf-admin-page .field-type-select-results .select2-search .select2-search__field {
+.rtl.acf-admin-page .field-type-select-results .select2-search .select2-search__field, .rtl.acf-admin-page .schema-property-select-results .select2-search .select2-search__field,
+.rtl.acf-admin-page .schema-type-select-results .select2-search .select2-search__field,
+.rtl.acf-admin-page .schema-output-format-select-results .select2-search .select2-search__field {
   padding-right: 38px;
   padding-left: 0;
 }
 
-.acf-admin-page .field-type-select-results .select2-search .select2-search__field:focus {
+.acf-admin-page .field-type-select-results .select2-search .select2-search__field:focus, .acf-admin-page .schema-property-select-results .select2-search .select2-search__field:focus,
+.acf-admin-page .schema-type-select-results .select2-search .select2-search__field:focus,
+.acf-admin-page .schema-output-format-select-results .select2-search .select2-search__field:focus {
   border-top-color: #D0D5DD;
   outline: 0;
 }
-
-.acf-admin-page .field-type-select-results .select2-results__options {
+.acf-admin-page .field-type-select-results .select2-results__options, .acf-admin-page .schema-property-select-results .select2-results__options,
+.acf-admin-page .schema-type-select-results .select2-results__options,
+.acf-admin-page .schema-output-format-select-results .select2-results__options {
   max-height: 440px;
 }
-
-.acf-admin-page .field-type-select-results .select2-results__option .select2-results__option--highlighted {
+.acf-admin-page .field-type-select-results .select2-results__option .select2-results__option--highlighted, .acf-admin-page .schema-property-select-results .select2-results__option .select2-results__option--highlighted,
+.acf-admin-page .schema-type-select-results .select2-results__option .select2-results__option--highlighted,
+.acf-admin-page .schema-output-format-select-results .select2-results__option .select2-results__option--highlighted {
   background-color: #0783BE !important;
   color: #F9FAFB !important;
 }
-
-.acf-admin-page .field-type-select-results .select2-results__option .select2-results__option {
+.acf-admin-page .field-type-select-results .select2-results__option .select2-results__option, .acf-admin-page .schema-property-select-results .select2-results__option .select2-results__option,
+.acf-admin-page .schema-type-select-results .select2-results__option .select2-results__option,
+.acf-admin-page .schema-output-format-select-results .select2-results__option .select2-results__option {
   display: inline-flex;
   position: relative;
   width: calc(100% - 24px);
@@ -1785,26 +1664,30 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-left: 12px;
   align-items: center;
 }
-
-.acf-admin-page .field-type-select-results .select2-results__option .select2-results__option .field-type-icon {
+.acf-admin-page .field-type-select-results .select2-results__option .select2-results__option .field-type-icon, .acf-admin-page .schema-property-select-results .select2-results__option .select2-results__option .field-type-icon,
+.acf-admin-page .schema-type-select-results .select2-results__option .select2-results__option .field-type-icon,
+.acf-admin-page .schema-output-format-select-results .select2-results__option .select2-results__option .field-type-icon {
   top: auto;
   width: 18px;
   height: 18px;
   margin-right: 2px;
   box-shadow: 0 0 0 1px #F9FAFB;
 }
-
-.acf-admin-page .field-type-select-results .select2-results__option .select2-results__option .field-type-icon:before {
+.acf-admin-page .field-type-select-results .select2-results__option .select2-results__option .field-type-icon:before, .acf-admin-page .schema-property-select-results .select2-results__option .select2-results__option .field-type-icon:before,
+.acf-admin-page .schema-type-select-results .select2-results__option .select2-results__option .field-type-icon:before,
+.acf-admin-page .schema-output-format-select-results .select2-results__option .select2-results__option .field-type-icon:before {
   width: 9px;
   height: 9px;
 }
-
-.acf-admin-page .field-type-select-results .select2-results__option[aria-selected=true] {
+.acf-admin-page .field-type-select-results .select2-results__option[aria-selected=true], .acf-admin-page .schema-property-select-results .select2-results__option[aria-selected=true],
+.acf-admin-page .schema-type-select-results .select2-results__option[aria-selected=true],
+.acf-admin-page .schema-output-format-select-results .select2-results__option[aria-selected=true] {
   background-color: #EBF5FA !important;
   color: #344054 !important;
 }
-
-.acf-admin-page .field-type-select-results .select2-results__option[aria-selected=true]:after {
+.acf-admin-page .field-type-select-results .select2-results__option[aria-selected=true]:after, .acf-admin-page .schema-property-select-results .select2-results__option[aria-selected=true]:after,
+.acf-admin-page .schema-type-select-results .select2-results__option[aria-selected=true]:after,
+.acf-admin-page .schema-output-format-select-results .select2-results__option[aria-selected=true]:after {
   content: "";
   right: 13px;
   position: absolute;
@@ -1825,13 +1708,16 @@ html[dir=rtl] .acf-field-object.open > .handle {
   white-space: nowrap;
   overflow: hidden;
 }
-
-.rtl.acf-admin-page .field-type-select-results .select2-results__option[aria-selected=true]:after {
+.rtl.acf-admin-page .field-type-select-results .select2-results__option[aria-selected=true]:after, .rtl.acf-admin-page .schema-property-select-results .select2-results__option[aria-selected=true]:after,
+.rtl.acf-admin-page .schema-type-select-results .select2-results__option[aria-selected=true]:after,
+.rtl.acf-admin-page .schema-output-format-select-results .select2-results__option[aria-selected=true]:after {
   left: 13px;
   right: auto;
 }
 
-.acf-admin-page .field-type-select-results .select2-results__group {
+.acf-admin-page .field-type-select-results .select2-results__group, .acf-admin-page .schema-property-select-results .select2-results__group,
+.acf-admin-page .schema-type-select-results .select2-results__group,
+.acf-admin-page .schema-output-format-select-results .select2-results__group {
   display: inline-flex;
   align-items: center;
   width: calc(100% - 24px);
@@ -1852,7 +1738,23 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-left: 12px;
   font-weight: normal;
 }
-
+.acf-admin-page .schema-property-select-results .select2-results__option .select2-results__option,
+.acf-admin-page .schema-type-select-results .select2-results__option .select2-results__option,
+.acf-admin-page .schema-output-format-select-results .select2-results__option .select2-results__option {
+  display: flex;
+}
+.acf-admin-page .schema-property-select-results .select2-results__option .select2-results__options,
+.acf-admin-page .schema-type-select-results .select2-results__option .select2-results__options,
+.acf-admin-page .schema-output-format-select-results .select2-results__option .select2-results__options {
+  max-height: none;
+}
+.acf-admin-page {
+  /*---------------------------------------------------------------------------------------------
+  *
+  *  RTL arrow position
+  *
+  *---------------------------------------------------------------------------------------------*/
+}
 .acf-admin-page.rtl .acf-field-setting-type .select2-selection__arrow:after,
 .acf-admin-page.rtl .acf-field-permalink-rewrite .select2-selection__arrow:after,
 .acf-admin-page.rtl .acf-field-query-var .select2-selection__arrow:after {
@@ -1923,18 +1825,15 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-radius: 0 0 8px 8px;
   box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.1);
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap.-empty {
   border-top-width: 1px;
   border-top-style: solid;
   border-top-color: #EAECF0;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap.-empty .acf-thead,
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap.-empty .acf-tfoot {
   display: none;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap.-empty .no-fields-message {
   min-height: 280px;
 }
@@ -1953,7 +1852,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-bottom-style: solid;
   border-bottom-color: #EAECF0;
 }
-
 .post-type-acf-field-group .acf-thead li {
   display: flex;
   align-items: center;
@@ -1974,11 +1872,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-top-style: solid;
   border-top-color: #EAECF0;
 }
-
 .post-type-acf-field-group .acf-field-object:hover .acf-sortable-handle:before {
   display: inline-flex;
 }
-
 .post-type-acf-field-group .acf-field-object.acf-field-is-endpoint:before {
   display: block;
   content: "";
@@ -1987,11 +1883,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background: #D0D5DD;
   margin-top: -1px;
 }
-
 .post-type-acf-field-group .acf-field-object.acf-field-is-endpoint.acf-field-object-accordion:before {
   display: none;
 }
-
 .post-type-acf-field-group .acf-field-object.acf-field-is-endpoint.acf-field-object-accordion:after {
   display: block;
   content: "";
@@ -2000,52 +1894,41 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background: #D0D5DD;
   z-index: 500;
 }
-
 .post-type-acf-field-group .acf-field-object:hover {
-  background-color: #f7fbfd;
+  background-color: rgb(247.24, 251.12, 253.06);
 }
-
 .post-type-acf-field-group .acf-field-object.open {
   background-color: #fff;
   border-top-color: #A5D2E7;
 }
-
 .post-type-acf-field-group .acf-field-object.open .handle {
   background-color: #D8EBF5;
   border: none;
   text-shadow: none;
 }
-
 .post-type-acf-field-group .acf-field-object.open .handle a {
   color: #0783BE !important;
 }
-
 .post-type-acf-field-group .acf-field-object.open .handle a.delete-field {
   color: #a00 !important;
 }
-
 .post-type-acf-field-group .acf-field-object .acf-field-setting-type .acf-hl {
   margin: 0;
 }
-
 .post-type-acf-field-group .acf-field-object .acf-field-setting-type .acf-hl li {
   width: auto;
 }
-
 .post-type-acf-field-group .acf-field-object .acf-field-setting-type .acf-hl li:first-child {
   flex-grow: 1;
   margin-left: -10px;
 }
-
 .post-type-acf-field-group .acf-field-object .acf-field-setting-type .acf-hl li:nth-child(2) {
   padding-right: 0;
 }
-
 .post-type-acf-field-group .acf-field-object ul.acf-hl {
   display: flex;
   align-items: stretch;
 }
-
 .post-type-acf-field-group .acf-field-object .handle li {
   display: flex;
   align-items: top;
@@ -2053,7 +1936,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   min-height: 60px;
   color: #344054;
 }
-
 .post-type-acf-field-group .acf-field-object .handle li.li-field-label {
   display: flex;
   flex-wrap: wrap;
@@ -2062,15 +1944,12 @@ html[dir=rtl] .acf-field-object.open > .handle {
   align-items: flex-start;
   width: auto;
 }
-
 .post-type-acf-field-group .acf-field-object .handle li.li-field-label strong {
   font-weight: 500;
 }
-
 .post-type-acf-field-group .acf-field-object .handle li.li-field-label .row-options {
   width: 100%;
 }
-
 /*----------------------------------------------------------------------------
 *
 *  Table footer
@@ -2086,12 +1965,11 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-right: 24px;
   padding-bottom: 8px;
   padding-left: 24px;
-  background-color: #fff;
+  background-color: #F9FAFB;
   border-top-width: 1px;
   border-top-style: solid;
   border-top-color: #EAECF0;
 }
-
 .post-type-acf-field-group .acf-tfoot .acf-fr {
   margin-top: 0;
   margin-right: 0;
@@ -2129,7 +2007,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-bottom: 32px;
   padding-left: 0;
 }
-
 .acf-field-settings-main .acf-field:last-of-type,
 .acf-field-settings-main .acf-field.acf-last-visible {
   margin-bottom: 0;
@@ -2168,7 +2045,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-bottom: 0;
   padding-left: 72px;
 }
-
 @media screen and (max-width: 600px) {
   .acf-field-settings .acf-field {
     padding-right: 12px;
@@ -2179,12 +2055,10 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-field-settings .acf-field .acf-input {
   max-width: 600px;
 }
-
 .acf-field-settings .acf-field .acf-label.acf-input-sub,
 .acf-field-settings .acf-field .acf-input.acf-input-sub {
   max-width: 100%;
 }
-
 .acf-field-settings .acf-field .acf-label .acf-btn:disabled,
 .acf-field-settings .acf-field .acf-input .acf-btn:disabled {
   background-color: #F2F4F7;
@@ -2192,7 +2066,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border: 1px #D0D5DD solid;
   cursor: default;
 }
-
 .acf-field-settings .acf-field .acf-input-wrap {
   overflow: visible;
 }
@@ -2214,6 +2087,15 @@ html[dir=rtl] .acf-field-object.open > .handle {
   margin-top: 24px;
 }
 
+.acf-field-object-message .acf-field-settings-main-presentation {
+  padding-top: 0;
+  margin-top: 0;
+}
+.acf-field-object-message .acf-field-settings-main-presentation .acf-field-number {
+  border-top-style: none;
+  padding-top: 0;
+}
+
 /*----------------------------------------------------------------------------
 *
 *  Informational Notes for specific fields
@@ -2222,7 +2104,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-field-setting-bidirectional_notes .acf-label {
   display: none;
 }
-
 .acf-field-setting-bidirectional_notes .acf-feature-notice {
   background-color: #F9FAFB;
   border: 1px solid #EAECF0;
@@ -2231,11 +2112,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   color: #344054;
   position: relative;
 }
-
 .acf-field-setting-bidirectional_notes .acf-feature-notice.with-warning-icon {
   padding-left: 45px;
 }
-
 .acf-field-setting-bidirectional_notes .acf-feature-notice.with-warning-icon::before {
   content: "";
   display: block;
@@ -2270,6 +2149,7 @@ html[dir=rtl] .acf-field-object.open > .handle {
   min-height: 72px;
   box-sizing: border-box;
   width: 100%;
+  gap: 8px;
   margin-top: 0;
   margin-right: 0;
   margin-bottom: 0;
@@ -2282,12 +2162,12 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-top-style: solid;
   border-top-color: #EAECF0;
 }
-
 @media screen and (max-width: 600px) {
   .acf-field-settings .acf-field-settings-footer {
     padding-left: 12px;
   }
 }
+
 .rtl .acf-field-settings .acf-field-settings-footer {
   padding-top: 0;
   padding-right: 72px;
@@ -2306,7 +2186,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background: #F9FAFB;
   border-bottom-color: #1D2939;
 }
-
 .acf-fields .acf-tab-wrap .acf-tab-group,
 .acf-admin-page.acf-internal-post-type .acf-tab-wrap .acf-tab-group,
 .acf-browse-fields-modal-wrap .acf-tab-wrap .acf-tab-group {
@@ -2317,7 +2196,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-bottom-style: solid;
   border-bottom-color: #EAECF0;
 }
-
 .acf-fields .acf-field-settings-tab-bar,
 .acf-fields .acf-tab-wrap .acf-tab-group,
 .acf-admin-page.acf-internal-post-type .acf-field-settings-tab-bar,
@@ -2337,7 +2215,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-bottom-style: solid;
   border-bottom-color: #EAECF0;
 }
-
 .acf-fields .acf-field-settings-tab-bar li,
 .acf-fields .acf-tab-wrap .acf-tab-group li,
 .acf-admin-page.acf-internal-post-type .acf-field-settings-tab-bar li,
@@ -2351,7 +2228,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   margin-left: 0;
   padding: 0;
 }
-
 .acf-fields .acf-field-settings-tab-bar li a,
 .acf-fields .acf-tab-wrap .acf-tab-group li a,
 .acf-admin-page.acf-internal-post-type .acf-field-settings-tab-bar li a,
@@ -2376,7 +2252,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   color: #667085;
   font-weight: normal;
 }
-
 .acf-fields .acf-field-settings-tab-bar li a:focus-visible,
 .acf-fields .acf-tab-wrap .acf-tab-group li a:focus-visible,
 .acf-admin-page.acf-internal-post-type .acf-field-settings-tab-bar li a:focus-visible,
@@ -2385,7 +2260,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-browse-fields-modal-wrap .acf-tab-wrap .acf-tab-group li a:focus-visible {
   border: 1px solid #5897fb;
 }
-
 .acf-fields .acf-field-settings-tab-bar li a:hover,
 .acf-fields .acf-tab-wrap .acf-tab-group li a:hover,
 .acf-admin-page.acf-internal-post-type .acf-field-settings-tab-bar li a:hover,
@@ -2394,7 +2268,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-browse-fields-modal-wrap .acf-tab-wrap .acf-tab-group li a:hover {
   color: #1D2939;
 }
-
 .acf-fields .acf-field-settings-tab-bar li a:hover,
 .acf-fields .acf-tab-wrap .acf-tab-group li a:hover,
 .acf-admin-page.acf-internal-post-type .acf-field-settings-tab-bar li a:hover,
@@ -2403,7 +2276,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-browse-fields-modal-wrap .acf-tab-wrap .acf-tab-group li a:hover {
   background-color: transparent;
 }
-
 .acf-fields .acf-field-settings-tab-bar li.active a,
 .acf-fields .acf-tab-wrap .acf-tab-group li.active a,
 .acf-admin-page.acf-internal-post-type .acf-field-settings-tab-bar li.active a,
@@ -2414,7 +2286,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-bottom-color: #0783BE;
   color: #0783BE;
 }
-
 .acf-fields .acf-field-settings-tab-bar li.active a:focus-visible,
 .acf-fields .acf-tab-wrap .acf-tab-group li.active a:focus-visible,
 .acf-admin-page.acf-internal-post-type .acf-field-settings-tab-bar li.active a:focus-visible,
@@ -2428,12 +2299,12 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-admin-page.acf-internal-post-type .acf-field-editor .acf-field-settings-tab-bar {
   padding-left: 72px;
 }
-
 @media screen and (max-width: 600px) {
   .acf-admin-page.acf-internal-post-type .acf-field-editor .acf-field-settings-tab-bar {
     padding-left: 12px;
   }
 }
+
 /*----------------------------------------------------------------------------
 *
 *  Field group settings
@@ -2445,11 +2316,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-bottom: 24px;
   padding-left: 24px;
 }
-
 #acf-field-group-options .field-group-settings-tab .acf-field:last-of-type {
   padding: 0;
 }
-
 #acf-field-group-options .acf-field {
   border: none;
   margin-top: 0;
@@ -2461,7 +2330,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-bottom: 24px;
   padding-left: 0;
 }
-
 #acf-field-group-options .field-group-setting-split-container {
   display: flex;
   padding-top: 0;
@@ -2469,7 +2337,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-bottom: 0;
   padding-left: 0;
 }
-
 #acf-field-group-options .field-group-setting-split-container .field-group-setting-split {
   box-sizing: border-box;
   padding-top: 24px;
@@ -2477,11 +2344,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-bottom: 24px;
   padding-left: 24px;
 }
-
 #acf-field-group-options .field-group-setting-split-container .field-group-setting-split:nth-child(1) {
   flex: 1 0 auto;
 }
-
 #acf-field-group-options .field-group-setting-split-container .field-group-setting-split:nth-child(2n) {
   flex: 1 0 auto;
   max-width: 320px;
@@ -2495,11 +2360,11 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-left-style: solid;
   border-left-color: #EAECF0;
 }
-
-#acf-field-group-options .acf-field[data-name=description], #acf-field-group-options .acf-field[data-name=display_title] {
+#acf-field-group-options .acf-field[data-name=description],
+#acf-field-group-options .acf-field[data-name=display_title],
+#acf-field-group-options .acf-field[data-name=ai_description] {
   max-width: 600px;
 }
-
 #acf-field-group-options .acf-button-group {
   display: inline-flex;
 }
@@ -2528,7 +2393,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   align-items: stretch;
   background-color: transparent;
 }
-
 .acf-field-list .acf-sortable-handle {
   display: flex;
   flex-direction: row;
@@ -2545,11 +2409,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border: none;
   border-radius: 0;
 }
-
 .acf-field-list .acf-sortable-handle:hover {
   cursor: grab;
 }
-
 .acf-field-list .acf-sortable-handle:before {
   content: "";
   display: none;
@@ -2590,7 +2452,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   position: relative;
   padding-left: 40px;
 }
-
 .acf-field-object .li-field-label:before {
   content: "";
   display: block;
@@ -2615,7 +2476,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   -webkit-mask-image: url("../../images/icons/icon-chevron-down.svg");
   mask-image: url("../../images/icons/icon-chevron-down.svg");
 }
-
 .acf-field-object .li-field-label:hover:before {
   cursor: pointer;
 }
@@ -2624,24 +2484,20 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-left: 0;
   padding-right: 40px;
 }
-
 .rtl .acf-field-object .li-field-label:before {
   left: 0;
   right: 6px;
   -webkit-mask-image: url("../../images/icons/icon-chevron-down.svg");
   mask-image: url("../../images/icons/icon-chevron-down.svg");
 }
-
 .rtl .acf-field-object.open .li-field-label:before {
   -webkit-mask-image: url("../../images/icons/icon-chevron-down.svg");
   mask-image: url("../../images/icons/icon-chevron-down.svg");
 }
-
 .rtl .acf-field-object.open .acf-input-sub .li-field-label:before {
   -webkit-mask-image: url("../../images/icons/icon-chevron-right.svg");
   mask-image: url("../../images/icons/icon-chevron-right.svg");
 }
-
 .rtl .acf-field-object.open .acf-input-sub .acf-field-object.open .li-field-label:before {
   -webkit-mask-image: url("../../images/icons/icon-chevron-down.svg");
   mask-image: url("../../images/icons/icon-chevron-down.svg");
@@ -2650,7 +2506,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-thead .li-field-label {
   padding-left: 40px;
 }
-
 .rtl .acf-thead .li-field-label {
   padding-left: 0;
   padding-right: 40px;
@@ -2666,7 +2521,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-right: 72px;
   padding-left: 72px;
 }
-
 @media screen and (max-width: 600px) {
   .acf-field-settings-main-conditional-logic .acf-conditional-toggle {
     padding-left: 12px;
@@ -2678,7 +2532,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-right: 0;
   padding-left: 0;
 }
-
 .acf-field-settings-main-conditional-logic .acf-field .rule-groups {
   flex: 0 1 100%;
   order: 3;
@@ -2690,7 +2543,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-top-style: solid;
   border-top-color: #EAECF0;
 }
-
 @media screen and (max-width: 600px) {
   .acf-field-settings-main-conditional-logic .acf-field .rule-groups {
     padding-left: 12px;
@@ -2706,6 +2558,7 @@ html[dir=rtl] .acf-field-object.open > .handle {
     flex: 1 1 100%;
   }
 }
+
 .acf-taxonomy-select-id,
 .acf-relationship-select-id,
 .acf-post_object-select-id,
@@ -2748,11 +2601,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.1);
   color: #667085;
 }
-
 .acf-input .acf-input-prepend {
   border-radius: 6px 0 0 6px;
 }
-
 .acf-input .acf-input-append {
   border-radius: 0 6px 6px 0;
 }
@@ -2781,7 +2632,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-top: 48px;
   padding-bottom: 48px;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner {
   display: flex;
   flex-wrap: wrap;
@@ -2791,36 +2641,30 @@ html[dir=rtl] .acf-field-object.open > .handle {
   text-align: center;
   max-width: 400px;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner img,
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner h2,
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner p {
   flex: 1 0 100%;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner h2 {
   margin-top: 32px;
   margin-bottom: 0;
   padding: 0;
   color: #344054;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner p {
   margin-top: 12px;
   margin-bottom: 0;
   padding: 0;
   color: #667085;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner p.acf-small {
   margin-top: 32px;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner img {
   max-width: 284px;
   margin-bottom: 0;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list.-empty .no-fields-message .no-fields-message-inner .acf-btn {
   margin-top: 32px;
 }
@@ -2842,7 +2686,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-admin-page #acf-popup .acf-popup-box {
   min-width: 480px;
 }
-
 .acf-admin-page #acf-popup .acf-popup-box .title {
   display: flex;
   align-items: center;
@@ -2857,7 +2700,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-bottom-style: solid;
   border-bottom-color: #EAECF0;
 }
-
 .acf-admin-page #acf-popup .acf-popup-box .title h1,
 .acf-admin-page #acf-popup .acf-popup-box .title h2,
 .acf-admin-page #acf-popup .acf-popup-box .title h3,
@@ -2865,7 +2707,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-left: 0;
   color: #344054;
 }
-
 .acf-admin-page #acf-popup .acf-popup-box .title .acf-icon {
   display: block;
   position: relative;
@@ -2876,7 +2717,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background-color: transparent;
   color: transparent;
 }
-
 .acf-admin-page #acf-popup .acf-popup-box .title .acf-icon:before {
   display: inline-flex;
   position: absolute;
@@ -2899,11 +2739,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   -webkit-mask-image: url("../../images/icons/icon-close-circle.svg");
   mask-image: url("../../images/icons/icon-close-circle.svg");
 }
-
 .acf-admin-page #acf-popup .acf-popup-box .title .acf-icon:hover:before {
   background-color: #0783BE;
 }
-
 .acf-admin-page #acf-popup .acf-popup-box .inner {
   box-sizing: border-box;
   margin: 0;
@@ -2913,23 +2751,19 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-left: 24px;
   border-top: none;
 }
-
 .acf-admin-page #acf-popup .acf-popup-box .inner p {
   margin-top: 0;
   margin-bottom: 0;
 }
-
 .acf-admin-page #acf-popup .acf-popup-box #acf-move-field-form .acf-field-select,
 .acf-admin-page #acf-popup .acf-popup-box #acf-link-field-groups-form .acf-field-select {
   margin-top: 0;
 }
-
 .acf-admin-page .acf-link-field-groups-popup .acf-popup-box .title h3,
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .title h3 {
   color: #1D2939;
   font-weight: 500;
 }
-
 .acf-admin-page .acf-link-field-groups-popup .acf-popup-box .title h3:before,
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .title h3:before {
   content: "";
@@ -2938,12 +2772,10 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background: #98A2B3;
   margin-right: 9px;
 }
-
 .acf-admin-page .acf-link-field-groups-popup .acf-popup-box .inner,
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner {
   padding: 0 !important;
 }
-
 .acf-admin-page .acf-link-field-groups-popup .acf-popup-box .inner .acf-field-select,
 .acf-admin-page .acf-link-field-groups-popup .acf-popup-box .inner .acf-link-successful,
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-field-select,
@@ -2951,14 +2783,12 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding: 32px 24px;
   margin-bottom: 0;
 }
-
 .acf-admin-page .acf-link-field-groups-popup .acf-popup-box .inner .acf-field-select .description,
 .acf-admin-page .acf-link-field-groups-popup .acf-popup-box .inner .acf-link-successful .description,
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-field-select .description,
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-link-successful .description {
   margin-top: 6px !important;
 }
-
 .acf-admin-page .acf-link-field-groups-popup .acf-popup-box .inner .acf-actions,
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-actions {
   background: #F9FAFB;
@@ -2970,35 +2800,28 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
-
 .acf-admin-page .acf-link-field-groups-popup .acf-popup-box .inner .acf-actions .acf-btn,
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-actions .acf-btn {
   display: inline-block;
   margin-left: 8px;
 }
-
 .acf-admin-page .acf-link-field-groups-popup .acf-popup-box .inner .acf-actions .acf-btn.acf-btn-primary,
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-actions .acf-btn.acf-btn-primary {
   width: 120px;
 }
-
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-error-message.-success {
   display: none;
 }
-
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .-dismiss {
   margin: 24px 32px !important;
 }
-
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-field {
   padding: 24px 32px 0 32px;
   margin: 0;
 }
-
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-field.acf-error .acf-input-wrap {
   overflow: inherit;
 }
-
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-field.acf-error .acf-input-wrap input[type=text] {
   border: 1px rgba(209, 55, 55, 0.5) solid !important;
   box-shadow: 0px 0px 0px 3px rgba(209, 55, 55, 0.12), 0px 0px 0px rgba(255, 54, 54, 0.25) !important;
@@ -3007,16 +2830,13 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background-size: 14px;
   background-repeat: no-repeat;
 }
-
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-field .acf-options-page-modal-error p {
   font-size: 12px;
   color: #D13737;
 }
-
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-actions {
   margin-top: 32px;
 }
-
 .acf-admin-page .acf-create-options-page-popup .acf-popup-box .inner .acf-actions .acf-btn:disabled {
   background-color: #0783BE;
 }
@@ -3051,7 +2871,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-top-style: solid;
   border-top-color: #EAECF0;
 }
-
 .acf-field-group-settings-footer .acf-created-on {
   display: inline-flex;
   justify-content: flex-start;
@@ -3059,7 +2878,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   align-items: center;
   color: #667085;
 }
-
 .acf-field-group-settings-footer .acf-created-on:before {
   content: "";
   display: inline-block;
@@ -3087,7 +2905,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .conditional-logic-badge {
   display: none;
 }
-
 .conditional-logic-badge.is-enabled {
   display: inline-block;
   width: 6px;
@@ -3124,13 +2941,11 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-top-style: solid;
   border-top-color: #EAECF0;
 }
-
 .acf-field-settings-split .acf-field {
   margin: 0;
   padding-top: 32px;
   padding-bottom: 32px;
 }
-
 .acf-field-settings-split .acf-field:nth-child(2n) {
   border-left-width: 1px;
   border-left-style: solid;
@@ -3157,23 +2972,19 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-field-setting-return_format .acf-label {
   margin-bottom: 6px;
 }
-
 .acf-field-setting-display_format .acf-radio-list li,
 .acf-field-setting-return_format .acf-radio-list li {
   display: flex;
 }
-
 .acf-field-setting-display_format .acf-radio-list li label,
 .acf-field-setting-return_format .acf-radio-list li label {
   display: inline-flex;
   width: 100%;
 }
-
 .acf-field-setting-display_format .acf-radio-list li label span,
 .acf-field-setting-return_format .acf-radio-list li label span {
   flex: 1 1 auto;
 }
-
 .acf-field-setting-display_format .acf-radio-list li label code,
 .acf-field-setting-return_format .acf-radio-list li label code {
   padding-right: 8px;
@@ -3182,7 +2993,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-radius: 4px;
   color: #475467;
 }
-
 .acf-field-setting-display_format .acf-radio-list li input[type=text],
 .acf-field-setting-return_format .acf-radio-list li input[type=text] {
   height: 32px;
@@ -3213,7 +3023,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-field-settings .acf-field-appended {
   overflow: auto;
 }
-
 .acf-field-settings .acf-field-appended .acf-input {
   float: left;
 }
@@ -3227,7 +3036,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-field-settings .acf-field.acf-field-setting-max_width .acf-input {
   max-width: none;
 }
-
 .acf-field-settings .acf-field.acf-field-setting-min_width .acf-input-wrap input[type=text],
 .acf-field-settings .acf-field.acf-field-setting-max_width .acf-input-wrap input[type=text] {
   max-width: 81px;
@@ -3241,7 +3049,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .post-type-acf-field-group .acf-field-object-flexible-content .acf-field-setting-pagination {
   display: none;
 }
-
 .post-type-acf-field-group .acf-field-object-repeater .acf-field-object-repeater .acf-field-setting-pagination {
   display: none;
 }
@@ -3264,7 +3071,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .acf-admin-single-field-group .acf-field.acf-field-true-false.acf-field-setting-default_value .acf-true-false {
   border: none;
 }
-
 .acf-admin-single-field-group .acf-field.acf-field-true-false.acf-field-setting-default_value .acf-true-false input[type=checkbox] {
   margin-right: 0;
 }
@@ -3289,10 +3095,9 @@ html[dir=rtl] .acf-field-object.open > .handle {
   border-radius: 8px;
   border-width: 1px;
   border-style: solid;
-  border-color: #dbdfe5;
+  border-color: rgb(219.125, 222.5416666667, 229.375);
   box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.1);
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-sub-field-list-header {
   display: flex;
   justify-content: space-between;
@@ -3302,16 +3107,13 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-right: 24px;
   padding-left: 24px;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-field-list-wrap {
   box-shadow: none;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-hl.acf-tfoot {
   min-height: 64px;
   align-items: center;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input.acf-input-sub {
   max-width: 100%;
   margin-right: 0;
@@ -3336,7 +3138,7 @@ html[dir=rtl] .acf-field-object.open > .handle {
 }
 
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-field-object.open {
-  border-top-color: #dbdfe5;
+  border-top-color: rgb(219.125, 222.5416666667, 229.375);
 }
 
 /*---------------------------------------------------------------------------------------------
@@ -3349,13 +3151,11 @@ html[dir=rtl] .acf-field-object.open > .handle {
   background-color: #667085;
   color: #667085;
 }
-
 .post-type-acf-field-group i.acf-icon.acf-icon-trash.delete-layout {
   margin: 0 auto !important;
   background-color: #667085;
   color: #667085;
 }
-
 .post-type-acf-field-group button.acf-btn.acf-btn-tertiary.acf-field-setting-fc-duplicate, .post-type-acf-field-group button.acf-btn.acf-btn-tertiary.acf-field-setting-fc-delete {
   background-color: #ffffff !important;
   box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.1);
@@ -3365,7 +3165,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   min-height: 32px;
   padding: 0;
 }
-
 .post-type-acf-field-group button.add-layout.acf-btn.acf-btn-primary.add-field,
 .post-type-acf-field-group .acf-sub-field-list-header a.acf-btn.acf-btn-secondary.add-field,
 .post-type-acf-field-group .acf-field-list-wrap.acf-is-subfields a.acf-btn.acf-btn-secondary.add-field {
@@ -3373,12 +3172,10 @@ html[dir=rtl] .acf-field-object.open > .handle {
   min-height: 32px;
   margin-left: 5px;
 }
-
 .post-type-acf-field-group .acf-field.acf-field-setting-fc_layout {
   background-color: #ffffff;
   margin-bottom: 16px;
 }
-
 .post-type-acf-field-group .acf-field-setting-fc_layout {
   width: calc(100% - 144px);
   margin-right: 72px;
@@ -3387,18 +3184,16 @@ html[dir=rtl] .acf-field-object.open > .handle {
   padding-left: 0;
   border-width: 1px;
   border-style: solid;
-  border-color: #dbdfe5;
+  border-color: rgb(219.125, 222.5416666667, 229.375);
   border-radius: 8px;
   box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.1);
 }
-
 .post-type-acf-field-group .acf-field-setting-fc_layout .acf-field-layout-settings.open {
   background-color: #ffffff;
   border-top-width: 1px;
   border-top-style: solid;
   border-top-color: #EAECF0;
 }
-
 @media screen and (max-width: 768px) {
   .post-type-acf-field-group .acf-field-setting-fc_layout {
     width: calc(100% - 16px);
@@ -3411,25 +3206,21 @@ html[dir=rtl] .acf-field-object.open > .handle {
   margin-right: 0;
   margin-left: 0;
 }
-
 .post-type-acf-field-group .acf-field-setting-fc_layout .acf-label,
 .post-type-acf-field-group .acf-field-setting-fc_layout .acf-input {
   max-width: 100% !important;
 }
-
 .post-type-acf-field-group .acf-field-setting-fc_layout .acf-input-sub {
   margin-right: 32px;
   margin-bottom: 32px;
   margin-left: 32px;
 }
-
 .post-type-acf-field-group .acf-field-setting-fc_layout .acf-fc-meta {
   max-width: 100%;
   padding-top: 24px;
   padding-right: 32px;
   padding-left: 32px;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head {
   display: flex;
   align-items: center;
@@ -3440,26 +3231,22 @@ html[dir=rtl] .acf-field-object.open > .handle {
   margin-bottom: 0px;
   padding-right: 24px;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head .acf-fc_draggable {
   min-height: 64px;
   padding-left: 24px;
   display: flex;
   white-space: nowrap;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head .acf-fc-layout-name {
   min-width: 0;
   color: #98A2B3;
   padding-left: 8px;
   font-size: 16px;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head .acf-fc-layout-name.copyable:not(.input-copyable, .copy-unsupported):hover:after {
   width: 14px !important;
   height: 14px !important;
 }
-
 @media screen and (max-width: 880px) {
   .post-type-acf-field-group .acf-field-settings-fc_head .acf-fc-layout-name {
     display: none !important;
@@ -3470,21 +3257,17 @@ html[dir=rtl] .acf-field-object.open > .handle {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head span.toggle-indicator {
   pointer-events: none;
   margin-top: 7px;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head label {
   display: inline-flex;
   align-items: center;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head label.acf-fc-layout-name {
   margin-left: 1rem;
 }
-
 @media screen and (max-width: 880px) {
   .post-type-acf-field-group .acf-field-settings-fc_head label.acf-fc-layout-name {
     display: none !important;
@@ -3496,7 +3279,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   height: 22px;
   white-space: nowrap;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head label.acf-fc-layout-label:before {
   content: "";
   display: inline-block;
@@ -3513,7 +3295,6 @@ html[dir=rtl] .acf-field-object.open > .handle {
   -webkit-mask-position: center;
   mask-position: center;
 }
-
 .rtl.post-type-acf-field-group .acf-field-settings-fc_head label.acf-fc-layout-label:before {
   padding-right: 10px;
 }
@@ -3524,23 +3305,18 @@ html[dir=rtl] .acf-field-object.open > .handle {
   white-space: nowrap;
   margin-left: auto;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head .acf-fl-actions .acf-fc-add-layout {
   margin-left: 10px;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head .acf-fl-actions .acf-fc-add-layout .add-field {
   margin-left: 0px !important;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head .acf-fl-actions li {
   margin-right: 4px;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head .acf-fl-actions li:last-of-type {
   margin-right: 0;
 }
-
 .post-type-acf-field-group .acf-field-settings-fc_head.open {
   border-radius: 8px 8px 0px 0px;
 }
@@ -3563,63 +3339,48 @@ html[dir=rtl] .acf-field-object.open > .handle {
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-field-object .handle {
   background-color: transparent;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-field-object .handle:hover {
-  background-color: #f9f2fb;
+  background-color: rgb(248.6, 242, 251);
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-field-object.open .handle {
-  background-color: #f5eaf9;
+  background-color: rgb(244.76, 234.2, 248.6);
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-field-object .settings {
   border-left-color: #BF7DD7;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-field-object .handle {
   background-color: transparent;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-field-object .handle:hover {
-  background-color: #ebf7f4;
+  background-color: rgb(234.7348066298, 247.2651933702, 244.1712707182);
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-field-object.open .handle {
-  background-color: #e3f4f0;
+  background-color: rgb(227.3524861878, 244.4475138122, 240.226519337);
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-field-object .settings {
   border-left-color: #7CCDB9;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-input-sub .acf-field-object .handle {
   background-color: transparent;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-input-sub .acf-field-object .handle:hover {
-  background-color: #fcf5f2;
+  background-color: rgb(252.2544378698, 244.8698224852, 241.7455621302);
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-input-sub .acf-field-object.open .handle {
-  background-color: #fbeee9;
+  background-color: rgb(250.5041420118, 238.4118343195, 233.2958579882);
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-input-sub .acf-field-object .settings {
   border-left-color: #E29473;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-input-sub .acf-input-sub .acf-field-object .handle {
   background-color: transparent;
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-input-sub .acf-input-sub .acf-field-object .handle:hover {
-  background-color: #fafbfb;
+  background-color: rgb(249.8888888889, 250.6666666667, 251.1111111111);
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-input-sub .acf-input-sub .acf-field-object.open .handle {
-  background-color: #f4f6f7;
+  background-color: rgb(244.0962962963, 245.7555555556, 246.7037037037);
 }
-
 .post-type-acf-field-group #acf-field-group-fields .acf-field-list-wrap .acf-input-sub .acf-input-sub .acf-input-sub .acf-input-sub .acf-field-object .settings {
   border-left-color: #A3B1B9;
 }

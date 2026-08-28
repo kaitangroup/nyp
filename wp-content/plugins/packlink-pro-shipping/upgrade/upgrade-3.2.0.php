@@ -25,6 +25,12 @@ use Packlink\WooCommerce\Components\Utility\Database;
 // Methods used during the migration process.                                        *
 // ***********************************************************************************
 
+// Guard the function definitions so this file can be safely included more than once
+// per request (see WordPress Multisite update loop in Plugin::update()). Without this
+// the second blog's include fatals with "Cannot redeclare
+// pl_v320_get_current_shipping_methods()". The migration steps below still run on
+// every include, so each blog is migrated.
+if ( ! function_exists( 'pl_v320_get_current_shipping_methods' ) ) {
 /**
  * Returns current shipping methods in the raw format.
  *
@@ -78,6 +84,7 @@ function pl_v320_update_shipping_service( array $service ) {
 
 	return $service;
 }
+} // end: if ( ! function_exists( 'pl_v320_get_current_shipping_methods' ) )
 
 // ***********************************************************************************
 // STEP 1. ***************************************************************************

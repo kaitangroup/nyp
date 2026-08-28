@@ -9,6 +9,8 @@
 
 <script>
   <% autoescape 'js' %>
+  // Disable Gutenberg's opt-in VIPS upload path before the form editor bundle runs.
+  window.__clientSideMediaProcessing = false;
   var mailpoet_form_data = <%= form|wp_json_encode %>;
   var mailpoet_form_exports = <%= form_exports|wp_json_encode %>;
   var mailpoet_form_segments = <%= segments|wp_json_encode %>;
@@ -18,6 +20,7 @@
   var mailpoet_month_names = <%= month_names|wp_json_encode %>;
   var mailpoet_form_preview_page = <%= preview_page_url|wp_json_encode %>;
   var mailpoet_custom_fonts = <%= custom_fonts|wp_json_encode %>;
+  var mailpoet_form_editor_color_palette = <%= editor_color_palette|wp_json_encode %>;
   var mailpoet_translations = <%= translations|wp_json_encode %>;
   var mailpoet_all_wp_posts = <%= posts|wp_json_encode %>;
   var mailpoet_all_wp_pages = <%= pages|wp_json_encode %>;
@@ -157,6 +160,11 @@
   'blockFirstNameDescription': __('Input field used to catch subscribers’ first names.'),
   'blockLastName': __('Last name'),
   'blockLastNameDescription': __('Input field used to catch subscribers’ last names.'),
+  'blockTrackingConsent': __('Email activity tracking'),
+  'blockTrackingConsentDescription': __('Ask subscribers to allow tracking of email opens and link clicks. This is separate from the subscription opt-in and is always shown unchecked.'),
+  'blockTrackingConsentDefaultText': __('Allow tracking of email opens and link clicks'),
+  'blockTrackingConsentCheckboxLabel': __('Checkbox text'),
+  'blockTrackingConsentCopyHelp': __('This exact wording is stored with each subscriber as the record of what they agreed to.'),
   'blockSegmentSelect': __('List selection'),
   'blockLastNameDescription': __('Allow your subscribers to select which list(s) they want to subscribe to.'),
   'blockSegmentSelectLabel': __('Select list(s):'),
@@ -167,6 +175,9 @@
   'blockSubmit': __('Submit button'),
   'blockSubmitDescription': __('Button used to submit the form.'),
   'blockSubmitLabel': _x('Subscribe!', 'a default value for a subscription form button'),
+  'blockClose': __('Close button'),
+  'blockCloseDescription': __('Link or button used to dismiss a pop-up, slide-in or fixed bar form.'),
+  'blockCloseLabel': _x('No thanks', 'a default value for a form close link'),
   'missingObligatoryBlock': __('Email input or submit is missing. Try reloading the form editor.'),
   'label': _x('Label', 'settings for a label of an input'),
   'displayLabelWithinInput': __('Display label within input'),

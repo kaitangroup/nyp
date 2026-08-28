@@ -1,0 +1,1131 @@
+0000.000 (0) Opened log file at time: Tue, 25 Aug 2026 10:54:31 +0000 on https://staging.nyp-kitchendesign.de
+0000.001 (0) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 1.26.7 WP: 7.1 PHP: 8.2.33 (fpm-fcgi, Linux www722.your-server.de 6.12.101+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.101-1 (2026-08-05) x86_64) MySQL: 11.8.6-MariaDB-0+deb13u1 from Debian (max packet size=1073741824) WPLANG: de_DE Server: Apache safe_mode: 0 max_execution_time: 900 memory_limit: 384M (used: 181.7M | 184M) multisite: N openssl: OpenSSL 3.5.6 7 Apr 2026 mcrypt: Y LANG:  WP Proxy: disabled ZipArchive::addFile: Y
+0000.001 (0) Free space on disk containing Updraft's temporary directory: 2688083 MB
+0000.003 (0) Tasks: Backup files: 1 (schedule: unset) Backup DB: 1 (schedule: unset)
+0000.004 (0) Requesting semaphore lock (fd) (apparently not via scheduler)
+0000.005 (0) Set semaphore last lock (fd) time to 2026-08-25 10:54:31
+0000.005 (0) Semaphore lock (fd) complete
+0000.007 (0) Backup run: resumption=0, nonce=582d2939d0a1, file_nonce=582d2939d0a1 begun at=1787655271 (0s ago), job type=backup
+0000.007 (0) Scheduling a resumption (1) after 300 seconds (1787655571) in case this run gets aborted
+0000.012 (0) Checking if we have a zip executable available
+0000.013 (0) Testing: /usr/bin/zip
+0000.015 (0) Output: zip warning: binziptest/test.zip not found or empty
+0000.015 (0) Output: adding: binziptest/subdir1/	(in=0) (out=0) (stored 0%)
+0000.016 (0) Output: adding: binziptest/subdir1/subdir2/	(in=0) (out=0) (stored 0%)
+0000.016 (0) Output: adding: binziptest/subdir1/subdir2/test.html	(in=131) (out=107) (deflated 18%)
+0000.016 (0) Output: total bytes=131, compressed=107 -> 18% savings
+0000.022 (0) Output: adding: binziptest/subdir1/subdir2/test2.html	(in=138) (out=113) (deflated 18%)
+0000.022 (0) Output: total bytes=269, compressed=220 -> 18% savings
+0000.026 (0) Working binary zip found: /usr/bin/zip
+0000.027 (0) Zip engine: found/will use a binary zip: /usr/bin/zip
+0000.028 (0) Creation of backups of directories: beginning
+0000.029 (0) Beginning creation of dump of plugins (split every: 400 MB)
+0000.368 (0) Total entities for the zip file: 5564 directories, 31735 files (0 skipped as non-modified), 406.4 MB
+0000.370 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 100 files added (on-disk size: 0 KB)
+0000.372 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 200 files added (on-disk size: 0 KB)
+0000.373 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 300 files added (on-disk size: 0 KB)
+0000.374 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 400 files added (on-disk size: 0 KB)
+0000.376 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 500 files added (on-disk size: 0 KB)
+0000.377 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 600 files added (on-disk size: 0 KB)
+0000.378 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 700 files added (on-disk size: 0 KB)
+0000.379 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 800 files added (on-disk size: 0 KB)
+0000.381 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 900 files added (on-disk size: 0 KB)
+0000.382 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 1000 files added (on-disk size: 0 KB)
+0000.382 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (23.1 MB, 31735 files batched, 1001 (1001) added so far); re-opening (prior size: 0 KB)
+0001.297 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: size is now: 10.40 MB
+0001.299 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 1100 files added (on-disk size: 10691.3 KB)
+0001.301 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 1200 files added (on-disk size: 10691.3 KB)
+0001.302 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 1300 files added (on-disk size: 10691.3 KB)
+0001.304 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 1400 files added (on-disk size: 10691.3 KB)
+0001.305 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 1500 files added (on-disk size: 10691.3 KB)
+0001.307 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 1600 files added (on-disk size: 10691.3 KB)
+0001.308 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 1700 files added (on-disk size: 10691.3 KB)
+0001.309 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 1800 files added (on-disk size: 10691.3 KB)
+0001.311 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 1900 files added (on-disk size: 10691.3 KB)
+0001.312 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 2000 files added (on-disk size: 10691.3 KB)
+0001.313 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (3.7 MB, 31735 files batched, 1001 (2002) added so far); re-opening (prior size: 10691.3 KB)
+0001.452 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 2100 files added (on-disk size: 12065.3 KB)
+0001.454 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 2200 files added (on-disk size: 12065.3 KB)
+0001.455 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 2300 files added (on-disk size: 12065.3 KB)
+0001.457 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 2400 files added (on-disk size: 12065.3 KB)
+0001.458 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 2500 files added (on-disk size: 12065.3 KB)
+0001.459 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 2600 files added (on-disk size: 12065.3 KB)
+0001.461 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 2700 files added (on-disk size: 12065.3 KB)
+0001.462 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 2800 files added (on-disk size: 12065.3 KB)
+0001.463 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 2900 files added (on-disk size: 12065.3 KB)
+0001.465 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 3000 files added (on-disk size: 12065.3 KB)
+0001.465 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (5.7 MB, 31735 files batched, 1001 (3003) added so far); re-opening (prior size: 12065.3 KB)
+0001.622 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 3100 files added (on-disk size: 13515.7 KB)
+0001.623 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 3200 files added (on-disk size: 13515.7 KB)
+0001.625 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 3300 files added (on-disk size: 13515.7 KB)
+0001.626 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 3400 files added (on-disk size: 13515.7 KB)
+0001.628 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 3500 files added (on-disk size: 13515.7 KB)
+0001.629 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 3600 files added (on-disk size: 13515.7 KB)
+0001.630 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 3700 files added (on-disk size: 13515.7 KB)
+0001.632 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 3800 files added (on-disk size: 13515.7 KB)
+0001.633 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 3900 files added (on-disk size: 13515.7 KB)
+0001.634 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 4000 files added (on-disk size: 13515.7 KB)
+0001.635 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (7 MB, 31735 files batched, 1001 (4004) added so far); re-opening (prior size: 13515.7 KB)
+0001.848 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 4100 files added (on-disk size: 15620.1 KB)
+0001.849 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 4200 files added (on-disk size: 15620.1 KB)
+0001.851 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 4300 files added (on-disk size: 15620.1 KB)
+0001.852 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 4400 files added (on-disk size: 15620.1 KB)
+0001.853 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 4500 files added (on-disk size: 15620.1 KB)
+0001.855 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 4600 files added (on-disk size: 15620.1 KB)
+0001.856 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 4700 files added (on-disk size: 15620.1 KB)
+0001.857 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 4800 files added (on-disk size: 15620.1 KB)
+0001.858 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 4900 files added (on-disk size: 15620.1 KB)
+0001.860 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 5000 files added (on-disk size: 15620.1 KB)
+0001.860 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (6.5 MB, 31735 files batched, 1001 (5005) added so far); re-opening (prior size: 15620.1 KB)
+0002.066 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 5100 files added (on-disk size: 17401.6 KB)
+0002.067 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 5200 files added (on-disk size: 17401.6 KB)
+0002.068 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 5300 files added (on-disk size: 17401.6 KB)
+0002.070 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 5400 files added (on-disk size: 17401.6 KB)
+0002.071 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 5500 files added (on-disk size: 17401.6 KB)
+0002.072 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 5600 files added (on-disk size: 17401.6 KB)
+0002.074 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 5700 files added (on-disk size: 17401.6 KB)
+0002.075 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 5800 files added (on-disk size: 17401.6 KB)
+0002.076 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 5900 files added (on-disk size: 17401.6 KB)
+0002.077 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 6000 files added (on-disk size: 17401.6 KB)
+0002.078 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (11.8 MB, 31735 files batched, 1001 (6006) added so far); re-opening (prior size: 17401.6 KB)
+0002.431 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: size is now: 20.90 MB
+0002.434 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 6100 files added (on-disk size: 21413.2 KB)
+0002.435 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 6200 files added (on-disk size: 21413.2 KB)
+0002.436 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 6300 files added (on-disk size: 21413.2 KB)
+0002.438 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 6400 files added (on-disk size: 21413.2 KB)
+0002.439 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 6500 files added (on-disk size: 21413.2 KB)
+0002.440 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 6600 files added (on-disk size: 21413.2 KB)
+0002.442 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 6700 files added (on-disk size: 21413.2 KB)
+0002.443 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 6800 files added (on-disk size: 21413.2 KB)
+0002.444 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 6900 files added (on-disk size: 21413.2 KB)
+0002.446 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 7000 files added (on-disk size: 21413.2 KB)
+0002.446 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (8 MB, 31735 files batched, 1001 (7007) added so far); re-opening (prior size: 21413.2 KB)
+0002.751 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 7100 files added (on-disk size: 24664.4 KB)
+0002.753 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 7200 files added (on-disk size: 24664.4 KB)
+0002.755 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 7300 files added (on-disk size: 24664.4 KB)
+0002.756 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 7400 files added (on-disk size: 24664.4 KB)
+0002.758 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 7500 files added (on-disk size: 24664.4 KB)
+0002.759 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 7600 files added (on-disk size: 24664.4 KB)
+0002.760 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 7700 files added (on-disk size: 24664.4 KB)
+0002.762 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 7800 files added (on-disk size: 24664.4 KB)
+0002.763 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 7900 files added (on-disk size: 24664.4 KB)
+0002.764 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 8000 files added (on-disk size: 24664.4 KB)
+0002.765 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (21.6 MB, 31735 files batched, 1001 (8008) added so far); re-opening (prior size: 24664.4 KB)
+0003.452 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: size is now: 29.90 MB
+0003.454 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 8100 files added (on-disk size: 30663.8 KB)
+0003.456 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 8200 files added (on-disk size: 30663.8 KB)
+0003.457 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 8300 files added (on-disk size: 30663.8 KB)
+0003.458 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 8400 files added (on-disk size: 30663.8 KB)
+0003.460 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 8500 files added (on-disk size: 30663.8 KB)
+0003.461 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 8600 files added (on-disk size: 30663.8 KB)
+0003.463 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 8700 files added (on-disk size: 30663.8 KB)
+0003.464 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 8800 files added (on-disk size: 30663.8 KB)
+0003.466 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 8900 files added (on-disk size: 30663.8 KB)
+0003.467 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 9000 files added (on-disk size: 30663.8 KB)
+0003.468 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (10.2 MB, 31735 files batched, 1001 (9009) added so far); re-opening (prior size: 30663.8 KB)
+0003.783 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 9100 files added (on-disk size: 34857.6 KB)
+0003.784 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 9200 files added (on-disk size: 34857.6 KB)
+0003.785 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 9300 files added (on-disk size: 34857.6 KB)
+0003.787 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 9400 files added (on-disk size: 34857.6 KB)
+0003.788 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 9500 files added (on-disk size: 34857.6 KB)
+0003.789 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 9600 files added (on-disk size: 34857.6 KB)
+0003.790 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 9700 files added (on-disk size: 34857.6 KB)
+0003.792 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 9800 files added (on-disk size: 34857.6 KB)
+0003.793 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 9900 files added (on-disk size: 34857.6 KB)
+0003.794 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 10000 files added (on-disk size: 34857.6 KB)
+0003.795 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (19.3 MB, 31735 files batched, 1001 (10010) added so far); re-opening (prior size: 34857.6 KB)
+0004.387 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 10100 files added (on-disk size: 39976.3 KB)
+0004.388 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 10200 files added (on-disk size: 39976.3 KB)
+0004.390 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 10300 files added (on-disk size: 39976.3 KB)
+0004.391 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 10400 files added (on-disk size: 39976.3 KB)
+0004.392 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 10500 files added (on-disk size: 39976.3 KB)
+0004.394 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 10600 files added (on-disk size: 39976.3 KB)
+0004.395 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 10700 files added (on-disk size: 39976.3 KB)
+0004.396 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 10800 files added (on-disk size: 39976.3 KB)
+0004.397 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 10900 files added (on-disk size: 39976.3 KB)
+0004.399 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 11000 files added (on-disk size: 39976.3 KB)
+0004.399 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (22.3 MB, 31735 files batched, 1001 (11011) added so far); re-opening (prior size: 39976.3 KB)
+0004.987 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: size is now: 50.50 MB
+0004.989 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 11100 files added (on-disk size: 51677.3 KB)
+0004.991 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 11200 files added (on-disk size: 51677.3 KB)
+0004.992 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 11300 files added (on-disk size: 51677.3 KB)
+0004.993 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 11400 files added (on-disk size: 51677.3 KB)
+0004.995 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 11500 files added (on-disk size: 51677.3 KB)
+0004.996 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 11600 files added (on-disk size: 51677.3 KB)
+0004.997 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 11700 files added (on-disk size: 51677.3 KB)
+0004.999 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 11800 files added (on-disk size: 51677.3 KB)
+0005.000 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 11900 files added (on-disk size: 51677.3 KB)
+0005.001 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 12000 files added (on-disk size: 51677.3 KB)
+0005.002 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (16.2 MB, 31735 files batched, 1001 (12012) added so far); re-opening (prior size: 51677.3 KB)
+0005.535 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 12100 files added (on-disk size: 56734.5 KB)
+0005.536 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 12200 files added (on-disk size: 56734.5 KB)
+0005.537 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 12300 files added (on-disk size: 56734.5 KB)
+0005.539 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 12400 files added (on-disk size: 56734.5 KB)
+0005.540 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 12500 files added (on-disk size: 56734.5 KB)
+0005.541 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 12600 files added (on-disk size: 56734.5 KB)
+0005.543 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 12700 files added (on-disk size: 56734.5 KB)
+0005.544 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 12800 files added (on-disk size: 56734.5 KB)
+0005.545 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 25 MB added on this batch (25.4 MB, 31735 files batched, 838 (12850) added so far); re-opening (prior size: 56734.5 KB)
+0006.368 (0) A useful amount of data was added after this amount of zip processing: 1.6 s (normalised: 1.6 s, rate: 15819.6 KB/s)
+0006.369 (0) Performance is good - will increase the amount of data we attempt to batch (time=1.6469230651855, normalised_time=1.6182466340394, max_time=6.3680238723755, data points known=1, old_max_bytes=26214400, new_max_bytes=97195567)
+0006.370 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 12900 files added (on-disk size: 64403.4 KB)
+0006.371 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 13000 files added (on-disk size: 64403.4 KB)
+0006.373 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 13100 files added (on-disk size: 64403.4 KB)
+0006.374 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 13200 files added (on-disk size: 64403.4 KB)
+0006.375 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 13300 files added (on-disk size: 64403.4 KB)
+0006.377 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 13400 files added (on-disk size: 64403.4 KB)
+0006.378 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 13500 files added (on-disk size: 64403.4 KB)
+0006.379 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 13600 files added (on-disk size: 64403.4 KB)
+0006.381 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 13700 files added (on-disk size: 64403.4 KB)
+0006.382 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 13800 files added (on-disk size: 64403.4 KB)
+0006.383 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (23.6 MB, 31735 files batched, 1001 (13851) added so far); re-opening (prior size: 64403.4 KB)
+0007.087 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 13900 files added (on-disk size: 71435.6 KB)
+0007.088 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 14000 files added (on-disk size: 71435.6 KB)
+0007.090 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 14100 files added (on-disk size: 71435.6 KB)
+0007.091 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 14200 files added (on-disk size: 71435.6 KB)
+0007.092 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 14300 files added (on-disk size: 71435.6 KB)
+0007.093 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 14400 files added (on-disk size: 71435.6 KB)
+0007.095 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 14500 files added (on-disk size: 71435.6 KB)
+0007.096 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 14600 files added (on-disk size: 71435.6 KB)
+0007.097 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 14700 files added (on-disk size: 71435.6 KB)
+0007.099 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 14800 files added (on-disk size: 71435.6 KB)
+0007.100 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (11 MB, 31735 files batched, 1001 (14852) added so far); re-opening (prior size: 71435.6 KB)
+0007.442 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 14900 files added (on-disk size: 76275.9 KB)
+0007.443 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 15000 files added (on-disk size: 76275.9 KB)
+0007.445 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 15100 files added (on-disk size: 76275.9 KB)
+0007.446 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 15200 files added (on-disk size: 76275.9 KB)
+0007.447 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 15300 files added (on-disk size: 76275.9 KB)
+0007.448 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 15400 files added (on-disk size: 76275.9 KB)
+0007.450 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 15500 files added (on-disk size: 76275.9 KB)
+0007.451 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 15600 files added (on-disk size: 76275.9 KB)
+0007.452 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 15700 files added (on-disk size: 76275.9 KB)
+0007.454 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 15800 files added (on-disk size: 76275.9 KB)
+0007.454 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (29.8 MB, 31735 files batched, 1001 (15853) added so far); re-opening (prior size: 76275.9 KB)
+0008.385 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 15900 files added (on-disk size: 84772.5 KB)
+0008.386 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 16000 files added (on-disk size: 84772.5 KB)
+0008.388 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 16100 files added (on-disk size: 84772.5 KB)
+0008.389 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 16200 files added (on-disk size: 84772.5 KB)
+0008.390 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 16300 files added (on-disk size: 84772.5 KB)
+0008.391 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 16400 files added (on-disk size: 84772.5 KB)
+0008.393 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 16500 files added (on-disk size: 84772.5 KB)
+0008.394 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 16600 files added (on-disk size: 84772.5 KB)
+0008.395 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 16700 files added (on-disk size: 84772.5 KB)
+0008.396 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 16800 files added (on-disk size: 84772.5 KB)
+0008.397 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (5.9 MB, 31735 files batched, 1001 (16854) added so far); re-opening (prior size: 84772.5 KB)
+0008.723 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 16900 files added (on-disk size: 86652.7 KB)
+0008.725 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 17000 files added (on-disk size: 86652.7 KB)
+0008.727 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 17100 files added (on-disk size: 86652.7 KB)
+0008.728 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 17200 files added (on-disk size: 86652.7 KB)
+0008.730 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 17300 files added (on-disk size: 86652.7 KB)
+0008.732 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 17400 files added (on-disk size: 86652.7 KB)
+0008.733 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 17500 files added (on-disk size: 86652.7 KB)
+0008.735 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 17600 files added (on-disk size: 86652.7 KB)
+0008.736 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 17700 files added (on-disk size: 86652.7 KB)
+0008.738 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 17800 files added (on-disk size: 86652.7 KB)
+0008.739 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (9 MB, 31735 files batched, 1001 (17855) added so far); re-opening (prior size: 86652.7 KB)
+0009.121 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 17900 files added (on-disk size: 89097.7 KB)
+0009.122 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 18000 files added (on-disk size: 89097.7 KB)
+0009.123 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 18100 files added (on-disk size: 89097.7 KB)
+0009.125 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 18200 files added (on-disk size: 89097.7 KB)
+0009.126 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 18300 files added (on-disk size: 89097.7 KB)
+0009.127 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 18400 files added (on-disk size: 89097.7 KB)
+0009.129 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 18500 files added (on-disk size: 89097.7 KB)
+0009.130 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 18600 files added (on-disk size: 89097.7 KB)
+0009.131 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 18700 files added (on-disk size: 89097.7 KB)
+0009.133 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 18800 files added (on-disk size: 89097.7 KB)
+0009.134 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (7.4 MB, 31735 files batched, 1001 (18856) added so far); re-opening (prior size: 89097.7 KB)
+0009.509 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 18900 files added (on-disk size: 91887.8 KB)
+0009.510 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 19000 files added (on-disk size: 91887.8 KB)
+0009.512 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 19100 files added (on-disk size: 91887.8 KB)
+0009.513 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 19200 files added (on-disk size: 91887.8 KB)
+0009.514 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 19300 files added (on-disk size: 91887.8 KB)
+0009.516 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 19400 files added (on-disk size: 91887.8 KB)
+0009.517 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 19500 files added (on-disk size: 91887.8 KB)
+0009.518 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 19600 files added (on-disk size: 91887.8 KB)
+0009.520 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 19700 files added (on-disk size: 91887.8 KB)
+0009.521 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 19800 files added (on-disk size: 91887.8 KB)
+0009.523 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (11 MB, 31735 files batched, 1001 (19857) added so far); re-opening (prior size: 91887.8 KB)
+0009.908 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 19900 files added (on-disk size: 98765.4 KB)
+0009.910 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 20000 files added (on-disk size: 98765.4 KB)
+0009.911 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 20100 files added (on-disk size: 98765.4 KB)
+0009.913 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 20200 files added (on-disk size: 98765.4 KB)
+0009.914 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 20300 files added (on-disk size: 98765.4 KB)
+0009.916 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 20400 files added (on-disk size: 98765.4 KB)
+0009.918 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 20500 files added (on-disk size: 98765.4 KB)
+0009.920 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 20600 files added (on-disk size: 98765.4 KB)
+0009.921 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 20700 files added (on-disk size: 98765.4 KB)
+0009.923 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 20800 files added (on-disk size: 98765.4 KB)
+0009.924 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (13.9 MB, 31735 files batched, 1001 (20858) added so far); re-opening (prior size: 98765.4 KB)
+0010.467 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 20900 files added (on-disk size: 102863.8 KB)
+0010.468 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 21000 files added (on-disk size: 102863.8 KB)
+0010.470 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 21100 files added (on-disk size: 102863.8 KB)
+0010.471 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 21200 files added (on-disk size: 102863.8 KB)
+0010.472 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 21300 files added (on-disk size: 102863.8 KB)
+0010.474 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 21400 files added (on-disk size: 102863.8 KB)
+0010.475 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 21500 files added (on-disk size: 102863.8 KB)
+0010.476 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 21600 files added (on-disk size: 102863.8 KB)
+0010.477 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 21700 files added (on-disk size: 102863.8 KB)
+0010.479 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 21800 files added (on-disk size: 102863.8 KB)
+0010.480 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (8.6 MB, 31735 files batched, 1001 (21859) added so far); re-opening (prior size: 102863.8 KB)
+0010.902 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 21900 files added (on-disk size: 105260.1 KB)
+0010.904 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 22000 files added (on-disk size: 105260.1 KB)
+0010.905 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 22100 files added (on-disk size: 105260.1 KB)
+0010.906 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 22200 files added (on-disk size: 105260.1 KB)
+0010.907 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 22300 files added (on-disk size: 105260.1 KB)
+0010.909 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 22400 files added (on-disk size: 105260.1 KB)
+0010.910 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 22500 files added (on-disk size: 105260.1 KB)
+0010.911 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 22600 files added (on-disk size: 105260.1 KB)
+0010.913 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 22700 files added (on-disk size: 105260.1 KB)
+0010.914 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 22800 files added (on-disk size: 105260.1 KB)
+0010.915 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (20.7 MB, 31735 files batched, 1001 (22860) added so far); re-opening (prior size: 105260.1 KB)
+0011.585 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 22900 files added (on-disk size: 109712.9 KB)
+0011.586 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 23000 files added (on-disk size: 109712.9 KB)
+0011.588 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 23100 files added (on-disk size: 109712.9 KB)
+0011.589 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 23200 files added (on-disk size: 109712.9 KB)
+0011.590 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 23300 files added (on-disk size: 109712.9 KB)
+0011.592 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 23400 files added (on-disk size: 109712.9 KB)
+0011.594 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 23500 files added (on-disk size: 109712.9 KB)
+0011.595 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 23600 files added (on-disk size: 109712.9 KB)
+0011.597 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 23700 files added (on-disk size: 109712.9 KB)
+0011.599 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 23800 files added (on-disk size: 109712.9 KB)
+0011.600 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (9.5 MB, 31735 files batched, 1001 (23861) added so far); re-opening (prior size: 109712.9 KB)
+0012.043 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 23900 files added (on-disk size: 112224.7 KB)
+0012.045 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 24000 files added (on-disk size: 112224.7 KB)
+0012.046 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 24100 files added (on-disk size: 112224.7 KB)
+0012.048 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 24200 files added (on-disk size: 112224.7 KB)
+0012.049 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 24300 files added (on-disk size: 112224.7 KB)
+0012.050 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 24400 files added (on-disk size: 112224.7 KB)
+0012.052 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 24500 files added (on-disk size: 112224.7 KB)
+0012.053 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 24600 files added (on-disk size: 112224.7 KB)
+0012.054 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 24700 files added (on-disk size: 112224.7 KB)
+0012.055 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 24800 files added (on-disk size: 112224.7 KB)
+0012.056 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (7.4 MB, 31735 files batched, 1001 (24862) added so far); re-opening (prior size: 112224.7 KB)
+0012.480 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 24900 files added (on-disk size: 115396.1 KB)
+0012.481 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 25000 files added (on-disk size: 115396.1 KB)
+0012.483 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 25100 files added (on-disk size: 115396.1 KB)
+0012.485 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 25200 files added (on-disk size: 115396.1 KB)
+0012.486 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 25300 files added (on-disk size: 115396.1 KB)
+0012.487 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 25400 files added (on-disk size: 115396.1 KB)
+0012.489 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 25500 files added (on-disk size: 115396.1 KB)
+0012.490 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 25600 files added (on-disk size: 115396.1 KB)
+0012.491 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 25700 files added (on-disk size: 115396.1 KB)
+0012.492 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 25800 files added (on-disk size: 115396.1 KB)
+0012.493 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (14.2 MB, 31735 files batched, 1001 (25863) added so far); re-opening (prior size: 115396.1 KB)
+0013.065 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 25900 files added (on-disk size: 120445.6 KB)
+0013.066 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 26000 files added (on-disk size: 120445.6 KB)
+0013.067 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 26100 files added (on-disk size: 120445.6 KB)
+0013.069 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 26200 files added (on-disk size: 120445.6 KB)
+0013.070 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 26300 files added (on-disk size: 120445.6 KB)
+0013.071 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 26400 files added (on-disk size: 120445.6 KB)
+0013.073 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 26500 files added (on-disk size: 120445.6 KB)
+0013.074 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 26600 files added (on-disk size: 120445.6 KB)
+0013.075 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 26700 files added (on-disk size: 120445.6 KB)
+0013.076 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 26800 files added (on-disk size: 120445.6 KB)
+0013.077 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (16.8 MB, 31735 files batched, 1001 (26864) added so far); re-opening (prior size: 120445.6 KB)
+0013.707 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 26900 files added (on-disk size: 124974.2 KB)
+0013.709 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 27000 files added (on-disk size: 124974.2 KB)
+0013.710 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 27100 files added (on-disk size: 124974.2 KB)
+0013.711 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 27200 files added (on-disk size: 124974.2 KB)
+0013.713 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 27300 files added (on-disk size: 124974.2 KB)
+0013.714 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 27400 files added (on-disk size: 124974.2 KB)
+0013.715 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 27500 files added (on-disk size: 124974.2 KB)
+0013.717 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 27600 files added (on-disk size: 124974.2 KB)
+0013.718 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 27700 files added (on-disk size: 124974.2 KB)
+0013.719 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 27800 files added (on-disk size: 124974.2 KB)
+0013.720 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (2.3 MB, 31735 files batched, 1001 (27865) added so far); re-opening (prior size: 124974.2 KB)
+0014.058 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 27900 files added (on-disk size: 125961.2 KB)
+0014.060 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 28000 files added (on-disk size: 125961.2 KB)
+0014.061 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 28100 files added (on-disk size: 125961.2 KB)
+0014.062 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 28200 files added (on-disk size: 125961.2 KB)
+0014.064 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 28300 files added (on-disk size: 125961.2 KB)
+0014.065 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 28400 files added (on-disk size: 125961.2 KB)
+0014.066 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 28500 files added (on-disk size: 125961.2 KB)
+0014.068 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 28600 files added (on-disk size: 125961.2 KB)
+0014.069 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 28700 files added (on-disk size: 125961.2 KB)
+0014.070 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 28800 files added (on-disk size: 125961.2 KB)
+0014.071 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (3.2 MB, 31735 files batched, 1001 (28866) added so far); re-opening (prior size: 125961.2 KB)
+0014.495 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 28900 files added (on-disk size: 127279.9 KB)
+0014.496 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 29000 files added (on-disk size: 127279.9 KB)
+0014.498 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 29100 files added (on-disk size: 127279.9 KB)
+0014.499 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 29200 files added (on-disk size: 127279.9 KB)
+0014.500 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 29300 files added (on-disk size: 127279.9 KB)
+0014.501 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 29400 files added (on-disk size: 127279.9 KB)
+0014.503 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 29500 files added (on-disk size: 127279.9 KB)
+0014.504 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 29600 files added (on-disk size: 127279.9 KB)
+0014.505 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 29700 files added (on-disk size: 127279.9 KB)
+0014.506 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 29800 files added (on-disk size: 127279.9 KB)
+0014.507 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (17.2 MB, 31735 files batched, 1001 (29867) added so far); re-opening (prior size: 127279.9 KB)
+0015.210 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 29900 files added (on-disk size: 131954.8 KB)
+0015.211 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 30000 files added (on-disk size: 131954.8 KB)
+0015.213 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 30100 files added (on-disk size: 131954.8 KB)
+0015.214 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 30200 files added (on-disk size: 131954.8 KB)
+0015.215 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 30300 files added (on-disk size: 131954.8 KB)
+0015.217 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 30400 files added (on-disk size: 131954.8 KB)
+0015.218 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 30500 files added (on-disk size: 131954.8 KB)
+0015.219 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 30600 files added (on-disk size: 131954.8 KB)
+0015.221 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 30700 files added (on-disk size: 131954.8 KB)
+0015.222 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 30800 files added (on-disk size: 131954.8 KB)
+0015.223 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (6.4 MB, 31735 files batched, 1001 (30868) added so far); re-opening (prior size: 131954.8 KB)
+0015.624 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 30900 files added (on-disk size: 133454.9 KB)
+0015.626 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 31000 files added (on-disk size: 133454.9 KB)
+0015.627 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 31100 files added (on-disk size: 133454.9 KB)
+0015.629 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 31200 files added (on-disk size: 133454.9 KB)
+0015.630 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 31300 files added (on-disk size: 133454.9 KB)
+0015.631 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 31400 files added (on-disk size: 133454.9 KB)
+0015.632 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 31500 files added (on-disk size: 133454.9 KB)
+0015.634 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 31600 files added (on-disk size: 133454.9 KB)
+0015.635 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.tmp: 31700 files added (on-disk size: 133454.9 KB)
+0016.297 (0) Creating zip file manifest (backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.list-temp.tmp)
+0016.372 (0) Successfully created zip file manifest (size: 3161340)
+0017.110 (0) Created plugins zip (0) - 135663.1 KB in 17.1 s (7942.8 KB/s) (sha1: 8bfbdd1a0fe626a0086fba1ace62c374bab6cd41, sha256: d9f8826928c143b894ae2eff86bde1f82b03b23a6f8b5f6813ddb7a7bb7ec991)
+0017.125 (0) Cloud backup selection (1/1): none with instance (1/1) (last)
+0017.126 (0) No remote despatch: user chose no remote backup service
+0017.126 (0) Recording as successfully uploaded: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip
+0017.127 (0) Deleting zip manifest (backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip.list.tmp)
+0017.130 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=2, retain_db=2
+0017.131 (0) Number of backup sets in history: 0; groups (db): 1
+0017.131 (0) Number of backup sets in history: 0; groups (files): 1
+0017.132 (0) Retain: saving new backup history (sets now: 0) and finishing retain operation
+0017.135 (0) Beginning creation of dump of themes (split every: 400 MB)
+0017.154 (0) Total entities for the zip file: 274 directories, 1866 files (0 skipped as non-modified), 22.5 MB
+0017.157 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 100 files added (on-disk size: 0 KB)
+0017.159 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 200 files added (on-disk size: 0 KB)
+0017.161 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 300 files added (on-disk size: 0 KB)
+0017.162 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 400 files added (on-disk size: 0 KB)
+0017.164 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 500 files added (on-disk size: 0 KB)
+0017.165 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 600 files added (on-disk size: 0 KB)
+0017.167 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 700 files added (on-disk size: 0 KB)
+0017.168 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 800 files added (on-disk size: 0 KB)
+0017.170 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 900 files added (on-disk size: 0 KB)
+0017.171 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 1000 files added (on-disk size: 0 KB)
+0017.172 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (12.4 MB, 1866 files batched, 1001 (1001) added so far); re-opening (prior size: 0 KB)
+0017.461 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: size is now: 9.70 MB
+0017.464 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 1100 files added (on-disk size: 9904.6 KB)
+0017.465 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 1200 files added (on-disk size: 9904.6 KB)
+0017.467 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 1300 files added (on-disk size: 9904.6 KB)
+0017.468 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 1400 files added (on-disk size: 9904.6 KB)
+0017.469 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 1500 files added (on-disk size: 9904.6 KB)
+0017.471 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 1600 files added (on-disk size: 9904.6 KB)
+0017.472 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 1700 files added (on-disk size: 9904.6 KB)
+0017.474 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: 1800 files added (on-disk size: 9904.6 KB)
+0017.744 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.tmp: size is now: 15.90 MB
+0017.755 (0) Creating zip file manifest (backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.list-temp.tmp)
+0017.759 (0) Successfully created zip file manifest (size: 140812)
+0017.859 (0) Created themes zip (0) - 16325 KB in 0.7 s (22578.5 KB/s) (sha1: 45a3fa86a5ff23eec33d0b18dd66e823f0238faa, sha256: 935a850c4ee8588019dc63bb988779cff174ac647d617cc0942328ec503bb9e7)
+0017.861 (0) Cloud backup selection (1/1): none with instance (1/1) (last)
+0017.862 (0) No remote despatch: user chose no remote backup service
+0017.862 (0) Recording as successfully uploaded: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip
+0017.863 (0) Deleting zip manifest (backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip.list.tmp)
+0017.864 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=2, retain_db=2
+0017.864 (0) Number of backup sets in history: 0; groups (db): 1
+0017.864 (0) Number of backup sets in history: 0; groups (files): 1
+0017.865 (0) Retain: saving new backup history (sets now: 0) and finishing retain operation
+0017.867 (0) Exclusion option setting (uploads): backup*,*backups,backwpup*,wp-clone,snapshots,wp-staging
+0017.867 (0) Looking for candidates to backup in: /usr/www/users/bd9w5y/staging/wp-content/uploads
+0017.867 (0) finding files: 2026: adding to list (1)
+0017.867 (0) finding files: woocommerce_uploads: adding to list (2)
+0017.868 (0) finding files: wc-imports: adding to list (3)
+0017.868 (0) finding files: nyp-intake: adding to list (4)
+0017.868 (0) finding files: blocksy: adding to list (5)
+0017.868 (0) finding files: wp-personal-data-exports: adding to list (6)
+0017.869 (0) finding files: .DS_Store: adding to list (7)
+0017.869 (0) finding files: mailpoet: adding to list (8)
+0017.869 (0) finding files: wpcode: adding to list (9)
+0017.869 (0) finding files: wc-logs: adding to list (10)
+0017.870 (0) finding files: wpo_wcpdf_1c40d6a276406326a60318060047613e: adding to list (11)
+0017.870 (0) Beginning creation of dump of uploads (split every: 400 MB)
+0017.874 (0) Total entities for the zip file: 46 directories, 245 files (0 skipped as non-modified), 72.5 MB
+0017.875 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-uploads.zip.tmp: 100 files added (on-disk size: 0 KB)
+0017.877 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-uploads.zip.tmp: 200 files added (on-disk size: 0 KB)
+0018.556 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-uploads.zip.tmp: size is now: 68.80 MB
+0018.559 (0) Creating zip file manifest (backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-uploads.zip.list-temp.tmp)
+0018.559 (0) Successfully created zip file manifest (size: 19461)
+0018.922 (0) Created uploads zip (0) - 70482.9 KB in 1.1 s (67055.6 KB/s) (sha1: 6cb4bce8ce890c992b97366c9c0b11b67495e78a, sha256: cd00723a559f81082fb345711e66948df0ef793c3fa20de55b956d07841ec36b)
+0018.924 (0) Cloud backup selection (1/1): none with instance (1/1) (last)
+0018.924 (0) No remote despatch: user chose no remote backup service
+0018.924 (0) Recording as successfully uploaded: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-uploads.zip
+0018.925 (0) Deleting zip manifest (backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-uploads.zip.list.tmp)
+0018.926 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=2, retain_db=2
+0018.927 (0) Number of backup sets in history: 0; groups (db): 1
+0018.927 (0) Number of backup sets in history: 0; groups (files): 1
+0018.928 (0) Retain: saving new backup history (sets now: 0) and finishing retain operation
+0018.929 (0) No backup of mu-plugins: excluded by user's options
+0018.930 (0) Beginning backup of other directories found in the content directory (index: 0)
+0018.931 (0) Exclusion option setting (others): upgrade,cache,updraft,backup*,*backups,mysql.sql,debug.log
+0018.931 (0) Looking for candidates to backup in: /usr/www/users/bd9w5y/staging/wp-content
+0018.931 (0) finding files: debug.log: skipping: excluded by options
+0018.932 (0) finding files: upgrade: skipping: excluded by options
+0018.932 (0) finding files: wpvivid_staging: adding to list (1)
+0018.932 (0) finding files: themes: skipping: this is the themes directory
+0018.932 (0) finding files: updraft: skipping: this is the updraft directory
+0018.933 (0) finding files: wpvividbackups: skipping: excluded by options (glob)
+0018.933 (0) finding files: jetpack-waf: adding to list (2)
+0018.933 (0) finding files: wpvivid_uploads: adding to list (3)
+0018.934 (0) finding files: plugins: skipping: this is the plugins directory
+0018.934 (0) finding files: languages: adding to list (4)
+0018.935 (0) finding files: upgrade-temp-backup: adding to list (5)
+0018.935 (0) finding files: test.txt: adding to list (6)
+0018.935 (0) finding files: uploads: skipping: this is the uploads directory
+0018.936 (0) finding files: index.php: adding to list (7)
+0018.943 (0) Total entities for the zip file: 10 directories, 682 files (0 skipped as non-modified), 18.2 MB
+0018.945 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip.tmp: 100 files added (on-disk size: 0 KB)
+0018.947 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip.tmp: 200 files added (on-disk size: 0 KB)
+0018.948 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip.tmp: 300 files added (on-disk size: 0 KB)
+0018.950 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip.tmp: 400 files added (on-disk size: 0 KB)
+0018.952 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip.tmp: 500 files added (on-disk size: 0 KB)
+0018.953 (0) Zip: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip.tmp: 600 files added (on-disk size: 0 KB)
+0019.610 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip.tmp: size is now: 5.30 MB
+0019.615 (0) Creating zip file manifest (backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip.list-temp.tmp)
+0019.617 (0) Successfully created zip file manifest (size: 52961)
+0019.647 (0) Created others zip (0) - 5459.1 KB in 0.7 s (7684.4 KB/s) (sha1: 15b913c950a9d5283eb01f52ae2f9ceb9e657a07, sha256: 39c231c730c37832671a3f6c1d9cb371fb98bff683a20b23fea5746591490094)
+0019.649 (0) Cloud backup selection (1/1): none with instance (1/1) (last)
+0019.649 (0) No remote despatch: user chose no remote backup service
+0019.650 (0) Recording as successfully uploaded: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip
+0019.650 (0) Deleting zip manifest (backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip.list.tmp)
+0019.651 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=2, retain_db=2
+0019.652 (0) Number of backup sets in history: 0; groups (db): 1
+0019.652 (0) Number of backup sets in history: 0; groups (files): 1
+0019.652 (0) Retain: saving new backup history (sets now: 0) and finishing retain operation
+0019.655 (0) Saving backup status to database (elements: 8)
+0019.656 (0) Beginning creation of database dump (WordPress DB)
+0019.657 (0) SQL compatibility mode is: ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+0019.658 (0) Testing potential mysqldump binary: /usr/bin/mysqldump
+0019.680 (0) Output: /*M!999999\- enable the sandbox mode */ \n/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;\n/*!40103 SET TIME_ZONE='+00:00' */;\n/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;\n/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;\n/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;\n/*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;\nDROP TABLE IF EXISTS `nypwp_options`;\n/*!40101 SET @saved_cs_client     = @@character_se (truncated - 1641 bytes total)
+0019.681 (0) Working binary mysqldump found: /usr/bin/mysqldump
+0019.687 (0) Table nypwp_options: Total expected rows (via COUNT): 878
+0019.750 (0) Table nypwp_options: Rows added in this batch (next record: 79935): 873 (uncompressed bytes in this segment=2534135) in 0.07 seconds
+0019.752 (0) Table nypwp_options: finishing file(s) (2, 320.8 KB)
+0019.754 (0) Table nypwp_users: Total expected rows (via COUNT): 9
+0019.755 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.756 (0) Table nypwp_users: Rows added in this batch (next record: 9): 9 (uncompressed bytes in this segment=2651) in 0.00 seconds
+0019.757 (0) Table nypwp_users: finishing file(s) (2, 1.2 KB)
+0019.760 (0) Table nypwp_usermeta: Total expected rows (via COUNT): 442
+0019.760 (0) Table is relatively small; fetch_rows will thus be: 500 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.763 (0) Table nypwp_usermeta: Rows added in this batch (next record: 557): 442 (uncompressed bytes in this segment=22097) in 0.00 seconds
+0019.765 (0) Table nypwp_usermeta: finishing file(s) (2, 6.4 KB)
+0019.768 (0) Table nypwp_actionscheduler_actions: Total expected rows (approximate): 1330
+0019.788 (0) Table nypwp_actionscheduler_actions: Rows added in this batch (next record: 4318): 1376 (uncompressed bytes in this segment=597154) in 0.02 seconds
+0019.790 (0) Table nypwp_actionscheduler_actions: finishing file(s) (2, 46 KB)
+0019.792 (0) Table nypwp_actionscheduler_claims: Total expected rows (via COUNT): 0
+0019.793 (0) Table nypwp_actionscheduler_claims: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=645) in 0.00 seconds
+0019.794 (0) Table nypwp_actionscheduler_claims: finishing file(s) (2, 0.4 KB)
+0019.796 (0) Table nypwp_actionscheduler_groups: Total expected rows (via COUNT): 20
+0019.797 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.798 (0) Table nypwp_actionscheduler_groups: Rows added in this batch (next record: 20): 20 (uncompressed bytes in this segment=1180) in 0.00 seconds
+0019.799 (0) Table nypwp_actionscheduler_groups: finishing file(s) (2, 0.6 KB)
+0019.802 (0) Table nypwp_actionscheduler_logs: Total expected rows (approximate): 4209
+0019.822 (0) Table nypwp_actionscheduler_logs: Rows added in this batch (next record: 12815): 4087 (uncompressed bytes in this segment=373256) in 0.02 seconds
+0019.824 (0) Table nypwp_actionscheduler_logs: finishing file(s) (2, 33.2 KB)
+0019.826 (0) Table nypwp_commentmeta: Total expected rows (via COUNT): 53
+0019.827 (0) Table is relatively small; fetch_rows will thus be: 100 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.828 (0) Table nypwp_commentmeta: Rows added in this batch (next record: 53): 53 (uncompressed bytes in this segment=2729) in 0.00 seconds
+0019.829 (0) Table nypwp_commentmeta: finishing file(s) (2, 0.7 KB)
+0019.831 (0) Table nypwp_comments: Total expected rows (via COUNT): 100
+0019.832 (0) Table is relatively small; fetch_rows will thus be: 200 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.834 (0) Table nypwp_comments: Rows added in this batch (next record: 100): 100 (uncompressed bytes in this segment=26187) in 0.00 seconds
+0019.835 (0) Table nypwp_comments: finishing file(s) (2, 3.2 KB)
+0019.837 (0) Table nypwp_links: Total expected rows (via COUNT): 0
+0019.838 (0) Table nypwp_links: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1045) in 0.00 seconds
+0019.839 (0) Table nypwp_links: finishing file(s) (2, 0.5 KB)
+0019.842 (0) Table nypwp_postmeta: Total expected rows (via COUNT): 475
+0019.842 (0) Table is relatively small; fetch_rows will thus be: 500 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.845 (0) Table nypwp_postmeta: Rows added in this batch (next record: 645): 475 (uncompressed bytes in this segment=50144) in 0.00 seconds
+0019.847 (0) Table nypwp_postmeta: finishing file(s) (2, 7.1 KB)
+0019.851 (0) Table nypwp_posts: Total expected rows (via COUNT): 304
+0019.851 (0) Table is relatively small; fetch_rows will thus be: 500 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.947 (0) Table nypwp_posts: Rows added in this batch (next record: 343): 304 (uncompressed bytes in this segment=3989385) in 0.10 seconds
+0019.949 (0) Table nypwp_posts: finishing file(s) (2, 440.7 KB)
+0019.951 (0) Table nypwp_term_relationships: Total expected rows (approximate): 28
+0019.952 (0) Table nypwp_term_relationships: Rows added in this batch (next record: 100000): 28 (uncompressed bytes in this segment=1103) in 0.00 seconds
+0019.953 (0) Table nypwp_term_relationships: finishing file(s) (2, 0.5 KB)
+0019.956 (0) Table nypwp_term_taxonomy: Total expected rows (via COUNT): 28
+0019.956 (0) Table is relatively small; fetch_rows will thus be: 50 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.957 (0) Table nypwp_term_taxonomy: Rows added in this batch (next record: 28): 28 (uncompressed bytes in this segment=1903) in 0.00 seconds
+0019.959 (0) Table nypwp_term_taxonomy: finishing file(s) (2, 0.7 KB)
+0019.961 (0) Table nypwp_termmeta: Total expected rows (via COUNT): 4
+0019.961 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.962 (0) Table nypwp_termmeta: Rows added in this batch (next record: 4): 4 (uncompressed bytes in this segment=814) in 0.00 seconds
+0019.964 (0) Table nypwp_termmeta: finishing file(s) (2, 0.4 KB)
+0019.966 (0) Table nypwp_terms: Total expected rows (via COUNT): 28
+0019.966 (0) Table is relatively small; fetch_rows will thus be: 50 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.968 (0) Table nypwp_terms: Rows added in this batch (next record: 28): 28 (uncompressed bytes in this segment=1687) in 0.00 seconds
+0019.969 (0) Table nypwp_terms: finishing file(s) (2, 0.7 KB)
+0019.971 (0) Table nypwp_wc_category_lookup: Total expected rows (approximate): 3
+0019.972 (0) Table nypwp_wc_category_lookup: Rows added in this batch (next record: 1000): 3 (uncompressed bytes in this segment=632) in 0.00 seconds
+0019.973 (0) Table nypwp_wc_category_lookup: finishing file(s) (2, 0.4 KB)
+0019.975 (0) Table nypwp_wc_product_meta_lookup: Total expected rows (via COUNT): 6
+0019.975 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.977 (0) Table nypwp_wc_product_meta_lookup: Rows added in this batch (next record: 298): 6 (uncompressed bytes in this segment=2009) in 0.00 seconds
+0019.978 (0) Table nypwp_wc_product_meta_lookup: finishing file(s) (2, 0.7 KB)
+0019.979 (0) Table nypwp_wc_reserved_stock: Total expected rows (approximate): 0
+0019.980 (0) Table nypwp_wc_reserved_stock: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=734) in 0.00 seconds
+0019.982 (0) Table nypwp_wc_reserved_stock: finishing file(s) (2, 0.4 KB)
+0019.983 (0) Table nypwp_wc_tax_rate_classes: Total expected rows (via COUNT): 2
+0019.984 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.985 (0) Table nypwp_wc_tax_rate_classes: Rows added in this batch (next record: 2): 2 (uncompressed bytes in this segment=771) in 0.00 seconds
+0019.986 (0) Table nypwp_wc_tax_rate_classes: finishing file(s) (2, 0.4 KB)
+0019.988 (0) Table nypwp_woocommerce_order_itemmeta: Total expected rows (via COUNT): 360
+0019.989 (0) Table is relatively small; fetch_rows will thus be: 500 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0019.991 (0) Table nypwp_woocommerce_order_itemmeta: Rows added in this batch (next record: 378): 360 (uncompressed bytes in this segment=14302) in 0.00 seconds
+0019.993 (0) Table nypwp_woocommerce_order_itemmeta: finishing file(s) (2, 2.5 KB)
+0019.995 (0) Table nypwp_woocommerce_payment_tokenmeta: Total expected rows (via COUNT): 0
+0019.996 (0) Table nypwp_woocommerce_payment_tokenmeta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=767) in 0.00 seconds
+0019.998 (0) Table nypwp_woocommerce_payment_tokenmeta: finishing file(s) (2, 0.4 KB)
+0020.000 (0) Table nypwp_ff_scheduled_actions: Total expected rows (via COUNT): 0
+0020.001 (0) Table nypwp_ff_scheduled_actions: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=955) in 0.00 seconds
+0020.003 (0) Table nypwp_ff_scheduled_actions: finishing file(s) (2, 0.4 KB)
+0020.005 (0) Table nypwp_fluentform_entry_details: Total expected rows (via COUNT): 0
+0020.005 (0) Table nypwp_fluentform_entry_details: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=741) in 0.00 seconds
+0020.007 (0) Table nypwp_fluentform_entry_details: finishing file(s) (2, 0.4 KB)
+0020.009 (0) Table nypwp_fluentform_form_analytics: Total expected rows (via COUNT): 0
+0020.009 (0) Table nypwp_fluentform_form_analytics: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=956) in 0.00 seconds
+0020.011 (0) Table nypwp_fluentform_form_analytics: finishing file(s) (2, 0.4 KB)
+0020.013 (0) Table nypwp_fluentform_form_meta: Total expected rows (via COUNT): 17
+0020.013 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.015 (0) Table nypwp_fluentform_form_meta: Rows added in this batch (next record: 17): 17 (uncompressed bytes in this segment=23066) in 0.00 seconds
+0020.016 (0) Table nypwp_fluentform_form_meta: finishing file(s) (2, 3.5 KB)
+0020.019 (0) Table nypwp_fluentform_forms: Total expected rows (via COUNT): 4
+0020.019 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.020 (0) Table nypwp_fluentform_forms: Rows added in this batch (next record: 4): 4 (uncompressed bytes in this segment=16240) in 0.00 seconds
+0020.022 (0) Table nypwp_fluentform_forms: finishing file(s) (2, 2.4 KB)
+0020.025 (0) Table nypwp_fluentform_logs: Total expected rows (via COUNT): 0
+0020.026 (0) Table nypwp_fluentform_logs: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=790) in 0.00 seconds
+0020.027 (0) Table nypwp_fluentform_logs: finishing file(s) (2, 0.4 KB)
+0020.030 (0) Table nypwp_fluentform_submission_meta: Total expected rows (via COUNT): 0
+0020.031 (0) Table nypwp_fluentform_submission_meta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=953) in 0.00 seconds
+0020.032 (0) Table nypwp_fluentform_submission_meta: finishing file(s) (2, 0.4 KB)
+0020.035 (0) Table nypwp_fluentform_submissions: Total expected rows (via COUNT): 0
+0020.036 (0) Table nypwp_fluentform_submissions: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1537) in 0.00 seconds
+0020.037 (0) Table nypwp_fluentform_submissions: finishing file(s) (2, 0.6 KB)
+0020.039 (0) Table nypwp_gla_attribute_mapping_rules: Total expected rows (via COUNT): 0
+0020.040 (0) Table nypwp_gla_attribute_mapping_rules: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=676) in 0.00 seconds
+0020.041 (0) Table nypwp_gla_attribute_mapping_rules: finishing file(s) (2, 0.4 KB)
+0020.042 (0) Table nypwp_gla_budget_recommendations: Total expected rows (approximate): 4230
+0020.055 (0) Table nypwp_gla_budget_recommendations: Rows added in this batch (next record: 4230): 4230 (uncompressed bytes in this segment=113866) in 0.01 seconds
+0020.057 (0) Table nypwp_gla_budget_recommendations: finishing file(s) (2, 23.9 KB)
+0020.059 (0) Table nypwp_gla_merchant_issues: Total expected rows (via COUNT): 0
+0020.059 (0) Table nypwp_gla_merchant_issues: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=900) in 0.00 seconds
+0020.061 (0) Table nypwp_gla_merchant_issues: finishing file(s) (2, 0.4 KB)
+0020.063 (0) Table nypwp_gla_merchant_price_benchmarks: Total expected rows (via COUNT): 0
+0020.064 (0) Table nypwp_gla_merchant_price_benchmarks: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1729) in 0.00 seconds
+0020.065 (0) Table nypwp_gla_merchant_price_benchmarks: finishing file(s) (2, 0.6 KB)
+0020.067 (0) Table nypwp_gla_shipping_rates: Total expected rows (via COUNT): 0
+0020.068 (0) Table nypwp_gla_shipping_rates: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=665) in 0.00 seconds
+0020.069 (0) Table nypwp_gla_shipping_rates: finishing file(s) (2, 0.4 KB)
+0020.071 (0) Table nypwp_gla_shipping_times: Total expected rows (via COUNT): 0
+0020.071 (0) Table nypwp_gla_shipping_times: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=617) in 0.00 seconds
+0020.073 (0) Table nypwp_gla_shipping_times: finishing file(s) (2, 0.4 KB)
+0020.075 (0) Table nypwp_jetpack_sync_queue: Total expected rows (via COUNT): 11
+0020.076 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.077 (0) Table nypwp_jetpack_sync_queue: Rows added in this batch (next record: 465): 11 (uncompressed bytes in this segment=7960) in 0.00 seconds
+0020.079 (0) Table nypwp_jetpack_sync_queue: finishing file(s) (2, 1.2 KB)
+0020.082 (0) Table nypwp_mailpoet_automation_run_logs: Total expected rows (via COUNT): 0
+0020.083 (0) Table nypwp_mailpoet_automation_run_logs: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1089) in 0.00 seconds
+0020.085 (0) Table nypwp_mailpoet_automation_run_logs: finishing file(s) (2, 0.5 KB)
+0020.087 (0) Table nypwp_mailpoet_automation_run_subjects: Total expected rows (via COUNT): 0
+0020.087 (0) Table nypwp_mailpoet_automation_run_subjects: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=785) in 0.00 seconds
+0020.089 (0) Table nypwp_mailpoet_automation_run_subjects: finishing file(s) (2, 0.4 KB)
+0020.091 (0) Table nypwp_mailpoet_automation_runs: Total expected rows (via COUNT): 0
+0020.091 (0) Table nypwp_mailpoet_automation_runs: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1040) in 0.00 seconds
+0020.093 (0) Table nypwp_mailpoet_automation_runs: finishing file(s) (2, 0.5 KB)
+0020.094 (0) Table nypwp_mailpoet_automation_triggers: Total expected rows (approximate): 0
+0020.095 (0) Table nypwp_mailpoet_automation_triggers: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=597) in 0.00 seconds
+0020.096 (0) Table nypwp_mailpoet_automation_triggers: finishing file(s) (2, 0.3 KB)
+0020.099 (0) Table nypwp_mailpoet_automation_versions: Total expected rows (via COUNT): 0
+0020.099 (0) Table nypwp_mailpoet_automation_versions: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=793) in 0.00 seconds
+0020.101 (0) Table nypwp_mailpoet_automation_versions: finishing file(s) (2, 0.4 KB)
+0020.103 (0) Table nypwp_mailpoet_automations: Total expected rows (via COUNT): 0
+0020.104 (0) Table nypwp_mailpoet_automations: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=846) in 0.00 seconds
+0020.105 (0) Table nypwp_mailpoet_automations: finishing file(s) (2, 0.4 KB)
+0020.108 (0) Table nypwp_mailpoet_custom_fields: Total expected rows (via COUNT): 0
+0020.108 (0) Table nypwp_mailpoet_custom_fields: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=804) in 0.00 seconds
+0020.110 (0) Table nypwp_mailpoet_custom_fields: finishing file(s) (2, 0.4 KB)
+0020.112 (0) Table nypwp_mailpoet_dynamic_segment_filters: Total expected rows (via COUNT): 0
+0020.112 (0) Table nypwp_mailpoet_dynamic_segment_filters: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=895) in 0.00 seconds
+0020.114 (0) Table nypwp_mailpoet_dynamic_segment_filters: finishing file(s) (2, 0.4 KB)
+0020.116 (0) Table nypwp_mailpoet_feature_flags: Total expected rows (via COUNT): 0
+0020.117 (0) Table nypwp_mailpoet_feature_flags: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=735) in 0.00 seconds
+0020.118 (0) Table nypwp_mailpoet_feature_flags: finishing file(s) (2, 0.4 KB)
+0020.121 (0) Table nypwp_mailpoet_forms: Total expected rows (via COUNT): 0
+0020.121 (0) Table nypwp_mailpoet_forms: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=818) in 0.00 seconds
+0020.123 (0) Table nypwp_mailpoet_forms: finishing file(s) (2, 0.4 KB)
+0020.126 (0) Table nypwp_mailpoet_log: Total expected rows (via COUNT): 0
+0020.126 (0) Table nypwp_mailpoet_log: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=731) in 0.00 seconds
+0020.128 (0) Table nypwp_mailpoet_log: finishing file(s) (2, 0.4 KB)
+0020.129 (0) Table nypwp_mailpoet_migrations: Total expected rows (via COUNT): 47
+0020.130 (0) Table is relatively small; fetch_rows will thus be: 50 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.131 (0) Table nypwp_mailpoet_migrations: Rows added in this batch (next record: 47): 47 (uncompressed bytes in this segment=5167) in 0.00 seconds
+0020.132 (0) Table nypwp_mailpoet_migrations: finishing file(s) (2, 1 KB)
+0020.134 (0) Table nypwp_mailpoet_newsletter_links: Total expected rows (via COUNT): 0
+0020.135 (0) Table nypwp_mailpoet_newsletter_links: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=902) in 0.00 seconds
+0020.136 (0) Table nypwp_mailpoet_newsletter_links: finishing file(s) (2, 0.4 KB)
+0020.139 (0) Table nypwp_mailpoet_newsletter_option: Total expected rows (via COUNT): 0
+0020.139 (0) Table nypwp_mailpoet_newsletter_option: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=869) in 0.00 seconds
+0020.141 (0) Table nypwp_mailpoet_newsletter_option: finishing file(s) (2, 0.4 KB)
+0020.143 (0) Table nypwp_mailpoet_newsletter_option_fields: Total expected rows (via COUNT): 35
+0020.143 (0) Table is relatively small; fetch_rows will thus be: 50 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.144 (0) Table nypwp_mailpoet_newsletter_option_fields: Rows added in this batch (next record: 35): 35 (uncompressed bytes in this segment=3176) in 0.00 seconds
+0020.145 (0) Table nypwp_mailpoet_newsletter_option_fields: finishing file(s) (2, 0.8 KB)
+0020.147 (0) Table nypwp_mailpoet_newsletter_posts: Total expected rows (via COUNT): 0
+0020.148 (0) Table nypwp_mailpoet_newsletter_posts: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=781) in 0.00 seconds
+0020.149 (0) Table nypwp_mailpoet_newsletter_posts: finishing file(s) (2, 0.4 KB)
+0020.151 (0) Table nypwp_mailpoet_newsletter_segment: Total expected rows (via COUNT): 0
+0020.152 (0) Table nypwp_mailpoet_newsletter_segment: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=821) in 0.00 seconds
+0020.153 (0) Table nypwp_mailpoet_newsletter_segment: finishing file(s) (2, 0.4 KB)
+0020.155 (0) Table nypwp_mailpoet_newsletter_templates: Total expected rows (via COUNT): 77
+0020.155 (0) Table is relatively small; fetch_rows will thus be: 100 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.175 (0) Table nypwp_mailpoet_newsletter_templates: Rows added in this batch (next record: 77): 77 (uncompressed bytes in this segment=1114574) in 0.02 seconds
+0020.177 (0) Table nypwp_mailpoet_newsletter_templates: finishing file(s) (2, 66.3 KB)
+0020.180 (0) Table nypwp_mailpoet_newsletters: Total expected rows (via COUNT): 0
+0020.181 (0) Table nypwp_mailpoet_newsletters: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1490) in 0.00 seconds
+0020.182 (0) Table nypwp_mailpoet_newsletters: finishing file(s) (2, 0.6 KB)
+0020.184 (0) Table nypwp_mailpoet_scheduled_task_subscribers: Total expected rows (approximate): 0
+0020.185 (0) Table nypwp_mailpoet_scheduled_task_subscribers: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=916) in 0.00 seconds
+0020.186 (0) Table nypwp_mailpoet_scheduled_task_subscribers: finishing file(s) (2, 0.4 KB)
+0020.188 (0) Table nypwp_mailpoet_scheduled_tasks: Total expected rows (via COUNT): 238
+0020.189 (0) Table is relatively small; fetch_rows will thus be: 250 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.191 (0) Table nypwp_mailpoet_scheduled_tasks: Rows added in this batch (next record: 238): 238 (uncompressed bytes in this segment=38234) in 0.00 seconds
+0020.193 (0) Table nypwp_mailpoet_scheduled_tasks: finishing file(s) (2, 5.1 KB)
+0020.195 (0) Table nypwp_mailpoet_segments: Total expected rows (via COUNT): 3
+0020.195 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.196 (0) Table nypwp_mailpoet_segments: Rows added in this batch (next record: 3): 3 (uncompressed bytes in this segment=1918) in 0.00 seconds
+0020.198 (0) Table nypwp_mailpoet_segments: finishing file(s) (2, 0.7 KB)
+0020.200 (0) Table nypwp_mailpoet_sending_queues: Total expected rows (via COUNT): 0
+0020.201 (0) Table nypwp_mailpoet_sending_queues: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1196) in 0.00 seconds
+0020.203 (0) Table nypwp_mailpoet_sending_queues: finishing file(s) (2, 0.5 KB)
+0020.205 (0) Table nypwp_mailpoet_settings: Total expected rows (via COUNT): 14
+0020.205 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.206 (0) Table nypwp_mailpoet_settings: Rows added in this batch (next record: 16): 14 (uncompressed bytes in this segment=3184) in 0.00 seconds
+0020.208 (0) Table nypwp_mailpoet_settings: finishing file(s) (2, 1.2 KB)
+0020.210 (0) Table nypwp_mailpoet_statistics_bounces: Total expected rows (via COUNT): 0
+0020.210 (0) Table nypwp_mailpoet_statistics_bounces: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=724) in 0.00 seconds
+0020.212 (0) Table nypwp_mailpoet_statistics_bounces: finishing file(s) (2, 0.4 KB)
+0020.214 (0) Table nypwp_mailpoet_statistics_clicks: Total expected rows (via COUNT): 0
+0020.214 (0) Table nypwp_mailpoet_statistics_clicks: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1145) in 0.00 seconds
+0020.215 (0) Table nypwp_mailpoet_statistics_clicks: finishing file(s) (2, 0.5 KB)
+0020.217 (0) Table nypwp_mailpoet_statistics_forms: Total expected rows (via COUNT): 0
+0020.218 (0) Table nypwp_mailpoet_statistics_forms: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=726) in 0.00 seconds
+0020.219 (0) Table nypwp_mailpoet_statistics_forms: finishing file(s) (2, 0.4 KB)
+0020.221 (0) Table nypwp_mailpoet_statistics_newsletters: Total expected rows (via COUNT): 0
+0020.221 (0) Table nypwp_mailpoet_statistics_newsletters: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=827) in 0.00 seconds
+0020.222 (0) Table nypwp_mailpoet_statistics_newsletters: finishing file(s) (2, 0.4 KB)
+0020.224 (0) Table nypwp_mailpoet_statistics_opens: Total expected rows (via COUNT): 0
+0020.225 (0) Table nypwp_mailpoet_statistics_opens: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1089) in 0.00 seconds
+0020.226 (0) Table nypwp_mailpoet_statistics_opens: finishing file(s) (2, 0.5 KB)
+0020.228 (0) Table nypwp_mailpoet_statistics_unsubscribes: Total expected rows (via COUNT): 0
+0020.228 (0) Table nypwp_mailpoet_statistics_unsubscribes: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1217) in 0.00 seconds
+0020.230 (0) Table nypwp_mailpoet_statistics_unsubscribes: finishing file(s) (2, 0.5 KB)
+0020.232 (0) Table nypwp_mailpoet_statistics_woocommerce_purchases: Total expected rows (via COUNT): 0
+0020.232 (0) Table nypwp_mailpoet_statistics_woocommerce_purchases: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1345) in 0.00 seconds
+0020.233 (0) Table nypwp_mailpoet_statistics_woocommerce_purchases: finishing file(s) (2, 0.6 KB)
+0020.235 (0) Table nypwp_mailpoet_stats_notifications: Total expected rows (via COUNT): 0
+0020.236 (0) Table nypwp_mailpoet_stats_notifications: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=853) in 0.00 seconds
+0020.237 (0) Table nypwp_mailpoet_stats_notifications: finishing file(s) (2, 0.4 KB)
+0020.239 (0) Table nypwp_mailpoet_subscriber_custom_field: Total expected rows (via COUNT): 0
+0020.239 (0) Table nypwp_mailpoet_subscriber_custom_field: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=897) in 0.00 seconds
+0020.240 (0) Table nypwp_mailpoet_subscriber_custom_field: finishing file(s) (2, 0.4 KB)
+0020.242 (0) Table nypwp_mailpoet_subscriber_ips: Total expected rows (approximate): 0
+0020.242 (0) Table nypwp_mailpoet_subscriber_ips: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=582) in 0.00 seconds
+0020.244 (0) Table nypwp_mailpoet_subscriber_ips: finishing file(s) (2, 0.3 KB)
+0020.246 (0) Table nypwp_mailpoet_subscriber_segment: Total expected rows (via COUNT): 1
+0020.246 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.247 (0) Table nypwp_mailpoet_subscriber_segment: Rows added in this batch (next record: 1): 1 (uncompressed bytes in this segment=1054) in 0.00 seconds
+0020.249 (0) Table nypwp_mailpoet_subscriber_segment: finishing file(s) (2, 0.5 KB)
+0020.250 (0) Table nypwp_mailpoet_subscriber_tag: Total expected rows (via COUNT): 0
+0020.251 (0) Table nypwp_mailpoet_subscriber_tag: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=812) in 0.00 seconds
+0020.252 (0) Table nypwp_mailpoet_subscriber_tag: finishing file(s) (2, 0.4 KB)
+0020.255 (0) Table nypwp_mailpoet_subscribers: Total expected rows (via COUNT): 1
+0020.255 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.257 (0) Table nypwp_mailpoet_subscribers: Rows added in this batch (next record: 1): 1 (uncompressed bytes in this segment=3471) in 0.00 seconds
+0020.259 (0) Table nypwp_mailpoet_subscribers: finishing file(s) (2, 1 KB)
+0020.261 (0) Table nypwp_mailpoet_tags: Total expected rows (via COUNT): 0
+0020.262 (0) Table nypwp_mailpoet_tags: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=688) in 0.00 seconds
+0020.263 (0) Table nypwp_mailpoet_tags: finishing file(s) (2, 0.4 KB)
+0020.265 (0) Table nypwp_mailpoet_user_agents: Total expected rows (via COUNT): 0
+0020.266 (0) Table nypwp_mailpoet_user_agents: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=717) in 0.00 seconds
+0020.267 (0) Table nypwp_mailpoet_user_agents: finishing file(s) (2, 0.4 KB)
+0020.269 (0) Table nypwp_mailpoet_user_flags: Total expected rows (via COUNT): 0
+0020.269 (0) Table nypwp_mailpoet_user_flags: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=769) in 0.00 seconds
+0020.271 (0) Table nypwp_mailpoet_user_flags: finishing file(s) (2, 0.4 KB)
+0020.274 (0) Table nypwp_packlink_entity: Total expected rows (via COUNT): 3
+0020.274 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.275 (0) Table nypwp_packlink_entity: Rows added in this batch (next record: 3): 3 (uncompressed bytes in this segment=2185) in 0.00 seconds
+0020.277 (0) Table nypwp_packlink_entity: finishing file(s) (2, 0.8 KB)
+0020.279 (0) Table nypwp_wc_admin_note_actions: Total expected rows (via COUNT): 108
+0020.280 (0) Table is relatively small; fetch_rows will thus be: 200 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.282 (0) Table nypwp_wc_admin_note_actions: Rows added in this batch (next record: 7361): 108 (uncompressed bytes in this segment=20494) in 0.00 seconds
+0020.283 (0) Table nypwp_wc_admin_note_actions: finishing file(s) (2, 3.8 KB)
+0020.286 (0) Table nypwp_wc_admin_notes: Total expected rows (via COUNT): 80
+0020.286 (0) Table is relatively small; fetch_rows will thus be: 100 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.289 (0) Table nypwp_wc_admin_notes: Rows added in this batch (next record: 82): 80 (uncompressed bytes in this segment=38480) in 0.00 seconds
+0020.290 (0) Table nypwp_wc_admin_notes: finishing file(s) (2, 9.3 KB)
+0020.292 (0) Table nypwp_wc_customer_lookup: Total expected rows (via COUNT): 6
+0020.293 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.294 (0) Table nypwp_wc_customer_lookup: Rows added in this batch (next record: 6): 6 (uncompressed bytes in this segment=1939) in 0.00 seconds
+0020.295 (0) Table nypwp_wc_customer_lookup: finishing file(s) (2, 0.8 KB)
+0020.297 (0) Table nypwp_wc_download_log: Total expected rows (via COUNT): 0
+0020.298 (0) Table nypwp_wc_download_log: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=734) in 0.00 seconds
+0020.299 (0) Table nypwp_wc_download_log: finishing file(s) (2, 0.4 KB)
+0020.301 (0) Table nypwp_wc_email_unsubscribes: Total expected rows (via COUNT): 0
+0020.301 (0) Table nypwp_wc_email_unsubscribes: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=689) in 0.00 seconds
+0020.302 (0) Table nypwp_wc_email_unsubscribes: finishing file(s) (2, 0.4 KB)
+0020.304 (0) Table nypwp_wc_order_addresses: Total expected rows (via COUNT): 64
+0020.304 (0) Table is relatively small; fetch_rows will thus be: 100 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.306 (0) Table nypwp_wc_order_addresses: Rows added in this batch (next record: 64): 64 (uncompressed bytes in this segment=9551) in 0.00 seconds
+0020.307 (0) Table nypwp_wc_order_addresses: finishing file(s) (2, 1.3 KB)
+0020.309 (0) Table nypwp_wc_order_coupon_lookup: Total expected rows (approximate): 0
+0020.310 (0) Table nypwp_wc_order_coupon_lookup: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=733) in 0.00 seconds
+0020.311 (0) Table nypwp_wc_order_coupon_lookup: finishing file(s) (2, 0.4 KB)
+0020.313 (0) Table nypwp_wc_order_operational_data: Total expected rows (via COUNT): 32
+0020.313 (0) Table is relatively small; fetch_rows will thus be: 50 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.315 (0) Table nypwp_wc_order_operational_data: Rows added in this batch (next record: 205): 32 (uncompressed bytes in this segment=7734) in 0.00 seconds
+0020.316 (0) Table nypwp_wc_order_operational_data: finishing file(s) (2, 1.8 KB)
+0020.318 (0) Table nypwp_wc_order_product_lookup: Total expected rows (approximate): 40
+0020.319 (0) Table nypwp_wc_order_product_lookup: Rows added in this batch (next record: 1000): 40 (uncompressed bytes in this segment=4617) in 0.00 seconds
+0020.320 (0) Table nypwp_wc_order_product_lookup: finishing file(s) (2, 1.1 KB)
+0020.322 (0) Table nypwp_wc_order_stats: Total expected rows (via COUNT): 32
+0020.322 (0) Table is relatively small; fetch_rows will thus be: 50 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.324 (0) Table nypwp_wc_order_stats: Rows added in this batch (next record: 310): 32 (uncompressed bytes in this segment=5627) in 0.00 seconds
+0020.325 (0) Table nypwp_wc_order_stats: finishing file(s) (2, 1.2 KB)
+0020.327 (0) Table nypwp_wc_order_tax_lookup: Total expected rows (approximate): 0
+0020.328 (0) Table nypwp_wc_order_tax_lookup: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=811) in 0.00 seconds
+0020.329 (0) Table nypwp_wc_order_tax_lookup: finishing file(s) (2, 0.4 KB)
+0020.331 (0) Table nypwp_wc_orders: Total expected rows (via COUNT): 32
+0020.331 (0) Table is relatively small; fetch_rows will thus be: 50 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.333 (0) Table nypwp_wc_orders: Rows added in this batch (next record: 310): 32 (uncompressed bytes in this segment=12834) in 0.00 seconds
+0020.334 (0) Table nypwp_wc_orders: finishing file(s) (2, 2 KB)
+0020.336 (0) Table nypwp_wc_orders_meta: Total expected rows (approximate): 1950
+0020.343 (0) Table nypwp_wc_orders_meta: Rows added in this batch (next record: 2183): 1950 (uncompressed bytes in this segment=110608) in 0.01 seconds
+0020.344 (0) Table nypwp_wc_orders_meta: finishing file(s) (2, 18.2 KB)
+0020.346 (0) Table nypwp_wc_product_attributes_lookup: Total expected rows (approximate): 0
+0020.347 (0) Table nypwp_wc_product_attributes_lookup: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=997) in 0.00 seconds
+0020.348 (0) Table nypwp_wc_product_attributes_lookup: finishing file(s) (2, 0.4 KB)
+0020.350 (0) Table nypwp_wc_product_download_directories: Total expected rows (via COUNT): 2
+0020.350 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.351 (0) Table nypwp_wc_product_download_directories: Rows added in this batch (next record: 2): 2 (uncompressed bytes in this segment=903) in 0.00 seconds
+0020.352 (0) Table nypwp_wc_product_download_directories: finishing file(s) (2, 0.5 KB)
+0020.354 (0) Table nypwp_wc_rate_limits: Total expected rows (via COUNT): 0
+0020.355 (0) Table nypwp_wc_rate_limits: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=702) in 0.00 seconds
+0020.356 (0) Table nypwp_wc_rate_limits: finishing file(s) (2, 0.4 KB)
+0020.358 (0) Table nypwp_wc_webhooks: Total expected rows (via COUNT): 0
+0020.358 (0) Table nypwp_wc_webhooks: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1089) in 0.00 seconds
+0020.360 (0) Table nypwp_wc_webhooks: finishing file(s) (2, 0.5 KB)
+0020.362 (0) Table nypwp_wcpdf_invoice_number: Total expected rows (via COUNT): 7
+0020.362 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.363 (0) Table nypwp_wcpdf_invoice_number: Rows added in this batch (next record: 7): 7 (uncompressed bytes in this segment=992) in 0.00 seconds
+0020.364 (0) Table nypwp_wcpdf_invoice_number: finishing file(s) (2, 0.5 KB)
+0020.366 (0) Table nypwp_wcpdf_packing_slip_number: Total expected rows (via COUNT): 0
+0020.367 (0) Table nypwp_wcpdf_packing_slip_number: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=678) in 0.00 seconds
+0020.368 (0) Table nypwp_wcpdf_packing_slip_number: finishing file(s) (2, 0.4 KB)
+0020.370 (0) Table nypwp_woo_wallet_referrals: Total expected rows (via COUNT): 0
+0020.371 (0) Table nypwp_woo_wallet_referrals: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1499) in 0.00 seconds
+0020.372 (0) Table nypwp_woo_wallet_referrals: finishing file(s) (2, 0.6 KB)
+0020.374 (0) Table nypwp_woo_wallet_transaction_meta: Total expected rows (via COUNT): 0
+0020.375 (0) Table nypwp_woo_wallet_transaction_meta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=749) in 0.00 seconds
+0020.377 (0) Table nypwp_woo_wallet_transaction_meta: finishing file(s) (2, 0.4 KB)
+0020.379 (0) Table nypwp_woo_wallet_transactions: Total expected rows (via COUNT): 0
+0020.380 (0) Table nypwp_woo_wallet_transactions: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1422) in 0.00 seconds
+0020.382 (0) Table nypwp_woo_wallet_transactions: finishing file(s) (2, 0.6 KB)
+0020.384 (0) Table nypwp_woocommerce_api_keys: Total expected rows (via COUNT): 0
+0020.385 (0) Table nypwp_woocommerce_api_keys: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=891) in 0.00 seconds
+0020.387 (0) Table nypwp_woocommerce_api_keys: finishing file(s) (2, 0.4 KB)
+0020.388 (0) Table nypwp_woocommerce_attribute_taxonomies: Total expected rows (via COUNT): 0
+0020.389 (0) Table nypwp_woocommerce_attribute_taxonomies: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=853) in 0.00 seconds
+0020.390 (0) Table nypwp_woocommerce_attribute_taxonomies: finishing file(s) (2, 0.4 KB)
+0020.392 (0) Table nypwp_woocommerce_downloadable_product_permissions: Total expected rows (via COUNT): 0
+0020.392 (0) Table nypwp_woocommerce_downloadable_product_permissions: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1472) in 0.00 seconds
+0020.394 (0) Table nypwp_woocommerce_downloadable_product_permissions: finishing file(s) (2, 0.5 KB)
+0020.396 (0) Table nypwp_woocommerce_log: Total expected rows (via COUNT): 0
+0020.396 (0) Table nypwp_woocommerce_log: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=660) in 0.00 seconds
+0020.398 (0) Table nypwp_woocommerce_log: finishing file(s) (2, 0.4 KB)
+0020.400 (0) Table nypwp_woocommerce_order_items: Total expected rows (via COUNT): 40
+0020.400 (0) Table is relatively small; fetch_rows will thus be: 50 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.401 (0) Table nypwp_woocommerce_order_items: Rows added in this batch (next record: 42): 40 (uncompressed bytes in this segment=2791) in 0.00 seconds
+0020.402 (0) Table nypwp_woocommerce_order_items: finishing file(s) (2, 0.7 KB)
+0020.404 (0) Table nypwp_woocommerce_payment_tokens: Total expected rows (via COUNT): 0
+0020.405 (0) Table nypwp_woocommerce_payment_tokens: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=762) in 0.00 seconds
+0020.406 (0) Table nypwp_woocommerce_payment_tokens: finishing file(s) (2, 0.4 KB)
+0020.409 (0) Table nypwp_woocommerce_sessions: Total expected rows (via COUNT): 1
+0020.409 (0) Table is relatively small; fetch_rows will thus be: 20 (allow_further_reductions=1, is_first_fetch=1, known_bigger_than_table=1)
+0020.410 (0) Table nypwp_woocommerce_sessions: Rows added in this batch (next record: 311): 1 (uncompressed bytes in this segment=2600) in 0.00 seconds
+0020.412 (0) Table nypwp_woocommerce_sessions: finishing file(s) (2, 1.1 KB)
+0020.414 (0) Table nypwp_woocommerce_shipping_zone_locations: Total expected rows (via COUNT): 0
+0020.414 (0) Table nypwp_woocommerce_shipping_zone_locations: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=822) in 0.00 seconds
+0020.416 (0) Table nypwp_woocommerce_shipping_zone_locations: finishing file(s) (2, 0.4 KB)
+0020.417 (0) Table nypwp_woocommerce_shipping_zone_methods: Total expected rows (via COUNT): 0
+0020.418 (0) Table nypwp_woocommerce_shipping_zone_methods: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=826) in 0.00 seconds
+0020.419 (0) Table nypwp_woocommerce_shipping_zone_methods: finishing file(s) (2, 0.4 KB)
+0020.421 (0) Table nypwp_woocommerce_shipping_zones: Total expected rows (via COUNT): 0
+0020.421 (0) Table nypwp_woocommerce_shipping_zones: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=668) in 0.00 seconds
+0020.423 (0) Table nypwp_woocommerce_shipping_zones: finishing file(s) (2, 0.4 KB)
+0020.424 (0) Table nypwp_woocommerce_tax_rate_locations: Total expected rows (via COUNT): 0
+0020.425 (0) Table nypwp_woocommerce_tax_rate_locations: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=804) in 0.00 seconds
+0020.426 (0) Table nypwp_woocommerce_tax_rate_locations: finishing file(s) (2, 0.4 KB)
+0020.428 (0) Table nypwp_woocommerce_tax_rates: Total expected rows (via COUNT): 0
+0020.428 (0) Table nypwp_woocommerce_tax_rates: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1160) in 0.00 seconds
+0020.429 (0) Table nypwp_woocommerce_tax_rates: finishing file(s) (2, 0.4 KB)
+0020.431 (0) Table nypwp_wpmailsmtp_debug_events: Total expected rows (via COUNT): 0
+0020.432 (0) Table nypwp_wpmailsmtp_debug_events: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=689) in 0.00 seconds
+0020.433 (0) Table nypwp_wpmailsmtp_debug_events: finishing file(s) (2, 0.4 KB)
+0020.435 (0) Table nypwp_wpmailsmtp_tasks_meta: Total expected rows (via COUNT): 0
+0020.436 (0) Table nypwp_wpmailsmtp_tasks_meta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=579) in 0.00 seconds
+0020.438 (0) Table nypwp_wpmailsmtp_tasks_meta: finishing file(s) (2, 0.4 KB)
+0020.439 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_options.table.tmpr79936.gz (1/114/fopen): adding to final database dump
+0020.442 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_options.table.gz (2/114/fopen): adding to final database dump
+0020.442 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_users.table.tmpr10.gz (3/114/fopen): adding to final database dump
+0020.442 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_users.table.gz (4/114/fopen): adding to final database dump
+0020.443 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_usermeta.table.tmpr558.gz (5/114/fopen): adding to final database dump
+0020.443 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_usermeta.table.gz (6/114/fopen): adding to final database dump
+0020.443 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_actionscheduler_actions.table.tmpr4319.gz (7/114/fopen): adding to final database dump
+0020.444 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_actionscheduler_actions.table.gz (8/114/fopen): adding to final database dump
+0020.444 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_actionscheduler_claims.table.tmpr0.gz (9/114/fopen): adding to final database dump
+0020.445 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_actionscheduler_claims.table.gz (10/114/fopen): adding to final database dump
+0020.445 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_actionscheduler_groups.table.tmpr21.gz (11/114/fopen): adding to final database dump
+0020.445 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_actionscheduler_groups.table.gz (12/114/fopen): adding to final database dump
+0020.445 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_actionscheduler_logs.table.tmpr12816.gz (13/114/fopen): adding to final database dump
+0020.446 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_actionscheduler_logs.table.gz (14/114/fopen): adding to final database dump
+0020.446 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_commentmeta.table.tmpr54.gz (15/114/fopen): adding to final database dump
+0020.447 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_commentmeta.table.gz (16/114/fopen): adding to final database dump
+0020.447 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_comments.table.tmpr101.gz (17/114/fopen): adding to final database dump
+0020.447 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_comments.table.gz (18/114/fopen): adding to final database dump
+0020.447 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_links.table.tmpr0.gz (19/114/fopen): adding to final database dump
+0020.448 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_links.table.gz (20/114/fopen): adding to final database dump
+0020.448 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_postmeta.table.tmpr646.gz (21/114/fopen): adding to final database dump
+0020.448 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_postmeta.table.gz (22/114/fopen): adding to final database dump
+0020.449 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_posts.table.tmpr344.gz (23/114/fopen): adding to final database dump
+0020.453 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_posts.table.gz (24/114/fopen): adding to final database dump
+0020.454 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_term_relationships.table.tmpr100001.gz (25/114/fopen): adding to final database dump
+0020.454 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_term_relationships.table.gz (26/114/fopen): adding to final database dump
+0020.454 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_term_taxonomy.table.tmpr29.gz (27/114/fopen): adding to final database dump
+0020.455 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_term_taxonomy.table.gz (28/114/fopen): adding to final database dump
+0020.455 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_termmeta.table.tmpr5.gz (29/114/fopen): adding to final database dump
+0020.455 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_termmeta.table.gz (30/114/fopen): adding to final database dump
+0020.456 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_terms.table.tmpr29.gz (31/114/fopen): adding to final database dump
+0020.456 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_terms.table.gz (32/114/fopen): adding to final database dump
+0020.456 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_category_lookup.table.tmpr1001.gz (33/114/fopen): adding to final database dump
+0020.457 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_category_lookup.table.gz (34/114/fopen): adding to final database dump
+0020.457 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_product_meta_lookup.table.tmpr299.gz (35/114/fopen): adding to final database dump
+0020.457 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_product_meta_lookup.table.gz (36/114/fopen): adding to final database dump
+0020.458 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_reserved_stock.table.tmpr1.gz (37/114/fopen): adding to final database dump
+0020.458 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_reserved_stock.table.gz (38/114/fopen): adding to final database dump
+0020.458 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_tax_rate_classes.table.tmpr3.gz (39/114/fopen): adding to final database dump
+0020.459 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_tax_rate_classes.table.gz (40/114/fopen): adding to final database dump
+0020.459 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_order_itemmeta.table.tmpr379.gz (41/114/fopen): adding to final database dump
+0020.460 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_order_itemmeta.table.gz (42/114/fopen): adding to final database dump
+0020.460 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_payment_tokenmeta.table.tmpr0.gz (43/114/fopen): adding to final database dump
+0020.460 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_payment_tokenmeta.table.gz (44/114/fopen): adding to final database dump
+0020.461 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_ff_scheduled_actions.table.tmpr0.gz (45/114/fopen): adding to final database dump
+0020.461 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_ff_scheduled_actions.table.gz (46/114/fopen): adding to final database dump
+0020.461 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_entry_details.table.tmpr0.gz (47/114/fopen): adding to final database dump
+0020.462 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_entry_details.table.gz (48/114/fopen): adding to final database dump
+0020.462 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_form_analytics.table.tmpr0.gz (49/114/fopen): adding to final database dump
+0020.462 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_form_analytics.table.gz (50/114/fopen): adding to final database dump
+0020.463 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_form_meta.table.tmpr18.gz (51/114/fopen): adding to final database dump
+0020.463 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_form_meta.table.gz (52/114/fopen): adding to final database dump
+0020.463 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_forms.table.tmpr5.gz (53/114/fopen): adding to final database dump
+0020.464 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_forms.table.gz (54/114/fopen): adding to final database dump
+0020.464 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_logs.table.tmpr0.gz (55/114/fopen): adding to final database dump
+0020.464 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_logs.table.gz (56/114/fopen): adding to final database dump
+0020.464 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_submission_meta.table.tmpr0.gz (57/114/fopen): adding to final database dump
+0020.465 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_submission_meta.table.gz (58/114/fopen): adding to final database dump
+0020.465 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_submissions.table.tmpr0.gz (59/114/fopen): adding to final database dump
+0020.466 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_fluentform_submissions.table.gz (60/114/fopen): adding to final database dump
+0020.466 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_attribute_mapping_rules.table.tmpr0.gz (61/114/fopen): adding to final database dump
+0020.466 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_attribute_mapping_rules.table.gz (62/114/fopen): adding to final database dump
+0020.467 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_budget_recommendations.table.tmpr4231.gz (63/114/fopen): adding to final database dump
+0020.467 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_budget_recommendations.table.gz (64/114/fopen): adding to final database dump
+0020.468 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_merchant_issues.table.tmpr0.gz (65/114/fopen): adding to final database dump
+0020.468 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_merchant_issues.table.gz (66/114/fopen): adding to final database dump
+0020.468 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_merchant_price_benchmarks.table.tmpr0.gz (67/114/fopen): adding to final database dump
+0020.469 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_merchant_price_benchmarks.table.gz (68/114/fopen): adding to final database dump
+0020.469 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_shipping_rates.table.tmpr0.gz (69/114/fopen): adding to final database dump
+0020.469 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_shipping_rates.table.gz (70/114/fopen): adding to final database dump
+0020.470 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_shipping_times.table.tmpr0.gz (71/114/fopen): adding to final database dump
+0020.470 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_gla_shipping_times.table.gz (72/114/fopen): adding to final database dump
+0020.470 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_jetpack_sync_queue.table.tmpr466.gz (73/114/fopen): adding to final database dump
+0020.471 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_jetpack_sync_queue.table.gz (74/114/fopen): adding to final database dump
+0020.471 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automation_run_logs.table.tmpr0.gz (75/114/fopen): adding to final database dump
+0020.471 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automation_run_logs.table.gz (76/114/fopen): adding to final database dump
+0020.471 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automation_run_subjects.table.tmpr0.gz (77/114/fopen): adding to final database dump
+0020.472 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automation_run_subjects.table.gz (78/114/fopen): adding to final database dump
+0020.472 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automation_runs.table.tmpr0.gz (79/114/fopen): adding to final database dump
+0020.472 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automation_runs.table.gz (80/114/fopen): adding to final database dump
+0020.473 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automation_triggers.table.tmpr1.gz (81/114/fopen): adding to final database dump
+0020.473 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automation_triggers.table.gz (82/114/fopen): adding to final database dump
+0020.473 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automation_versions.table.tmpr0.gz (83/114/fopen): adding to final database dump
+0020.473 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automation_versions.table.gz (84/114/fopen): adding to final database dump
+0020.474 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automations.table.tmpr0.gz (85/114/fopen): adding to final database dump
+0020.474 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_automations.table.gz (86/114/fopen): adding to final database dump
+0020.474 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_custom_fields.table.tmpr0.gz (87/114/fopen): adding to final database dump
+0020.474 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_custom_fields.table.gz (88/114/fopen): adding to final database dump
+0020.475 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_dynamic_segment_filters.table.tmpr0.gz (89/114/fopen): adding to final database dump
+0020.475 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_dynamic_segment_filters.table.gz (90/114/fopen): adding to final database dump
+0020.475 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_feature_flags.table.tmpr0.gz (91/114/fopen): adding to final database dump
+0020.476 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_feature_flags.table.gz (92/114/fopen): adding to final database dump
+0020.476 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_forms.table.tmpr0.gz (93/114/fopen): adding to final database dump
+0020.476 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_forms.table.gz (94/114/fopen): adding to final database dump
+0020.476 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_log.table.tmpr0.gz (95/114/fopen): adding to final database dump
+0020.477 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_log.table.gz (96/114/fopen): adding to final database dump
+0020.477 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_migrations.table.tmpr48.gz (97/114/fopen): adding to final database dump
+0020.477 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_migrations.table.gz (98/114/fopen): adding to final database dump
+0020.478 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_links.table.tmpr0.gz (99/114/fopen): adding to final database dump
+0020.478 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_links.table.gz (100/114/fopen): adding to final database dump
+0020.479 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_option.table.tmpr0.gz (101/114/fopen): adding to final database dump
+0020.479 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_option.table.gz (102/114/fopen): adding to final database dump
+0020.479 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_option_fields.table.tmpr36.gz (103/114/fopen): adding to final database dump
+0020.479 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_option_fields.table.gz (104/114/fopen): adding to final database dump
+0020.480 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_posts.table.tmpr0.gz (105/114/fopen): adding to final database dump
+0020.480 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_posts.table.gz (106/114/fopen): adding to final database dump
+0020.480 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_segment.table.tmpr0.gz (107/114/fopen): adding to final database dump
+0020.481 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_segment.table.gz (108/114/fopen): adding to final database dump
+0020.481 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_templates.table.tmpr78.gz (109/114/fopen): adding to final database dump
+0020.482 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletter_templates.table.gz (110/114/fopen): adding to final database dump
+0020.482 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletters.table.tmpr0.gz (111/114/fopen): adding to final database dump
+0020.482 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_newsletters.table.gz (112/114/fopen): adding to final database dump
+0020.483 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_scheduled_task_subscribers.table.tmpr1.gz (113/114/fopen): adding to final database dump
+0020.483 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_scheduled_task_subscribers.table.gz (114/114/fopen): adding to final database dump
+0020.483 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_scheduled_tasks.table.tmpr239.gz (115/114/fopen): adding to final database dump
+0020.484 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_scheduled_tasks.table.gz (116/114/fopen): adding to final database dump
+0020.484 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_segments.table.tmpr4.gz (117/114/fopen): adding to final database dump
+0020.484 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_segments.table.gz (118/114/fopen): adding to final database dump
+0020.484 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_sending_queues.table.tmpr0.gz (119/114/fopen): adding to final database dump
+0020.485 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_sending_queues.table.gz (120/114/fopen): adding to final database dump
+0020.485 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_settings.table.tmpr17.gz (121/114/fopen): adding to final database dump
+0020.485 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_settings.table.gz (122/114/fopen): adding to final database dump
+0020.486 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_bounces.table.tmpr0.gz (123/114/fopen): adding to final database dump
+0020.486 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_bounces.table.gz (124/114/fopen): adding to final database dump
+0020.486 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_clicks.table.tmpr0.gz (125/114/fopen): adding to final database dump
+0020.486 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_clicks.table.gz (126/114/fopen): adding to final database dump
+0020.487 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_forms.table.tmpr0.gz (127/114/fopen): adding to final database dump
+0020.487 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_forms.table.gz (128/114/fopen): adding to final database dump
+0020.487 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_newsletters.table.tmpr0.gz (129/114/fopen): adding to final database dump
+0020.488 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_newsletters.table.gz (130/114/fopen): adding to final database dump
+0020.488 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_opens.table.tmpr0.gz (131/114/fopen): adding to final database dump
+0020.488 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_opens.table.gz (132/114/fopen): adding to final database dump
+0020.488 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_unsubscribes.table.tmpr0.gz (133/114/fopen): adding to final database dump
+0020.489 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_unsubscribes.table.gz (134/114/fopen): adding to final database dump
+0020.489 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_woocommerce_purchases.table.tmpr0.gz (135/114/fopen): adding to final database dump
+0020.489 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_statistics_woocommerce_purchases.table.gz (136/114/fopen): adding to final database dump
+0020.490 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_stats_notifications.table.tmpr0.gz (137/114/fopen): adding to final database dump
+0020.490 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_stats_notifications.table.gz (138/114/fopen): adding to final database dump
+0020.490 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_subscriber_custom_field.table.tmpr0.gz (139/114/fopen): adding to final database dump
+0020.490 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_subscriber_custom_field.table.gz (140/114/fopen): adding to final database dump
+0020.491 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_subscriber_ips.table.tmpr1.gz (141/114/fopen): adding to final database dump
+0020.491 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_subscriber_ips.table.gz (142/114/fopen): adding to final database dump
+0020.491 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_subscriber_segment.table.tmpr2.gz (143/114/fopen): adding to final database dump
+0020.491 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_subscriber_segment.table.gz (144/114/fopen): adding to final database dump
+0020.492 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_subscriber_tag.table.tmpr0.gz (145/114/fopen): adding to final database dump
+0020.492 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_subscriber_tag.table.gz (146/114/fopen): adding to final database dump
+0020.492 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_subscribers.table.tmpr2.gz (147/114/fopen): adding to final database dump
+0020.493 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_subscribers.table.gz (148/114/fopen): adding to final database dump
+0020.493 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_tags.table.tmpr0.gz (149/114/fopen): adding to final database dump
+0020.493 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_tags.table.gz (150/114/fopen): adding to final database dump
+0020.493 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_user_agents.table.tmpr0.gz (151/114/fopen): adding to final database dump
+0020.494 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_user_agents.table.gz (152/114/fopen): adding to final database dump
+0020.494 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_user_flags.table.tmpr0.gz (153/114/fopen): adding to final database dump
+0020.494 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_mailpoet_user_flags.table.gz (154/114/fopen): adding to final database dump
+0020.495 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_packlink_entity.table.tmpr4.gz (155/114/fopen): adding to final database dump
+0020.495 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_packlink_entity.table.gz (156/114/fopen): adding to final database dump
+0020.495 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_admin_note_actions.table.tmpr7362.gz (157/114/fopen): adding to final database dump
+0020.495 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_admin_note_actions.table.gz (158/114/fopen): adding to final database dump
+0020.496 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_admin_notes.table.tmpr83.gz (159/114/fopen): adding to final database dump
+0020.496 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_admin_notes.table.gz (160/114/fopen): adding to final database dump
+0020.496 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_customer_lookup.table.tmpr7.gz (161/114/fopen): adding to final database dump
+0020.497 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_customer_lookup.table.gz (162/114/fopen): adding to final database dump
+0020.497 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_download_log.table.tmpr0.gz (163/114/fopen): adding to final database dump
+0020.497 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_download_log.table.gz (164/114/fopen): adding to final database dump
+0020.497 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_email_unsubscribes.table.tmpr0.gz (165/114/fopen): adding to final database dump
+0020.498 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_email_unsubscribes.table.gz (166/114/fopen): adding to final database dump
+0020.498 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_addresses.table.tmpr65.gz (167/114/fopen): adding to final database dump
+0020.498 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_addresses.table.gz (168/114/fopen): adding to final database dump
+0020.499 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_coupon_lookup.table.tmpr1.gz (169/114/fopen): adding to final database dump
+0020.499 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_coupon_lookup.table.gz (170/114/fopen): adding to final database dump
+0020.499 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_operational_data.table.tmpr206.gz (171/114/fopen): adding to final database dump
+0020.499 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_operational_data.table.gz (172/114/fopen): adding to final database dump
+0020.500 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_product_lookup.table.tmpr1001.gz (173/114/fopen): adding to final database dump
+0020.500 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_product_lookup.table.gz (174/114/fopen): adding to final database dump
+0020.500 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_stats.table.tmpr311.gz (175/114/fopen): adding to final database dump
+0020.501 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_stats.table.gz (176/114/fopen): adding to final database dump
+0020.501 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_tax_lookup.table.tmpr1.gz (177/114/fopen): adding to final database dump
+0020.501 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_order_tax_lookup.table.gz (178/114/fopen): adding to final database dump
+0020.501 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_orders.table.tmpr311.gz (179/114/fopen): adding to final database dump
+0020.502 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_orders.table.gz (180/114/fopen): adding to final database dump
+0020.502 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_orders_meta.table.tmpr2184.gz (181/114/fopen): adding to final database dump
+0020.502 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_orders_meta.table.gz (182/114/fopen): adding to final database dump
+0020.503 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_product_attributes_lookup.table.tmpr1.gz (183/114/fopen): adding to final database dump
+0020.503 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_product_attributes_lookup.table.gz (184/114/fopen): adding to final database dump
+0020.503 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_product_download_directories.table.tmpr3.gz (185/114/fopen): adding to final database dump
+0020.504 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_product_download_directories.table.gz (186/114/fopen): adding to final database dump
+0020.504 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_rate_limits.table.tmpr0.gz (187/114/fopen): adding to final database dump
+0020.504 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_rate_limits.table.gz (188/114/fopen): adding to final database dump
+0020.504 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_webhooks.table.tmpr0.gz (189/114/fopen): adding to final database dump
+0020.505 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wc_webhooks.table.gz (190/114/fopen): adding to final database dump
+0020.505 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wcpdf_invoice_number.table.tmpr8.gz (191/114/fopen): adding to final database dump
+0020.505 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wcpdf_invoice_number.table.gz (192/114/fopen): adding to final database dump
+0020.505 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wcpdf_packing_slip_number.table.tmpr0.gz (193/114/fopen): adding to final database dump
+0020.506 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wcpdf_packing_slip_number.table.gz (194/114/fopen): adding to final database dump
+0020.506 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woo_wallet_referrals.table.tmpr0.gz (195/114/fopen): adding to final database dump
+0020.506 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woo_wallet_referrals.table.gz (196/114/fopen): adding to final database dump
+0020.506 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woo_wallet_transaction_meta.table.tmpr0.gz (197/114/fopen): adding to final database dump
+0020.507 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woo_wallet_transaction_meta.table.gz (198/114/fopen): adding to final database dump
+0020.507 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woo_wallet_transactions.table.tmpr0.gz (199/114/fopen): adding to final database dump
+0020.508 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woo_wallet_transactions.table.gz (200/114/fopen): adding to final database dump
+0020.508 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_api_keys.table.tmpr0.gz (201/114/fopen): adding to final database dump
+0020.508 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_api_keys.table.gz (202/114/fopen): adding to final database dump
+0020.508 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_attribute_taxonomies.table.tmpr0.gz (203/114/fopen): adding to final database dump
+0020.509 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_attribute_taxonomies.table.gz (204/114/fopen): adding to final database dump
+0020.509 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_downloadable_product_permissions.table.tmpr0.gz (205/114/fopen): adding to final database dump
+0020.509 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_downloadable_product_permissions.table.gz (206/114/fopen): adding to final database dump
+0020.509 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_log.table.tmpr0.gz (207/114/fopen): adding to final database dump
+0020.510 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_log.table.gz (208/114/fopen): adding to final database dump
+0020.510 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_order_items.table.tmpr43.gz (209/114/fopen): adding to final database dump
+0020.510 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_order_items.table.gz (210/114/fopen): adding to final database dump
+0020.510 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_payment_tokens.table.tmpr0.gz (211/114/fopen): adding to final database dump
+0020.511 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_payment_tokens.table.gz (212/114/fopen): adding to final database dump
+0020.511 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_sessions.table.tmpr312.gz (213/114/fopen): adding to final database dump
+0020.511 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_sessions.table.gz (214/114/fopen): adding to final database dump
+0020.511 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_shipping_zone_locations.table.tmpr0.gz (215/114/fopen): adding to final database dump
+0020.512 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_shipping_zone_locations.table.gz (216/114/fopen): adding to final database dump
+0020.512 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_shipping_zone_methods.table.tmpr0.gz (217/114/fopen): adding to final database dump
+0020.512 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_shipping_zone_methods.table.gz (218/114/fopen): adding to final database dump
+0020.512 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_shipping_zones.table.tmpr0.gz (219/114/fopen): adding to final database dump
+0020.513 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_shipping_zones.table.gz (220/114/fopen): adding to final database dump
+0020.513 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_tax_rate_locations.table.tmpr0.gz (221/114/fopen): adding to final database dump
+0020.513 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_tax_rate_locations.table.gz (222/114/fopen): adding to final database dump
+0020.514 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_tax_rates.table.tmpr0.gz (223/114/fopen): adding to final database dump
+0020.514 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_woocommerce_tax_rates.table.gz (224/114/fopen): adding to final database dump
+0020.514 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wpmailsmtp_debug_events.table.tmpr0.gz (225/114/fopen): adding to final database dump
+0020.514 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wpmailsmtp_debug_events.table.gz (226/114/fopen): adding to final database dump
+0020.515 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wpmailsmtp_tasks_meta.table.tmpr0.gz (227/114/fopen): adding to final database dump
+0020.515 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db-table-nypwp_wpmailsmtp_tasks_meta.table.gz (228/114/fopen): adding to final database dump
+0020.517 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db.gz: finished writing out complete database file (1045.1 KB)
+0020.529 (0) Total database tables backed up: 114 (backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db.gz, size: 1070322, sha1: 00bdad5ca04d1382b957d39426e190905346a3eb, sha256: ba050e87a237435c907ff43960a7582a701024080d4f180eda987f37c4f4a9dd)
+0020.531 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-plugins.zip: plugins: This file has already been successfully processed
+0020.531 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-themes.zip: themes: This file has already been successfully processed
+0020.531 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-uploads.zip: uploads: This file has already been successfully processed
+0020.532 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-others.zip: others: This file has already been successfully processed
+0020.532 (0) backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db.gz: db: This file has not yet been successfully uploaded: will queue
+0020.532 (0) Saving backup history. Total backup size: 223.6 MB
+0020.533 (0) Requesting upload of the files that have not yet been successfully uploaded (1)
+0020.534 (0) Cloud backup selection (1/1): none with instance (1/1) (last)
+0020.535 (0) No remote despatch: user chose no remote backup service
+0020.535 (0) Recording as successfully uploaded: backup_2026-08-25-1054_NYP_Kitchen_Design_582d2939d0a1-db.gz
+0020.536 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=2, retain_db=2
+0020.537 (0) Number of backup sets in history: 1; groups (db): 1
+0020.537 (0) Examining (for databases) backup set with group_id=0, nonce=582d2939d0a1, datestamp=1787655271 (Aug 25 2026 10:54:31)
+0020.537 (0) This backup set is the backup set just made, so will not be deleted.
+0020.537 (0) Number of backup sets in history: 1; groups (files): 1
+0020.538 (0) Examining (for files) backup set with nonce=582d2939d0a1, datestamp=1787655271 (Aug 25 2026 10:54:31)
+0020.538 (0) This backup set is the backup set just made, so will not be deleted.
+0020.538 (0) This backup set is the backup set just made, so will not be deleted.
+0020.538 (0) This backup set is the backup set just made, so will not be deleted.
+0020.538 (0) This backup set is the backup set just made, so will not be deleted.
+0020.538 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0020.538 (0) Retain: saving new backup history (sets now: 1) and finishing retain operation
+0020.539 (0) Resume backup (582d2939d0a1, 0): finish run
+0020.540 (0) Decremented the semaphore (fd) by 1
+0020.540 (0) Semaphore (fd) unlocked
+0020.541 (0) There were no errors in the uploads, so the 'resume' event (1) is being unscheduled
+0020.542 (0) The backup succeeded and is now complete
+0020.542 (0) No email will/can be sent - the user has not configured an email address.
+0020.543 (0) Die Sicherung war erfolgreich und ist nun abgeschlossen

@@ -39,7 +39,9 @@ class __TwigTemplate_042329f1c0fb8078aa6e91c00feb5fb0ef8b51da862bdffbd8a41930e7d
         $macros = $this->macros;
         yield "<style type=\"text/css\">
     .mailpoet_text_block .mailpoet_content,
-    .mailpoet_text_block .mailpoet_content p {
+    .mailpoet_text_block .mailpoet_content p,
+    .mailpoet_footer_block .mailpoet_content,
+    .mailpoet_footer_block .mailpoet_content p {
         color: {{ text.fontColor }};
         font-size: {{ text.fontSize }};
         font-family: {{fontWithFallback text.fontFamily }};

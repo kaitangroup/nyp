@@ -116,6 +116,12 @@ class SubscriberSaveController {
       $data = $this->wp->stripslashesDeep($data);
     }
 
+    // Proof-of-consent fields are stamped server-side only. The manage page sets
+    // them by calling createOrUpdate() directly; this client-data path (admin/API)
+    // may change the consent state but must never forge the record of how or
+    // against what wording it was given.
+    unset($data['tracking_consent_method'], $data['tracking_consent_copy']);
+
     if (empty($data['segments'])) {
       $data['segments'] = [];
     }
@@ -230,9 +236,16 @@ class SubscriberSaveController {
     }
 
     if (isset($data['email'])) $subscriber->setEmail($data['email']);
-    if (isset($data['first_name'])) $subscriber->setFirstName($data['first_name']);
-    if (isset($data['last_name'])) $subscriber->setLastName($data['last_name']);
+    if (isset($data['first_name'])) $subscriber->setFirstName(sanitize_text_field($data['first_name']));
+    if (isset($data['last_name'])) $subscriber->setLastName(sanitize_text_field($data['last_name']));
     if (isset($data['status'])) $subscriber->setStatus($data['status']);
+    if (isset($data['tracking_consent'])) {
+      $subscriber->setTrackingConsent(
+        (string)$data['tracking_consent'],
+        $data['tracking_consent_method'] ?? SubscriberEntity::TRACKING_CONSENT_METHOD_ADMIN,
+        $data['tracking_consent_copy'] ?? null
+      );
+    }
     if (isset($data['source'])) $subscriber->setSource($data['source']);
     if (isset($data['wp_user_id'])) $subscriber->setWpUserId($data['wp_user_id']);
     if (isset($data['subscribed_ip'])) $subscriber->setSubscribedIp($data['subscribed_ip']);
@@ -246,6 +259,9 @@ class SubscriberSaveController {
         $subscriber->setTimeZoneConfidence(SubscriberEntity::TIME_ZONE_CONFIDENCE_BROWSER);
         $subscriber->setTimeZoneUpdatedAt(Carbon::now()->millisecond(0));
       }
+    }
+    if (array_key_exists('timezone', $data)) {
+      $this->updateTimeZoneManually($subscriber, $data['timezone']);
     }
     $createdAt = isset($data['created_at']) ? Carbon::createFromFormat('Y-m-d H:i:s', $data['created_at']) : null;
     if ($createdAt) $subscriber->setCreatedAt($createdAt);
@@ -268,6 +284,31 @@ class SubscriberSaveController {
     }
 
     return $subscriber;
+  }
+
+  /**
+   * @param mixed $value
+   */
+  private function updateTimeZoneManually(SubscriberEntity $subscriber, $value): void {
+    if ($value === '' || $value === null) {
+      if ($subscriber->getTimeZone() === null) {
+        return;
+      }
+      $subscriber->setTimeZone(null);
+      $subscriber->setTimeZoneSource(null);
+      $subscriber->setTimeZoneConfidence(null);
+      $subscriber->setTimeZoneUpdatedAt(null);
+      return;
+    }
+
+    $timeZone = SubscriberEntity::sanitizeTimeZone($value);
+    if ($timeZone === null || $timeZone === $subscriber->getTimeZone()) {
+      return;
+    }
+    $subscriber->setTimeZone($timeZone);
+    $subscriber->setTimeZoneSource(SubscriberEntity::TIME_ZONE_SOURCE_MANUAL);
+    $subscriber->setTimeZoneConfidence(SubscriberEntity::TIME_ZONE_CONFIDENCE_MANUAL);
+    $subscriber->setTimeZoneUpdatedAt(Carbon::now()->millisecond(0));
   }
 
   private function isNewEmail(string $email, ?SubscriberEntity $subscriber): bool {

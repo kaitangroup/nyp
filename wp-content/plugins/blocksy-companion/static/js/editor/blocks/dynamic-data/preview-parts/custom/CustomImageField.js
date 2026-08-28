@@ -22,7 +22,13 @@ const CustomImageField = ({
 		}
 	}
 
-	return <ImagePreview attributes={attributes} url={maybeUrl} />
+	return (
+		<ImagePreview
+			attributes={attributes}
+			url={maybeUrl}
+			caption={fieldData?.caption}
+		/>
+	)
 }
 
 export default CustomImageField

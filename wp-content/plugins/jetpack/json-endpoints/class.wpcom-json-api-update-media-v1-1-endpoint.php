@@ -84,6 +84,34 @@ new WPCOM_JSON_API_Update_Media_v1_1_Endpoint(
  */
 class WPCOM_JSON_API_Update_Media_v1_1_Endpoint extends WPCOM_JSON_API_Endpoint {
 	/**
+	 * Whether the current user may edit the given media item.
+	 *
+	 * `upload_files` is a primitive capability and ignores any object passed to it,
+	 * so it only tells us the caller may upload something, never that they may edit
+	 * this particular item. A missing item is passed through so the caller receives
+	 * the endpoint's own 404 rather than a 403. A userless request gets no exemption:
+	 * `edit_post` fails closed for user 0 like any other caller.
+	 *
+	 * Do not move this into a trait: this file instantiates the endpoint above the
+	 * class declaration, and `use Trait;` disables PHP early binding, which makes the
+	 * file fatal with "Class not found".
+	 *
+	 * @param int $media_id Media post ID.
+	 * @return bool
+	 */
+	protected function current_user_can_edit_media_item( $media_id ) {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return false;
+		}
+
+		if ( ! get_post( $media_id ) ) {
+			return true;
+		}
+
+		return current_user_can( 'edit_post', $media_id );
+	}
+
+	/**
 	 * Update media item info API v1.1 callback.
 	 *
 	 * @param string $path API path.
@@ -98,8 +126,8 @@ class WPCOM_JSON_API_Update_Media_v1_1_Endpoint extends WPCOM_JSON_API_Endpoint 
 			return $blog_id;
 		}
 
-		if ( ! current_user_can( 'upload_files', $media_id ) ) {
-			return new WP_Error( 'unauthorized', 'User cannot view media', 403 );
+		if ( ! $this->current_user_can_edit_media_item( $media_id ) ) {
+			return new WP_Error( 'unauthorized', 'User cannot edit media', 403 );
 		}
 
 		$item = $this->get_media_item_v1_1( $media_id );
@@ -194,13 +222,13 @@ class WPCOM_JSON_API_Update_Media_v1_1_Endpoint extends WPCOM_JSON_API_Endpoint 
 		return \Videopress_Attachment_Metadata::persist_metadata(
 			$media_id,
 			$item->videopress_guid,
-			isset( $input['title'] ) ? $input['title'] : null,
-			isset( $input['caption'] ) ? $input['caption'] : null,
-			isset( $input['description'] ) ? $input['description'] : null,
-			isset( $input['rating'] ) ? $input['rating'] : null,
-			isset( $input['display_embed'] ) ? $input['display_embed'] : null,
-			isset( $input['allow_download'] ) ? $input['allow_download'] : null,
-			isset( $input['privacy_setting'] ) ? $input['privacy_setting'] : null
+			$input['title'] ?? null,
+			$input['caption'] ?? null,
+			$input['description'] ?? null,
+			$input['rating'] ?? null,
+			$input['display_embed'] ?? null,
+			$input['allow_download'] ?? null,
+			$input['privacy_setting'] ?? null
 		);
 	}
 }

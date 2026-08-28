@@ -20,6 +20,15 @@ class Dom_Document_Helper {
  $elements = $this->dom->getElementsByTagName( $tag_name );
  return $elements->item( 0 ) ? $elements->item( 0 ) : null;
  }
+ public function find_elements( string $tag_name ): array {
+ $elements = array();
+ foreach ( $this->dom->getElementsByTagName( $tag_name ) as $element ) {
+ if ( $element instanceof \DOMElement ) {
+ $elements[] = $element;
+ }
+ }
+ return $elements;
+ }
  public function get_attribute_value( \DOMElement $element, string $attribute ): string {
  return $element->hasAttribute( $attribute ) ? $element->getAttribute( $attribute ) : '';
  }
@@ -32,6 +41,25 @@ class Dom_Document_Helper {
  }
  public function get_outer_html( \DOMElement $element ): string {
  return (string) $this->dom->saveHTML( $element );
+ }
+ public function remove_element( \DOMElement $element ): void {
+ $parent = $element->parentNode; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+ if ( $parent instanceof \DOMNode ) {
+ $parent->removeChild( $element );
+ }
+ }
+ public function get_root_html(): string {
+ $html = '';
+ foreach ( $this->dom->childNodes as $child ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+ // Skip the `<?xml encoding="UTF-8">` processing instruction that load_html() prepends to
+ // force UTF-8; serializing it back would corrupt callers (e.g. strip_tags treats the
+ // unterminated `<?` as a tag and swallows the rest of the string).
+ if ( XML_PI_NODE === $child->nodeType ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+ continue;
+ }
+ $html .= (string) $this->dom->saveHTML( $child );
+ }
+ return $html;
  }
  public function get_element_inner_html( \DOMElement $element ): string {
  $inner_html = '';

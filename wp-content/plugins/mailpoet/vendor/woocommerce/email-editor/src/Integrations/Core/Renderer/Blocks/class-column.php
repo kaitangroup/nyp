@@ -77,8 +77,15 @@ class Column extends Abstract_Block_Renderer {
  $wrapper_cell_attrs = array(
  'class' => $wrapper_classname,
  'style' => $wrapper_styles['css'],
- 'width' => Styles_Helper::parse_value( $block_attributes['width'] ),
+ 'width' => $this->get_width_attribute_value( $block_attributes['width'] ),
  );
  return Table_Wrapper_Helper::render_table_cell( $inner_table, $wrapper_cell_attrs );
+ }
+ private function get_width_attribute_value( $width ): string {
+ $parsed_width = Styles_Helper::parse_value( $width );
+ if ( is_string( $width ) && preg_match( '/%\s*$/', $width ) ) {
+ return $parsed_width . '%';
+ }
+ return (string) $parsed_width;
  }
 }

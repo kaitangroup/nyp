@@ -15,7 +15,7 @@ if ($view_type === 'cover') {
 		return;
 	}
 
-	blocksy_render_view_e(
+	blocksy_companion_render_view_e(
 		dirname(__FILE__) . '/cover-field.php',
 		[
 			'attributes' => $attributes,
@@ -38,6 +38,7 @@ $height = blocksy_akg('height', $attributes, '');
 
 $lightbox = blocksy_akg('lightbox', $attributes, '');
 $video_thumbnail = blocksy_akg('videoThumbnail', $attributes, '');
+$has_image_caption = blocksy_akg('has_image_caption', $attributes, 'no');
 $image_hover_effect = blocksy_akg('image_hover_effect', $attributes, '');
 
 $size_slug = blocksy_akg('sizeSlug', $attributes, 'full');
@@ -85,7 +86,6 @@ if (
 
 $wrapper_attr = [
 	'class' => 'ct-dynamic-media',
-	'aria-label' => wp_strip_all_tags($aria_label),
 ];
 
 $link_attr = [];
@@ -158,7 +158,8 @@ if (
 	)
 ) {
 	$link_attr = [
-		'href' => $url
+		'href' => $url,
+		'aria-label' => wp_strip_all_tags($aria_label),
 	];
 
 	if ($has_field_link_new_tab !== 'no') {
@@ -249,14 +250,36 @@ if (
 	);
 }
 
+$caption_html = '';
+
+if ($has_image_caption === 'yes') {
+	$caption = wp_get_attachment_caption($attachment_id);
+
+	if (! empty($caption)) {
+		$caption_html = blocksy_html_tag(
+			'figcaption',
+			[
+				'class' => 'wp-element-caption'
+			],
+			wp_kses_post($caption)
+		);
+	}
+}
+
 $tag_name = 'figure';
 
 if (! empty($link_attr)) {
-	$tag_name = 'a';
-	$wrapper_attr = array_merge(
-		$wrapper_attr,
-		$link_attr
-	);
+	if (! empty($caption_html)) {
+		$value = blocksy_html_tag('a', $link_attr, $value) . $caption_html;
+	} else {
+		$tag_name = 'a';
+		$wrapper_attr = array_merge(
+			$wrapper_attr,
+			$link_attr
+		);
+	}
+} else {
+	$value .= $caption_html;
 }
 
 $wrapper_attr = get_block_wrapper_attributes($wrapper_attr);

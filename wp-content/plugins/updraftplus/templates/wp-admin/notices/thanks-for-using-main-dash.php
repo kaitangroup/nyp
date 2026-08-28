@@ -1,3 +1,4 @@
+<?php if (!defined('ABSPATH')) die('No direct access.'); ?>
 <div id="updraft-dashnotice" class="updated">
 	<div style="float:right;"><a href="#" onclick="jQuery('#updraft-dashnotice').slideUp(); jQuery.post(ajaxurl, {action: 'updraft_ajax', subaction: 'dismissdashnotice', nonce: '<?php echo esc_js(wp_create_nonce('updraftplus-credentialtest-nonce'));?>' });">
 		<?php
@@ -38,6 +39,10 @@
 	</p>
 	<p>
 		<?php echo '<strong><a href="https://wpovernight.com/" target="_blank">'.esc_html__('WP Overnight', 'updraftplus').'</a>: </strong>'.esc_html__("Quality add-ons for WooCommerce.", 'updraftplus').' '.esc_html__("Designed to optimize your store, enhance user experience  and increase revenue!", 'updraftplus');
+	?>
+	</p>
+	<p>
+		<?php echo '<strong><a href="https://burst-statistics.com/?utm_source=udp-plugin&utm_medium=referral&utm_campaign=paac&utm_content=burst-statistics-plugin/" target="_blank">'.esc_html__('Burst Statistics', 'updraftplus').'</a>: </strong>'.esc_html__("Get clear, actionable insights into your website's visitors.", 'updraftplus').' '.esc_html__("Privacy-friendly, locally-hosted, and built for clarity.", 'updraftplus');
 	?>
 	</p>
 	<p>

@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) exit;
 
 
 use MailPoet\Entities\SegmentEntity;
+use MailPoet\Listing\ListingDateRangeFilterTrait;
 use MailPoet\Listing\ListingDefinition;
 use MailPoet\Listing\ListingRepository;
 use MailPoet\Util\Helpers;
@@ -13,6 +14,8 @@ use MailPoetVendor\Doctrine\ORM\EntityManager;
 use MailPoetVendor\Doctrine\ORM\QueryBuilder;
 
 class SegmentListingRepository extends ListingRepository {
+  use ListingDateRangeFilterTrait;
+
   const DEFAULT_SORT_BY = 'name';
 
   /** @var WooCommerce */
@@ -50,6 +53,26 @@ class SegmentListingRepository extends ListingRepository {
   }
 
   protected function applyFilters(QueryBuilder $queryBuilder, array $filters) {
+    $this->applyDateRangeFilter($queryBuilder, 's.createdAt', $filters, 'created_from', 'created_to');
+    $this->applyScoreFilter($queryBuilder, $filters);
+  }
+
+  /**
+   * @param array<string, mixed> $filters
+   */
+  private function applyScoreFilter(QueryBuilder $queryBuilder, array $filters): void {
+    $min = $filters['score_min'] ?? null;
+    if (is_numeric($min)) {
+      $queryBuilder
+        ->andWhere('s.averageEngagementScore >= :scoreMin')
+        ->setParameter('scoreMin', (float)$min);
+    }
+    $max = $filters['score_max'] ?? null;
+    if (is_numeric($max)) {
+      $queryBuilder
+        ->andWhere('s.averageEngagementScore <= :scoreMax')
+        ->setParameter('scoreMax', (float)$max);
+    }
   }
 
   protected function applyParameters(QueryBuilder $queryBuilder, array $parameters) {

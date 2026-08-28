@@ -1,5 +1,5 @@
 <?php
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 /**
  * Handles the UpdraftPlus deactivation popup modal.
@@ -102,6 +102,7 @@ class UpdraftPlus_Deactivation {
 				'template_file'    => UPDRAFTPLUS_DIR . '/templates/deactivation-popup-modal.php',
 				'show_on_network_admin' => true,
 				'show_on_subsites' => false,
+				'custom_css' => true,
 			));
 		}
 	}
@@ -112,7 +113,7 @@ class UpdraftPlus_Deactivation {
 	 */
 	public function handle_user_choice() {
 
-		$choice = UpdraftPlus_Manipulation_Functions::fetch_superglobal('post', 'updraft_deinstall_option', 'no', true, null, 'sanitize_text_field');
-		UpdraftPlus_Options::update_updraft_option('updraftplus_deinstall_option', $choice);
+		$choice = UpdraftPlus_Manipulation_Functions::fetch_superglobal('post', 'updraftplus_deinstall_option', 'no', true, null, 'sanitize_text_field');
+		update_site_option('updraftplus_deinstall_option', $choice);
 	}
 }

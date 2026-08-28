@@ -6,7 +6,9 @@ if (!defined('ABSPATH')) exit;
 
 
 use MailPoet\Entities\FormEntity;
+use MailPoet\Entities\SubscriberEntity;
 use MailPoet\Form\Block\Checkbox;
+use MailPoet\Form\Block\Close;
 use MailPoet\Form\Block\Column;
 use MailPoet\Form\Block\Columns;
 use MailPoet\Form\Block\Date;
@@ -21,11 +23,15 @@ use MailPoet\Form\Block\Select;
 use MailPoet\Form\Block\Submit;
 use MailPoet\Form\Block\Text;
 use MailPoet\Form\Block\Textarea;
+use MailPoet\Subscribers\TrackingConsentCapture;
 use MailPoet\Util\Security;
 
 class BlocksRenderer {
   /** @var Checkbox */
   private $checkbox;
+
+  /** @var Close */
+  private $close;
 
   /** @var Date */
   private $date;
@@ -69,8 +75,12 @@ class BlocksRenderer {
   /** @var Paragraph */
   private $paragraph;
 
+  /** @var TrackingConsentCapture */
+  private $trackingConsentCapture;
+
   public function __construct(
     Checkbox $checkbox,
+    Close $close,
     Column $column,
     Columns $columns,
     Date $date,
@@ -84,9 +94,11 @@ class BlocksRenderer {
     Select $select,
     Submit $submit,
     Text $text,
-    Textarea $textarea
+    Textarea $textarea,
+    TrackingConsentCapture $trackingConsentCapture
   ) {
     $this->checkbox = $checkbox;
+    $this->close = $close;
     $this->column = $column;
     $this->columns = $columns;
     $this->date = $date;
@@ -101,10 +113,20 @@ class BlocksRenderer {
     $this->textarea = $textarea;
     $this->heading = $heading;
     $this->paragraph = $paragraph;
+    $this->trackingConsentCapture = $trackingConsentCapture;
   }
 
   public function renderBlock(array $block, array $formSettings, ?int $formId): string {
     $html = '';
+    // A tracking-consent checkbox is recipient-facing, so it only appears on
+    // sites that chose to ask. On a site that tracks everyone without asking,
+    // a block a merchant placed deliberately still renders nothing.
+    if (($block['id'] ?? null) === TrackingConsentCapture::FIELD_ID) {
+      if (!$this->trackingConsentCapture->isCaptureEnabled()) {
+        return $html;
+      }
+      $block = $this->withResolvedConsentCopy($block);
+    }
     if ($formId) {
       $formSettings['id'] = $formId;
     }
@@ -163,8 +185,28 @@ class BlocksRenderer {
       case FormEntity::SUBMIT_BLOCK_TYPE:
         $html .= $this->submit->render($block, $formSettings);
         break;
+
+      case FormEntity::CLOSE_BLOCK_TYPE:
+        $html .= $this->close->render($block, $formSettings);
+        break;
     }
     return $html;
+  }
+
+  /**
+   * Replaces the consent block's stored wording with the wording that will
+   * actually be recorded as proof. The subscriber must see exactly the sentence
+   * we file against their consent, so the blank fallback and the
+   * mailpoet_tracking_consent_copy filter have to reach the rendered label too,
+   * not only SubscriberSubscribeController's record of it.
+   */
+  private function withResolvedConsentCopy(array $block): array {
+    $stored = $block['params']['values'][0]['value'] ?? null;
+    $block['params']['values'][0]['value'] = $this->trackingConsentCapture->getCopy(
+      SubscriberEntity::TRACKING_CONSENT_METHOD_FORM,
+      is_string($stored) ? $stored : null
+    );
+    return $block;
   }
 
   public function renderContainerBlock(array $block, string $content) {

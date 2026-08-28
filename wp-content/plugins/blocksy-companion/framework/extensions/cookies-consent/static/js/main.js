@@ -15,9 +15,9 @@ const showCookieConsent = (node) => {
 		node.classList.remove('ct-fade-in-start')
 		node.classList.add('ct-fade-in-end')
 
-		whenTransitionEnds(node, () => {
+		setTimeout(() => {
 			node.classList.remove('ct-fade-in-end')
-		})
+		}, 300)
 	})
 }
 
@@ -30,9 +30,9 @@ const hideCookieConsent = (node) => {
 		node.classList.remove('ct-fade-start')
 		node.classList.add('ct-fade-end')
 
-		whenTransitionEnds(node, () => {
+		setTimeout(() => {
 			node.parentNode.removeChild(node)
-		})
+		}, 300)
 	})
 }
 
@@ -167,23 +167,3 @@ onDocumentLoaded(() => {
 		})
 	}
 })
-
-function whenTransitionEnds(el, cb) {
-	setTimeout(() => {
-		cb()
-	}, 300)
-	return
-
-	const end = () => {
-		el.removeEventListener('transitionend', onEnd)
-		cb()
-	}
-
-	const onEnd = (e) => {
-		if (e.target === el) {
-			end()
-		}
-	}
-
-	el.addEventListener('transitionend', onEnd)
-}

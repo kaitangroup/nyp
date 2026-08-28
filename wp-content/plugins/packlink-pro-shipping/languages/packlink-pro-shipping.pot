@@ -776,3 +776,79 @@ msgstr ""
 #: Components/Checkout/class-block-checkout-handler.php:59
 msgid "There are no drop-off locations available for the entered address"
 msgstr ""
+
+#: Components/Customs/class-customs-handler.php
+msgid "HS code"
+msgstr ""
+
+#: Components/Customs/class-customs-handler.php
+msgid "Harmonized System code used on customs invoices (6 to 8 digits)."
+msgstr ""
+
+#: Components/Customs/class-customs-handler.php
+msgid "Country of origin"
+msgstr ""
+
+#: Components/Customs/class-customs-handler.php
+msgid "Country where the product was manufactured, used on customs invoices."
+msgstr ""
+
+#: Components/Customs/class-customs-handler.php
+msgid "— Select —"
+msgstr ""
+
+#: Components/Customs/class-customs-handler.php
+msgid "Tax ID"
+msgstr ""
+
+#: Components/Customs/class-customs-handler.php
+msgid "Company VAT"
+msgstr ""
+
+#: Components/Customs/class-customs-handler.php
+msgid "Billing company"
+msgstr ""
+
+#: Components/Services/class-customs-mapping-service.php
+msgid "Customer tax ID field"
+msgstr ""
+
+#: Components/Services/class-customs-mapping-service.php
+msgid "Packlink customer tax ID"
+msgstr ""
+
+#: Components/Services/class-customs-mapping-service.php
+msgid "Product HS code field"
+msgstr ""
+
+#: Components/Services/class-customs-mapping-service.php
+msgid "Packlink product HS code"
+msgstr ""
+
+#: Components/Services/class-customs-mapping-service.php
+msgid "Company VAT field"
+msgstr ""
+
+#: Components/Services/class-customs-mapping-service.php
+msgid "Packlink company VAT"
+msgstr ""
+
+#: resources/views/meta-post-box.php
+msgid "Documents"
+msgstr ""
+
+#: resources/views/meta-post-box.php
+msgid "Shipping label"
+msgstr ""
+
+#: resources/views/meta-post-box.php
+msgid "Customs label"
+msgstr ""
+
+#: resources/views/meta-post-box.php
+msgid "Download"
+msgstr ""
+
+#: resources/views/meta-post-box.php
+msgid "Print"
+msgstr ""

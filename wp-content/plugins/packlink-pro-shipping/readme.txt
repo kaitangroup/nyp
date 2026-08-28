@@ -3,8 +3,8 @@ Contributors: packlink
 Tags: shipping, delivery, carrier, order, package
 Requires at least: 4.7
 Requires PHP: 7.0
-Tested up to: 6.9
-Stable tag: 4.1.2
+Tested up to: 7.0
+Stable tag: 4.3.1
 License: LICENSE-2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -93,6 +93,45 @@ Click <a href="https://support-pro.packlink.com/hc/es-es/articles/210158585" tar
 
 
 == Changelog ==
+
+#### 4.3.1 - August 12th, 2026
+
+**Updates**
+
+- Security update
+
+#### 4.3.0 - July 28th, 2026
+
+**Updates**
+
+- Add customs support for international shipments: Customs settings page with default values and data mapping to product attributes and customer fields, product HS code and country of origin fields, a customer tax ID / VAT number field on the admin customer profile, automatic customs invoice creation when an order is paid, and customs invoice download/print on the order details page (upgrades the packlink/integration-core shared library with customs support)
+
+#### 4.2.3 - July 23rd, 2026
+
+**Updates**
+
+- Fix checkout SyntaxError caused by unescaped apostrophes in drop-off translations
+
+#### 4.2.2 - July 14th, 2026
+
+**Updates**
+
+- Fix fatal error when activating the plugin on WordPress Multisite installations with multiple sites
+
+#### 4.2.1 - July 08th, 2026
+
+**Updates**
+
+- Add support for shipping in Brazil
+
+#### 4.2.0 - July 07th, 2026
+
+**Updates**
+
+- Add compatibility with Divi, Astra, Makeaholic themes
+- Add subscription banners
+- Improve bulk printing labels
+- Fix drop-off location selection on CartFlows Store Checkout
 
 #### 4.1.2 - May 19th, 2026
 

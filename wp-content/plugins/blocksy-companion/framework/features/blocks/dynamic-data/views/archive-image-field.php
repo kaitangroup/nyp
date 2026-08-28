@@ -12,17 +12,22 @@ $image_source = blocksy_akg('imageSource', $attributes, 'featured');
 $attachment_id = null;
 
 if (! $term_id && is_archive()) {
-	$term_id = get_queried_object_id();
+	$queried_object = get_queried_object();
+
+	if (is_a($queried_object, 'WP_Term')) {
+		$term_id = $queried_object->term_id;
+	}
 }
 
-if (! $term_id && function_exists('is_shop') && is_shop()) {
-	$post_id = get_option('woocommerce_shop_page_id');
-	$attachment_id = get_post_thumbnail_id($post_id);
+$special_post_id = blocksy_companion_theme_functions()->blocksy_get_special_post_id();
+
+if ($special_post_id) {
+	$attachment_id = get_post_thumbnail_id($special_post_id);
 }
 
-if (! $term_id && is_home() && ! is_front_page()) {
-	$post_id = get_option('page_for_posts');
-	$attachment_id = get_post_thumbnail_id($post_id);
+if (is_search()) {
+	$term_id = null;
+	$attachment_id = null;
 }
 
 if ($term_id) {
@@ -36,19 +41,16 @@ if ($term_id) {
 		$attachment_id = null;
 	}
 
-	$term_atts = get_term_meta(
-		$term_id,
-		'blocksy_taxonomy_meta_options'
-	);
+	$term_atts = blocksy_companion_theme_functions()->blocksy_get_taxonomy_options($term_id);
 
 	if (empty($term_atts)) {
-		$term_atts = [[]];
+		$term_atts = [];
 	}
 
-	$maybe_image = blocksy_akg('image', $term_atts[0], '');
+	$maybe_image = blocksy_akg('image', $term_atts, '');
 
 	if ($image_source === 'icon') {
-		$maybe_image = blocksy_akg('icon_image', $term_atts[0], '');
+		$maybe_image = blocksy_akg('icon_image', $term_atts, '');
 	}
 
 	if (
@@ -62,7 +64,7 @@ if ($term_id) {
 	}
 }
 
-blocksy_render_view_e(
+blocksy_companion_render_view_e(
 	dirname(__FILE__) . '/image-field.php',
 	[
 		'attributes' => $attributes,

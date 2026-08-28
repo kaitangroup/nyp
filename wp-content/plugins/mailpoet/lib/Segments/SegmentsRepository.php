@@ -12,12 +12,14 @@ use MailPoet\Entities\DynamicSegmentFilterData;
 use MailPoet\Entities\DynamicSegmentFilterEntity;
 use MailPoet\Entities\NewsletterSegmentEntity;
 use MailPoet\Entities\SegmentEntity;
+use MailPoet\Entities\SubscriberEntity;
 use MailPoet\Entities\SubscriberSegmentEntity;
 use MailPoet\Form\FormsRepository;
 use MailPoet\InvalidStateException;
 use MailPoet\Logging\LoggerFactory;
 use MailPoet\Newsletter\Segment\NewsletterSegmentRepository;
 use MailPoet\NotFoundException;
+use MailPoet\Subscribers\SegmentsCountRecalculator;
 use MailPoet\WP\Functions as WPFunctions;
 use MailPoetVendor\Carbon\Carbon;
 use MailPoetVendor\Doctrine\DBAL\ArrayParameterType;
@@ -42,18 +44,23 @@ class SegmentsRepository extends Repository {
   /** @var LoggerFactory */
   private $loggerFactory;
 
+  /** @var SegmentsCountRecalculator */
+  private $segmentsCountRecalculator;
+
   public function __construct(
     EntityManager $entityManager,
     NewsletterSegmentRepository $newsletterSegmentRepository,
     FormsRepository $formsRepository,
     WPFunctions $wp,
-    LoggerFactory $loggerFactory
+    LoggerFactory $loggerFactory,
+    SegmentsCountRecalculator $segmentsCountRecalculator
   ) {
     parent::__construct($entityManager);
     $this->newsletterSegmentRepository = $newsletterSegmentRepository;
     $this->formsRepository = $formsRepository;
     $this->wp = $wp;
     $this->loggerFactory = $loggerFactory;
+    $this->segmentsCountRecalculator = $segmentsCountRecalculator;
   }
 
   protected function getEntityClassName() {
@@ -279,6 +286,24 @@ class SegmentsRepository extends Repository {
       return 0;
     }
 
+    // Dynamic segments never materialize memberships in subscriber_segment, so
+    // deleting them cannot change any subscriber's segments_count. Skip the
+    // capture (and the recalc below) for them.
+    $isDynamic = $type === SegmentEntity::TYPE_DYNAMIC;
+
+    // Capture the affected subscribers before the cascade removes their
+    // memberships, so segments_count can be refreshed for them afterwards. When
+    // there are too many to recompute inline, skip the (potentially huge)
+    // capture and let the background sweep reconcile their counts instead.
+    $deferRecalculation = false;
+    $affectedSubscriberIds = [];
+    if (!$isDynamic) {
+      $deferRecalculation = $this->segmentsCountRecalculator->countSegmentMembers($ids, true, $type) >= $this->segmentsCountRecalculator->getDeferThreshold();
+      if (!$deferRecalculation) {
+        $affectedSubscriberIds = $this->getSubscriberIdsForSegments($ids, $type);
+      }
+    }
+
     $count = 0;
     $this->entityManager->transactional(function (EntityManager $entityManager) use ($ids, $type, &$count) {
       $subscriberSegmentTable = $entityManager->getClassMetadata(SubscriberSegmentEntity::class)->getTableName();
@@ -316,7 +341,46 @@ class SegmentsRepository extends Repository {
         ->setParameter('ids', $ids, ArrayParameterType::INTEGER)
         ->getQuery()->execute();
     });
+
+    if (!$isDynamic) {
+      if ($deferRecalculation) {
+        $this->segmentsCountRecalculator->scheduleBackgroundRecalculation();
+      } else {
+        $this->segmentsCountRecalculator->recalculateForSubscribers($affectedSubscriberIds);
+      }
+    }
+
     return $count;
+  }
+
+  /**
+   * @param int[] $segmentIds
+   * @return int[]
+   */
+  private function getSubscriberIdsForSegments(array $segmentIds, string $type): array {
+    if (empty($segmentIds)) {
+      return [];
+    }
+
+    $subscriberSegmentTable = $this->entityManager->getClassMetadata(SubscriberSegmentEntity::class)->getTableName();
+    $segmentTable = $this->entityManager->getClassMetadata(SegmentEntity::class)->getTableName();
+
+    $subscribedStatus = SubscriberEntity::STATUS_SUBSCRIBED;
+    $ids = $this->entityManager->getConnection()->executeQuery("
+       SELECT DISTINCT ss.`subscriber_id` FROM $subscriberSegmentTable ss
+       JOIN $segmentTable s ON ss.`segment_id` = s.`id`
+       WHERE ss.`segment_id` IN (:ids)
+       AND s.`type` = :type
+       AND ss.`status` = :subscribedStatus
+    ", [
+      'ids' => $segmentIds,
+      'type' => $type,
+      'subscribedStatus' => $subscribedStatus,
+    ], ['ids' => ArrayParameterType::INTEGER])->fetchFirstColumn();
+
+    return array_map(function ($id): int {
+      return is_numeric($id) ? (int)$id : 0;
+    }, $ids);
   }
 
   public function bulkTrash(array $ids, string $type = SegmentEntity::TYPE_DEFAULT): int {
@@ -348,6 +412,16 @@ class SegmentsRepository extends Repository {
     ->setParameter('ids', $ids)
     ->setParameter('type', $type)
     ->getQuery()->execute();
+
+    // Trashing or restoring a segment changes whether its memberships count
+    // towards segments_count, so refresh every affected subscriber. The
+    // memberships still exist here (only deleted_at changed), so walk them in
+    // keyset-paginated batches instead of materializing every member id at once.
+    // Dynamic segments have no materialized memberships, so there is nothing to
+    // recalculate for them.
+    if ($type !== SegmentEntity::TYPE_DYNAMIC) {
+      $this->segmentsCountRecalculator->recalculateForSegments($ids);
+    }
 
     return $rows;
   }

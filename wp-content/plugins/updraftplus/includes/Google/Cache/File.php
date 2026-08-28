@@ -16,6 +16,8 @@
  * limitations under the License.
  */
 
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 if (!class_exists('UDP_Google_Client')) {
   require_once dirname(__FILE__) . '/../autoload.php';
 }
@@ -73,7 +75,7 @@ class Google_Cache_File extends Google_Cache_Abstract
     if ($this->acquireReadLock($storageFile)) {
       if (filesize($storageFile) > 0) {
         $data = fread($this->fh, filesize($storageFile));
-        $data =  unserialize($data);
+        $data = UpdraftPlus::unserialize($data, array('UDP_Google_Http_Request'));
       } else {
         $this->client->getLogger()->debug(
             'Cache file was empty',

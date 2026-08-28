@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 
 updraft_try_include_file('methods/s3.php', 'require_once');
 
@@ -12,6 +12,41 @@ class UpdraftPlus_BackupModule_s3generic extends UpdraftPlus_BackupModule_s3 {
 	protected $provider_can_use_aws_sdk = false;
 	
 	protected $provider_has_regions = false;
+	
+	/**
+	 * Input and option field mappings with default values and supported contexts.
+	 *
+	 * @var array
+	 */
+	protected $input_option_field_mappings = array(
+		'accesskey' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'access_key',
+			'contexts' => array('option', 'input'),
+		),
+		'secretkey' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'secret_key',
+			'contexts' => array('option', 'input'),
+		),
+		'path' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'location',
+			'contexts' => array('option', 'input'),
+		),
+		'endpoint' => array(
+			'default_value' => '',
+			'contexts' => array('option', 'input'),
+		),
+		'bucket_access_style' => array(
+			'default_value' => 'path_style',
+			'contexts' => array('input'),
+		),
+		'signature_version' => array(
+			'default_value' => 'v4',
+			'contexts' => array('input'),
+		),
+	);
 
 	/**
 	 * Given an S3 object, possibly set the region on it
@@ -51,20 +86,6 @@ class UpdraftPlus_BackupModule_s3generic extends UpdraftPlus_BackupModule_s3 {
 	public function get_supported_features() {
 		// This options format is handled via only accessing options via $this->get_options()
 		return array('multi_options', 'config_templates', 'multi_storage', 'conditional_logic');
-	}
-
-	/**
-	 * Retrieve default options for this remote storage module.
-	 *
-	 * @return Array - an array of options
-	 */
-	public function get_default_options() {
-		return array(
-			'accesskey' => '',
-			'secretkey' => '',
-			'path' => '',
-			'endpoint' => '',
-		);
 	}
 
 	/**
@@ -229,14 +250,18 @@ class UpdraftPlus_BackupModule_s3generic extends UpdraftPlus_BackupModule_s3 {
 			'ssl_certificates_errors_link_text' => wp_kses('<a href="'.apply_filters("updraftplus_com_link", "https://teamupdraft.com/documentation/updraftplus/topics/backing-up/troubleshooting/i-get-ssl-certificate-errors-when-backing-up-and-or-restoring/?utm_source=udp-plugin&utm_medium=referral&utm_campaign=paac&utm_content=s3-ssl-certificates&utm_creative_format=text").'" target="_blank">'.__('If you see errors about SSL certificates, then please go here for help.', 'updraftplus').'</a>', $this->allowed_html_for_content_sanitisation()),
 			/* translators: %s: Cloud storage provider */
 			'input_access_key_label' => sprintf(__('%s access key', 'updraftplus'), 'S3'),
+			'input_access_key_placeholder' => __('Paste your access key here', 'updraftplus'),
 			/* translators: %s: Cloud storage provider */
 			'input_secret_key_label' => sprintf(__('%s secret key', 'updraftplus'), 'S3'),
+			'input_secret_key_placeholder' => __('Paste your secret key here', 'updraftplus'),
 			'input_secret_key_type' => apply_filters('updraftplus_admin_secret_field_type', 'password'),
 			/* translators: %s: Cloud storage provider */
 			'input_location_label' => sprintf(__('%s location', 'updraftplus'), 'S3'),
 			'input_location_title' => __('Enter only a bucket name or a bucket and path.', 'updraftplus').' '.__('Examples: mybucket, mybucket/mypath', 'updraftplus'),
+			'input_location_prefix' => 's3generic://',
 			/* translators: %s: Cloud storage provider */
 			'input_endpoint_label' => sprintf(__('%s end-point', 'updraftplus'), 'S3'),
+			'input_endpoint_placeholder' => __('Example: sgp1.digitaloceanspaces.com', 'updraftplus'),
 			'input_bucket_access_style_label' => __('Bucket access style', 'updraftplus'),
 			'input_bucket_access_style_readmore' => wp_kses('<a aria-label="'.esc_attr__('Read more about bucket access style', 'updraftplus').'" href="https://teamupdraft.com/documentation/updraftplus/topics/cloud-storage/amazon-s3/faqs/what-is-the-difference-between-path-style-and-bucket-style-access/" target="_blank"><em>'.__('(Read more)', 'updraftplus').'</em></a>', $this->allowed_html_for_content_sanitisation()),
 			'input_bucket_access_style_option_labels' => array(

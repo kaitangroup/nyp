@@ -39,6 +39,7 @@ class Pages {
   const ACTION_MANAGE = 'manage';
   const ACTION_UNSUBSCRIBE = 'unsubscribe';
   const ACTION_RE_ENGAGEMENT = 're_engagement';
+  const ACTION_TRACKING_OPT_OUT = 'tracking_opt_out';
 
   private $action;
   private $data;
@@ -162,6 +163,10 @@ class Pages {
     return $this;
   }
 
+  public function isInitialized(): bool {
+    return $this->data !== null;
+  }
+
   private function isPreview() {
     return (array_key_exists('preview', $_GET) || array_key_exists('preview', $this->data));
   }
@@ -219,6 +224,7 @@ class Pages {
 
     $subscriberData = json_decode((string)$this->subscriber->getUnconfirmedData(), true);
     $originalStatus = $this->subscriber->getStatus();
+    $confirmationCompleted = $originalStatus !== SubscriberEntity::STATUS_SUBSCRIBED || $subscriberData !== null;
 
     $this->subscriber->setStatus(SubscriberEntity::STATUS_SUBSCRIBED);
     $this->subscriber->setConfirmedIp(Helpers::getIP());
@@ -258,7 +264,7 @@ class Pages {
     }
 
     // Send new subscriber notification only when status changes to subscribed or there are unconfirmed data to avoid spamming
-    if ($originalStatus !== SubscriberEntity::STATUS_SUBSCRIBED || $subscriberData !== null) {
+    if ($confirmationCompleted) {
       $this->newSubscriberNotificationSender->send($this->subscriber, $subscriberSegments);
     }
 
@@ -266,6 +272,10 @@ class Pages {
     if (!empty($subscriberData)) {
       $this->subscriberSaveController->createOrUpdate((array)$subscriberData, $this->subscriber);
       $this->subscriberSaveController->updateCustomFields((array)$subscriberData, $this->subscriber);
+    }
+
+    if ($confirmationCompleted) {
+      $this->wp->doAction('mailpoet_subscription_confirmed', $this->subscriber);
     }
   }
 
@@ -298,6 +308,26 @@ class Pages {
 
       $this->subscriberSegmentRepository->unsubscribeFromSegments($this->subscriber);
     }
+  }
+
+  public function trackingOptOut(string $method, string $copy): void {
+    if (
+      !$this->isPreview()
+      && (!is_null($this->subscriber))
+      && ($this->subscriber->getTrackingConsent() !== SubscriberEntity::TRACKING_CONSENT_DENIED)
+    ) {
+      $this->subscriber->setTrackingConsent(SubscriberEntity::TRACKING_CONSENT_DENIED, $method, $copy);
+      $this->subscribersRepository->persist($this->subscriber);
+      $this->subscribersRepository->flush();
+    }
+  }
+
+  /**
+   * The wording the subscriber is shown before choosing. Kept in one place so
+   * the copy we store as proof is exactly the copy we rendered.
+   */
+  public static function getTrackingOptOutConsentCopy(): string {
+    return __('If you confirm, tracking of email opens and link clicks will stop. This is separate from unsubscribing: you will keep receiving emails.', 'mailpoet');
   }
 
   public function isSubscriberUnsubscribed(): bool {
@@ -340,6 +370,9 @@ class Pages {
 
         case self::ACTION_RE_ENGAGEMENT:
           return $this->getReEngagementTitle();
+
+        case self::ACTION_TRACKING_OPT_OUT:
+          return $this->getTrackingOptOutTitle();
       }
     }
   }
@@ -369,6 +402,9 @@ class Pages {
           break;
         case self::ACTION_RE_ENGAGEMENT:
           $content = $this->getReEngagementContent();
+          break;
+        case self::ACTION_TRACKING_OPT_OUT:
+          $content = $this->getTrackingOptOutContent();
           break;
       }
       return str_replace('[mailpoet_page]', trim($content), $pageContent);
@@ -433,6 +469,15 @@ class Pages {
   private function getReEngagementTitle() {
     if ($this->isPreview() || $this->subscriber !== null) {
       return __('Thank you for letting us know!', 'mailpoet');
+    }
+  }
+
+  private function getTrackingOptOutTitle() {
+    if ($this->isPreview() || $this->subscriber !== null) {
+      if ($this->subscriber !== null && $this->subscriber->getTrackingConsent() === SubscriberEntity::TRACKING_CONSENT_DENIED) {
+        return __('You have opted out of email activity tracking.', 'mailpoet');
+      }
+      return __('Opt out of email activity tracking', 'mailpoet');
     }
   }
 
@@ -571,6 +616,23 @@ class Pages {
       $content .= '<p>' . __('We appreciate your continued interest in our updates. Expect to hear from us again soon!', 'mailpoet') . '</p>';
     }
     return $content;
+  }
+
+  private function getTrackingOptOutContent() {
+    if (!$this->isPreview() && $this->subscriber === null) {
+      return '';
+    }
+    if ($this->subscriber !== null && $this->subscriber->getTrackingConsent() === SubscriberEntity::TRACKING_CONSENT_DENIED) {
+      return '<p class="mailpoet_tracking_opt_out_content">'
+        . __('Tracking of email opens and link clicks is now off. You will keep receiving emails as usual.', 'mailpoet')
+        . ' <strong>[mailpoet_manage]</strong></p>';
+    }
+    $optOutUrl = $this->subscriptionUrlFactory->getTrackingOptOutUrl($this->subscriber);
+    return '<p>' . self::getTrackingOptOutConsentCopy() . '</p>'
+      . '<form method="post" action="' . esc_attr((string)$optOutUrl) . '" class="mailpoet_tracking_opt_out_form">'
+      . '<input type="hidden" name="_wpnonce" value="' . esc_attr($this->wp->wpCreateNonce('mailpoet_tracking_opt_out')) . '" />'
+      . '<input type="submit" value="' . esc_attr__('Stop tracking my activity', 'mailpoet') . '" />'
+      . '</form>';
   }
 
   private function getConfirmUnsubscribeContent() {

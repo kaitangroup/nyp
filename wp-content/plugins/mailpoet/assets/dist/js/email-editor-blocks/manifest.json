@@ -1,6 +1,7 @@
 {
   "form_preview.js": "form_preview.js",
   "post_editor_block.js": "post_editor_block.js",
+  "public.min.js": "public.min.js",
   "public.js": "public.js",
   "powered-by-mailpoet-block.js": "auto/powered-by-mailpoet-block.js",
   "powered-by-mailpoet-block.php": "auto/powered-by-mailpoet-block.asset.php",

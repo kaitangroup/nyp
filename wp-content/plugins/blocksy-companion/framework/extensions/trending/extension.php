@@ -46,7 +46,7 @@ class BlocksyExtensionTrending {
 		add_filter(
 			'blocksy_extensions_customizer_options',
 			function ($opts) {
-				$opts['trending_posts_ext'] = blocksy_get_options(
+				$opts['trending_posts_ext'] = blocksy_companion_get_options(
 					dirname(__FILE__) . '/customizer.php',
 					[],
 					false
@@ -124,7 +124,7 @@ class BlocksyExtensionTrending {
 	}
 
 	static public function add_global_styles($args) {
-		blocksy_theme_get_dynamic_styles(array_merge([
+		blocksy_companion_theme_functions()->blocksy_theme_get_dynamic_styles(array_merge([
 			'path' => dirname(__FILE__) . '/global.php',
 			'chunk' => 'global',
 		], $args));

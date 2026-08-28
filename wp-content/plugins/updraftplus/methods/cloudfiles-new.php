@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 
 // SDK uses namespacing - requires PHP 5.3 (actually the SDK states its requirements as 5.3.3)
 use OpenCloud\Rackspace;
@@ -12,8 +12,55 @@ updraft_try_include_file('methods/openstack-base.php', 'require_once');
 
 class UpdraftPlus_BackupModule_cloudfiles_opencloudsdk extends UpdraftPlus_BackupModule_openstack_base {
 
+	/**
+	 * Cloudfiles available regions.
+	 *
+	 * @var array
+	 */
+	private $regions;
+
+	/**
+	 * Input and option field mappings with default values and supported contexts.
+	 *
+	 * @var array
+	 */
+	protected $input_option_field_mappings = array(
+		'authurl' => array(
+			'default_value' => 'https://auth.api.rackspacecloud.com',
+			'template_property_input_mapping' => 'account',
+			'contexts' => array('option', 'input'),
+		),
+		'region' => array(
+			'default_value' => null,
+			'contexts' => array('option', 'input'),
+		),
+		'user' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'username',
+			'contexts' => array('option', 'input'),
+		),
+		'apikey' => array(
+			'default_value' => '',
+			'contexts' => array('option', 'input'),
+		),
+		'path' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'container',
+			'contexts' => array('option', 'input'),
+		),
+	);
+
 	public function __construct() {
 		parent::__construct('cloudfiles', 'Cloud Files', 'Rackspace Cloud Files', '/images/rackspacecloud-logo.png');
+
+		$this->regions = array(
+			'DFW' => __('Dallas (DFW) (default)', 'updraftplus'),
+			'SYD' => __('Sydney (SYD)', 'updraftplus'),
+			'ORD' => __('Chicago (ORD)', 'updraftplus'),
+			'IAD' => __('Northern Virginia (IAD)', 'updraftplus'),
+			'HKG' => __('Hong Kong (HKG)', 'updraftplus'),
+			'LON' => __('London (LON)', 'updraftplus')
+		);
 	}
 
 	public function get_client() {
@@ -82,21 +129,6 @@ class UpdraftPlus_BackupModule_cloudfiles_opencloudsdk extends UpdraftPlus_Backu
 		// This options format is handled via only accessing options via $this->get_options()
 		return array('multi_options', 'config_templates', 'multi_storage', 'conditional_logic');
 	}
-
-	/**
-	 * Retrieve default options for this remote storage module.
-	 *
-	 * @return Array - an array of options
-	 */
-	public function get_default_options() {
-		return array(
-			'user' => '',
-			'authurl' => 'https://auth.api.rackspacecloud.com',
-			'apikey' => '',
-			'path' => '',
-			'region' => null
-		);
-	}
 	
 	/**
 	 * This gives the partial template string to the settings page for the CloudFiles  settings.
@@ -154,14 +186,7 @@ class UpdraftPlus_BackupModule_cloudfiles_opencloudsdk extends UpdraftPlus_Backu
 	 * @return Array - Modified handerbar template options
 	 */
 	public function transform_options_for_template($opts) {
-		$opts['regions'] = array(
-			'DFW' => __('Dallas (DFW) (default)', 'updraftplus'),
-			'SYD' => __('Sydney (SYD)', 'updraftplus'),
-			'ORD' => __('Chicago (ORD)', 'updraftplus'),
-			'IAD' => __('Northern Virginia (IAD)', 'updraftplus'),
-			'HKG' => __('Hong Kong (HKG)', 'updraftplus'),
-			'LON' => __('London (LON)', 'updraftplus')
-		);
+		$opts['regions'] = $this->regions;
 		$opts['region'] = (empty($opts['region'])) ? 'DFW' : $opts['region'];
 		if (isset($opts['apikey'])) {
 			$opts['apikey'] = trim($opts['apikey']);
@@ -361,14 +386,40 @@ class UpdraftPlus_BackupModule_cloudfiles_opencloudsdk extends UpdraftPlus_Backu
 				'https://lon.auth.api.rackspacecloud.com' => __('UK', 'updraftplus'),
 			),
 			'input_region_label' => __('Cloud Files Storage Region', 'updraftplus'),
+			'input_region_option_labels' => $this->regions,
 			'input_username_label' => __('Cloud Files Username', 'updraftplus'),
+			'input_username_placeholder' => __('Enter your username', 'updraftplus'),
 			'input_apikey_label' => __('Cloud Files API Key', 'updraftplus'),
 			'input_apikey_type' => apply_filters('updraftplus_admin_secret_field_type', 'password'),
+			'input_apikey_placeholder' => __('Paste your key here', 'updraftplus'),
 			'input_container_label' => wp_kses(apply_filters('updraftplus_cloudfiles_location_description', __('Cloud Files Container', 'updraftplus')), $this->allowed_html_for_content_sanitisation()),
+			'input_container_placeholder' => __('Enter your container name', 'updraftplus'),
 			/* translators: %s: Backup method */
 			'input_test_label' => sprintf(__('Test %s Settings', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
 			'updraftplus_premium_url' => $updraftplus->get_url('premium'),
 		);
 		return wp_parse_args(apply_filters('updraft_'.$this->get_id().'_template_properties', array()), wp_parse_args($properties, $this->get_persistent_variables_and_methods()));
+	}
+
+	/**
+	 * Customize generated field data using legacy mapping values.
+	 *
+	 * Used by transform_template_properties_to_fields_structure()
+	 * to allow child classes to adjust the generated field structure
+	 * based on legacy data and field mapping requirements.
+	 *
+	 * @param array  $field               Field data.
+	 * @param array  $template_properties Template properties.
+	 * @param string $field_name          Field name.
+	 * @param array  $option              Field mapping option.
+	 *
+	 * @return array
+	 */
+	public function configure_field_from_legacy($field, $template_properties, $field_name, $option) {
+		$prefix = 'input_'.$option['template_property_input_mapping'].'_';
+
+		if (empty($field['tooltip']) && isset($template_properties[$prefix.'title'])) $field['tooltip'] = array('text' => $template_properties[$prefix.'title']);
+
+		return $field;
 	}
 }

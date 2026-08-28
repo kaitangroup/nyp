@@ -114,7 +114,7 @@ if ( ! class_exists( 'ACF_Field_User' ) ) :
 				$field,
 				array(
 					'label'        => __( 'Select Multiple', 'secure-custom-fields' ),
-					'instructions' => 'Allow content editors to select multiple values',
+					'instructions' => __( 'Allow content editors to select multiple values', 'secure-custom-fields' ),
 					'name'         => 'multiple',
 					'type'         => 'true_false',
 					'ui'           => 1,
@@ -409,7 +409,7 @@ if ( ! class_exists( 'ACF_Field_User' ) ) :
 			$nonce = acf_request_arg( 'nonce', '' );
 			$key   = acf_request_arg( 'field_key', '' );
 
-			if ( ! acf_verify_ajax( $nonce, $key, true ) ) {
+			if ( ! acf_verify_ajax( $nonce, $key, true, 'user' ) ) {
 				$query->send( new WP_Error( 'acf_invalid_request', __( 'Invalid request.', 'secure-custom-fields' ), array( 'status' => 404 ) ) );
 			}
 		}

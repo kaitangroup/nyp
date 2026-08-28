@@ -231,7 +231,7 @@ class HeaderAdditions {
 		});
 
 		add_filter('blocksy:header:settings', function ($opt) {
-			$opt = blocksy_get_options(
+			$opt = blocksy_companion_get_options(
 				dirname(__FILE__) . '/header/header-options.php',
 				[],
 				false
@@ -515,7 +515,7 @@ class HeaderAdditions {
 
 		$atts = $render->get_item_data_for('account');
 
-		$html = blocksy_render_view(
+		$html = blocksy_companion_render_view(
 			dirname(__FILE__) . '/header/account-modal.php',
 			[
 				'current_url' => blocksy_current_url(),

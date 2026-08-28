@@ -45,7 +45,10 @@
 	margin-top: 1.5rem;
 	margin-left: 1em;
 	margin-bottom: 1rem;
-	line-height: inherit;
+	min-height: 2em;
+	overflow: visible;
+	white-space: normal;
+	line-height: 1.4;
 }
 
 .lp-location-wrapper {
@@ -60,4 +63,53 @@
 		width: 30px;
 		height: 30px;
 	}
+}
+
+/* Divi / Extra theme: style the drop-off button as a primary CTA in classic shortcode checkout.
+   Uses Divi's accent color CSS variable so the button respects the user's theme
+   customizer choice; falls back to Divi's default blue when the variable is unset.
+   Extra ships its own body class (`et_extra`) and does not include `et_divi_theme`,
+   so it must be matched explicitly. */
+body.et_divi_theme #packlink-drop-off-picker,
+body.et_extra #packlink-drop-off-picker {
+	font-size: 13px;
+	padding: 8px 16px;
+	margin-top: 16px;
+	margin-left: 0;
+	margin-bottom: 8px;
+	background-color: var(--et_accent_color, var(--accent-color, #2ea3f2));
+	color: #ffffff;
+	border: none;
+	text-transform: uppercase;
+	line-height: 1.4;
+}
+
+body.et_divi_theme #packlink-drop-off-picker:hover,
+body.et_divi_theme #packlink-drop-off-picker:focus,
+body.et_extra #packlink-drop-off-picker:hover,
+body.et_extra #packlink-drop-off-picker:focus {
+	background-color: var(--et_accent_color, var(--accent-color, #2ea3f2));
+	color: #ffffff;
+	filter: brightness(0.9);
+}
+
+/* Astra theme: fix drop-off button alignment in classic checkout order-review table.
+   Astra right-aligns shipping-method content in the `<td>`, which displaces the button.
+   Force block-level rendering and left-align so the button anchors under the carrier
+   info regardless of the cell's text-align. Both responsive body classes are matched. */
+body.ast-desktop .woocommerce-checkout-review-order-table .shipping #packlink-drop-off-picker,
+body.ast-header-break-point .woocommerce-checkout-review-order-table .shipping #packlink-drop-off-picker {
+	display: block;
+	margin-top: 8px;
+	margin-left: 0;
+	text-align: left;
+}
+
+/* Astra Pro Two-Step Checkout: drop-off button is rendered in a `<div>` context
+   instead of the order-review `<td>`. Force block-level rendering and reset the
+   inherited margins so the button anchors flush-left under the carrier info. */
+body.ast-woo-two-step-modern-checkout #packlink-drop-off-picker {
+	display: block;
+	margin-top: 8px;
+	margin-left: 0;
 }

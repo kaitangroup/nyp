@@ -163,7 +163,7 @@ class Template6FixedBar extends FormTemplate {
   }
 
   public function getStyles(): string {
-    return <<<EOL
+    return <<<'EOL'
 /* form */
 .mailpoet_form {
 }

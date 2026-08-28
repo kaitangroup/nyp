@@ -4,7 +4,7 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
-function blocksy_ext_cookies_consent_output() {
+function blocksy_companion_ext_cookies_consent_output() {
 	$content = blocksy_companion_theme_functions()->blocksy_get_theme_mod(
 		'cookie_consent_content',
 		__('We use cookies to ensure that we give you the best experience on our website.', 'blocksy-companion')
@@ -45,12 +45,16 @@ function blocksy_ext_cookies_consent_output() {
 	return ob_get_clean();
 }
 
-function blocksy_ext_cookies_checkbox($prefix = '') {
+function blocksy_companion_ext_cookies_checkbox($prefix = '', $unique_suffix = '') {
 	ob_start();
 
 	if (! empty($prefix)) {
 		$prefix = '_' . $prefix;
 	}
+
+	$input_id = ! empty($unique_suffix)
+		? 'gdprconfirm_newsletter-' . sanitize_html_class($unique_suffix)
+		: 'gdprconfirm' . $prefix;
 
 	$message = blocksy_companion_theme_functions()->blocksy_get_theme_mod(
 		'forms_cookie_consent_content',
@@ -70,14 +74,14 @@ function blocksy_ext_cookies_checkbox($prefix = '') {
 			blocksy_html_tag_e(
 				'input',
 				[
-					'id' => 'gdprconfirm' . $prefix,
+					'id' => $input_id,
 					'class' => 'ct-checkbox',
 					'name' => 'gdprconfirm',
 					'type' => 'checkbox',
 					'required' => true
 				]
 			);
-		?><label for="gdprconfirm<?php echo esc_attr($prefix) ?>"><?php echo wp_kses_post($message) ?></label>
+		?><label for="<?php echo esc_attr($input_id) ?>"><?php echo wp_kses_post($message) ?></label>
 	</p>
 
 	<?php

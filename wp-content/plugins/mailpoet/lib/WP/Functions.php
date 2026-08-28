@@ -235,6 +235,15 @@ class Functions {
     return get_comment_meta($commentId, $key, $single);
   }
 
+  /**
+   * @param int|null $blogId
+   * @return string
+   */
+  public function getBlogPrefix($blogId = null) {
+    global $wpdb;
+    return $wpdb->get_blog_prefix($blogId);
+  }
+
   public function getCurrentScreen() {
     return get_current_screen();
   }
@@ -329,6 +338,14 @@ class Functions {
 
   public function getPostType($post = null) {
     return get_post_type($post);
+  }
+
+  /**
+   * @param string $status
+   * @return object|null
+   */
+  public function getPostStatusObject($status) {
+    return get_post_status_object($status);
   }
 
   public function getPosts(?array $args = null) {
@@ -588,6 +605,13 @@ class Functions {
     wp_enqueue_media($args);
   }
 
+  /**
+   * @return array|false
+   */
+  public function wpEnqueueCodeEditor(array $args) {
+    return wp_enqueue_code_editor($args);
+  }
+
   public function wpEnqueueScript($handle, $src = '', array $deps = [], $ver = false, $inFooter = false) {
     return wp_enqueue_script($handle, $src, $deps, $ver, $inFooter);
   }
@@ -635,6 +659,10 @@ class Functions {
 
   public function wpGetThemeSupport($feature = null, $args = null) {
     return get_theme_support($feature, $args);
+  }
+
+  public function wpGetGlobalSettings(array $path = [], array $context = []) {
+    return wp_get_global_settings($path, $context);
   }
 
   public function wpInsertPost(array $postarr, $wpError = false) {
@@ -711,6 +739,15 @@ class Functions {
 
   public function wpTrimWords($text, $numWords = 55, $more = null) {
     return wp_trim_words($text, $numWords, $more);
+  }
+
+  public function wpCacheSet($key, $data, $group = '', $expire = 0) {
+    // phpcs:ignore WordPressVIPMinimum.Performance.LowExpiryCacheTime.CacheTimeUndetermined -- generic wrapper, expiry is controlled by callers.
+    return wp_cache_set($key, $data, $group, $expire);
+  }
+
+  public function wpCacheDelete($key, $group = '') {
+    return wp_cache_delete($key, $group);
   }
 
   public function wpUploadDir($time = null, $createDir = true, $refreshCache = false) {

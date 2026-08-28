@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 
 abstract class UpdraftPlus_BackupModule {
 
@@ -16,6 +16,14 @@ abstract class UpdraftPlus_BackupModule {
 	 * @var bool
 	 */
 	protected $is_connection_successful = false;
+
+	/**
+	 * Input and option field mappings with default values and supported contexts.
+	 * N.B. This variable/property would normally be over-ridden by the child.
+	 *
+	 * @var array
+	 */
+	protected $input_option_field_mappings = array();
 	
 	/**
 	 * Store options (within this class) for this remote storage module. There is also a parameter for saving to the permanent storage (i.e. database).
@@ -67,12 +75,19 @@ abstract class UpdraftPlus_BackupModule {
 	
 	/**
 	 * Retrieve default options for this remote storage module.
-	 * This method would normally be over-ridden by the child.
 	 *
-	 * @return Array - an array of options
+	 * @return array - an array of options
 	 */
 	public function get_default_options() {
-		return array();
+		$options = $this->get_input_option_mappings('option');
+
+		$defaults = array();
+
+		foreach ($options as $key => $option) {
+			$defaults[$key] = $option['default_value'];
+		}
+
+		return $defaults;
 	}
 
 	/**
@@ -694,7 +709,7 @@ abstract class UpdraftPlus_BackupModule {
 		if (method_exists($this, 'do_authenticate_storage')) {
 			$this->do_authenticate_storage($instance_id);
 		} else {
-			error_log($this->get_id().": module does not have an authenticate storage method (coding bug)");
+			UpdraftPlus_Manipulation_Functions::error_log($this->get_id().": module does not have an authenticate storage method (coding bug)");
 		}
 	}
 	
@@ -785,7 +800,7 @@ abstract class UpdraftPlus_BackupModule {
 			return $this->do_complete_authentication($state, $code, true);
 		} else {
 			$message = $this->get_id().": module does not have an complete authentication method (coding bug)";
-			error_log($message);
+			UpdraftPlus_Manipulation_Functions::error_log($message);
 			return $message;
 		}
 	}
@@ -918,5 +933,98 @@ abstract class UpdraftPlus_BackupModule {
 	 */
 	public function is_connection_successful() {
 		return $this->is_connection_successful;
+	}
+
+	/**
+	 * Transform template properties into field array structures.
+	 *
+	 * Builds an array of field definitions based on the template properties
+	 * and configured fields. Supports text, password, and dropdown field
+	 * types, including placeholders, tooltips, and options.
+	 *
+	 * This method is already onboarding-oriented; it processes all properties in the template that were added using the naming convention starting with the 'input_' prefix.
+	 * Format: "input_{fieldName}_{attribute}"
+	 * fieldName or inputName refers to data added in the $input_option_field_mappings class variable in each remote storage module
+	 * attribute is essential metadata accompanying a field, defining its characteristics or behaviour. The list of supported attributes:
+	 * id, default, type, label, placeholder, prefix, tooltip, option_labels
+	 *
+	 * NOTE: Not all variables in the template properties consistently follow the naming convention/format, so mapping might be necessary to avoid introducing new translation strings and/or redundancies.
+	 *
+	 * @return array List of field definitions.
+	 */
+	public function transform_template_properties_to_fields_structure() {
+		$fields = array();
+		$template_property_input_mappings = $this->get_input_option_mappings('input');
+
+		if (empty($template_property_input_mappings)) return $fields;
+
+		$template_properties = $this->get_template_properties();
+
+		foreach ($template_property_input_mappings as $field_name => $option) {
+			$field = array(
+				'id' => $field_name,
+				'default' => $option['default_value'],
+				'type' => 'text',
+			);
+
+			if (!isset($option['template_property_input_mapping'])) $option['template_property_input_mapping'] = $field_name;
+			$prefix = 'input_'.$option['template_property_input_mapping'].'_';
+
+			if (isset($template_properties[$prefix.'type'])) $field['type'] = $template_properties[$prefix.'type'];
+
+			switch ($field['type']) {
+				case 'password':
+					$field['show_forgot_password'] = false;
+					break;
+				case 'number':
+					if (isset($template_properties[$prefix.'min_value'])) $field['min'] = $template_properties[$prefix.'min_value'];
+					if (isset($template_properties[$prefix.'max_value'])) $field['max'] = $template_properties[$prefix.'max_value'];
+					break;
+			}
+
+			if (isset($template_properties[$prefix.'label'])) $field['label'] = $template_properties[$prefix.'label'];
+
+			if (isset($template_properties[$prefix.'placeholder'])) $field['placeholder'] = $template_properties[$prefix.'placeholder'];
+
+			if (isset($template_properties[$prefix.'prefix'])) $field['prefix'] = $template_properties[$prefix.'prefix'];
+
+			if (isset($template_properties[$prefix.'tooltip'])) $field['tooltip'] = array('text' => wp_kses_post($template_properties[$prefix.'tooltip']));
+
+			if (isset($template_properties[$prefix.'option_labels'])) {
+				$field['type'] = 'dropdown';
+				$options = array();
+				foreach ($template_properties[$prefix.'option_labels'] as $key => $value) {
+					$options[] = array(
+						'value' => $key,
+						'label' => $value,
+					);
+				}
+				$field['options'] = $options;
+			}
+
+			if (method_exists($this, 'configure_field_from_legacy')) $field = $this->configure_field_from_legacy($field, $template_properties, $field_name, $option);
+
+			if ($field) $fields[] = $field;
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Retrieve field mappings, optionally filters mappings by context.
+	 *
+	 * @param string $context Optional. Context name used to filter mappings.
+	 *
+	 * @return array
+	 */
+	public function get_input_option_mappings($context = '') {
+		if (empty($context)) return $this->input_option_field_mappings;
+		$filtered_mappings = array();
+
+		foreach ($this->input_option_field_mappings as $key => $mapping) {
+			if (in_array($context, $mapping['contexts'])) $filtered_mappings[$key] = $mapping;
+		}
+
+		return $filtered_mappings;
 	}
 }

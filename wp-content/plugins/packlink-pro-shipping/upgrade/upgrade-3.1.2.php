@@ -9,6 +9,11 @@
 use Packlink\WooCommerce\Components\Utility\Database;
 
 //@codingStandardsIgnoreStart
+
+// Guard the function definition so this file can be safely included more than once
+// per request (see WordPress Multisite update loop in Plugin::update()). Without this
+// the second blog's include fatals with "Cannot redeclare update_saved_parcel()".
+if ( ! function_exists( 'update_saved_parcel' ) ) {
 /**
  * @param wpdb   $db
  * @param string $table_name
@@ -39,6 +44,7 @@ function update_saved_parcel( $db, $table_name ) {
 		}
 	}
 }
+} // end: if ( ! function_exists( 'update_saved_parcel' ) )
 
 global $wpdb;
 $db = $wpdb;

@@ -60,6 +60,9 @@ class Renderer {
  'padding-top' => $email_styles['spacing']['padding']['top'] ?? '0px',
  'padding-bottom' => $email_styles['spacing']['padding']['bottom'] ?? '0px',
  'font-family' => $email_styles['typography']['fontFamily'] ?? 'inherit',
+ 'font-weight' => $email_styles['typography']['fontWeight'] ?? 'inherit',
+ 'font-style' => $email_styles['typography']['fontStyle'] ?? 'inherit',
+ 'letter-spacing' => $email_styles['typography']['letterSpacing'] ?? 'normal',
  'line-height' => $email_styles['typography']['lineHeight'] ?? '1.5',
  'font-size' => $email_styles['typography']['fontSize'] ?? 'inherit',
  'direction' => $rendering_context->get_text_direction(),
@@ -95,6 +98,16 @@ class Renderer {
  } finally {
  $this->content_renderer->restore_rendering_context( $previous_rendering_context );
  }
+ }
+ public function render_from_content( string $content, string $template_slug, string $subject, string $pre_header, string $language = 'en', string $meta_robots = '' ): array {
+ $synthetic_post = new \WP_Post(
+ (object) array(
+ 'ID' => 0,
+ 'post_status' => 'publish',
+ 'post_content' => $content,
+ )
+ );
+ return $this->render( $synthetic_post, $subject, $pre_header, $language, $meta_robots, $template_slug );
  }
  private function inline_css_styles( $template ) {
  return $this->css_inliner->from_html( $template )->inline_css()->render();

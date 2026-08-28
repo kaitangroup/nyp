@@ -1,5 +1,6 @@
 import { createElement } from '@wordpress/element'
 import { RichText } from '@wordpress/block-editor'
+import { useInstanceId } from '@wordpress/compose'
 import { __ } from 'ct-i18n'
 import { useEffect } from 'react'
 
@@ -8,6 +9,8 @@ const { has_cookies_checkbox } = window.blc_newsletter_data
 const cookies_checkbox_enabled = !!parseInt(has_cookies_checkbox)
 
 const Preview = ({ attributes, buttonStyles, setAttributes }) => {
+	const gdprCheckboxId = `gdprconfirm_newsletter-${useInstanceId(Preview)}`
+
 	const {
 		newsletter_subscribe_view_type,
 		newsletter_subscribe_name_label,
@@ -103,13 +106,13 @@ const Preview = ({ attributes, buttonStyles, setAttributes }) => {
 							value="yes"
 						/>
 						<input
-							id="gdprconfirm_newsletter-subscribe"
+							id={gdprCheckboxId}
 							className="ct-checkbox"
 							name="gdprconfirm"
 							type="checkbox"
 							required=""
 						/>
-						<label for="gdprconfirm_newsletter-subscribe">
+						<label htmlFor={gdprCheckboxId}>
 							I accept the{' '}
 							<a href="/privacy-policy">Privacy Policy</a>
 						</label>

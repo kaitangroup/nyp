@@ -8,7 +8,7 @@ jQuery(function($) {
 		// Create the dialog HTML for ThickBox
 		var html = '<div id="' + selector + '" style="display:none;">' +
 			'<div id="updraft-deinstall-thickbox-v1-content"></div>' +
-			'<div id="plugin-information-footer">' +
+			'<div id="plugin-information-footer" class="updraft-deinstall-footer">' +
 				'<button class="updraft-deinstall-confirm-btn button button-primary">' + data.deactivate_label + '</button>' +
 				'<button class="updraft-deinstall-cancel-btn right button">' + data.cancel_label + '</button>' +
 			'</div>' +

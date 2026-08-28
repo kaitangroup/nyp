@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Blocksy Companion Pro package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-01-28 17:04:59+0000\n"
+"PO-Revision-Date: 2026-06-02 10:48:47+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1211,7 +1211,7 @@ msgstr "4 étoiles"
 #: framework/premium/extensions/woocommerce-extra/features/filters/filter-types/rating.php:120
 #: framework/premium/extensions/woocommerce-extra/static/js/blocks/woocommerce-filters/rating-filter/Preview.js:25
 msgid "5 stars"
-msgstr "5 étoiles"
+msgstr "5 ��toiles"
 
 #: framework/premium/extensions/woocommerce-extra/features/filters/filter-types/status.php:147
 msgid "On sale"
@@ -4470,7 +4470,7 @@ msgstr "Badge Mis en avant"
 #: framework/premium/extensions/woocommerce-extra/features/custom-badges/feature.php:168,
 #: framework/premium/extensions/woocommerce-extra/features/custom-badges/options.php:82
 msgid "HOT"
-msgstr ""
+msgstr "RÉCENT"
 
 #: framework/premium/extensions/woocommerce-extra/features/custom-badges/feature.php:202,
 #: framework/premium/extensions/woocommerce-extra/features/custom-badges/options.php:35
@@ -4648,7 +4648,7 @@ msgstr "Téléverser une image (facultatif)"
 
 #: framework/premium/extensions/woocommerce-extra/features/advanced-reviews/options.php:11
 msgid "Reviews Order"
-msgstr ""
+msgstr "Avis commande"
 
 #: framework/premium/extensions/woocommerce-extra/features/advanced-reviews/options.php:18
 msgid "Oldest First"
@@ -7196,7 +7196,7 @@ msgstr "WP head"
 #: framework/premium/features/content-blocks/hooks-manager.php:32,
 #: framework/premium/features/content-blocks/hooks-manager.php:41
 msgid "Head"
-msgstr ""
+msgstr "En-tête"
 
 #: framework/premium/features/content-blocks/hooks-manager.php:20
 msgid "WP head start"
@@ -7475,7 +7475,7 @@ msgstr "Après le contenu principal"
 
 #: framework/premium/features/content-blocks/hooks-manager.php:596
 msgid "WooCommerce Global"
-msgstr ""
+msgstr "Global WooCommerce"
 
 #: framework/premium/features/content-blocks/hooks-manager.php:601
 msgid "Archive description"

@@ -535,7 +535,7 @@ msgstr "- Odaberi -"
 #. translators: %s is the author's display name.
 #: framework/features/demo-install/wp-importer.php:476
 msgid "Failed to create new user for %s. Their posts will be attributed to the current user."
-msgstr "Nije uspjelo stvaranje novog korisnika za %s. Njihovi objavljeni ��lanci bit će pripisani trenutnom korisniku."
+msgstr "Nije uspjelo stvaranje novog korisnika za %s. Njihovi objavljeni članci bit će pripisani trenutnom korisniku."
 
 #. translators: %s is the category slug.
 #: framework/features/demo-install/wp-importer.php:540

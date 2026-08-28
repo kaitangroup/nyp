@@ -184,6 +184,19 @@ class Shop_Helper {
 	}
 
 	/**
+	 * Returns a region-qualified locale (e.g. "en-GB") for the Packlink public tracking
+	 * page request, which requires a mandatory locale. Falls back to "en-GB" when the
+	 * current locale has no region part.
+	 *
+	 * @return string
+	 */
+	public static function get_tracking_locale() {
+		$locale = str_replace( '_', '-', get_user_locale() );
+
+		return false !== strpos( $locale, '-' ) ? $locale : 'en-GB';
+	}
+
+	/**
 	 * Retrieves admin user data.
 	 *
 	 * @param int $user_id Admin user id.

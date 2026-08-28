@@ -20,6 +20,7 @@ use MailPoet\Newsletter\Sending\ScheduledTasksRepository;
 use MailPoet\Newsletter\Sending\SendingQueuesRepository;
 use MailPoet\Settings\SettingsController;
 use MailPoet\Settings\TrackingConfig;
+use MailPoet\Subscribers\TrackingConsentController;
 use MailPoet\UnexpectedValueException;
 use MailPoet\Util\License\Features\Subscribers as SubscribersFeature;
 use MailPoet\WP\Functions as WPFunctions;
@@ -68,6 +69,9 @@ class NewsletterResendController {
   /** @var TrackingConfig */
   private $trackingConfig;
 
+  /** @var TrackingConsentController */
+  private $trackingConsentController;
+
   public function __construct(
     NewsletterSaveController $newsletterSaveController,
     NewsletterDeleteController $newsletterDeleteController,
@@ -80,7 +84,8 @@ class NewsletterResendController {
     SettingsController $settings,
     SubscribersFeature $subscribersFeature,
     MailerFactory $mailerFactory,
-    TrackingConfig $trackingConfig
+    TrackingConfig $trackingConfig,
+    TrackingConsentController $trackingConsentController
   ) {
     $this->newsletterSaveController = $newsletterSaveController;
     $this->newsletterDeleteController = $newsletterDeleteController;
@@ -94,6 +99,7 @@ class NewsletterResendController {
     $this->subscribersFeature = $subscribersFeature;
     $this->mailerFactory = $mailerFactory;
     $this->trackingConfig = $trackingConfig;
+    $this->trackingConsentController = $trackingConsentController;
   }
 
   /**
@@ -257,21 +263,28 @@ class NewsletterResendController {
   private function getNonOpenerIds(NewsletterEntity $newsletter): array {
     $statisticsNewsletterTable = $this->entityManager->getClassMetadata(StatisticsNewsletterEntity::class)->getTableName();
     $statisticsOpenTable = $this->entityManager->getClassMetadata(StatisticsOpenEntity::class)->getTableName();
+    $subscribersTable = $this->entityManager->getClassMetadata(SubscriberEntity::class)->getTableName();
 
     $connection = $this->entityManager->getConnection();
 
     $result = $connection->executeQuery(
       "SELECT DISTINCT sn.subscriber_id
        FROM $statisticsNewsletterTable sn
+       INNER JOIN $subscribersTable s
+         ON s.id = sn.subscriber_id
        LEFT JOIN $statisticsOpenTable so
          ON so.newsletter_id = sn.newsletter_id
          AND so.subscriber_id = sn.subscriber_id
        WHERE sn.newsletter_id = ?
-         AND so.id IS NULL",
+         AND so.id IS NULL
+         AND s.tracking_consent != 'denied'
+         AND (? = 1 OR s.tracking_consent != 'unknown')",
       [
         $newsletter->getId(),
+        $this->trackingConsentController->shouldTrackUnknownConsent() ? 1 : 0,
       ],
       [
+        ParameterType::INTEGER,
         ParameterType::INTEGER,
       ]
     );

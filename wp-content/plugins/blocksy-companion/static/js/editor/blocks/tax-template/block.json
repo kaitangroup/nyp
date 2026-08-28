@@ -56,6 +56,7 @@
 
 		"has_slideshow",
 		"has_slideshow_arrows",
+		"has_slideshow_pills",
 		"has_slideshow_autoplay",
 		"has_slideshow_autoplay_speed",
 		"has_pagination"

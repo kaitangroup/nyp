@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "blocksy/widgets-wrapper",
+	"supports": {
+		"className": false,
+		"spacing": {
+			"margin": true,
+			"__experimentalDefaultControls": {
+				"margin": true
+			}
+		}
+	}
+}

@@ -98,6 +98,8 @@ class Manage {
     if (!is_array($subscriberData)) {
       $subscriberData = [];
     }
+    // Never trust posted method/copy: stamp them server-side from the actual checkbox state.
+    unset($subscriberData['tracking_consent_method'], $subscriberData['tracking_consent_copy']);
     if ($this->hasInvalidStatus($subscriberData) || $this->hasMalformedLegacySegmentIds($subscriberData)) {
       $this->urlHelper->redirectBack(['error' => true]);
       return;
@@ -115,7 +117,23 @@ class Manage {
             && $subscriber instanceof SubscriberEntity
             && $subscriber->getStatus() === SubscriberEntity::STATUS_SUBSCRIBED
           );
-          $subscriber = $this->subscriberSaveController->createOrUpdate($subscriberData, $subscriber);
+          if (array_key_exists('tracking_consent', $subscriberData)) {
+            $postedConsent = (bool)$subscriberData['tracking_consent'];
+            $currentlyGranted = $subscriber->getTrackingConsent() === SubscriberEntity::TRACKING_CONSENT_GRANTED;
+            if ($postedConsent === $currentlyGranted) {
+              // Checkbox state unchanged from what was rendered — don't rewrite consent.
+              // An untouched 'unknown' subscriber must stay 'unknown', not be flipped to
+              // 'denied' just because they saved the manage page for another reason.
+              unset($subscriberData['tracking_consent']);
+            } else {
+              $subscriberData['tracking_consent'] = $postedConsent
+                ? SubscriberEntity::TRACKING_CONSENT_GRANTED
+                : SubscriberEntity::TRACKING_CONSENT_DENIED;
+              $subscriberData['tracking_consent_method'] = SubscriberEntity::TRACKING_CONSENT_METHOD_MANAGE_PAGE;
+              $subscriberData['tracking_consent_copy'] = ManageSubscriptionFormRenderer::getTrackingConsentCopy();
+            }
+          }
+          $subscriber = $this->subscriberSaveController->createOrUpdate($this->filterToEditableFields($subscriberData), $subscriber);
           if ($shouldTrackUnsubscribe) {
             $this->unsubscribesTracker->track(
               (int)$subscriber->getId(),
@@ -178,7 +196,9 @@ class Manage {
         $this->subscriberSegmentRepository->createOrUpdate(
           $subscriber,
           $segment,
-          SubscriberEntity::STATUS_UNSUBSCRIBED
+          SubscriberEntity::STATUS_UNSUBSCRIBED,
+          false,
+          true
         );
       }
     }
@@ -190,9 +210,13 @@ class Manage {
       $this->subscriberSegmentRepository->createOrUpdate(
         $subscriber,
         $segments[$segmentId],
-        SubscriberEntity::STATUS_SUBSCRIBED
+        SubscriberEntity::STATUS_SUBSCRIBED,
+        false,
+        true
       );
     }
+
+    $this->subscribersRepository->recalculateSegmentsCount([(int)$subscriber->getId()]);
 
     $this->sendNotificationsForNewSegments(
       $subscriber,
@@ -230,7 +254,9 @@ class Manage {
       $this->subscriberSegmentRepository->createOrUpdate(
         $subscriber,
         $segments[$segmentId],
-        SubscriberEntity::STATUS_UNSUBSCRIBED
+        SubscriberEntity::STATUS_UNSUBSCRIBED,
+        false,
+        true
       );
     }
 
@@ -238,15 +264,34 @@ class Manage {
       $this->subscriberSegmentRepository->createOrUpdate(
         $subscriber,
         $segments[$segmentId],
-        SubscriberEntity::STATUS_SUBSCRIBED
+        SubscriberEntity::STATUS_SUBSCRIBED,
+        false,
+        true
       );
     }
+
+    $this->subscribersRepository->recalculateSegmentsCount([(int)$subscriber->getId()]);
 
     $this->sendNotificationsForNewSegments(
       $subscriber,
       $isGlobalResubscribe
         ? $this->getCurrentSubscribedSegmentIds($subscriber)
         : array_diff($subscribeIds, $currentSegmentIds)
+    );
+  }
+
+  /**
+   * The manage-subscription form only edits the subscriber's name, email,
+   * global status, and tracking consent. Subscription choices and custom
+   * fields are handled separately. Keep only those fields when saving the
+   * subscriber so any other submitted key is ignored. `status` is already
+   * validated by hasInvalidStatus(); `tracking_consent`/`_method`/`_copy`
+   * are already stamped server-side in onSave().
+   */
+  private function filterToEditableFields(array $subscriberData): array {
+    return array_intersect_key(
+      $subscriberData,
+      array_flip(['email', 'first_name', 'last_name', 'status', 'tracking_consent', 'tracking_consent_method', 'tracking_consent_copy'])
     );
   }
 

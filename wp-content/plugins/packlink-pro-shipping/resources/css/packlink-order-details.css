@@ -58,6 +58,7 @@
 
 #packlink-shipping-modal .pl-button-view {
 	float: left;
+	margin-bottom: 1em;
 }
 
 #packlink-shipping-modal button.button.button-primary {
@@ -67,4 +68,144 @@
 #packlink-shipping-modal .pl-button-view.pl-carrier-button {
 	float: right;
 	margin-right: 20px;
+}
+
+#packlink-shipping-modal .order_actions,
+#packlink-shipping-modal .order_actions li.wide {
+	overflow: visible;
+}
+
+/* overflow:visible (needed for the documents dropdown) removes WooCommerce's
+   float containment, letting floated buttons escape the box — clear them here. */
+#packlink-shipping-modal .order_actions li.wide::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+#packlink-shipping-modal .pl-documents-section {
+	clear: both;
+	margin-top: 1.33em;
+	border-top: 1px solid #e0e0e0;
+	padding-top: 1em;
+	overflow: visible;
+}
+
+#packlink-shipping-modal .pl-documents-section h4 {
+	margin: 0 0 4px;
+}
+
+#packlink-shipping-modal .pl-documents-subtitle {
+	margin: 0 0 10px;
+	color: #666;
+	font-size: 12px;
+}
+
+#packlink-shipping-modal .pl-document-dropdown {
+	display: inline-block;
+	position: relative;
+}
+
+#packlink-shipping-modal .pl-doc-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+#packlink-shipping-modal .pl-dropdown-arrow {
+	font-size: 10px;
+	line-height: 1;
+}
+
+#packlink-shipping-modal .pl-dropdown-menu {
+	position: absolute;
+	z-index: 100;
+	top: 100%;
+	left: 0;
+	min-width: 100%;
+	background: #fff;
+	border: 1px solid #ccc;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+	display: none;
+	margin-top: 2px;
+}
+
+#packlink-shipping-modal .pl-dropdown-menu.pl-open {
+	display: block;
+}
+
+#packlink-shipping-modal .pl-dropdown-item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 14px;
+	color: #2271b1;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+#packlink-shipping-modal .pl-dropdown-item:hover {
+	background: #f1f1f1;
+	color: #135e96;
+}
+
+#packlink-shipping-modal .pl-dropdown-item .dashicons,
+.pl-documents-section .pl-dropdown-item .dashicons,
+.pl-documents-section .pl-doc-btn .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Documents dropdown rendered in the order-details meta box (outside the modal). */
+.pl-documents-section .pl-dropdown-item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+/* Dropdown trigger button (shipping-label icon + type label + arrow). */
+.pl-documents-section .pl-doc-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+/* Document sections (shipping label / customs label): a heading above a Download (primary) +
+   Print button pair, matching the order-details mock-up. No dividers between the info rows and
+   the label sections — the separator line belongs only before the View button. */
+#packlink-shipping-modal .order_actions li.wide {
+	border: 0;
+}
+
+#packlink-shipping-modal .pl-document-section {
+	clear: both;
+	margin: 0 0 14px;
+}
+
+#packlink-shipping-modal .pl-document-section h4 {
+	margin: 0 0 6px;
+}
+
+#packlink-shipping-modal .pl-document-section .pl-doc-button {
+	float: none;
+	margin: 0 10px 0 0;
+}
+
+/* Gray separator line + spacing before "View on Packlink PRO" — the same 1px #ddd line
+   WooCommerce draws between .order_actions rows. */
+#packlink-shipping-modal .pl-view-actions {
+	clear: both;
+	margin-top: 16px;
+	padding-top: 16px;
+	border-top: 1px solid #ddd;
+}
+
+#packlink-shipping-modal .pl-view-actions .pl-button-view {
+	float: none;
+	margin: 0;
 }

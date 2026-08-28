@@ -24,15 +24,20 @@ class InactiveSubscribersController {
   /** @var EntityManager */
   private $entityManager;
 
+  /** @var TrackingConsentController */
+  private $trackingConsentController;
+
   public function __construct(
-    EntityManager $entityManager
+    EntityManager $entityManager,
+    TrackingConsentController $trackingConsentController
   ) {
     $this->entityManager = $entityManager;
+    $this->trackingConsentController = $trackingConsentController;
   }
 
-  public function markInactiveSubscribers(int $daysToInactive, int $batchSize, ?int $startId = null, ?int $unopenedEmails = self::UNOPENED_EMAILS_THRESHOLD) {
+  public function markInactiveSubscribers(int $daysToInactive, int $startId, int $endId, ?int $unopenedEmails = self::UNOPENED_EMAILS_THRESHOLD) {
     $thresholdDate = $this->getThresholdDate($daysToInactive);
-    return $this->deactivateSubscribers($thresholdDate, $batchSize, $startId, $unopenedEmails);
+    return $this->deactivateSubscribers($thresholdDate, $startId, $endId, $unopenedEmails);
   }
 
   public function markActiveSubscribers(int $daysToInactive, int $batchSize): int {
@@ -59,7 +64,7 @@ class InactiveSubscribersController {
   /**
    * @return int
    */
-  private function deactivateSubscribers(Carbon $thresholdDate, int $batchSize, ?int $startId = null, ?int $unopenedEmails = self::UNOPENED_EMAILS_THRESHOLD) {
+  private function deactivateSubscribers(Carbon $thresholdDate, int $startId, int $endId, ?int $unopenedEmails = self::UNOPENED_EMAILS_THRESHOLD) {
     $subscribersTable = $this->entityManager->getClassMetadata(SubscriberEntity::class)->getTableName();
     $scheduledTasksTable = $this->entityManager->getClassMetadata(ScheduledTaskEntity::class)->getTableName();
     $scheduledTaskSubscribersTable = $this->entityManager->getClassMetadata(ScheduledTaskSubscriberEntity::class)->getTableName();
@@ -89,8 +94,6 @@ class InactiveSubscribersController {
     }
 
     // Select subscribers who received at least a number of emails after threshold date and subscribed before that
-    $startId = (int)$startId;
-    $endId = $startId + $batchSize;
     $lifetimeEmailsThreshold = self::LIFETIME_EMAILS_THRESHOLD;
     $inactiveSubscriberIdsTmpTable = 'inactive_subscriber_ids';
     $connection->executeQuery(
@@ -102,8 +105,10 @@ class InactiveSubscribersController {
         JOIN {$processedTaskIdsTable} task_ids ON task_ids.id = sts.task_id
       WHERE s.last_subscribed_at < :thresholdDate
         AND s.status = :status
+        AND s.tracking_consent != 'denied'
+        AND (:trackUnknown = 1 OR s.tracking_consent != 'unknown')
         AND s.id >= :startId
-        AND s.id < :endId
+        AND s.id <= :endId
         AND s.email_count >= {$lifetimeEmailsThreshold}
       GROUP BY s.id
       HAVING count(s.id) >= :unopenedEmailsThreshold
@@ -111,6 +116,7 @@ class InactiveSubscribersController {
       [
         'thresholdDate' => $thresholdDateIso,
         'status' => SubscriberEntity::STATUS_SUBSCRIBED,
+        'trackUnknown' => $this->trackingConsentController->shouldTrackUnknownConsent() ? 1 : 0,
         'startId' => $startId,
         'endId' => $endId,
         'unopenedEmailsThreshold' => $unopenedEmails,

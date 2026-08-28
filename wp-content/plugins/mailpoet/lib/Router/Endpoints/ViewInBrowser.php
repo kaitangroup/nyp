@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) exit;
 
 use MailPoet\Config\AccessControl;
 use MailPoet\Newsletter\ViewInBrowser\ViewInBrowserController;
+use MailPoet\Util\ThirdPartyOutput;
 use MailPoet\WP\Functions as WPFunctions;
 
 class ViewInBrowser {
@@ -38,6 +39,7 @@ class ViewInBrowser {
 
   private function displayNewsletter($result) {
     if ($result) {
+      ThirdPartyOutput::preventHtmlRewriting();
       header('Content-Type: text/html; charset=utf-8');
       // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
       echo $result;

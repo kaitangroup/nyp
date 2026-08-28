@@ -91,6 +91,13 @@ class Logger_Service extends Singleton implements LoggerAdapter {
 		}
 
 		$filename = self::get_log_file();
+		// Ensure the log directory exists before writing. On Multisite the per-site
+		// log folder (uploads/sites/<id>/packlink-logs) may not have been created yet
+		// when a message is logged, which would otherwise emit an fopen() warning.
+		$dir = dirname( $filename );
+		if ( ! is_dir( $dir ) ) {
+			wp_mkdir_p( $dir );
+		}
 		if ( ( $log = fopen( $filename, 'ab+' ) ) !== false ) {
 			fwrite( $log, $message );
 			fclose( $log );

@@ -125,6 +125,7 @@ function blocksy_companion_ext_newsletter_subscribe_output_form($args = []) {
 	}
 
 	$fields_number = '2';
+	$gdpr_checkbox_id_suffix = substr(blocksy_rand_md5(), 0, 3);
 
 	if ($has_name) {
 		$fields_number = '3';
@@ -197,9 +198,12 @@ function blocksy_companion_ext_newsletter_subscribe_output_form($args = []) {
 				</button>
 			</div>
 
-			<?php if (function_exists('blocksy_ext_cookies_checkbox')) {
+			<?php if (function_exists('blocksy_companion_ext_cookies_checkbox')) {
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo blocksy_ext_cookies_checkbox('subscribe');
+				echo blocksy_companion_ext_cookies_checkbox(
+					'subscribe',
+					$gdpr_checkbox_id_suffix
+				);
 			} ?>
 
 			<div class="ct-newsletter-subscribe-message"></div>

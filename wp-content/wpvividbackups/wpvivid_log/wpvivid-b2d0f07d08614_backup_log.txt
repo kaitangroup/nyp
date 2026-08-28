@@ -1,0 +1,164 @@
+Log created: 2026-08-20 10:54:18
+Type: backup
+[2026-08-20 10:54:19][notice]Start backing up.
+[2026-08-20 10:54:19][notice]server info fcgi:Off max execution time: 300 wp version:7.0 php version:8.2.33 db version:11.8.6 php ini:safe_mode: memory_limit:512M memory_get_usage:163,96 MB memory_get_peak_usage:164,74 MB extensions:PDO enabled curl enabled zlib enabled   is_multisite:0
+[2026-08-20 10:54:19][notice]Prepare to backup backup_db files.
+[2026-08-20 10:54:19][notice]Start exporting database.
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_ff_scheduled_actions
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_fluentform_entry_details
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_fluentform_forms
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_fluentform_logs
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_gla_attribute_mapping_rules
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_gla_merchant_issues
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_automation_triggers
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_automations
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_forms
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_statistics_bounces
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_packlink_entity
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_wc_category_lookup
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_wpmailsmtp_debug_events
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_wpmailsmtp_tasks_meta
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_actionscheduler_claims
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_actionscheduler_groups
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_fluentform_submission_meta
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_gla_shipping_times
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_links
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_automation_versions
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_custom_fields
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_dynamic_segment_filters
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_feature_flags
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_log
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_migrations
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_newsletter_option
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_newsletter_option_fields
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_newsletter_posts
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_newsletter_segment
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_scheduled_task_subscribers
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_settings
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_statistics_forms
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_subscriber_custom_field
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_subscriber_ips
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_tags
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_user_agents
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_mailpoet_user_flags
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_term_relationships
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_wc_product_download_directories
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_wc_rate_limits
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_wc_reserved_stock
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_wc_tax_rate_classes
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_wc_webhooks
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_wcpdf_invoice_number
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_wcpdf_packing_slip_number
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_woocommerce_attribute_taxonomies
+[2026-08-20 10:54:19][notice]Preparing to dump table nypwp_woocommerce_log
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_order_items
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_payment_tokens
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_shipping_zones
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_commentmeta
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_fluentform_form_analytics
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_gla_shipping_rates
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_automation_run_subjects
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_segments
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_sending_queues
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_statistics_newsletters
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_stats_notifications
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_subscriber_segment
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_subscriber_tag
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_term_taxonomy
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_termmeta
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_terms
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_customer_lookup
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_download_log
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_order_coupon_lookup
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_order_operational_data
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_order_tax_lookup
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_product_attributes_lookup
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woo_wallet_transaction_meta
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_api_keys
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_payment_tokenmeta
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_sessions
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_shipping_zone_locations
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_shipping_zone_methods
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_tax_rate_locations
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_fluentform_form_meta
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_gla_merchant_price_benchmarks
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_automation_run_logs
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_newsletter_links
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_newsletters
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_statistics_clicks
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_users
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_admin_note_actions
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_admin_notes
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_fluentform_submissions
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_jetpack_sync_queue
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_scheduled_tasks
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_statistics_unsubscribes
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_order_addresses
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_order_stats
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_order_itemmeta
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_tax_rates
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_automation_runs
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_statistics_opens
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_statistics_woocommerce_purchases
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_usermeta
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_order_product_lookup
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woo_wallet_transactions
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woocommerce_downloadable_product_permissions
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_woo_wallet_referrals
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_postmeta
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_product_meta_lookup
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_orders
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_comments
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_mailpoet_subscribers
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_gla_budget_recommendations
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_wc_orders_meta
+[2026-08-20 10:54:20][notice]Preparing to dump table nypwp_actionscheduler_logs
+[2026-08-20 10:54:21][notice]Preparing to dump table nypwp_actionscheduler_actions
+[2026-08-20 10:54:21][notice]Preparing to dump table nypwp_mailpoet_newsletter_templates
+[2026-08-20 10:54:21][notice]Preparing to dump table nypwp_options
+[2026-08-20 10:54:21][notice]Preparing to dump table nypwp_posts
+[2026-08-20 10:54:21][notice]Exporting database finished.
+[2026-08-20 10:54:21][notice]Start compressing database
+[2026-08-20 10:54:21][notice]Prepare to zip file. file: staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_db.sql
+[2026-08-20 10:54:21][notice]Adding zip files completed.staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_db.part001.zip, filesize: 831,66 KB
+[2026-08-20 10:54:21][notice]Compressing database completed
+[2026-08-20 10:54:21][notice]Backing up backup_db completed.
+[2026-08-20 10:54:21][notice]Prepare to backup backup_themes files.
+[2026-08-20 10:54:21][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_themes.part001.zip index:1866
+[2026-08-20 10:54:22][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_themes.part001.zip success. index:1866 file size:15,78 MB
+[2026-08-20 10:54:22][notice]Backing up backup_themes completed.
+[2026-08-20 10:54:22][notice]Prepare to backup backup_plugin files.
+[2026-08-20 10:54:22][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_plugin.part001.zip index:14393
+[2026-08-20 10:54:30][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_plugin.part001.zip success. index:14393 file size:68,57 MB
+[2026-08-20 10:54:31][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_plugin.part002.zip index:30052
+[2026-08-20 10:54:37][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_plugin.part002.zip success. index:30052 file size:52,33 MB
+[2026-08-20 10:54:38][notice]Backing up backup_plugin completed.
+[2026-08-20 10:54:38][notice]Prepare to backup backup_uploads files.
+[2026-08-20 10:54:38][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_uploads.part001.zip index:238
+[2026-08-20 10:54:39][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_uploads.part001.zip success. index:238 file size:68,19 MB
+[2026-08-20 10:54:40][notice]Backing up backup_uploads completed.
+[2026-08-20 10:54:40][notice]Prepare to backup backup_content files.
+[2026-08-20 10:54:40][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_content.part001.zip index:88
+[2026-08-20 10:54:40][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_content.part001.zip success. index:88 file size:1,18 MB
+[2026-08-20 10:54:40][notice]Backing up backup_content completed.
+[2026-08-20 10:54:40][notice]Prepare to backup backup_core files.
+[2026-08-20 10:54:40][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_core.part001.zip index:3511
+[2026-08-20 10:54:43][notice]Compressing zip file:staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_core.part001.zip success. index:3511 file size:17,19 MB
+[2026-08-20 10:54:43][notice]Backing up backup_core completed.
+[2026-08-20 10:54:43][notice]Prepare to backup backup_merge files.
+[2026-08-20 10:54:43][notice]Prepare to zip file. file: staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_db.zip
+[2026-08-20 10:54:43][notice]Adding zip files completed.staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_all.part001.zip, filesize: 793,09 KB
+[2026-08-20 10:54:43][notice]Prepare to zip file. file: staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_themes.zip
+[2026-08-20 10:54:44][notice]Adding zip files completed.staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_all.part001.zip, filesize: 16,26 MB
+[2026-08-20 10:54:44][notice]Prepare to zip file. file: staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_plugin.part001.zip
+[2026-08-20 10:54:45][notice]Adding zip files completed.staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_all.part001.zip, filesize: 80,30 MB
+[2026-08-20 10:54:45][notice]Prepare to zip file. file: staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_plugin.part002.zip
+[2026-08-20 10:54:47][notice]Adding zip files completed.staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_all.part001.zip, filesize: 129,73 MB
+[2026-08-20 10:54:47][notice]Prepare to zip file. file: staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_uploads.zip
+[2026-08-20 10:54:48][notice]Adding zip files completed.staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_all.part001.zip, filesize: 197,77 MB
+[2026-08-20 10:54:48][notice]Prepare to zip file. file: staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_content.zip
+[2026-08-20 10:54:49][notice]Adding zip files completed.staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_all.part001.zip, filesize: 198,94 MB
+[2026-08-20 10:54:49][notice]Prepare to zip file. file: staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_core.zip
+[2026-08-20 10:54:50][notice]Adding zip files completed.staging.nyp-kitchendesign.de_wpvivid-b2d0f07d08614_2026-08-20-10-54_backup_all.part002.zip, filesize: 16,66 MB
+[2026-08-20 10:54:50][notice]Backing up backup_merge completed.
+[2026-08-20 10:54:50][notice]Backup completed.

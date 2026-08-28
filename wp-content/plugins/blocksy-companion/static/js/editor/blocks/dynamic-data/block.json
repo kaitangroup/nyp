@@ -129,6 +129,11 @@
 			"default": "no"
 		},
 
+		"has_image_caption": {
+			"type": "string",
+			"default": "no"
+		},
+
 		"image_hover_effect": {
 			"type": "string",
 			"default": "none"

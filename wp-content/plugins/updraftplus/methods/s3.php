@@ -39,6 +39,39 @@ class UpdraftPlus_BackupModule_s3 extends UpdraftPlus_BackupModule {
 	private $got_with;
 
 	/**
+	 * Input and option field mappings with default values and supported contexts.
+	 *
+	 * @var array
+	 */
+	protected $input_option_field_mappings = array(
+		'accesskey' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'access_key',
+			'contexts' => array('option', 'input'),
+		),
+		'secretkey' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'secret_key',
+			'contexts' => array('option', 'input'),
+		),
+		'path' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'location',
+			'contexts' => array('option', 'input'),
+		),
+		'rrs' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'storage_class',
+			'contexts' => array('option', 'input'),
+		),
+		'server_side_encryption' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'server_encryption',
+			'contexts' => array('option', 'input'),
+		),
+	);
+
+	/**
 	 * Retrieve specific options for this remote storage module
 	 *
 	 * @param Boolean $force_refresh - if set, and if relevant, don't use cached credentials, but get them afresh
@@ -61,21 +94,6 @@ class UpdraftPlus_BackupModule_s3 extends UpdraftPlus_BackupModule {
 	public function get_supported_features() {
 		// This options format is handled via only accessing options via $this->get_options()
 		return array('multi_options', 'config_templates', 'multi_storage', 'conditional_logic');
-	}
-
-	/**
-	 * Retrieve default options for this remote storage module.
-	 *
-	 * @return Array - an array of options
-	 */
-	public function get_default_options() {
-		return array(
-			'accesskey' => '',
-			'secretkey' => '',
-			'path' => '',
-			'rrs' => '',
-			'server_side_encryption' => '',
-		);
 	}
 
 	/**
@@ -1222,14 +1240,18 @@ Check your permissions and credentials.','updraftplus'), 'error');
 			'faqs' => wp_kses('<a href="'.apply_filters("updraftplus_com_link", "https://teamupdraft.com/documentation/updraftplus/topics/cloud-storage/amazon-s3/faqs?utm_source=udp-plugin&utm_medium=referral&utm_campaign=paac&utm_content=amazon-s3-faqs&utm_creative_format=text").'" target="_blank">'.sprintf(__('Other %s FAQs.', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]).'</a>', $this->allowed_html_for_content_sanitisation()),
 			/* translators: %s: Access key type */
 			'input_access_key_label' => sprintf(__('%s access key', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
+			'input_access_key_placeholder' => __('Paste your access key here', 'updraftplus'),
 			/* translators: %s: Secret key type */
 			'input_secret_key_label' => sprintf(__('%s secret key', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
+			'input_secret_key_placeholder' => __('Paste your secret key here', 'updraftplus'),
 			'input_secret_key_type' => apply_filters('updraftplus_admin_secret_field_type', 'password'),
 			/* translators: %s: Location type */
 			'input_location_label' => sprintf(__('%s location', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
 			'input_location_title' => __('Enter only a bucket name or a bucket and path.', 'updraftplus').' '.__('Examples: mybucket, mybucket/mypath', 'updraftplus'),
+			'input_location_prefix' => 's3://',
 			/* translators: %s: Test settings type */
 			'input_test_label' => sprintf(__('Test %s Settings', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
+
 		);
 		return wp_parse_args(apply_filters('updraft_'.$this->get_id().'_template_properties', array()), wp_parse_args($properties, $this->get_persistent_variables_and_methods()));
 	}
@@ -1642,5 +1664,29 @@ Check your permissions and credentials.','updraftplus'), 'error');
 	public function options_exist($opts) {
 		if (is_array($opts) && isset($opts['accesskey']) && '' != $opts['accesskey'] && isset($opts['secretkey'])) return true;
 		return false;
+	}
+	
+	/**
+	 * Customize generated field data using legacy mapping values.
+	 *
+	 * Used by transform_template_properties_to_fields_structure()
+	 * to allow child classes to adjust the generated field structure
+	 * based on legacy data and field mapping requirements.
+	 *
+	 * @param array  $field               Field data.
+	 * @param array  $template_properties Template properties.
+	 * @param string $field_name          Field name.
+	 * @param array  $option              Field mapping option.
+	 *
+	 * @return array
+	 */
+	public function configure_field_from_legacy($field, $template_properties, $field_name, $option) {
+		$prefix = 'input_'.$option['template_property_input_mapping'].'_';
+
+		if (empty($field['tooltip']) && isset($template_properties[$prefix.'title'])) $field['tooltip'] = array('text' => $template_properties[$prefix.'title']);
+
+		if (!class_exists('UpdraftPlus_Addon_S3_Enhanced') && in_array($field_name, array('rrs', 'server_side_encryption'))) $field = array();
+		
+		return $field;
 	}
 }

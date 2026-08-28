@@ -186,7 +186,7 @@ class ConditionsManager {
 		}
 
 		foreach ($sections as $section) {
-			$maybe_rules = blocksy_get_options(
+			$maybe_rules = blocksy_companion_get_options(
 				dirname(__FILE__) . '/conditions/rules/' . $section . '.php',
 				['filter' => $args['filter']],
 				false

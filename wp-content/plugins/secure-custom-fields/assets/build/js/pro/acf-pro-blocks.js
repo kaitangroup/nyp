@@ -32,13 +32,9 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************!*\
   !*** ./assets/src/js/pro/_acf-blocks.js ***!
   \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
 (($, undefined) => {
   // Dependencies.
@@ -244,9 +240,7 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
     // Handle svg HTML.
     if (typeof blockType.icon === 'string' && blockType.icon.substr(0, 4) === '<svg') {
       const iconHTML = blockType.icon;
-      blockType.icon = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Div, {
-        children: iconHTML
-      });
+      blockType.icon = /*#__PURE__*/React.createElement(Div, null, iconHTML);
     }
 
     // Remove icon if empty to allow for default "block".
@@ -319,11 +313,9 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
           wp.data.dispatch('core/editor').unlockPostSaving('acf/block/' + props.clientId);
         };
       }, []);
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(ThisBlockEdit, {
-        ...props
-      });
+      return /*#__PURE__*/React.createElement(ThisBlockEdit, props);
     };
-    blockType.save = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(ThisBlockSave, {});
+    blockType.save = () => /*#__PURE__*/React.createElement(ThisBlockSave, null);
 
     // Add to storage.
     blockTypes[blockType.name] = blockType;
@@ -561,9 +553,7 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
       nodeAttrs[name] = value;
     });
     if ('ACFInnerBlocks' === nodeName) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(ACFInnerBlocks, {
-        ...nodeAttrs
-      });
+      return /*#__PURE__*/React.createElement(ACFInnerBlocks, nodeAttrs);
     }
 
     // Define args for React.createElement().
@@ -612,7 +602,7 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
    */
   class Script extends Component {
     render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+      return /*#__PURE__*/React.createElement("div", {
         ref: el => this.el = el
       });
     }
@@ -670,10 +660,7 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
     const innerBlockProps = useInnerBlocksProps({
       className: className
     }, props);
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-      ...innerBlockProps,
-      children: innerBlockProps.children
-    });
+    return /*#__PURE__*/React.createElement("div", innerBlockProps, innerBlockProps.children);
   }
 
   /**
@@ -727,10 +714,14 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
         // Replace names for JSX counterparts.
         name = getJSXName(name);
 
-        // Convert JSON values.
+        // Convert JSON values. Ignore values that merely start with a
+        // JSON-like character but aren't valid JSON (e.g. an oEmbed
+        // title beginning with "[" or "{").
         const c1 = value.charAt(0);
         if (c1 === '[' || c1 === '{') {
-          value = JSON.parse(value);
+          try {
+            value = JSON.parse(value);
+          } catch (err) {}
         }
 
         // Convert bool values.
@@ -807,9 +798,7 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
       }
     }
     render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockListBlock, {
-        ...this.props
-      });
+      return /*#__PURE__*/React.createElement(BlockListBlock, this.props);
     }
   }, 'withDefaultAttributes');
   wp.hooks.addFilter('editor.BlockListBlock', 'acf/with-default-attributes', withDefaultAttributes);
@@ -821,7 +810,7 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
    * @since	ACF 5.9.0
    */
   function BlockSave() {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(InnerBlocks.Content, {});
+    return /*#__PURE__*/React.createElement(InnerBlocks.Content, null);
   }
 
   /**
@@ -897,27 +886,14 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
       }
 
       // Return template.
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockControls, {
-          children: showToggle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(ToolbarGroup, {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(ToolbarButton, {
-              className: "components-icon-button components-toolbar__control",
-              label: toggleText,
-              icon: toggleIcon,
-              onClick: toggleMode
-            })
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(InspectorControls, {
-          children: mode === 'preview' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-            className: "acf-block-component acf-block-panel",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockForm, {
-              ...this.props
-            })
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockBody, {
-          ...this.props
-        })]
-      });
+      return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(BlockControls, null, showToggle && /*#__PURE__*/React.createElement(ToolbarGroup, null, /*#__PURE__*/React.createElement(ToolbarButton, {
+        className: "components-icon-button components-toolbar__control",
+        label: toggleText,
+        icon: toggleIcon,
+        onClick: toggleMode
+      }))), /*#__PURE__*/React.createElement(InspectorControls, null, mode === 'preview' && /*#__PURE__*/React.createElement("div", {
+        className: "acf-block-component acf-block-panel"
+      }, /*#__PURE__*/React.createElement(BlockForm, this.props))), /*#__PURE__*/React.createElement(BlockBody, this.props));
     }
   }
 
@@ -962,32 +938,21 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
       acf.blockInstances[clientId].has_been_deselected = true;
     }
     if (getBlockVersion(name) > 1) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-        ...useBlockProps({
-          className: additionalClasses
-        }),
-        children: showForm ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockForm, {
-          ...props,
-          index: index
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockPreview, {
-          ...props,
-          index: index
-        })
-      });
+      return /*#__PURE__*/React.createElement("div", useBlockProps({
+        className: additionalClasses
+      }), showForm ? /*#__PURE__*/React.createElement(BlockForm, _extends({}, props, {
+        index: index
+      })) : /*#__PURE__*/React.createElement(BlockPreview, _extends({}, props, {
+        index: index
+      })));
     } else {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-        ...useBlockProps(),
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-          className: "acf-block-component acf-block-body",
-          children: showForm ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockForm, {
-            ...props,
-            index: index
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockPreview, {
-            ...props,
-            index: index
-          })
-        })
-      });
+      return /*#__PURE__*/React.createElement("div", useBlockProps(), /*#__PURE__*/React.createElement("div", {
+        className: "acf-block-component acf-block-body"
+      }, showForm ? /*#__PURE__*/React.createElement(BlockForm, _extends({}, props, {
+        index: index
+      })) : /*#__PURE__*/React.createElement(BlockPreview, _extends({}, props, {
+        index: index
+      }))));
     }
   }
 
@@ -1002,7 +967,7 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
    */
   class Div extends Component {
     render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+      return /*#__PURE__*/React.createElement("div", {
         dangerouslySetInnerHTML: {
           __html: this.props.children
         }
@@ -1160,20 +1125,16 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
           this.setRef(this.state.jsx);
           return this.state.jsx;
         } else {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-            ref: this.setRef,
-            children: this.state.jsx
-          });
+          return /*#__PURE__*/React.createElement("div", {
+            ref: this.setRef
+          }, this.state.jsx);
         }
       }
 
       // Return HTML.
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-        ref: this.setRef,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Placeholder, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Spinner, {})
-        })
-      });
+      return /*#__PURE__*/React.createElement("div", {
+        ref: this.setRef
+      }, /*#__PURE__*/React.createElement(Placeholder, null, /*#__PURE__*/React.createElement(Spinner, null)));
     }
     shouldComponentUpdate({
       index
@@ -1786,18 +1747,13 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
             alignContent: validateAlignment(alignContent)
           });
         }
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockControls, {
-            group: "block",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(AlignmentComponent, {
-              label: acf.__('Change content alignment'),
-              value: validateAlignment(alignContent),
-              onChange: onChangeAlignContent
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(OriginalBlockEdit, {
-            ...this.props
-          })]
-        });
+        return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(BlockControls, {
+          group: "block"
+        }, /*#__PURE__*/React.createElement(AlignmentComponent, {
+          label: acf.__('Change content alignment'),
+          value: validateAlignment(alignContent),
+          onChange: onChangeAlignContent
+        })), /*#__PURE__*/React.createElement(OriginalBlockEdit, this.props));
       }
     };
   }
@@ -1833,17 +1789,12 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
             alignText: validateAlignment(alignText)
           });
         }
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockControls, {
-            group: "block",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(AlignmentToolbar, {
-              value: validateAlignment(alignText),
-              onChange: onChangeAlignText
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(OriginalBlockEdit, {
-            ...this.props
-          })]
-        });
+        return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(BlockControls, {
+          group: "block"
+        }, /*#__PURE__*/React.createElement(AlignmentToolbar, {
+          value: validateAlignment(alignText),
+          onChange: onChangeAlignText
+        })), /*#__PURE__*/React.createElement(OriginalBlockEdit, this.props));
       }
     };
   }
@@ -1876,17 +1827,12 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
             fullHeight
           });
         }
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockControls, {
-            group: "block",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockFullHeightAlignmentControl, {
-              isActive: fullHeight,
-              onToggle: onToggleFullHeight
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(OriginalBlockEdit, {
-            ...this.props
-          })]
-        });
+        return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(BlockControls, {
+          group: "block"
+        }, /*#__PURE__*/React.createElement(BlockFullHeightAlignmentControl, {
+          isActive: fullHeight,
+          onToggle: onToggleFullHeight
+        })), /*#__PURE__*/React.createElement(OriginalBlockEdit, this.props));
       }
     };
   }
@@ -2279,8 +2225,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _inline_editing_toolbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./inline-editing-toolbar */ "./assets/src/js/pro/blocks-v3/components/inline-editing-toolbar.js");
 /* harmony import */ var _popover_wrapper__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./popover-wrapper */ "./assets/src/js/pro/blocks-v3/components/popover-wrapper.js");
 /* harmony import */ var _utils_post_locking__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../utils/post-locking */ "./assets/src/js/pro/blocks-v3/utils/post-locking.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__);
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
  * BlockEdit Component
  * Main component for editing ACF blocks in the Gutenberg editor
@@ -2308,7 +2253,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {React.RefObject} props.inspectorBlockFormRef - Ref to inspector container
  * @param {Function} props.setCurrentBlockFormContainer - Setter for current container
  */
-
 const InspectorBlockFormContainer = ({
   inspectorBlockFormRef,
   setCurrentBlockFormContainer
@@ -2316,7 +2260,7 @@ const InspectorBlockFormContainer = ({
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     setCurrentBlockFormContainer(inspectorBlockFormRef.current);
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+  return /*#__PURE__*/React.createElement("div", {
     ref: inspectorBlockFormRef
   });
 };
@@ -2339,6 +2283,54 @@ const useBlockEditorInspectorSidebarOpen = () => {
   }, []);
   return isOpen;
 };
+
+/**
+ * Converts serialized Google Map field values from JSON strings back into
+ * objects so they aren't double-encoded when the block's data is stored as
+ * a JSON block attribute. Google Map fields keep their value as a JSON
+ * string in a hidden input, which acf.serialize() would otherwise pass
+ * through as a string.
+ *
+ * @param {Object} $form          The block form jQuery element that was serialized.
+ * @param {Object} serializedData The data returned by acf.serialize(); modified in place.
+ * @param {string} clientId       The block client ID.
+ * @return {void}
+ */
+function deserializeGoogleMapValues($form, serializedData, clientId) {
+  const inputPrefix = `acf-block_${clientId}`;
+  $form.find('.acf-field-google-map input[type="hidden"][name]').each(function () {
+    if (this.name.indexOf(inputPrefix) !== 0) {
+      return;
+    }
+
+    // Extract the bracketed key path, e.g. "[field_abc][field_def]" -> [ 'field_abc', 'field_def' ].
+    const keyPath = this.name.slice(inputPrefix.length).match(/([^\[\]])+/g);
+    if (!keyPath) {
+      return;
+    }
+
+    // Walk the serialized data down to the parent of the leaf key.
+    let parent = serializedData;
+    for (let i = 0; i < keyPath.length - 1; i++) {
+      if (parent === null || typeof parent !== 'object') {
+        return;
+      }
+      parent = parent[keyPath[i]];
+    }
+    if (parent === null || typeof parent !== 'object') {
+      return;
+    }
+    const leafKey = keyPath[keyPath.length - 1];
+    if (typeof parent[leafKey] === 'string') {
+      try {
+        const parsedValue = JSON.parse(parent[leafKey]);
+        if (typeof parsedValue === 'object' && parsedValue !== null) {
+          parent[leafKey] = parsedValue;
+        }
+      } catch (err) {}
+    }
+  });
+}
 
 /**
  * Main BlockEdit component wrapper
@@ -2548,23 +2540,43 @@ const BlockEdit = props => {
     if (isInQueryLoop(clientId)) {
       return false;
     }
-    const preloadedBlocks = acf.get('preloadedBlocks');
-    if (!preloadedBlocks || !preloadedBlocks[hash]) {
+    const data = getPreloadedBlockData(hash, clientId, acf.get('preloadedBlocks'));
+    if (!data) {
       acf.debug('Preload failed: not preloaded.');
       return false;
     }
-    const data = preloadedBlocks[hash];
+    acf.debug('Preload successful', data);
+    return data;
+  }
+
+  /**
+   * Returns a copy of a preloaded block entry with the placeholder hash
+   * replaced by the actual client ID.
+   *
+   * Works on a deep clone so the shared preloaded entry is never mutated —
+   * duplicating a block with identical attributes reuses the same hash, and
+   * an in-place replacement would corrupt the entry for the duplicate.
+   *
+   * @param {string} hash            - Attributes hash
+   * @param {string} blockClientId   - Block client ID
+   * @param {Object} preloadedBlocks - The preloaded blocks store
+   * @return {Object|boolean} - Preloaded data or false
+   */
+  function getPreloadedBlockData(hash, blockClientId, preloadedBlocks) {
+    if (!preloadedBlocks || !preloadedBlocks[hash]) {
+      return false;
+    }
+    const data = JSON.parse(JSON.stringify(preloadedBlocks[hash]));
 
     // Replace placeholder client ID with actual client ID
-    data.html = data.html.replaceAll(hash, clientId);
-    data.form = data.form.replaceAll(hash, clientId);
-    if (data?.validation && data?.validation.errors) {
+    data.html = data.html.replaceAll(hash, blockClientId);
+    data.form = data.form.replaceAll(hash, blockClientId);
+    if (data?.validation?.errors) {
       data.validation.errors = data.validation.errors.map(error => {
-        error.input = error.input.replaceAll(hash, clientId);
+        error.input = error.input.replaceAll(hash, blockClientId);
         return error;
       });
     }
-    acf.debug('Preload successful', data);
     return data;
   }
 
@@ -2735,8 +2747,7 @@ const BlockEdit = props => {
       }, 0);
     }, 0);
   }, [currentInlineEditingElement]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(BlockEditInner, {
-    ...props,
+  return /*#__PURE__*/React.createElement(BlockEditInner, _extends({}, props, {
     validationErrors: validationErrors,
     showValidationErrors: showValidationErrors,
     theSerializedAcfData: theSerializedAcfData,
@@ -2768,7 +2779,7 @@ const BlockEdit = props => {
     blockEditorInspectorSidebarOpen: blockEditorInspectorSidebarOpen,
     freezeInlineToolbarDuringReRender: freezeInlineToolbarDuringReRender,
     isFetchingBlock: isFetchingBlock
-  });
+  }));
 };
 
 /**
@@ -2822,7 +2833,18 @@ function BlockEditInner(props) {
   const modalFormContainerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)();
   const [currentFormContainer, setCurrentFormContainer] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)();
   const [canRenderForm, setCanRenderForm] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const [shouldShowModalDoneFallback, setShouldShowModalDoneFallback] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
   const [invisibleBlockFormContainer, setInvisibleBlockFormContainer] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)();
+  const closeBlockFormModal = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
+    setCurrentFormContainer(null);
+    setBlockFormModalOpen(false);
+  }, []);
+  const setModalFormContainer = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(container => {
+    modalFormContainerRef.current = container;
+    if (container && blockFormModalOpen) {
+      setCurrentFormContainer(container);
+    }
+  }, [blockFormModalOpen]);
 
   // Render counter for debugging
   const renderCount = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(0);
@@ -2860,17 +2882,48 @@ function BlockEditInner(props) {
     setInvisibleBlockFormContainer(invisibleContainer);
   }, [blockEditorInspectorSidebarOpen]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
-    if (blockFormModalOpen && modalFormContainerRef?.current) {
-      setCurrentFormContainer(modalFormContainerRef.current);
+    if (blockFormModalOpen) {
       return;
     }
     setCurrentFormContainer(blockEditorInspectorSidebarOpen ? inspectorControlsRef.current : invisibleBlockFormContainer);
-  }, [blockFormModalOpen, modalFormContainerRef]);
+  }, [blockEditorInspectorSidebarOpen, invisibleBlockFormContainer, blockFormModalOpen]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
-    if (blockEditorInspectorSidebarOpen) {
-      if (!blockFormModalOpen) {
-        setCurrentFormContainer(inspectorControlsRef.current);
+    if (!blockFormModalOpen) {
+      return;
+    }
+    const setModalContainer = () => {
+      if (modalFormContainerRef?.current) {
+        setCurrentFormContainer(modalFormContainerRef.current);
       }
+    };
+    setModalContainer();
+    const timeout = setTimeout(setModalContainer, 0);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [blockFormModalOpen]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    if (!blockFormModalOpen) {
+      setShouldShowModalDoneFallback(false);
+      return;
+    }
+    const updateFallbackVisibility = () => {
+      const modal = modalFormContainerRef?.current?.closest('.acf-block-form-modal');
+      const hasHeaderActions = modal?.querySelector('.components-modal__header .components-button');
+      setShouldShowModalDoneFallback(!hasHeaderActions);
+    };
+    updateFallbackVisibility();
+    const timeout = setTimeout(updateFallbackVisibility, 0);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [blockFormModalOpen]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    if (blockFormModalOpen) {
+      return;
+    }
+    if (blockEditorInspectorSidebarOpen) {
+      setCurrentFormContainer(inspectorControlsRef.current);
       return;
     }
     setCurrentFormContainer(invisibleBlockFormContainer);
@@ -2922,6 +2975,7 @@ function BlockEditInner(props) {
     const $form = $(acfFormRef?.current);
     const serializedData = acf.serialize($form, `acf-block_${clientId}`);
     if (serializedData) {
+      deserializeGoogleMapValues($form, serializedData, clientId);
       setTheSerializedAcfData(JSON.stringify(serializedData));
     } else {
       setUserHasInteractedWithForm(false);
@@ -3028,156 +3082,141 @@ function BlockEditInner(props) {
   if (inlineEditingToolbarAnchor && !inlineEditingToolbarAnchor.isConnected) {
     inlineEditingToolbarAnchor = null;
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_block_toolbar_fields__WEBPACK_IMPORTED_MODULE_8__.BlockToolbarFields, {
-      blockToolbarFields: blockToolbarFields,
-      blockFieldInfo: blockFieldInfo,
-      setCurrentBlockFormContainer: setCurrentFormContainer,
-      gutenbergIframeOrDocument: gutenbergIframeOrDocument,
-      setBlockFormModalOpen: setBlockFormModalOpen,
-      blockFormModalOpen: blockFormModalOpen,
-      invisibleBlockFormContainer: invisibleBlockFormContainer,
-      currentInlineEditingElement: currentInlineEditingElement,
-      setCurrentInlineEditingElement: setCurrentInlineEditingElement,
-      currentInlineEditingElementUid: currentInlineEditingElementUid,
-      hideExpandedEditorBtnInToolbar: blockType?.expanded_editor_buttons === false || Array.isArray(blockType?.expanded_editor_buttons) && !blockType?.expanded_editor_buttons.includes('toolbar') || !blockFieldInfo || blockFieldInfo?.length === 0,
-      onNewInlineEditingElementSelected: handleNewInlineEditingElementSelected
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, {
-      children: [blockFieldInfo?.length > 0 && (blockType?.expanded_editor_buttons === true || Array.isArray(blockType?.expanded_editor_buttons) && blockType?.expanded_editor_buttons.includes('sidebar')) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-          className: "acf-blocks-open-expanded-editor-btn",
-          variant: "secondary",
-          onClick: () => {
-            setBlockFormModalOpen(true);
-          },
-          icon: "edit",
-          children: blockType?.expanded_editor_button_text || acf.__('Open Expanded Editor')
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(InspectorBlockFormContainer, {
-        inspectorBlockFormRef: inspectorControlsRef,
-        setCurrentBlockFormContainer: setCurrentFormContainer
-      })]
-    }), portalTarget && canRenderForm && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createPortal)(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_block_form__WEBPACK_IMPORTED_MODULE_5__.BlockForm, {
-        $: $,
-        clientId: clientId,
-        blockFormHtml: blockFormHtml,
-        onChange: function ($form) {
-          const serializedData = acf.serialize($form, `acf-block_${clientId}`);
-          if (serializedData) {
-            setTheSerializedAcfData(JSON.stringify(serializedData));
-          }
-        },
-        validationErrors: validationErrors,
-        showValidationErrors: showValidationErrors,
-        acfFormRef: acfFormRef,
-        userHasInteractedWithForm: userHasInteractedWithForm,
-        attributes: attributes,
-        hideFieldsInSidebar: blockType?.auto_inline_editing && blockType?.hide_fields_in_sidebar === undefined && currentFormContainer === inspectorControlsRef.current || blockType?.hide_fields_in_sidebar && currentFormContainer === inspectorControlsRef.current
-      }), freezeInlineToolbarDuringReRender && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("style", {
-        children: `.acf-inline-editing-toolbar{${freezeInlineToolbarDuringReRender}}`
-      })]
-    }), portalTarget), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
-      children: blockFormModalOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Modal, {
-        className: "acf-block-form-modal",
-        overlayClassName: acf.applyFilters('blocks/expanded_editor_overlay_class', 'acf-expanded-editor-panel-overlay'),
-        isFullScreen: true,
-        title: blockType.title,
-        onRequestClose: () => {
-          if (!isFetchingBlock || validationErrors) {
-            setBlockFormModalOpen(false);
-          }
-        },
-        shouldCloseOnEsc: !isFetchingBlock || validationErrors,
-        isDismissible: false,
-        headerActions: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-          variant: "primary",
-          disabled: isFetchingBlock && !validationErrors,
-          isBusy: isFetchingBlock,
-          onClick: () => {
-            setCurrentFormContainer(null);
-            setBlockFormModalOpen(false);
-          },
-          children: acf.__('Done')
-        }, "done")],
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
-          className: "acf-modal-block-form-container",
-          ref: modalFormContainerRef
-        })
-      })
-    }), inlineEditingToolbarAnchor && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_popover_wrapper__WEBPACK_IMPORTED_MODULE_10__.PopoverWrapper, {
-      focusOnMount: (() => {
-        const activeElement = document.activeElement;
-        return activeElement && activeElement.isContentEditable, false;
-      })(),
-      variant: "unstyled",
-      anchor: inlineEditingToolbarAnchor,
-      className: "acf-inline-editing-toolbar block-editor-block-list__block-popover",
-      placement: "top-start",
-      onClose: event => {
-        // Don't close if clicking toolbar button
-        if (event.key !== 'Escape' && event.target.closest('.acf-toolbar-button')) {
-          return false;
-        }
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(_block_toolbar_fields__WEBPACK_IMPORTED_MODULE_8__.BlockToolbarFields, {
+    blockToolbarFields: blockToolbarFields,
+    blockFieldInfo: blockFieldInfo,
+    setCurrentBlockFormContainer: setCurrentFormContainer,
+    gutenbergIframeOrDocument: gutenbergIframeOrDocument,
+    setBlockFormModalOpen: setBlockFormModalOpen,
+    blockFormModalOpen: blockFormModalOpen,
+    invisibleBlockFormContainer: invisibleBlockFormContainer,
+    currentInlineEditingElement: currentInlineEditingElement,
+    setCurrentInlineEditingElement: setCurrentInlineEditingElement,
+    currentInlineEditingElementUid: currentInlineEditingElementUid,
+    hideExpandedEditorBtnInToolbar: blockType?.expanded_editor_buttons === false || Array.isArray(blockType?.expanded_editor_buttons) && !blockType?.expanded_editor_buttons.includes('toolbar') || !blockFieldInfo || blockFieldInfo?.length === 0,
+    onNewInlineEditingElementSelected: handleNewInlineEditingElementSelected
+  }), /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, blockFieldInfo?.length > 0 && (blockType?.expanded_editor_buttons === true || Array.isArray(blockType?.expanded_editor_buttons) && blockType?.expanded_editor_buttons.includes('sidebar')) && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, null, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+    className: "acf-blocks-open-expanded-editor-btn",
+    variant: "secondary",
+    onClick: () => {
+      setBlockFormModalOpen(true);
+    },
+    icon: "edit"
+  }, blockType?.expanded_editor_button_text || acf.__('Open Expanded Editor'))), /*#__PURE__*/React.createElement(InspectorBlockFormContainer, {
+    inspectorBlockFormRef: inspectorControlsRef,
+    setCurrentBlockFormContainer: setCurrentFormContainer
+  })), portalTarget && canRenderForm && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createPortal)(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(_block_form__WEBPACK_IMPORTED_MODULE_5__.BlockForm, {
+    $: $,
+    clientId: clientId,
+    blockFormHtml: blockFormHtml,
+    onChange: function ($form) {
+      const serializedData = acf.serialize($form, `acf-block_${clientId}`);
+      if (serializedData) {
+        deserializeGoogleMapValues($form, serializedData, clientId);
+        setTheSerializedAcfData(JSON.stringify(serializedData));
+      }
+    },
+    validationErrors: validationErrors,
+    showValidationErrors: showValidationErrors,
+    acfFormRef: acfFormRef,
+    userHasInteractedWithForm: userHasInteractedWithForm,
+    attributes: attributes,
+    hideFieldsInSidebar: blockType?.auto_inline_editing && blockType?.hide_fields_in_sidebar === undefined && currentFormContainer === inspectorControlsRef.current || blockType?.hide_fields_in_sidebar && currentFormContainer === inspectorControlsRef.current
+  }), freezeInlineToolbarDuringReRender && /*#__PURE__*/React.createElement("style", null, `.acf-inline-editing-toolbar{${freezeInlineToolbarDuringReRender}}`)), portalTarget), /*#__PURE__*/React.createElement(React.Fragment, null, blockFormModalOpen && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Modal, {
+    className: "acf-block-form-modal",
+    overlayClassName: acf.applyFilters('blocks/expanded_editor_overlay_class', 'acf-expanded-editor-panel-overlay'),
+    isFullScreen: true,
+    title: blockType.title,
+    onRequestClose: () => {
+      if (!isFetchingBlock || validationErrors) {
+        setBlockFormModalOpen(false);
+      }
+    },
+    shouldCloseOnEsc: !isFetchingBlock || validationErrors,
+    isDismissible: false,
+    headerActions: [/*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+      key: "done",
+      variant: "primary",
+      disabled: isFetchingBlock && !validationErrors,
+      isBusy: isFetchingBlock,
+      onClick: closeBlockFormModal
+    }, acf.__('Done'))]
+  }, shouldShowModalDoneFallback && /*#__PURE__*/React.createElement("div", {
+    className: "acf-block-form-modal__actions"
+  }, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+    className: "acf-block-form-modal__done-button",
+    variant: "primary",
+    disabled: isFetchingBlock && !validationErrors,
+    isBusy: isFetchingBlock,
+    onClick: closeBlockFormModal
+  }, acf.__('Done'))), /*#__PURE__*/React.createElement("div", {
+    className: "acf-modal-block-form-container",
+    ref: setModalFormContainer
+  }))), inlineEditingToolbarAnchor && /*#__PURE__*/React.createElement(_popover_wrapper__WEBPACK_IMPORTED_MODULE_10__.PopoverWrapper, {
+    key: currentContentEditableElement,
+    focusOnMount: (() => {
+      const activeElement = document.activeElement;
+      return activeElement && activeElement.isContentEditable, false;
+    })(),
+    variant: "unstyled",
+    anchor: inlineEditingToolbarAnchor,
+    className: "acf-inline-editing-toolbar block-editor-block-list__block-popover",
+    placement: "top-start",
+    onClose: event => {
+      // Don't close if clicking toolbar button
+      if (event.key !== 'Escape' && event.target.closest('.acf-toolbar-button')) {
+        return false;
+      }
 
-        // Handle Escape key
-        if (event.key === 'Escape') {
-          return !document.querySelector('.acf-inline-fields-popover-inner') && !currentContentEditableElement && (currentInlineEditingElement && currentInlineEditingElement.focus(), setCurrentInlineEditingElementUid(null), setCurrentContentEditableElement(null), true);
-        }
+      // Handle Escape key
+      if (event.key === 'Escape') {
+        return !document.querySelector('.acf-inline-fields-popover-inner') && !currentContentEditableElement && (currentInlineEditingElement && currentInlineEditingElement.focus(), setCurrentInlineEditingElementUid(null), setCurrentContentEditableElement(null), true);
+      }
 
-        // Don't close if clicking on contenteditable element
-        if (event.target.getAttribute('data-acf-inline-contenteditable')) {
-          return false;
-        }
+      // Don't close if clicking on contenteditable element
+      if (event.target.getAttribute('data-acf-inline-contenteditable')) {
+        return false;
+      }
 
-        // Don't close if clicking inside popover or modal
-        const inlineFieldsPopover = event.target.closest('.acf-inline-fields-popover-inner');
-        const modal = event.target.closest('.components-modal__content');
-        return inlineFieldsPopover || modal || (setCurrentInlineEditingElementUid(null), setCurrentContentEditableElement(null)), true;
-      },
-      gutenbergIframeOrDocument: gutenbergIframeOrDocument,
-      hidePrimaryBlockToolbar: true,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_inline_editing_toolbar__WEBPACK_IMPORTED_MODULE_9__.InlineEditingToolbar, {
-        blockIcon: blockType.icon,
-        blockFieldInfo: blockFieldInfo,
-        acfFormRef: acfFormRef,
-        setInlineEditingToolbarHasFocus: setInlineEditingToolbarHasFocus,
-        currentContentEditableElement: currentContentEditableElement,
-        currentInlineEditingElement: currentInlineEditingElement,
-        currentInlineEditingElementUid: currentInlineEditingElementUid,
-        gutenbergIframeOrDocument: gutenbergIframeOrDocument,
-        setCurrentBlockFormContainer: setCurrentFormContainer,
-        contentEditableChangeInProgress: contentEditableChangeInProgress
-      }, currentInlineEditingElementUid)
-    }, currentContentEditableElement), currentInlineEditingElementUid && acfDynamicStylesElement && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createPortal)(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("style", {
-      children: `
+      // Don't close if clicking inside popover or modal
+      const inlineFieldsPopover = event.target.closest('.acf-inline-fields-popover-inner');
+      const modal = event.target.closest('.components-modal__content');
+      return inlineFieldsPopover || modal || (setCurrentInlineEditingElementUid(null), setCurrentContentEditableElement(null)), true;
+    },
+    gutenbergIframeOrDocument: gutenbergIframeOrDocument,
+    hidePrimaryBlockToolbar: true
+  }, /*#__PURE__*/React.createElement(_inline_editing_toolbar__WEBPACK_IMPORTED_MODULE_9__.InlineEditingToolbar, {
+    key: currentInlineEditingElementUid,
+    blockIcon: blockType.icon,
+    blockFieldInfo: blockFieldInfo,
+    acfFormRef: acfFormRef,
+    setInlineEditingToolbarHasFocus: setInlineEditingToolbarHasFocus,
+    currentContentEditableElement: currentContentEditableElement,
+    currentInlineEditingElement: currentInlineEditingElement,
+    currentInlineEditingElementUid: currentInlineEditingElementUid,
+    gutenbergIframeOrDocument: gutenbergIframeOrDocument,
+    setCurrentBlockFormContainer: setCurrentFormContainer,
+    contentEditableChangeInProgress: contentEditableChangeInProgress
+  })), currentInlineEditingElementUid && acfDynamicStylesElement && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createPortal)(/*#__PURE__*/React.createElement("style", null, `
 				[data-acf-inline-fields-uid="${currentInlineEditingElementUid}"]{
 					outline: 2px solid var( --wp-admin-theme-color );
 					outline-offset: 2px;
 				}
-			`
-    }), acfDynamicStylesElement), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_block_preview__WEBPACK_IMPORTED_MODULE_6__.BlockPreview, {
-        blockPreviewHtml: blockPreviewHtml,
-        blockProps: blockProps,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_error_boundary__WEBPACK_IMPORTED_MODULE_7__.ErrorBoundary, {
-          fallbackRender: ({
-            error
-          }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_error_boundary__WEBPACK_IMPORTED_MODULE_7__.BlockPreviewErrorFallback, {
-            blockLabel: blockType?.title || acf.__('ACF Block'),
-            setBlockFormModalOpen: setBlockFormModalOpen,
-            error: error
-          }),
-          children: [blockPreviewHtml === 'acf-block-preview-no-html' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_block_placeholder__WEBPACK_IMPORTED_MODULE_4__.BlockPlaceholder, {
-            setBlockFormModalOpen: setBlockFormModalOpen,
-            blockLabel: blockType.title
-          }) : null, blockPreviewHtml === 'acf-block-preview-loading' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Spinner, {})
-          }), blockPreviewHtml !== 'acf-block-preview-loading' && blockPreviewHtml !== 'acf-block-preview-no-html' && blockPreviewHtml && acf.parseJSX(blockPreviewHtml, handleNewInlineEditingElementSelected, updateFieldValueFromContentEditable, handleNewContentEditableElementSelected, blockFieldInfo, $)]
-        })
-      })
-    })]
-  });
+			`), acfDynamicStylesElement), /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(_block_preview__WEBPACK_IMPORTED_MODULE_6__.BlockPreview, {
+    blockPreviewHtml: blockPreviewHtml,
+    blockProps: blockProps
+  }, /*#__PURE__*/React.createElement(_error_boundary__WEBPACK_IMPORTED_MODULE_7__.ErrorBoundary, {
+    fallbackRender: ({
+      error
+    }) => /*#__PURE__*/React.createElement(_error_boundary__WEBPACK_IMPORTED_MODULE_7__.BlockPreviewErrorFallback, {
+      blockLabel: blockType?.title || acf.__('ACF Block'),
+      setBlockFormModalOpen: setBlockFormModalOpen,
+      error: error
+    })
+  }, blockPreviewHtml === 'acf-block-preview-no-html' ? /*#__PURE__*/React.createElement(_block_placeholder__WEBPACK_IMPORTED_MODULE_4__.BlockPlaceholder, {
+    setBlockFormModalOpen: setBlockFormModalOpen,
+    blockLabel: blockType.title
+  }) : null, blockPreviewHtml === 'acf-block-preview-loading' && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Placeholder, null, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Spinner, null)), blockPreviewHtml !== 'acf-block-preview-loading' && blockPreviewHtml !== 'acf-block-preview-no-html' && blockPreviewHtml && acf.parseJSX(blockPreviewHtml, handleNewInlineEditingElementSelected, updateFieldValueFromContentEditable, handleNewContentEditableElementSelected, blockFieldInfo, $)))));
 }
 
 /***/ }),
@@ -3196,8 +3235,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _utils_post_locking__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/post-locking */ "./assets/src/js/pro/blocks-v3/utils/post-locking.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 /**
  * BlockForm Component
  * Renders the ACF fields form inside a block and handles form changes, validation, and remounting
@@ -3223,7 +3260,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {Object} props.attributes - Block attributes
  * @returns {JSX.Element} - Rendered form component
  */
-
 const BlockForm = ({
   $,
   clientId,
@@ -3427,7 +3463,7 @@ const BlockForm = ({
       }
     };
   }, [acfFormRef, attributes, formHtml, onMount, userHasInteractedWithForm]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+  return /*#__PURE__*/React.createElement("div", {
     ref: acfFormRef,
     className: "acf-block-component acf-block-panel",
     style: {
@@ -3454,8 +3490,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
 /**
  * BlockPlaceholder Component
  * Displays a placeholder UI when block has no preview HTML
@@ -3466,18 +3500,16 @@ __webpack_require__.r(__webpack_exports__);
  * SVG icon for the block placeholder
  * Represents a generic block/form icon
  */
-
-const blockIcon = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
+const blockIcon = /*#__PURE__*/React.createElement("svg", {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
   width: "24",
   height: "24",
   "aria-hidden": "true",
-  focusable: "false",
-  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
-    d: "M19 8h-1V6h-5v2h-2V6H6v2H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm.5 10c0 .3-.2.5-.5.5H5c-.3 0-.5-.2-.5-.5v-8c0-.3.2-.5.5-.5h14c.3 0 .5.2.5.5v8z"
-  })
-});
+  focusable: "false"
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M19 8h-1V6h-5v2h-2V6H6v2H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm.5 10c0 .3-.2.5-.5.5H5c-.3 0-.5-.2-.5-.5v-8c0-.3.2-.5.5-.5h14c.3 0 .5.2.5.5v8z"
+}));
 
 /**
  * BlockPlaceholder component
@@ -3494,20 +3526,18 @@ const BlockPlaceholder = ({
   blockLabel,
   instructions
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Placeholder, {
-    icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Icon, {
+  return /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Placeholder, {
+    icon: /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Icon, {
       icon: blockIcon
     }),
     label: blockLabel,
-    instructions: instructions,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-      variant: "primary",
-      onClick: () => {
-        setBlockFormModalOpen(true);
-      },
-      children: acf.__('Edit Block')
-    })
-  });
+    instructions: instructions
+  }, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+    variant: "primary",
+    onClick: () => {
+      setBlockFormModalOpen(true);
+    }
+  }, acf.__('Edit Block')));
 };
 
 /***/ }),
@@ -3523,9 +3553,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   BlockPreview: () => (/* binding */ BlockPreview)
 /* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
 /**
  * BlockPreview Component
  * Simple wrapper component that renders block preview HTML with block props
@@ -3543,10 +3570,7 @@ __webpack_require__.r(__webpack_exports__);
 const BlockPreview = ({
   children,
   blockProps
-}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-  ...blockProps,
-  children: children
-});
+}) => /*#__PURE__*/React.createElement("div", blockProps, children);
 
 /***/ }),
 
@@ -3568,8 +3592,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _popover_wrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./popover-wrapper */ "./assets/src/js/pro/blocks-v3/components/popover-wrapper.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
 /**
  * BlockToolbarFields Component
  * Renders field buttons in the WordPress block toolbar (top toolbar)
@@ -3597,7 +3619,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {boolean}                    props.hideExpandedEditorBtnInToolbar - Whether to hide the expanded editor button in the toolbar
  * @return {JSX.Element} - Rendered toolbar controls
  */
-
 const BlockToolbarFields = ({
   blockToolbarFields,
   blockFieldInfo,
@@ -3650,110 +3671,99 @@ const BlockToolbarFields = ({
     // Fallback to fieldName when label not found to ensure toolbar shows a title
     return field?.label || fieldName || '';
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_blockEditor__WEBPACK_IMPORTED_MODULE_1__.BlockControls, {
-    children: [!hideExpandedEditorBtnInToolbar && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarGroup, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarButton, {
-        className: "components-icon-button components-toolbar__control",
-        label: acf.__('Edit Block'),
-        icon: "edit",
-        onClick: () => {
-          setBlockFormModalOpen(true);
-        },
-        isPressed: blockFormModalOpen
-      })
-    }), blockToolbarFields.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarGroup, {
-      children: [(() => {
-        const styleContent = `[data-name="${selectedFieldKey}"]{ display: block!important; }`;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("style", {
-          children: styleContent
-        });
-      })(), blockToolbarFields && blockToolbarFields.map(field => {
-        let fieldName = '';
-        let fieldIconSvg = null;
-        let fieldLabel = null;
+  return /*#__PURE__*/React.createElement(_wordpress_blockEditor__WEBPACK_IMPORTED_MODULE_1__.BlockControls, null, !hideExpandedEditorBtnInToolbar && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarGroup, null, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarButton, {
+    className: "components-icon-button components-toolbar__control",
+    label: acf.__('Edit Block'),
+    icon: "edit",
+    onClick: () => {
+      setBlockFormModalOpen(true);
+    },
+    isPressed: blockFormModalOpen
+  })), blockToolbarFields.length > 0 && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarGroup, null, (() => {
+    const styleContent = `[data-name="${selectedFieldKey}"]{ display: block!important; }`;
+    return /*#__PURE__*/React.createElement("style", null, styleContent);
+  })(), blockToolbarFields && blockToolbarFields.map(field => {
+    let fieldName = '';
+    let fieldIconSvg = null;
+    let fieldLabel = null;
 
-        // Handle field config object or simple string
-        if (typeof field === 'object') {
-          fieldName = field.fieldName ? field.fieldName : field.index;
-          fieldIconSvg = field.fieldIcon ? window.atob(field.fieldIcon) : null;
-          fieldLabel = field.fieldLabel ? field.fieldLabel : fieldName;
-        } else {
-          fieldName = field;
+    // Handle field config object or simple string
+    if (typeof field === 'object') {
+      fieldName = field.fieldName ? field.fieldName : field.index;
+      fieldIconSvg = field.fieldIcon ? window.atob(field.fieldIcon) : null;
+      fieldLabel = field.fieldLabel ? field.fieldLabel : fieldName;
+    } else {
+      fieldName = field;
+    }
+    return /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarButton, {
+      key: fieldName,
+      icon: fieldIconSvg ? /*#__PURE__*/React.createElement("i", {
+        dangerouslySetInnerHTML: {
+          __html: fieldIconSvg
         }
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarButton, {
-          icon: fieldIconSvg ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-            dangerouslySetInnerHTML: {
-              __html: fieldIconSvg
-            }
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
-            className: `field-type-icon field-type-icon-${getFieldTypeClassName(fieldName)}`
-          }),
-          label: fieldLabel || getFieldLabel(fieldName),
-          isPressed: fieldName === selectedFieldKey,
-          ref: fieldName === selectedFieldKey ? setSelectedFieldButtonRef : null,
-          onMouseDown: () => {
-            if (selectedFieldKey === fieldName) {
-              setSelectedFieldKey(null);
+      }) : /*#__PURE__*/React.createElement("i", {
+        className: `field-type-icon field-type-icon-${getFieldTypeClassName(fieldName)}`
+      }),
+      label: fieldLabel || getFieldLabel(fieldName),
+      isPressed: fieldName === selectedFieldKey,
+      ref: fieldName === selectedFieldKey ? setSelectedFieldButtonRef : null,
+      onMouseDown: () => {
+        if (selectedFieldKey === fieldName) {
+          setSelectedFieldKey(null);
+        } else {
+          setSelectedFieldKey(null);
+          setTimeout(() => {
+            const fieldInfo = getFieldInfo(fieldName);
+            // Use modal for complex field types
+            if (fieldInfo?.type === 'flexible_content' || fieldInfo?.type === 'repeater') {
+              setUsePopover(false);
             } else {
-              setSelectedFieldKey(null);
-              setTimeout(() => {
-                const fieldInfo = getFieldInfo(fieldName);
-                // Use modal for complex field types
-                if (fieldInfo?.type === 'flexible_content' || fieldInfo?.type === 'repeater') {
-                  setUsePopover(false);
-                } else {
-                  setUsePopover(true);
-                }
-                setSelectedFieldKey(fieldName);
-              });
+              setUsePopover(true);
             }
-          }
-        }, fieldName);
-      }), selectedFieldKey && selectedFieldButtonRef && usePopover && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_popover_wrapper__WEBPACK_IMPORTED_MODULE_3__.PopoverWrapper, {
-        focusOnMount: false,
-        className: "acf-inline-fields-popover",
-        anchor: selectedFieldButtonRef,
-        animate: true,
-        onClose: event => {
-          // Don't close on certain events
-          if (event.key !== 'Escape' && (event?.target.closest('.media-modal') || event?.target.closest('.acf-tooltip') || event?.target && fieldPopoverContainerRef?.current && fieldPopoverContainerRef?.current.contains(event.target) || selectedFieldButtonRef?.current && selectedFieldButtonRef?.current.contains(event?.target))) {
-            return false;
-          }
-          setSelectedFieldKey(null);
-          return true;
-        },
-        variant: "unstyled",
-        gutenbergIframeOrDocument: gutenbergIframeOrDocument,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-          ref: fieldPopoverContainerRef,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "acf-inline-fields-popover-inner",
-            style: {
-              minWidth: '300px'
-            },
-            ref: setCurrentBlockFormContainer
-          })
-        })
-      }), selectedFieldKey && selectedFieldButtonRef && !usePopover && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Modal, {
-        className: "acf-block-form-modal",
-        isFullScreen: true,
-        title: getFieldInfo(selectedFieldKey)?.label,
-        onRequestClose: () => {
-          setSelectedFieldKey(null);
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-          ref: fieldPopoverContainerRef,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "acf-inline-fields-popover-inner",
-            style: {
-              minWidth: '300px'
-            },
-            ref: setCurrentBlockFormContainer
-          })
-        })
-      })]
-    })]
-  });
+            setSelectedFieldKey(fieldName);
+          });
+        }
+      }
+    });
+  }), selectedFieldKey && selectedFieldButtonRef && usePopover && /*#__PURE__*/React.createElement(_popover_wrapper__WEBPACK_IMPORTED_MODULE_3__.PopoverWrapper, {
+    focusOnMount: false,
+    className: "acf-inline-fields-popover",
+    anchor: selectedFieldButtonRef,
+    animate: true,
+    onClose: event => {
+      // Don't close on certain events
+      if (event.key !== 'Escape' && (event?.target.closest('.media-modal') || event?.target.closest('.acf-tooltip') || event?.target && fieldPopoverContainerRef?.current && fieldPopoverContainerRef?.current.contains(event.target) || selectedFieldButtonRef?.current && selectedFieldButtonRef?.current.contains(event?.target))) {
+        return false;
+      }
+      setSelectedFieldKey(null);
+      return true;
+    },
+    variant: "unstyled",
+    gutenbergIframeOrDocument: gutenbergIframeOrDocument
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: fieldPopoverContainerRef
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "acf-inline-fields-popover-inner",
+    style: {
+      minWidth: '300px'
+    },
+    ref: setCurrentBlockFormContainer
+  }))), selectedFieldKey && selectedFieldButtonRef && !usePopover && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Modal, {
+    className: "acf-block-form-modal",
+    isFullScreen: true,
+    title: getFieldInfo(selectedFieldKey)?.label,
+    onRequestClose: () => {
+      setSelectedFieldKey(null);
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: fieldPopoverContainerRef
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "acf-inline-fields-popover-inner",
+    style: {
+      minWidth: '300px'
+    },
+    ref: setCurrentBlockFormContainer
+  })))));
 };
 
 /***/ }),
@@ -3774,13 +3784,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _block_placeholder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./block-placeholder */ "./assets/src/js/pro/blocks-v3/components/block-placeholder.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
 // Create context outside the class
-
 const ErrorBoundaryContext = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 
 // Initial state constant
@@ -3865,23 +3872,20 @@ class ErrorBoundary extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Comp
       if (typeof fallbackRender === 'function') {
         content = fallbackRender(errorProps);
       } else if (FallbackComponent) {
-        content = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(FallbackComponent, {
-          ...errorProps
-        });
+        content = /*#__PURE__*/React.createElement(FallbackComponent, errorProps);
       } else if (fallback !== undefined) {
         content = fallback;
       } else {
         throw error;
       }
     }
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(ErrorBoundaryContext.Provider, {
+    return /*#__PURE__*/React.createElement(ErrorBoundaryContext.Provider, {
       value: {
         didCatch,
         error,
         resetErrorBoundary: this.resetErrorBoundary
-      },
-      children: content
-    });
+      }
+    }, content);
   }
 }
 
@@ -3899,7 +3903,7 @@ const BlockPreviewErrorFallback = ({
     acf.debug('Block preview error:', error);
     errorMessage = acf.__('Error previewing block v3');
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_block_placeholder__WEBPACK_IMPORTED_MODULE_1__.BlockPlaceholder, {
+  return /*#__PURE__*/React.createElement(_block_placeholder__WEBPACK_IMPORTED_MODULE_1__.BlockPlaceholder, {
     setBlockFormModalOpen: setBlockFormModalOpen,
     blockLabel: blockLabel,
     instructions: errorMessage
@@ -3924,8 +3928,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _popover_wrapper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./popover-wrapper */ "./assets/src/js/pro/blocks-v3/components/popover-wrapper.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
 /**
  * InlineEditingToolbar Component
  * Main inline editing toolbar for ACF blocks
@@ -3952,7 +3954,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {boolean} props.contentEditableChangeInProgress - Whether content change is in progress
  * @returns {JSX.Element|null} - Rendered toolbar or null
  */
-
 const InlineEditingToolbar = ({
   blockIcon,
   blockFieldInfo,
@@ -4009,7 +4010,7 @@ const InlineEditingToolbar = ({
       icon = currentInlineEditingElement ? currentInlineEditingElement.getAttribute('data-acf-toolbar-icon') : null;
     }
     if (icon) {
-      icon = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
+      icon = /*#__PURE__*/React.createElement("i", {
         dangerouslySetInnerHTML: {
           __html: icon
         }
@@ -4017,12 +4018,12 @@ const InlineEditingToolbar = ({
     }
     if (!icon && currentContentEditableElement && !currentInlineEditingElement) {
       const fieldSlug = currentContentEditableElement.getAttribute('data-acf-inline-contenteditable-field-slug');
-      icon = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
+      icon = /*#__PURE__*/React.createElement("i", {
         className: `field-type-icon field-type-icon-${getFieldTypeClassName(fieldSlug)}`
       });
     }
     if (!icon) {
-      icon = React.isValidElement(blockIcon) ? blockIcon : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+      icon = React.isValidElement(blockIcon) ? blockIcon : /*#__PURE__*/React.createElement("span", {
         className: `dashicon dashicons dashicons-${blockIcon}`
       });
     }
@@ -4072,136 +4073,121 @@ const InlineEditingToolbar = ({
     }
     return getFieldLabel(fieldName);
   }, [currentInlineEditingElement, currentContentEditableElement, blockFieldInfo]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
-    children: [selectedFieldKey && selectedFieldButtonRef && usePopover && currentInlineEditingElementUid && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_popover_wrapper__WEBPACK_IMPORTED_MODULE_2__.PopoverWrapper, {
-      focusOnMount: false,
-      className: "acf-inline-fields-popover",
-      anchor: selectedFieldButtonRef,
-      onClose: event => {
-        if (event.key === 'Escape') {
-          setSelectedFieldKey(null);
-          return true;
-        }
-        // Don't close if clicking inside the popover or anchor
-        if (event?.target && fieldPopoverContainerRef?.current && fieldPopoverContainerRef?.current.contains(event.target) || selectedFieldButtonRef?.current && selectedFieldButtonRef?.current.contains(event?.target)) {
-          return false;
-        }
-        return undefined;
-      },
-      variant: usePopover ? 'toolbar' : 'unstyled',
-      gutenbergIframeOrDocument: gutenbergIframeOrDocument,
-      hidePrimaryBlockToolbar: true,
-      animate: true,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        ref: fieldPopoverContainerRef,
-        onClick: () => {
-          setInlineEditingToolbarHasFocus(true);
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "acf-inline-fields-popover-inner",
-          style: {
-            minWidth: selectedFieldConfig?.popoverMinWidth ? selectedFieldConfig?.popoverMinWidth : '300px'
-          },
-          ref: setCurrentBlockFormContainer
-        })
-      })
-    }), selectedFieldKey && selectedFieldButtonRef && !usePopover && currentInlineEditingElementUid && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
-      className: "acf-block-form-modal",
-      isFullScreen: true,
-      title: blockFieldInfo && selectedFieldKey ? blockFieldInfo.find(f => f.name === selectedFieldKey)?.label : '',
-      onRequestClose: () => {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, selectedFieldKey && selectedFieldButtonRef && usePopover && currentInlineEditingElementUid && /*#__PURE__*/React.createElement(_popover_wrapper__WEBPACK_IMPORTED_MODULE_2__.PopoverWrapper, {
+    focusOnMount: false,
+    className: "acf-inline-fields-popover",
+    anchor: selectedFieldButtonRef,
+    onClose: event => {
+      if (event.key === 'Escape') {
         setSelectedFieldKey(null);
-      },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        ref: fieldPopoverContainerRef,
+        return true;
+      }
+      // Don't close if clicking inside the popover or anchor
+      if (event?.target && fieldPopoverContainerRef?.current && fieldPopoverContainerRef?.current.contains(event.target) || selectedFieldButtonRef?.current && selectedFieldButtonRef?.current.contains(event?.target)) {
+        return false;
+      }
+      return undefined;
+    },
+    variant: usePopover ? 'toolbar' : 'unstyled',
+    gutenbergIframeOrDocument: gutenbergIframeOrDocument,
+    hidePrimaryBlockToolbar: true,
+    animate: true
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: fieldPopoverContainerRef,
+    onClick: () => {
+      setInlineEditingToolbarHasFocus(true);
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "acf-inline-fields-popover-inner",
+    style: {
+      minWidth: selectedFieldConfig?.popoverMinWidth ? selectedFieldConfig?.popoverMinWidth : '300px'
+    },
+    ref: setCurrentBlockFormContainer
+  }))), selectedFieldKey && selectedFieldButtonRef && !usePopover && currentInlineEditingElementUid && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
+    className: "acf-block-form-modal",
+    isFullScreen: true,
+    title: blockFieldInfo && selectedFieldKey ? blockFieldInfo.find(f => f.name === selectedFieldKey)?.label : '',
+    onRequestClose: () => {
+      setSelectedFieldKey(null);
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: fieldPopoverContainerRef,
+    onClick: () => {
+      setInlineEditingToolbarHasFocus(true);
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "acf-inline-fields-popover-inner",
+    style: {
+      minWidth: selectedFieldConfig?.popoverMinWidth ? selectedFieldConfig?.popoverMinWidth : '300px'
+    },
+    ref: setCurrentBlockFormContainer
+  }))), /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Toolbar, {
+    orientation: "horizontal",
+    className: "components-accessible-toolbar block-editor-block-contextual-toolbar",
+    style: {
+      width: 'max-content'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "block-editor-block-toolbar"
+  }, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarGroup, {
+    style: {
+      alignItems: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "acf-blocks-toolbar-icon components-toolbar-group block-editor-block-toolbar__block-controls",
+    label: toolbarTitle
+  }, toolbarIcon, /*#__PURE__*/React.createElement("span", null, toolbarTitle))), /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarGroup, null, (() => {
+    if (!inlineFields || inlineFields.length === 0) {
+      return null;
+    }
+    const buttons = inlineFields.map((field, index) => {
+      let fieldName = '';
+      let fieldIconSvg = null;
+      let fieldLabel = null;
+      if (typeof field === 'object') {
+        fieldName = field.fieldName ? field.fieldName : index;
+        fieldIconSvg = field.fieldIcon ? window.atob(field.fieldIcon) : null;
+        fieldLabel = field.fieldLabel ? field.fieldLabel : fieldName;
+      } else {
+        fieldName = field;
+      }
+
+      // Use 'edit' icon if field has useExpandedEditor flag
+      if (!fieldIconSvg && field?.useExpandedEditor) {
+        fieldIconSvg = 'edit';
+      }
+      return /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
+        key: fieldName,
+        disabled: contentEditableChangeInProgress,
+        className: "acf-toolbar-button",
+        icon: fieldIconSvg ? typeof fieldIconSvg === 'string' && fieldIconSvg === 'edit' ? 'edit' : /*#__PURE__*/React.createElement("i", {
+          dangerouslySetInnerHTML: {
+            __html: fieldIconSvg
+          }
+        }) : /*#__PURE__*/React.createElement("i", {
+          className: `field-type-icon field-type-icon-${getFieldTypeClassName(fieldName)}`
+        }),
+        label: fieldLabel || getFieldLabel(fieldName),
+        isPressed: fieldName === selectedFieldKey,
+        ref: fieldName === selectedFieldKey ? setSelectedFieldButtonRef : null,
         onClick: () => {
           setInlineEditingToolbarHasFocus(true);
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "acf-inline-fields-popover-inner",
-          style: {
-            minWidth: selectedFieldConfig?.popoverMinWidth ? selectedFieldConfig?.popoverMinWidth : '300px'
-          },
-          ref: setCurrentBlockFormContainer
-        })
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Toolbar, {
-      orientation: "horizontal",
-      className: "components-accessible-toolbar block-editor-block-contextual-toolbar",
-      style: {
-        width: 'max-content'
-      },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-        className: "block-editor-block-toolbar",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarGroup, {
-          style: {
-            alignItems: 'center'
-          },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-            className: "acf-blocks-toolbar-icon components-toolbar-group block-editor-block-toolbar__block-controls",
-            label: toolbarTitle,
-            children: [toolbarIcon, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-              children: toolbarTitle
-            })]
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarGroup, {
-          children: (() => {
-            if (!inlineFields || inlineFields.length === 0) {
-              return null;
-            }
-            const buttons = inlineFields.map((field, index) => {
-              let fieldName = '';
-              let fieldIconSvg = null;
-              let fieldLabel = null;
-              if (typeof field === 'object') {
-                fieldName = field.fieldName ? field.fieldName : index;
-                fieldIconSvg = field.fieldIcon ? window.atob(field.fieldIcon) : null;
-                fieldLabel = field.fieldLabel ? field.fieldLabel : fieldName;
-              } else {
-                fieldName = field;
-              }
-
-              // Use 'edit' icon if field has useExpandedEditor flag
-              if (!fieldIconSvg && field?.useExpandedEditor) {
-                fieldIconSvg = 'edit';
-              }
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
-                disabled: contentEditableChangeInProgress,
-                className: "acf-toolbar-button",
-                icon: fieldIconSvg ? typeof fieldIconSvg === 'string' && fieldIconSvg === 'edit' ? 'edit' : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
-                  dangerouslySetInnerHTML: {
-                    __html: fieldIconSvg
-                  }
-                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
-                  className: `field-type-icon field-type-icon-${getFieldTypeClassName(fieldName)}`
-                }),
-                label: fieldLabel || getFieldLabel(fieldName),
-                isPressed: fieldName === selectedFieldKey,
-                ref: fieldName === selectedFieldKey ? setSelectedFieldButtonRef : null,
-                onClick: () => {
-                  setInlineEditingToolbarHasFocus(true);
-                  if (selectedFieldKey === fieldName) {
-                    setSelectedFieldKey(null);
-                  } else {
-                    // Determine if we should use modal or popover
-                    setUsePopover(!field?.useExpandedEditor);
-                    setSelectedFieldKey(fieldName);
-                    setSelectedFieldConfig(field);
-                  }
-                }
-              }, fieldName);
-            });
-            return buttons;
-          })()
-        })]
-      })
-    }), (() => {
-      const styleContent = `[data-name="${selectedFieldKey}"]{ display: block!important; }`;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("style", {
-        children: styleContent
+          if (selectedFieldKey === fieldName) {
+            setSelectedFieldKey(null);
+          } else {
+            // Determine if we should use modal or popover
+            setUsePopover(!field?.useExpandedEditor);
+            setSelectedFieldKey(fieldName);
+            setSelectedFieldConfig(field);
+          }
+        }
       });
-    })()]
-  });
+    });
+    return buttons;
+  })()))), (() => {
+    const styleContent = `[data-name="${selectedFieldKey}"]{ display: block!important; }`;
+    return /*#__PURE__*/React.createElement("style", null, styleContent);
+  })());
 };
 
 /***/ }),
@@ -4350,9 +4336,13 @@ function parseAttribute(attribute) {
         break;
       }
       attrName = getJSXNameReplacement(attrName);
+      // Ignore values that merely start with a JSON-like character but
+      // aren't valid JSON (e.g. an oEmbed title beginning with "[" or "{").
       const firstChar = attrValue.charAt(0);
       if (firstChar === '[' || firstChar === '{') {
-        attrValue = JSON.parse(attrValue);
+        try {
+          attrValue = JSON.parse(attrValue);
+        } catch (err) {}
       }
       if (attrValue === 'true' || attrValue === 'false') {
         attrValue = attrValue === 'true';
@@ -4612,8 +4602,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 /**
  * PopoverWrapper Component
  * Custom Popover wrapper that handles inline editing toolbar behavior
@@ -4643,7 +4631,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {boolean} props.hidePrimaryBlockToolbar - Whether to hide the primary block toolbar
  * @returns {JSX.Element} - Wrapped Popover component
  */
-
 const PopoverWrapper = ({
   children,
   className,
@@ -4692,21 +4679,18 @@ const PopoverWrapper = ({
       }
     };
   }, [gutenbergIframeOrDocument, onClose, className, hidePrimaryBlockToolbar]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Popover, {
+  return /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Popover, {
     focusOnMount: focusOnMount,
     variant: variant,
     anchor: anchor,
     className: className,
     placement: placement,
-    animate: animate,
-    children: [hidePrimaryBlockToolbar && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("style", {
-      children: `
+    animate: animate
+  }, hidePrimaryBlockToolbar && /*#__PURE__*/React.createElement("style", null, `
 					.components-popover.block-editor-block-popover.block-editor-block-list__block-popover{
 						display: none!important;
 					}
-				`
-    }), children]
-  });
+				`), children);
 };
 
 /***/ }),
@@ -4722,9 +4706,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   withAlignContent: () => (/* binding */ withAlignContent)
 /* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
 /**
  * withAlignContent Higher-Order Component
  * Adds content alignment toolbar controls to ACF blocks
@@ -4819,22 +4800,17 @@ const withAlignContent = (BlockComponent, blockConfig) => {
       const {
         alignContent
       } = attributes;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockControls, {
-          group: "block",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(AlignmentControl, {
-            label: acf.__('Change content alignment'),
-            value: normalizeAlignment(alignContent),
-            onChange: function (newAlignment) {
-              setAttributes({
-                alignContent: normalizeAlignment(newAlignment)
-              });
-            }
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockComponent, {
-          ...this.props
-        })]
-      });
+      return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(BlockControls, {
+        group: "block"
+      }, /*#__PURE__*/React.createElement(AlignmentControl, {
+        label: acf.__('Change content alignment'),
+        value: normalizeAlignment(alignContent),
+        onChange: function (newAlignment) {
+          setAttributes({
+            alignContent: normalizeAlignment(newAlignment)
+          });
+        }
+      })), /*#__PURE__*/React.createElement(BlockComponent, this.props));
     }
   };
 };
@@ -4852,9 +4828,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   withAlignText: () => (/* binding */ withAlignText)
 /* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
 /**
  * withAlignText Higher-Order Component
  * Adds text alignment toolbar controls to ACF blocks
@@ -4902,21 +4875,16 @@ const withAlignText = (BlockComponent, blockConfig) => {
       const {
         alignText
       } = attributes;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockControls, {
-          group: "block",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(AlignmentToolbar, {
-            value: normalizeAlignment(alignText),
-            onChange: function (newAlignment) {
-              setAttributes({
-                alignText: normalizeAlignment(newAlignment)
-              });
-            }
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockComponent, {
-          ...this.props
-        })]
-      });
+      return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(BlockControls, {
+        group: "block"
+      }, /*#__PURE__*/React.createElement(AlignmentToolbar, {
+        value: normalizeAlignment(alignText),
+        onChange: function (newAlignment) {
+          setAttributes({
+            alignText: normalizeAlignment(newAlignment)
+          });
+        }
+      })), /*#__PURE__*/React.createElement(BlockComponent, this.props));
     }
   };
 };
@@ -4934,9 +4902,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   withFullHeight: () => (/* binding */ withFullHeight)
 /* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
 /**
  * withFullHeight Higher-Order Component
  * Adds full height toggle control to ACF blocks
@@ -4974,21 +4939,16 @@ const withFullHeight = BlockComponent => {
       const {
         fullHeight
       } = attributes;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockControls, {
-          group: "block",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockFullHeightAlignmentControl, {
-            isActive: fullHeight,
-            onToggle: function (newValue) {
-              setAttributes({
-                fullHeight: newValue
-              });
-            }
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(BlockComponent, {
-          ...this.props
-        })]
-      });
+      return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(BlockControls, {
+        group: "block"
+      }, /*#__PURE__*/React.createElement(BlockFullHeightAlignmentControl, {
+        isActive: fullHeight,
+        onToggle: function (newValue) {
+          setAttributes({
+            fullHeight: newValue
+          });
+        }
+      })), /*#__PURE__*/React.createElement(BlockComponent, this.props));
     }
   };
 };
@@ -5013,14 +4973,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _high_order_components_with_align_text__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./high-order-components/with-align-text */ "./assets/src/js/pro/blocks-v3/high-order-components/with-align-text.js");
 /* harmony import */ var _high_order_components_with_align_content__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./high-order-components/with-align-content */ "./assets/src/js/pro/blocks-v3/high-order-components/with-align-content.js");
 /* harmony import */ var _high_order_components_with_full_height__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./high-order-components/with-full-height */ "./assets/src/js/pro/blocks-v3/high-order-components/with-full-height.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
  * ACF Block Type Registration - Version 3
  * Handles registration of ACF blocks (version 3) with WordPress Gutenberg
  * Includes attribute setup, higher-order component composition, and block filtering
  */
-
 
 
 
@@ -5083,7 +5041,7 @@ function processBlockIcon(blockConfig) {
   // Convert SVG string to JSX element
   if (typeof blockConfig.icon === 'string' && blockConfig.icon.substr(0, 4) === '<svg') {
     const iconSvg = blockConfig.icon;
-    blockConfig.icon = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+    blockConfig.icon = /*#__PURE__*/React.createElement("div", {
       dangerouslySetInnerHTML: {
         __html: iconSvg
       }
@@ -5221,15 +5179,14 @@ function registerACFBlockType(blockConfig) {
 
   // Create edit function that passes blockConfig and jQuery
   blockConfig.edit = function (props) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(EditComponent, {
-      ...props,
+    return /*#__PURE__*/React.createElement(EditComponent, _extends({}, props, {
       blockType: blockConfig,
       $: (jquery__WEBPACK_IMPORTED_MODULE_0___default())
-    });
+    }));
   };
 
   // Create save function (ACF blocks save to post content as HTML comments)
-  blockConfig.save = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(InnerBlocks.Content, {});
+  blockConfig.save = () => /*#__PURE__*/React.createElement(InnerBlocks.Content, null);
 
   // Store in registry
   registeredBlocks[blockConfig.name] = blockConfig;
@@ -5306,9 +5263,7 @@ const withDefaultAttributes = createHigherOrderComponent(BlockListBlock => class
     }
   }
   render() {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(BlockListBlock, {
-      ...this.props
-    });
+    return /*#__PURE__*/React.createElement(BlockListBlock, this.props);
   }
 }, 'withDefaultAttributes');
 
@@ -5839,17 +5794,6 @@ module.exports = window["wp"]["element"];
 "use strict";
 module.exports = window["jQuery"];
 
-/***/ }),
-
-/***/ "react/jsx-runtime":
-/*!**********************************!*\
-  !*** external "ReactJSXRuntime" ***!
-  \**********************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = window["ReactJSXRuntime"];
-
 /***/ })
 
 /******/ 	});
@@ -5931,6 +5875,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _acf_jsx_names_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_acf-jsx-names.js */ "./assets/src/js/pro/_acf-jsx-names.js");
 /* harmony import */ var _acf_jsx_names_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_acf_jsx_names_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _acf_blocks_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_acf-blocks.js */ "./assets/src/js/pro/_acf-blocks.js");
+/* harmony import */ var _acf_blocks_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_acf_blocks_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _acf_blocks_v3_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_acf-blocks-v3.js */ "./assets/src/js/pro/_acf-blocks-v3.js");
 
 

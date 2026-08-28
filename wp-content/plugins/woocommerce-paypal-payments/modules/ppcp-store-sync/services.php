@@ -26,6 +26,7 @@ use WooCommerce\PayPalCommerce\StoreSync\Endpoint\ReplaceCartEndpoint;
 use WooCommerce\PayPalCommerce\StoreSync\Endpoint\CheckoutEndpoint;
 use WooCommerce\PayPalCommerce\StoreSync\Ingestion\IngestionBatchProvider;
 use WooCommerce\PayPalCommerce\StoreSync\Ingestion\IngestionManager;
+use WooCommerce\PayPalCommerce\StoreSync\Ingestion\ProductFilter;
 use WooCommerce\PayPalCommerce\StoreSync\Response\ResponseFactory;
 use WooCommerce\PayPalCommerce\StoreSync\Session\AgenticSessionHandler;
 use WooCommerce\PayPalCommerce\StoreSync\Setting\AgenticSettingsEndpoint;
@@ -34,6 +35,7 @@ use WooCommerce\PayPalCommerce\StoreSync\Setting\AgenticSettingsModule;
 use WooCommerce\PayPalCommerce\StoreSync\Merchant\MerchantMetadataProvider;
 use WooCommerce\PayPalCommerce\StoreSync\Registration\RegistrationService;
 use WooCommerce\PayPalCommerce\StoreSync\Registration\RegistrationEligibility;
+use WooCommerce\PayPalCommerce\StoreSync\Registration\ReconciliationService;
 use WooCommerce\PayPalCommerce\StoreSync\Helper\AgenticCheckoutProcessor;
 use WooCommerce\PayPalCommerce\StoreSync\Helper\ShippingOptionsBuilder;
 use WooCommerce\PayPalCommerce\StoreSync\Helper\PayPalOrderManager;
@@ -52,30 +54,22 @@ use WooCommerce\PayPalCommerce\StoreSync\CartValidation\CouponValidator\AppliedC
 use WooCommerce\PayPalCommerce\StoreSync\CartValidation\CartValidationProcessor;
 use WooCommerce\PayPalCommerce\StoreSync\Helper\AgenticSessionManager;
 use WooCommerce\PayPalCommerce\StoreSync\StoreData\StoreData;
-/**
- * Separate source keeps high-volume ingestion entries out of the agentic (cart API) log stream:
- * Ingestion is a cron-driven background process with a constant, predictable output cadence.
- * The cart API is event-driven and session-contextual. Mixing them into one stream makes both
- * harder to read.
- *
- * When using log-files, this creates a separate file for agentic log entries
- * When using DB logging, the source makes it easy to filter for agentic entries
- */
-const LOGGER_SOURCE_DEFAULT = 'woocommerce-paypal-agentic';
-const LOGGER_SOURCE_INGESTION = 'woocommerce-paypal-ingestion';
 return array(
     // Logging.
+    // Separate sources keep high-volume ingestion entries out of the agentic (cart API) log
+    // stream. When using log-files this creates separate files; with DB logging it allows
+    // easy filtering per stream.
     'agentic.logger.default' => static function (): LoggerInterface {
         if (!class_exists(WC_Logger::class)) {
             return new NullLogger();
         }
-        return new WooCommerceLogger(wc_get_logger(), LOGGER_SOURCE_DEFAULT);
+        return new WooCommerceLogger(wc_get_logger(), 'woocommerce-paypal-agentic');
     },
     'agentic.logger.ingestion' => static function (): LoggerInterface {
         if (!class_exists(WC_Logger::class)) {
             return new NullLogger();
         }
-        return new WooCommerceLogger(wc_get_logger(), LOGGER_SOURCE_INGESTION);
+        return new WooCommerceLogger(wc_get_logger(), 'woocommerce-paypal-ingestion');
     },
     // Configuration.
     'agentic.config.webhook_urls' => static function (ContainerInterface $c): AgenticWebhookConfiguration {
@@ -96,6 +90,9 @@ return array(
     },
     'agentic.registration.handler' => static function (ContainerInterface $c): RegistrationService {
         return new RegistrationService($c->get('agentic.config.webhook_urls'), $c->get('agentic.merchant.provider'), $c->get('agentic.logger.default'));
+    },
+    'agentic.registration.reconciler' => static function (ContainerInterface $c): ReconciliationService {
+        return new ReconciliationService($c->get('agentic.settings.model'), $c->get('agentic.registration.handler'), $c->get('agentic.logger.default'));
     },
     // Authentication services.
     'agentic.auth.key_provider' => static function (): PayPalJwkProvider {
@@ -132,7 +129,7 @@ return array(
         return new CartValidationProcessor($c->get('agentic.logger.default'));
     },
     'agentic.validator.product' => static function (ContainerInterface $c): ProductValidator {
-        return new ProductValidator($c->get('agentic.config.ingestion'));
+        return new ProductValidator($c->get('agentic.ingestion.product-filter'));
     },
     'agentic.validator.price' => static function (): PriceValidator {
         return new PriceValidator();
@@ -183,11 +180,14 @@ return array(
         return new StoreData($c->get('agentic.helper.product-manager'), $c->get('agentic.config.store-currency'), $c->get('agentic.helper.cart-builder'));
     },
     // Ingestion services.
+    'agentic.ingestion.product-filter' => static function (ContainerInterface $c): ProductFilter {
+        return new ProductFilter($c->get('agentic.logger.ingestion'));
+    },
     'agentic.ingestion-batch-provider' => static function (ContainerInterface $c): IngestionBatchProvider {
-        return new IngestionBatchProvider($c->get('agentic.config.ingestion'));
+        return new IngestionBatchProvider($c->get('agentic.config.ingestion'), $c->get('agentic.ingestion.product-filter'));
     },
     'agentic.ingestion-manager' => static function (ContainerInterface $c): IngestionManager {
-        return new IngestionManager($c->get('agentic.config.ingestion'), $c->get('agentic.ingestion-batch-provider'), $c->get('agentic.config.webhook_urls'), $c->get('agentic.merchant.provider'), $c->get('agentic.logger.ingestion'), $c->get('agentic.helper.product-manager'));
+        return new IngestionManager($c->get('agentic.config.ingestion'), $c->get('agentic.ingestion-batch-provider'), $c->get('agentic.config.webhook_urls'), $c->get('agentic.merchant.provider'), $c->get('agentic.logger.ingestion'), $c->get('agentic.helper.product-manager'), $c->get('agentic.ingestion.product-filter'));
     },
     // Settings.
     'agentic.settings.model' => static function (): AgenticSettingsDataModel {

@@ -20,7 +20,13 @@ use Packlink\WooCommerce\Components\Utility\Database;
 // Methods used during the migration process.                                        *
 // ***********************************************************************************
 
-function get_current_shipping_methods( $db, $table_name ) {
+// Guard the function definitions so this file can be safely included more than once
+// per request. On WordPress Multisite, Plugin::update() runs this migration for every
+// blog in the same request; without this guard the second include fatals with
+// "Cannot redeclare get_current_shipping_methods()". The migration steps below still
+// run on every include, so each blog is migrated.
+if ( ! function_exists( 'get_current_shipping_methods' ) ) {
+	function get_current_shipping_methods( $db, $table_name ) {
 	$query = "SELECT * FROM {$table_name} WHERE type = 'ShippingService' ";
 
 	$results = $db->get_results( $query, ARRAY_A );
@@ -33,7 +39,9 @@ function get_current_shipping_methods( $db, $table_name ) {
 function get_transformed_pricing_policy( array $method ) {
 	$result = array();
 
-	switch ( $method['pricingPolicy'] ) {
+	// Some stored shipping methods have no pricingPolicy key; default to 0 (Packlink
+	// prices) instead of triggering an "Undefined array key" warning on PHP 7.4+/8.
+	switch ( isset( $method['pricingPolicy'] ) ? $method['pricingPolicy'] : 0 ) {
 		case 1:
 			// Packlink prices.
 			break;
@@ -80,6 +88,7 @@ function get_transformed_pricing_policy( array $method ) {
 function get_logo_url($method) {
 	return str_replace('/resources/', '/resources/packlink/', $method['logoUrl']);
 }
+} // end: if ( ! function_exists( 'get_current_shipping_methods' ) )
 
 
 // ***********************************************************************************

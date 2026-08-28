@@ -5,9 +5,9 @@ Requires PHP: 7.4
 Requires at least: 6.9
 Requires Plugins: woocommerce
 Tested up to: 7.0
-WC requires at least: 10.6
-WC tested up to: 10.8
-Stable tag: 3.6.4
+WC requires at least: 10.8
+WC tested up to: 11.0
+Stable tag: 3.6.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,46 @@ This plugin relies on the following external services:
 2. Checking on the health of WooCommerce Tax
 
 == Changelog ==
+
+= 3.6.12 - 2026-08-10 =
+* Fix   - Restore tax rate lookups for local pickup orders, which could return no rates at all.
+* Fix   - Preserve apostrophes in city and street when taxes are recalculated from the order edit screen.
+* Fix   - Prevent a fatal error during cart and checkout tax calculation when a customization supplies an invalid store address.
+* Fix   - Send the same values for empty address fields whether taxes are calculated at checkout or from the order edit screen.
+* Fix   - Ignore array-valued address fields when taxes are recalculated from the order edit screen.
+* Fix   - Prevent tax calculation from failing when the store address postcode holds more than one comma-separated value.
+* Fix   - Accept lower-case country and state codes from the woocommerce_taxjar_nexus_address filter.
+* Fix   - Fall back to the store address when a custom nexus address is incomplete instead of abandoning the calculation.
+* Fix   - Prevent unbounded growth of WooCommerce tax rate rows when the customer state contains a character WooCommerce strips before storing it, such as a period or an accented letter.
+* Fix   - Restore tax rates on the price display, shipping tax and coupon paths for addresses whose state was stored in a normalized form.
+* Fix   - Calculate tax correctly for carts mixing taxable and non-taxable products, so a non-taxable product no longer resets the standard tax rate to zero.
+* Tweak - Centralize TaxJar address handling in an internal value object. No change to tax calculation.
+* Tweak - Store tax rate rows against the postcode the rate was quoted for when the address postcode holds more than one comma-separated value.
+* Tweak - Reduce redundant TaxJar API calls by matching cached tax responses across the cart and order paths and ignoring irrelevant formatting differences.
+
+= 3.6.11 - 2026-08-05 =
+* Fix   - Prevent a fatal error during cart and checkout tax calculation when TaxJar returns an incomplete tax response.
+* Fix   - React 19 compatibility for store notices on the block cart and checkout.
+
+= 3.6.10 - 2026-07-27 =
+* Tweak - WooCommerce 11.0 Compatibility.
+
+= 3.6.9 - 2026-07-20 =
+* Fix   - Prevent a rare fatal error when the WooCommerce Store API cannot be initialized on incomplete installations.
+
+= 3.6.8 - 2026-07-15 =
+* Fix   - TaxJar tax lines wiped when REST API order update includes address change.
+* Fix   - Prevent fatal error on sites running WooCommerce versions without StoreApi support.
+* Fix   - Prevent unbounded growth of WooCommerce tax rate rows when checkout city contains a semicolon.
+
+= 3.6.7 - 2026-07-06 =
+* Fix   - Prevent fatal error on Atomic sites caused by incorrect path resolution when loading the API client class.
+
+= 3.6.6 - 2026-06-22 =
+* Tweak - WooCommerce 10.9 Compatibility.
+
+= 3.6.5 - 2026-06-08 =
+* Fix   - Prevent PHP "undefined variable" warning when WooCommerce Helper authentication data is unavailable.
 
 = 3.6.4 - 2026-06-01 =
 * Dev   - Update JS dependencies.

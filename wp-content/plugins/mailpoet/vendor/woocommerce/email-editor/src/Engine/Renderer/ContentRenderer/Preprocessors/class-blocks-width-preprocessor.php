@@ -40,6 +40,11 @@ class Blocks_Width_Preprocessor implements Preprocessor {
  $suppress_h_padding = ! empty( $block['email_attrs']['suppress-horizontal-padding'] );
  $block_padding_left = $suppress_h_padding ? '0px' : Preset_Variable_Resolver::resolve( $block['attrs']['style']['spacing']['padding']['left'] ?? '0px', $variables_map );
  $block_padding_right = $suppress_h_padding ? '0px' : Preset_Variable_Resolver::resolve( $block['attrs']['style']['spacing']['padding']['right'] ?? '0px', $variables_map );
+ // Horizontal border reduces the content area available to inner blocks,
+ // just like padding does. It must be subtracted so fixed-width children
+ // (e.g. images, which emit an explicit width attribute) fit inside the
+ // block instead of forcing the surrounding table to expand.
+ $block_border_horizontal = $this->get_block_horizontal_border( $block );
  $width_input = $block['attrs']['width'] ?? '100%';
  // Currently we support only % and px units in case only the number is provided we assume it's %
  // because editor saves percent values as a number.
@@ -57,8 +62,12 @@ class Blocks_Width_Preprocessor implements Preprocessor {
  $block['innerBlocks'] = $this->add_missing_column_widths( $block['innerBlocks'], $columns_width, $variables_map );
  }
  // Copy layout styles and update width and padding with resolved values.
+ // The content area available to inner blocks is the block width minus its
+ // own horizontal border (padding is subtracted from this in the next level
+ // via $modified_styles).
+ $inner_content_width = max( 0, $width - $block_border_horizontal );
  $modified_layout = $layout;
- $modified_layout['contentSize'] = "{$width}px";
+ $modified_layout['contentSize'] = "{$inner_content_width}px";
  $modified_styles = $styles;
  $modified_styles['spacing']['padding']['left'] = $block_padding_left;
  $modified_styles['spacing']['padding']['right'] = $block_padding_right;
@@ -81,6 +90,12 @@ class Blocks_Width_Preprocessor implements Preprocessor {
  }
  private function parse_number_from_string_with_pixels( string $value ): float {
  return (float) str_replace( 'px', '', $value );
+ }
+ private function get_block_horizontal_border( array $block ): float {
+ $border_width = $block['attrs']['style']['border']['width'] ?? '0px';
+ $left = $block['attrs']['style']['border']['left']['width'] ?? $border_width;
+ $right = $block['attrs']['style']['border']['right']['width'] ?? $border_width;
+ return $this->parse_number_from_string_with_pixels( (string) $left ) + $this->parse_number_from_string_with_pixels( (string) $right );
  }
  private function add_missing_column_widths( array $columns, float $columns_width, array $variables_map = array() ): array {
  $columns_count_with_defined_width = 0;

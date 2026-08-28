@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) exit;
 
 use InvalidArgumentException;
 use MailPoet\Newsletter\Url as NewsletterUrl;
+use MailPoet\Util\ThirdPartyOutput;
 use MailPoet\WP\Functions as WPFunctions;
 
 class PublicEmailRoute {
@@ -124,6 +125,7 @@ class PublicEmailRoute {
   }
 
   private function display(string $html): void {
+    ThirdPartyOutput::preventHtmlRewriting();
     header('Content-Type: text/html; charset=utf-8');
     header('Cache-Control: private, no-store, max-age=0');
     header('X-Robots-Tag: noindex, nofollow');

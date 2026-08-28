@@ -6,10 +6,15 @@ if (!defined('ABSPATH')) exit;
 
 
 use MailPoet\Doctrine\Repository;
+use MailPoet\Doctrine\WPDB\Connection;
 use MailPoet\Entities\SegmentEntity;
+use MailPoet\Entities\StatisticsNewsletterEntity;
 use MailPoet\Entities\StatisticsOpenEntity;
 use MailPoet\Entities\SubscriberEntity;
+use MailPoet\Entities\UserAgentEntity;
+use MailPoet\Settings\TrackingConfig;
 use MailPoet\Subscribers\Statistics\SubscriberStatisticsRepository;
+use MailPoetVendor\Doctrine\DBAL\ArrayParameterType;
 use MailPoetVendor\Doctrine\ORM\EntityManager;
 use MailPoetVendor\Doctrine\ORM\QueryBuilder;
 
@@ -17,16 +22,16 @@ use MailPoetVendor\Doctrine\ORM\QueryBuilder;
  * @extends Repository<StatisticsOpenEntity>
  */
 class StatisticsOpensRepository extends Repository {
-  /** @var SubscriberStatisticsRepository */
-  private $subscriberStatisticsRepository;
+  /** @var TrackingConfig */
+  private $trackingConfig;
 
   public function __construct(
     EntityManager $entityManager,
-    SubscriberStatisticsRepository $subscriberStatisticsRepository
+    TrackingConfig $trackingConfig
   ) {
     parent::__construct($entityManager);
     $this->entityManager = $entityManager;
-    $this->subscriberStatisticsRepository = $subscriberStatisticsRepository;
+    $this->trackingConfig = $trackingConfig;
   }
 
   protected function getEntityClassName(): string {
@@ -34,18 +39,77 @@ class StatisticsOpensRepository extends Repository {
   }
 
   public function recalculateSubscriberScore(SubscriberEntity $subscriber): void {
-    $subscriber->setEngagementScoreUpdatedAt(new \DateTimeImmutable());
-    $yearAgo = new \DateTimeImmutable('-1 year');
-    $newslettersSentCount = $this->subscriberStatisticsRepository->getTotalSentCount($subscriber, $yearAgo);
-    if ($newslettersSentCount < SubscriberStatisticsRepository::MIN_SENT_EMAILS_FOR_ENGAGEMENT_SCORE) {
-      $subscriber->setEngagementScore(null);
-      $this->entityManager->flush();
+    $subscriberId = $subscriber->getId();
+    if (!$subscriberId) {
       return;
     }
-    $opensCount = $this->subscriberStatisticsRepository->getStatisticsOpenCount($subscriber, $yearAgo);
-    $score = ($opensCount / $newslettersSentCount) * 100;
-    $subscriber->setEngagementScore($score);
-    $this->entityManager->flush();
+    $this->recalculateSubscribersScore([$subscriberId]);
+  }
+
+  /**
+   * Recalculates and persists engagement scores in a single bulk UPDATE. Runs entirely
+   * in SQL so large batches avoid entity hydration, validation, and per-entity flushes.
+   * In-memory SubscriberEntity instances are not refreshed and keep stale score fields.
+   *
+   * @param int[] $subscriberIds
+   */
+  public function recalculateSubscribersScore(array $subscriberIds): void {
+    // The UPDATE ... LEFT JOIN below is not supported by the SQLite integration used in
+    // WordPress Playground. Scores stay unset there and the listing reports them as
+    // unknown; the sweep worker no-ops for the same reason (see SubscribersEngagementScore).
+    // Without this guard the tracking endpoint throws, which also breaks the click redirect.
+    if (Connection::isSQLite()) {
+      return;
+    }
+
+    if (!$subscriberIds) {
+      return;
+    }
+    $subscribersTable = $this->entityManager->getClassMetadata(SubscriberEntity::class)->getTableName();
+    $sentStatsTable = $this->entityManager->getClassMetadata(StatisticsNewsletterEntity::class)->getTableName();
+    $openStatsTable = $this->entityManager->getClassMetadata(StatisticsOpenEntity::class)->getTableName();
+    $humanOpensCondition = $this->trackingConfig->areOpensSeparated() ? ' AND so.user_agent_type = :userAgentType' : '';
+
+    $sql = "
+      UPDATE {$subscribersTable} s
+      LEFT JOIN (
+        SELECT subscriber_id, COUNT(DISTINCT newsletter_id) AS sent_count
+        FROM {$sentStatsTable}
+        WHERE subscriber_id IN (:ids) AND sent_at >= :yearAgo
+        GROUP BY subscriber_id
+      ) sent ON sent.subscriber_id = s.id
+      LEFT JOIN (
+        SELECT so.subscriber_id, COUNT(DISTINCT so.newsletter_id) AS open_count
+        FROM {$openStatsTable} so
+        JOIN {$sentStatsTable} sn
+          ON sn.newsletter_id = so.newsletter_id
+          AND sn.subscriber_id = so.subscriber_id
+          AND sn.sent_at >= :yearAgo
+        WHERE so.subscriber_id IN (:ids){$humanOpensCondition}
+        GROUP BY so.subscriber_id
+      ) opens ON opens.subscriber_id = s.id
+      SET s.engagement_score = CASE
+            WHEN COALESCE(sent.sent_count, 0) < :minSentCount THEN NULL
+            ELSE COALESCE(opens.open_count, 0) / sent.sent_count * 100
+          END,
+          s.engagement_score_updated_at = :now
+      WHERE s.id IN (:ids)
+    ";
+
+    $parameters = [
+      'ids' => array_map('intval', $subscriberIds),
+      'yearAgo' => (new \DateTimeImmutable('-1 year'))->format('Y-m-d H:i:s'),
+      'minSentCount' => SubscriberStatisticsRepository::MIN_SENT_EMAILS_FOR_ENGAGEMENT_SCORE,
+      'now' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+    ];
+    if ($humanOpensCondition) {
+      $parameters['userAgentType'] = UserAgentEntity::USER_AGENT_TYPE_HUMAN;
+    }
+    $this->entityManager->getConnection()->executeStatement(
+      $sql,
+      $parameters,
+      ['ids' => ArrayParameterType::INTEGER]
+    );
   }
 
   public function resetSubscribersScoreCalculation() {

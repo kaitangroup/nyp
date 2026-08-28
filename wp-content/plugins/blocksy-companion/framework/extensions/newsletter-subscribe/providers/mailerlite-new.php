@@ -3,6 +3,38 @@
 namespace Blocksy\Extensions\NewsletterSubscribe;
 
 class MailerliteNewProvider extends Provider {
+	private function get_double_optin_status_from_body($body) {
+		if (! is_array($body)) {
+			return null;
+		}
+
+		if (isset($body['enabled'])) {
+			return (bool) $body['enabled'];
+		}
+
+		if (isset($body['double_optin'])) {
+			return (bool) $body['double_optin'];
+		}
+
+		if (isset($body['data']['enabled'])) {
+			return (bool) $body['data']['enabled'];
+		}
+
+		if (isset($body['data']['double_optin'])) {
+			return (bool) $body['data']['double_optin'];
+		}
+
+		if (isset($body['settings']['double_optin'])) {
+			return (bool) $body['settings']['double_optin'];
+		}
+
+		if (isset($body['data']['settings']['double_optin'])) {
+			return (bool) $body['data']['settings']['double_optin'];
+		}
+
+		return null;
+	}
+
 	private function request($method, $path, $api_key, $body = null) {
 		$args = [
 			'timeout' => 30,
@@ -61,16 +93,25 @@ class MailerliteNewProvider extends Provider {
 		$is_enabled = false;
 
 		if (! $response['error'] && 200 === $response['code']) {
-			$body = $response['body'];
+			$detected = $this->get_double_optin_status_from_body($response['body']);
 
-			if (isset($body['enabled'])) {
-				$is_enabled = (bool) $body['enabled'];
-			} elseif (isset($body['double_optin'])) {
-				$is_enabled = (bool) $body['double_optin'];
-			} elseif (isset($body['data']['enabled'])) {
-				$is_enabled = (bool) $body['data']['enabled'];
-			} elseif (isset($body['data']['double_optin'])) {
-				$is_enabled = (bool) $body['data']['double_optin'];
+			if (! is_null($detected)) {
+				$is_enabled = $detected;
+			}
+		}
+
+		if (! $response['error'] && 404 === $response['code']) {
+			$response = $this->request('GET', 'account', $api_key);
+			$detected = $this->get_double_optin_status_from_body($response['body']);
+
+			if (
+				! $response['error']
+				&&
+				200 === $response['code']
+				&&
+				! is_null($detected)
+			) {
+				$is_enabled = $detected;
 			}
 		}
 

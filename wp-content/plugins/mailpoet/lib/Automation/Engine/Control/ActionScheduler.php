@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) exit;
 
 
 use ActionScheduler_Action;
+use ActionScheduler_Store;
 
 class ActionScheduler {
   private const GROUP_ID = 'mailpoet-automation';
@@ -22,6 +23,24 @@ class ActionScheduler {
 
   public function hasScheduledAction(string $hook, array $args = []): bool {
     return as_has_scheduled_action($hook, $args, self::GROUP_ID);
+  }
+
+  /**
+   * Unlike hasScheduledAction(), this only matches PENDING actions and ignores
+   * RUNNING ones. A recurring hook that reschedules itself from within its own
+   * handler must use this: while the handler runs, its own action has status
+   * RUNNING, so as_has_scheduled_action() would report the action as still
+   * scheduled and the next run would never be queued.
+   */
+  public function hasPendingScheduledAction(string $hook, array $args = []): bool {
+    $actions = as_get_scheduled_actions([
+      'hook' => $hook,
+      'args' => $args,
+      'status' => ActionScheduler_Store::STATUS_PENDING,
+      'group' => self::GROUP_ID,
+      'per_page' => 1,
+    ], 'ids');
+    return is_array($actions) && count($actions) > 0;
   }
 
   /** @return ActionScheduler_Action[] */

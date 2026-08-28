@@ -6009,7 +6009,7 @@ msgstr ""
 
 #. translators: placeholder here means the actual URL.
 #: framework/features/blocks/socials/options.php:24
-msgid "Configure the social links in Customizer ➝ General �� %1$sSocial Network Accounts%2$s."
+msgid "Configure the social links in Customizer ➝ General ➝ %1$sSocial Network Accounts%2$s."
 msgstr ""
 
 #: framework/features/header/items/account/options.php:320

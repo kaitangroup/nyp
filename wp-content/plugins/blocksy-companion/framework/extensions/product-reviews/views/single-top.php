@@ -203,7 +203,7 @@ if ($has_read_more || $has_buy_now) {
 				'href' => esc_url($product_link),
 				'class' => 'ct-button'
 			], $link_atts),
-			$product_button_label
+			esc_html($product_button_label)
 		);
 
 	/*
@@ -228,8 +228,10 @@ if (! empty($product_description)) {
 	echo '<div class="ct-product-description" ' . blocksy_schema_org_definitions('reviewBody') . '>';
 
 	echo '<div class="entry-content is-layout-flow">';
-	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo do_shortcode($product_description);
+	// Capability-independent: neutralizes any payload stored before the save-side
+	// sanitizer landed (and any rich content authored by trusted users), for
+	// every visitor including logged-in admins.
+	echo wp_kses_post(do_shortcode($product_description));
 	echo '</div>';
 
 	echo '</div>';

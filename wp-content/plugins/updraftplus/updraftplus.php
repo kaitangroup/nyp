@@ -6,7 +6,7 @@ Plugin Name: UpdraftPlus - Backup/Restore
 Plugin URI: https://updraftplus.com
 Description: Backup and restore: take backups locally, or backup to Amazon S3, Dropbox, Google Drive, Rackspace, (S)FTP, WebDAV & email, on automatic schedules.
 Author: TeamUpdraft, DavidAnderson
-Version: 1.26.4
+Version: 1.26.7
 Donate link: https://david.dw-perspective.org.uk/donate
 License: GPLv3 or later
 Text Domain: updraftplus
@@ -16,7 +16,7 @@ Author URI: https://updraftplus.com
 // @codingStandardsIgnoreEnd
 
 /*
-Portions copyright 2011-25 David Anderson
+Portions copyright 2011-26 David Anderson
 Portions copyright 2010 Paul Kehrer
 Other portions copyright as indicated by authors in the relevant files
 
@@ -176,7 +176,7 @@ function updraftplus_list_cron_schedules() {
 			'display' => apply_filters('updraftplus_cron_schedule_description', __('Fortnightly'), 'fortnightly'),
 		),
 		'monthly' => array(
-			'interval' => 2592000,
+			'interval' => date('t')*86400, // Calculate the monthly interval based on the total days of the current month.
 			'display' => apply_filters('updraftplus_cron_schedule_description', __('Monthly'), 'monthly'),
 		),
 		// phpcs:enable

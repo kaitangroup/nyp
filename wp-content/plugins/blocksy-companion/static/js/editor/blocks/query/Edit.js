@@ -203,7 +203,16 @@ const Edit = ({
 											has_slideshow_arrows: {
 												type: 'ct-switch',
 												label: __(
-													'Arrows',
+													'Navigation Arrows',
+													'blocksy-companion'
+												),
+												value: '',
+											},
+
+											has_slideshow_pills: {
+												type: 'ct-switch',
+												label: __(
+													'Navigation Pills',
 													'blocksy-companion'
 												),
 												value: '',

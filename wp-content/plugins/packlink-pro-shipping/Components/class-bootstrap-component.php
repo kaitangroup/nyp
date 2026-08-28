@@ -28,12 +28,15 @@ use Packlink\BusinessLogic\Brand\BrandConfigurationService;
 use Packlink\BusinessLogic\CashOnDelivery\Model\CashOnDelivery;
 use Packlink\BusinessLogic\CashOnDelivery\Services\OfflinePaymentsServices;
 use Packlink\BusinessLogic\Country\WarehouseCountryService;
+use Packlink\BusinessLogic\Customs\CustomsMappingService;
 use Packlink\BusinessLogic\FileResolver\FileResolverService;
 use Packlink\BusinessLogic\IntegrationRegistration\Interfaces\IntegrationRegistrationDataProviderInterface;
 use Packlink\BusinessLogic\IntegrationRegistration\Interfaces\ModuleResetServiceInterface;
 use Packlink\BusinessLogic\Order\Interfaces\ShopOrderService;
 use Packlink\BusinessLogic\Order\OrderService;
 use Packlink\BusinessLogic\OrderShipmentDetails\Models\OrderShipmentDetails;
+use Packlink\BusinessLogic\OrderShipmentDetails\OrderShipmentDetailsService;
+use Packlink\BusinessLogic\ShipmentDocument\Interfaces\LabelMergeServiceInterface;
 use Packlink\BusinessLogic\Registration\RegistrationInfoService;
 use Packlink\BusinessLogic\ShipmentDraft\Interfaces\ShipmentDraftServiceInterface;
 use Packlink\BusinessLogic\Tasks\Interfaces\TaskMetadataProviderInterface;
@@ -43,9 +46,11 @@ use Packlink\BusinessLogic\UpdateShippingServices\UpdateShippingServiceTaskStatu
 use Packlink\BusinessLogic\Scheduler\Interfaces\SchedulerInterface;
 use Packlink\WooCommerce\Components\IntegrationRegistration\Integration_Registration_Data_Provider;
 use Packlink\WooCommerce\Components\IntegrationRegistration\Integration_Reset_Service;
+use Packlink\WooCommerce\Components\Services\Customs_Mapping_Service;
 use Packlink\WooCommerce\Components\Services\Offline_Payments_Service;
 use Packlink\WooCommerce\Components\Services\Packlink_WordPress_Scheduler;
 use Packlink\WooCommerce\Components\Services\Order_Service;
+use Packlink\WooCommerce\Components\Services\Label_Merge_Service;
 use Packlink\WooCommerce\Components\Services\Shipment_Draft_Service;
 use Packlink\BusinessLogic\ShippingMethod\Interfaces\ShopShippingMethodService;
 use Packlink\BusinessLogic\ShippingMethod\Models\ShippingMethod;
@@ -110,6 +115,16 @@ class Bootstrap_Component extends BootstrapComponent {
 		);
 
 		ServiceRegister::registerService(
+			LabelMergeServiceInterface::CLASS_NAME,
+			function () {
+				return new Label_Merge_Service(
+					ServiceRegister::getService( OrderService::CLASS_NAME ),
+					ServiceRegister::getService( OrderShipmentDetailsService::CLASS_NAME )
+				);
+			}
+		);
+
+		ServiceRegister::registerService(
 			Serializer::CLASS_NAME,
 			function () {
 				return new NativeSerializer();
@@ -141,6 +156,13 @@ class Bootstrap_Component extends BootstrapComponent {
             OfflinePaymentsServices::CLASS_NAME,
             static function () {
                 return new Offline_Payments_Service;
+            }
+        );
+
+        ServiceRegister::registerService(
+            CustomsMappingService::CLASS_NAME,
+            static function () {
+                return new Customs_Mapping_Service();
             }
         );
 
