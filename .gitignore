@@ -57,3 +57,4 @@ Thumbs.db
 .sass-cache
 /nbproject/private/
 /nbproject
+wp-content/updraft/*.txt
