@@ -55,13 +55,13 @@ private function formatPlanningValue($value): string
         |--------------------------------------------------------------------------
         */
 
-        'open_plan' => 'Open Plan',
-        'l_shape' => 'L-Shape',
-        'u_shape' => 'U-Shape',
-        'galley' => 'Galley Kitchen',
-        'island' => 'Island Kitchen',
-        'single_wall' => 'Single Wall',
-        'two_wall' => 'Two Wall',
+        'open_plan' => 'Offene Küche',
+        'l_shape' => 'L-Form',
+        'u_shape' => 'U-Form',
+        'galley' => 'Zweizeilige Küche',
+        'island' => 'Kücheninsel',
+        'single_wall' => 'Einzeilig',
+        'two_wall' => 'Zweizeilig',
 
         /*
         |--------------------------------------------------------------------------
@@ -77,8 +77,8 @@ private function formatPlanningValue($value): string
         |--------------------------------------------------------------------------
         */
 
-        'handless' => 'Handleless',
-        'handles' => 'Handles',
+        'handless' => 'Grifflos',
+        'handles' => 'Mit Griffen',
 
         /*
         |--------------------------------------------------------------------------
@@ -87,10 +87,10 @@ private function formatPlanningValue($value): string
         */
 
         'pdf' => 'PDF',
-        'renders' => 'Renderings',
+        'renders' => 'Renderbilder',
         'drw' => 'DRW',
-        'pdf_renders' => 'PDF + Renderings',
-        'pdf_renders_drw' => 'PDF + Renderings + DRW',
+        'pdf_renders' => 'PDF + Renderbilder',
+        'pdf_renders_drw' => 'PDF + Renderbilder + DRW',
     ];
 
     if (isset($labels[$value])) {
@@ -131,7 +131,7 @@ public function downloadOrderFiles(): void
     );
 
     if (!$order) {
-        wp_die('Invalid order.');
+        wp_die('Ungültige Bestellung.');
     }
 
     $zip = new \ZipArchive();
@@ -152,7 +152,7 @@ public function downloadOrderFiles(): void
         ) !== true
     ) {
         wp_die(
-            'Unable to create ZIP.'
+            'ZIP-Datei konnte nicht erstellt werden.'
         );
     }
 
@@ -254,7 +254,7 @@ public function registerMetaBox(): void
 {
     add_meta_box(
         'nyp-planning-brief',
-        'NYP Planning Brief',
+        'NYP Planungsbogen',
         [$this, 'renderMetaBox'],
         'woocommerce_page_wc-orders',
         'normal',
@@ -267,7 +267,7 @@ public function renderMetaBox($order): void
     
 
         if (!$order) {
-            echo '<p>Order not found.</p>';
+            echo '<p>Bestellung nicht gefunden.</p>';
             return;
         }
 
@@ -303,46 +303,46 @@ public function renderMetaBox($order): void
     ): void {
     
         $this->sectionStart(
-            'Design Brief / Planning Goals'
+            'Designbrief / Planungsziele'
         );
     
         $this->row(
-            'Design Concept',
+            'Designkonzept',
             $order->get_meta(
                 '_nyp_design_concept'
             )
         );
     
         $this->row(
-            'Planning Priority',
+            'Planungspriorität',
             $order->get_meta(
                 '_nyp_planning_priority'
             )
         );
     
         $this->row(
-            'Must-Have Features',
+            'Unverzichtbare Ausstattungsmerkmale',
             $order->get_meta(
                 '_nyp_must_have_features'
             )
         );
     
         $this->row(
-            'Nice-to-Have Features',
+            'Wünschenswerte Ausstattungsmerkmale',
             $order->get_meta(
                 '_nyp_nice_to_have_features'
             )
         );
     
         $this->row(
-            'No-Gos / Exclusions',
+            'No-Gos / Ausschlüsse',
             $order->get_meta(
                 '_nyp_no_gos'
             )
         );
     
         $this->row(
-            'Additional Planning Notes',
+            'Zusätzliche Planungshinweise',
             $order->get_meta(
                 '_nyp_planning_notes'
             )
@@ -356,46 +356,46 @@ public function renderMetaBox($order): void
     ): void {
     
         $this->sectionStart(
-            'Confirmations'
+            'Bestätigungen'
         );
     
         $this->row(
-            'Measurements Confirmed',
+            'Maße bestätigt',
             $order->get_meta(
                 '_nyp_confirm_measurements'
             )
         );
     
         $this->row(
-            'Category Review Accepted',
+            'Kategorieprüfung akzeptiert',
             $order->get_meta(
                 '_nyp_confirm_category_review'
             )
         );
     
         $this->row(
-            'Planning Basis Accepted',
+            'Planungsgrundlage akzeptiert',
             $order->get_meta(
                 '_nyp_confirm_planning_basis'
             )
         );
     
         $this->row(
-            'Budget Guidance Accepted',
+            'Budgethinweis akzeptiert',
             $order->get_meta(
                 '_nyp_confirm_budget_guidance'
             )
         );
     
         $this->row(
-            'Delivery Requirements Accepted',
+            'Lieferanforderungen akzeptiert',
             $order->get_meta(
                 '_nyp_confirm_delivery_requirements'
             )
         );
     
         $this->row(
-            'Execution Responsibility Accepted',
+            'Ausführungsverantwortung akzeptiert',
             $order->get_meta(
                 '_nyp_confirm_execution_responsibility'
             )
@@ -409,18 +409,18 @@ public function renderMetaBox($order): void
     ): void {
     
         $this->sectionStart(
-            'Special Wishes / No-Gos'
+            'Sonderwünsche / No-Gos'
         );
     
         $this->row(
-            'Must Have Features',
+            'Unverzichtbare Ausstattungsmerkmale',
             $order->get_meta(
                 '_nyp_must_have_features'
             )
         );
     
         $this->row(
-            'Nice To Have',
+            'Wünschenswert',
             $order->get_meta(
                 '_nyp_nice_to_have_features'
             )
@@ -434,14 +434,14 @@ public function renderMetaBox($order): void
         );
     
         $this->row(
-            'Customer Priority',
+            'Kundenpriorität',
             $order->get_meta(
                 '_nyp_customer_priority'
             )
         );
     
         $this->row(
-            'Planning Notes',
+            'Planungshinweise',
             $order->get_meta(
                 '_nyp_planning_notes'
             )
@@ -455,7 +455,7 @@ public function renderMetaBox($order): void
     ): void {
     
         $this->sectionStart(
-            'Planning Software & Delivery'
+            'Planungssoftware & Lieferung'
         );
     
         $this->row(
@@ -473,28 +473,28 @@ public function renderMetaBox($order): void
         );
     
         $this->row(
-            'Delivery Format',
+            'Lieferformat',
             $order->get_meta(
                 '_nyp_delivery_format'
             )
         );
     
         $this->row(
-            'DRW Required',
+            'DRW erforderlich',
             $order->get_meta(
                 '_nyp_drw_required'
             )
         );
     
         $this->row(
-            'Renderings Required',
+            'Renderbilder erforderlich',
             $order->get_meta(
                 '_nyp_renderings_required'
             )
         );
     
         $this->row(
-            'Delivery Notes',
+            'Hinweise zur Lieferung',
             $order->get_meta(
                 '_nyp_delivery_notes'
             )
@@ -508,18 +508,18 @@ public function renderMetaBox($order): void
     ): void {
     
         $this->sectionStart(
-            'Delivery Format'
+            'Lieferformat'
         );
     
         $this->row(
-            'Delivery Format',
+            'Lieferformat',
             $order->get_meta(
                 '_nyp_delivery_format'
             )
         );
     
         $this->row(
-            'Delivery Notes',
+            'Hinweise zur Lieferung',
             $order->get_meta(
                 '_nyp_delivery_notes'
             )
@@ -533,25 +533,25 @@ public function renderMetaBox($order): void
     ): void {
     
         $this->sectionStart(
-            'Budget & Equipment Level'
+            'Budget & Ausstattungsniveau'
         );
         
         $this->row(
-            'Budget Range',
+            'Budgetrahmen',
             $order->get_meta(
                 '_nyp_budget_range'
             )
         );
         
         $this->row(
-            'Planning Priority',
+            'Planungspriorität',
             $order->get_meta(
                 '_nyp_planning_priority'
             )
         );
         
         $this->row(
-            'Budget Notes',
+            'Hinweise zu Budget',
             $order->get_meta(
                 '_nyp_budget_notes'
             )
@@ -565,46 +565,46 @@ public function renderMetaBox($order): void
     ): void {
     
         $this->sectionStart(
-            'Worktop / Niche / Ergonomics'
+            'Arbeitsplatte / Nische / Ergonomie'
         );
     
         $this->row(
-            'Worktop Material',
+            'Arbeitsplattenmaterial',
             $order->get_meta('_nyp_worktop_material')
         );
         
         $this->row(
-            'Worktop Thickness',
+            'Arbeitsplattenstärke',
             $order->get_meta('_nyp_worktop_thickness')
         );
         
         $this->row(
-            'Desired Work Height',
+            'Gewünschte Arbeitshöhe',
             $order->get_meta('_nyp_work_height')
         );
         
         $this->row(
-            'Corpus Height',
+            'Korpushöhe',
             $order->get_meta('_nyp_corpus_height')
         );
         
         $this->row(
-            'Plinth Height',
+            'Sockelhöhe',
             $order->get_meta('_nyp_plinth_height')
         );
         
         $this->row(
-            'Niche Cladding',
+            'Nischenverkleidung',
             $order->get_meta('_nyp_niche_cladding')
         );
         
         $this->row(
-            'Front / Corpus Material',
+            'Front-/Korpusmaterial',
             $order->get_meta('_nyp_corpus_material')
         );
         
         $this->row(
-            'Ergonomics Notes',
+            'Hinweise zur Ergonomie',
             $order->get_meta('_nyp_ergonomics_notes')
         );
     
@@ -616,7 +616,7 @@ public function renderMetaBox($order): void
     ): void {
     
         $this->sectionStart(
-            'Planning Category'
+            'Planungskategorie'
         );
     
         $category = $order->get_meta(
@@ -624,9 +624,9 @@ public function renderMetaBox($order): void
         );
     
         $categoryLabels = [
-            'basic'        => 'Basic Planning',
-            'professional' => 'Professional Kitchen Design',
-            'premium'      => 'Premium Room Concept',
+            'basic'        => 'Basisplanung',
+            'professional' => 'Professionelle Küchenplanung',
+            'premium'      => 'Premium-Raumkonzept',
         ];
     
         if (isset($categoryLabels[$category])) {
@@ -634,7 +634,7 @@ public function renderMetaBox($order): void
         }
     
         $this->row(
-            'Planning Category',
+            'Planungskategorie',
             $category
         );
     
@@ -646,25 +646,25 @@ public function renderMetaBox($order): void
     ): void {
     
         $this->sectionStart(
-            'Submission Information'
+            'Übermittlungsinformationen'
         );
     
         $this->row(
-            'Brief Submitted',
+            'Bogen übermittelt',
             $order->get_meta(
                 '_nyp_brief_submitted'
             )
         );
     
         $this->row(
-            'Submitted At',
+            'Übermittelt am',
             $order->get_meta(
                 '_nyp_brief_submitted_at'
             )
         );
     
         $this->row(
-            'Submitted By',
+            'Übermittelt von',
             $order->get_meta(
                 '_nyp_brief_submitted_by'
             )
@@ -675,59 +675,59 @@ public function renderMetaBox($order): void
 
     private function renderProjectInformation(\WC_Order $order): void
     {
-        $this->sectionStart('Project Information');
+        $this->sectionStart('Projektinformationen');
 
-        $this->row('Project Name', $order->get_meta('_nyp_project_name'));
-        $this->row('Reference Number', $order->get_meta('_nyp_reference_number'));
-        $this->row('Customer Name', $order->get_meta('_nyp_customer_name'));
-        $this->row('Installation Address', $order->get_meta('_nyp_installation_address'));
-        $this->row('Installation Date', $order->get_meta('_nyp_installation_date'));
+        $this->row('Projektname', $order->get_meta('_nyp_project_name'));
+        $this->row('Referenznummer', $order->get_meta('_nyp_reference_number'));
+        $this->row('Kundenname', $order->get_meta('_nyp_customer_name'));
+        $this->row('Montageadresse', $order->get_meta('_nyp_installation_address'));
+        $this->row('Montagetermin', $order->get_meta('_nyp_installation_date'));
 
         $this->sectionEnd();
     }
 
     private function renderLayoutInformation(\WC_Order $order): void
     {
-        $this->sectionStart('Room & Kitchen Layout');
+        $this->sectionStart('Raum- & Küchenlayout');
 
         $this->row(
-            'Kitchen Layout',
+            'Küchenlayout',
             $order->get_meta('_nyp_kitchen_layout')
         );
         
    
-        $this->row('Ceiling Height', $order->get_meta('_nyp_ceiling_height'));
-        $this->row('Layout Notes', $order->get_meta('_nyp_layout_notes'));
+        $this->row('Deckenhöhe', $order->get_meta('_nyp_ceiling_height'));
+        $this->row('Layout-Hinweise', $order->get_meta('_nyp_layout_notes'));
 
         $this->sectionEnd();
     }
 
     private function renderManufacturerInformation(\WC_Order $order): void
     {
-        $this->sectionStart('Manufacturer Information');
+        $this->sectionStart('Herstellerinformationen');
 
         $this->row(
-            'Manufacturer',
+            'Hersteller',
             $order->get_meta('_nyp_manufacturer')
         );
         
         $this->row(
-            'Product Line',
+            'Produktlinie',
             $order->get_meta('_nyp_product_line')
         );
         
         $this->row(
-            'Handle Preference',
+            'Griffpräferenz',
             $order->get_meta('_nyp_handle_preference')
         );
         
         $this->row(
-            'Color / Finish Concept',
+            'Farb-/Oberflächenkonzept',
             $order->get_meta('_nyp_finish_concept')
         );
         
         $this->row(
-            'Manufacturer Notes',
+            'Herstellerhinweise',
             $order->get_meta('_nyp_manufacturer_notes')
         );
 
@@ -736,55 +736,55 @@ public function renderMetaBox($order): void
 
     private function renderApplianceInformation(\WC_Order $order): void
     {
-        $this->sectionStart('Appliance Information');
+        $this->sectionStart('Geräteinformationen');
 
-        $this->row('Reuse Appliances', $order->get_meta('_nyp_reuse_appliances'));
-        $this->row('Appliance Brand', $order->get_meta('_nyp_appliance_brand'));
-        $this->row('Cooktop', $order->get_meta('_nyp_cooktop'));
-        $this->row('Oven', $order->get_meta('_nyp_oven'));
-        $this->row('Microwave', $order->get_meta('_nyp_microwave'));
-        $this->row('Refrigerator', $order->get_meta('_nyp_refrigerator'));
-        $this->row('Freezer', $order->get_meta('_nyp_freezer'));
-        $this->row('Dishwasher', $order->get_meta('_nyp_dishwasher'));
-        $this->row('Extractor Hood', $order->get_meta('_nyp_extractor_hood'));
-        $this->row('Notes', $order->get_meta('_nyp_appliance_notes'));
+        $this->row('Geräte übernehmen', $order->get_meta('_nyp_reuse_appliances'));
+        $this->row('Gerätemarke', $order->get_meta('_nyp_appliance_brand'));
+        $this->row('Kochfeld', $order->get_meta('_nyp_cooktop'));
+        $this->row('Backofen', $order->get_meta('_nyp_oven'));
+        $this->row('Mikrowelle', $order->get_meta('_nyp_microwave'));
+        $this->row('Kühlschrank', $order->get_meta('_nyp_refrigerator'));
+        $this->row('Gefrierschrank', $order->get_meta('_nyp_freezer'));
+        $this->row('Geschirrspüler', $order->get_meta('_nyp_dishwasher'));
+        $this->row('Dunstabzugshaube', $order->get_meta('_nyp_extractor_hood'));
+        $this->row('Hinweise', $order->get_meta('_nyp_appliance_notes'));
         $this->row(
-            'Sink Brand / Model',
+            'Spülenmarke / -modell',
             $order->get_meta(
                 '_nyp_sink_model'
             )
         );
         
         $this->row(
-            'Sink Color / Finish',
+            'Spülenfarbe / -oberfläche',
             $order->get_meta(
                 '_nyp_sink_finish'
             )
         );
         
         $this->row(
-            'Tap Brand / Model',
+            'Armaturenmarke / -modell',
             $order->get_meta(
                 '_nyp_tap_model'
             )
         );
         
         $this->row(
-            'Tap Color / Finish',
+            'Armaturenfarbe / -oberfläche',
             $order->get_meta(
                 '_nyp_tap_finish'
             )
         );
         
         $this->row(
-            'Water System Requirements',
+            'Anforderungen an das Wassersystem',
             $order->get_meta(
                 '_nyp_water_system_requirements'
             )
         );
         
         $this->row(
-            'Sink / Tap Notes',
+            'Hinweise zu Spüle / Armatur',
             $order->get_meta(
                 '_nyp_sink_tap_notes'
             )
@@ -795,63 +795,63 @@ public function renderMetaBox($order): void
 
     private function renderDesignRequirements(\WC_Order $order): void
     {
-        $this->sectionStart('Design Requirements');
+        $this->sectionStart('Designanforderungen');
 
-        $this->row('Design Style', $order->get_meta('_nyp_design_style'));
-        $this->row('Color Scheme', $order->get_meta('_nyp_color_scheme'));
-        $this->row('Worktop Preference', $order->get_meta('_nyp_worktop_preference'));
-        $this->row('Handle Preference', $order->get_meta('_nyp_handle_preference'));
-        $this->row('Lighting Requirements', $order->get_meta('_nyp_lighting_requirements'));
-        $this->row('Storage Requirements', $order->get_meta('_nyp_storage_requirements'));
-        $this->row('Customer Requests', $order->get_meta('_nyp_customer_requests'));
-        $this->row('Design Notes', $order->get_meta('_nyp_design_notes'));
+        $this->row('Designstil', $order->get_meta('_nyp_design_style'));
+        $this->row('Farbkonzept', $order->get_meta('_nyp_color_scheme'));
+        $this->row('Arbeitsplattenpräferenz', $order->get_meta('_nyp_worktop_preference'));
+        $this->row('Griffpräferenz', $order->get_meta('_nyp_handle_preference'));
+        $this->row('Beleuchtungsanforderungen', $order->get_meta('_nyp_lighting_requirements'));
+        $this->row('Stauraumanforderungen', $order->get_meta('_nyp_storage_requirements'));
+        $this->row('Kundenwünsche', $order->get_meta('_nyp_customer_requests'));
+        $this->row('Designhinweise', $order->get_meta('_nyp_design_notes'));
 
         $this->sectionEnd();
     }
 
     private function renderUploadedFiles(\WC_Order $order): void
     {
-        $this->sectionStart('Uploaded Files');
+        $this->sectionStart('Hochgeladene Dateien');
 
         $this->singleFile(
             $order->get_id(),
             '_nyp_floor_plan',
-            'Floor Plan',
+            'Grundriss',
             $order->get_meta('_nyp_floor_plan')
         );
 
         $this->singleFile(
             $order->get_id(),
             '_nyp_planning_export',
-            'Planning Export',
+            'Planungsexport',
             $order->get_meta('_nyp_planning_export')
         );
 
         $this->multiFile(
             $order->get_id(),
             '_nyp_kitchen_photos',
-            'Kitchen Photos',
+            'Küchenfotos',
             $order->get_meta('_nyp_kitchen_photos')
         );
 
         $this->multiFile(
             $order->get_id(),
             '_nyp_inspiration_images',
-            'Inspiration Images',
+            'Inspirationsbilder',
             $order->get_meta('_nyp_inspiration_images')
         );
 
         $this->multiFile(
             $order->get_id(),
             '_nyp_technical_documents',
-            'Technical Documents',
+            'Technische Unterlagen',
             $order->get_meta('_nyp_technical_documents')
         );
 
         $this->multiFile(
             $order->get_id(),
             '_nyp_additional_files',
-            'Additional Files',
+            'Weitere Dateien',
             $order->get_meta('_nyp_additional_files')
         );
 
@@ -873,7 +873,7 @@ echo '<a
         . '"
         class="button button-primary"
       >
-        Download All Files
+        Alle Dateien herunterladen
       </a>';
 
 echo '</p>';
@@ -935,7 +935,7 @@ echo '</p>';
                 target="_blank"
                 class="button button-small"
               >
-                Download
+                Herunterladen
               </a>';
     
         echo '</p>';
@@ -992,7 +992,7 @@ echo '</p>';
             echo '<a href="'
                 . esc_url($url)
                 . '" class="button button-small">
-                    Download
+                    Herunterladen
                   </a>';
     
             echo '</li>';
