@@ -18,28 +18,27 @@ class RegistrationForm
     }
 
     public function enqueue_assets()
-{
-    if (!is_page('partner-registration')) {
-        return;
-    }
+    {
+        if (!is_page('partner-registration')) {
+            return;
+        }
 
-    wp_enqueue_style(
-        'nyp-partner-registration',
-        plugin_dir_url(dirname(dirname(dirname(__DIR__))))
-            . 'assets/css/partner-registration.css',
-        [],
-        '1.0.0'
-    );
-}
+        wp_enqueue_style(
+            'nyp-partner-registration',
+            plugin_dir_url(dirname(dirname(dirname(__DIR__))))
+                . 'assets/css/partner-registration.css',
+            [],
+            '1.0.0'
+        );
+    }
 
     public function render()
     {
         // Already logged in
         if (is_user_logged_in()) {
-
             return '
                 <div class="nyp-notice nyp-notice-info">
-                    You are already logged in.
+                    Sie sind bereits angemeldet.
                 </div>
             ';
         }
@@ -47,8 +46,18 @@ class RegistrationForm
         ob_start();
 
         $this->display_messages();
-
         ?>
+
+        <div class="nyp-registration-intro">
+            <h2>Partner werden</h2>
+
+            <p>
+                Registrieren Sie Ihr Küchenstudio oder Unternehmen für den
+                NYP Partnerbereich. Nach Prüfung Ihrer Angaben schalten wir
+                Ihren Zugang frei. Erst nach Freischaltung erhalten Sie Zugriff
+                auf Preise, Planungsanfragen und das Partnerportal.
+            </p>
+        </div>
 
         <form method="post" class="nyp-partner-registration-form">
 
@@ -65,7 +74,7 @@ class RegistrationForm
 
             <div class="nyp-form-row">
                 <label for="company_name">
-                    Company Name *
+                    Firmenname *
                 </label>
 
                 <input
@@ -78,7 +87,7 @@ class RegistrationForm
 
             <div class="nyp-form-row">
                 <label for="contact_person">
-                    Contact Person *
+                    Ansprechpartner *
                 </label>
 
                 <input
@@ -91,7 +100,7 @@ class RegistrationForm
 
             <div class="nyp-form-row">
                 <label for="email">
-                    Email *
+                    E-Mail-Adresse *
                 </label>
 
                 <input
@@ -104,7 +113,7 @@ class RegistrationForm
 
             <div class="nyp-form-row">
                 <label for="phone">
-                    Phone *
+                    Telefonnummer *
                 </label>
 
                 <input
@@ -129,7 +138,7 @@ class RegistrationForm
 
             <div class="nyp-form-row">
                 <label for="vat_number">
-                    VAT Number
+                    USt-IdNr. / Steuernummer
                 </label>
 
                 <input
@@ -141,7 +150,7 @@ class RegistrationForm
 
             <div class="nyp-form-row">
                 <label for="message">
-                    Message
+                    Nachricht
                 </label>
 
                 <textarea
@@ -153,7 +162,7 @@ class RegistrationForm
 
             <div class="nyp-form-row">
                 <label for="password">
-                    Password *
+                    Passwort *
                 </label>
 
                 <input
@@ -166,7 +175,7 @@ class RegistrationForm
 
             <div class="nyp-form-row">
                 <label for="confirm_password">
-                    Confirm Password *
+                    Passwort bestätigen *
                 </label>
 
                 <input
@@ -177,8 +186,22 @@ class RegistrationForm
                 >
             </div>
 
+            <div class="nyp-form-row nyp-checkbox-row">
+                <label>
+                    <input
+                        type="checkbox"
+                        name="privacy_consent"
+                        value="1"
+                        required
+                    >
+
+                    Ich habe die Datenschutzerklärung gelesen und stimme der
+                    Verarbeitung meiner Angaben zur Prüfung meines Partnerzugangs zu.
+                </label>
+            </div>
+
             <button type="submit">
-                Apply For Partner Access
+                Partnerzugang beantragen
             </button>
 
         </form>
@@ -189,65 +212,64 @@ class RegistrationForm
     }
 
     private function display_messages()
-{
-    if (empty($_GET['registration'])) {
-        return;
-    }
+    {
+        if (empty($_GET['registration'])) {
+            return;
+        }
 
-    $registration = sanitize_text_field(
-        wp_unslash($_GET['registration'])
-    );
+        $registration = sanitize_text_field(
+            wp_unslash($_GET['registration'])
+        );
 
-    if ($registration === 'success') {
+        if ($registration === 'success') {
+
+            echo '
+            <div class="nyp-notice nyp-notice-success">
+                Vielen Dank für Ihre Registrierung.<br>
+                Ihr Partnerkonto wurde erstellt und wartet auf Freischaltung durch NYP Kitchen Design.
+            </div>';
+
+            return;
+        }
+
+        if ($registration !== 'failed') {
+            return;
+        }
+
+        $error = isset($_GET['nyp_error'])
+            ? sanitize_text_field(wp_unslash($_GET['nyp_error']))
+            : '';
+
+        $message = $this->get_error_message($error);
 
         echo '
-        <div class="nyp-notice nyp-notice-success">
-            Thank you for your application.
-            Your account has been created and is awaiting approval.
+        <div class="nyp-notice nyp-notice-error">
+            ' . esc_html($message) . '
         </div>';
-
-        return;
     }
 
-    if ($registration !== 'failed') {
-        return;
+    private function get_error_message($error)
+    {
+        $messages = [
+
+            'missing_fields' =>
+                'Bitte füllen Sie alle Pflichtfelder aus.',
+
+            'invalid_email' =>
+                'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
+
+            'email_exists' =>
+                'Für diese E-Mail-Adresse existiert bereits ein Konto.',
+
+            'password_mismatch' =>
+                'Die Passwörter stimmen nicht überein.',
+
+            'user_creation_failed' =>
+                'Ihr Konto konnte nicht erstellt werden. Bitte versuchen Sie es erneut.',
+
+        ];
+
+        return $messages[$error]
+            ?? 'Die Registrierung ist fehlgeschlagen. Bitte versuchen Sie es erneut.';
     }
-    $error = isset($_GET['nyp_error']) ? sanitize_text_field( wp_unslash($_GET['nyp_error']) ) : '';
-
-
-
-    $message = $this->get_error_message($error);
-
-    echo '
-    <div class="nyp-notice nyp-notice-error">
-        ' . esc_html($message) . '
-    </div>';
-}
-
-private function get_error_message($error)
-{
-    $messages = [
-
-        'missing_fields' =>
-            'Please fill in all required fields.',
-
-        'invalid_email' =>
-            'Please enter a valid email address.',
-
-        'email_exists' =>
-            'An account with this email address already exists.',
-
-        'password_mismatch' =>
-            'Passwords do not match.',
-
-        'user_creation_failed' =>
-            'Unable to create your account. Please try again.',
-
-    ];
-
-    return $messages[$error]
-        ?? 'Registration failed. Please try again.';
-}
-
-
 }

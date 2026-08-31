@@ -442,7 +442,7 @@ public function planningLoopButton(
         '<a href="%1$s" class="button">%2$s</a>',
         esc_url($url),
         esc_html__(
-            'Start Planning',
+            'Planungsanfrage starten',
             'nyp-partner-portal-enterprise'
         )
     );

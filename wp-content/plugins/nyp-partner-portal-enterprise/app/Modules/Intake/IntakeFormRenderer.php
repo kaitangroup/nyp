@@ -119,7 +119,7 @@ class IntakeFormRenderer
         if (!$this->initialize()) {
 
             return '<div class="woocommerce-error">
-                Invalid planning session.
+                Ungültige Planungssitzung.
             </div>';
 
         }
@@ -155,7 +155,7 @@ class IntakeFormRenderer
     <div class="nyp-intake-form">
 
         <h2>
-            Planning Brief
+            Planungsbogen
         </h2>
 <?php
 
@@ -180,7 +180,7 @@ if ($error) :
         case 'floor_plan_required':
 
             echo esc_html__(
-                'Please upload a Floor Plan / Dimensioned Sketch before submitting the Planning Brief.',
+                'Bitte laden Sie einen Grundriss / eine bemaßte Skizze hoch, bevor Sie den Planungsbogen absenden.',
                 'nyp'
             );
 
@@ -189,7 +189,7 @@ if ($error) :
         case 'missing_required_fields':
 
             echo esc_html__(
-                'Please complete all required fields before submitting the Planning Brief.',
+                'Bitte füllen Sie alle Pflichtfelder aus, bevor Sie den Planungsbogen absenden.',
                 'nyp'
             );
 
@@ -207,12 +207,12 @@ if ($error) :
                 isset($_GET['saved'])
             ) {
                 echo '<div class="woocommerce-message">
-        Project information saved.
+        Projektinformationen gespeichert.
     </div>';
 
                 if ($isSubmitted) {
                     echo '<div class="woocommerce-message">
-    Your planning brief has been submitted and can no longer be edited.
+    Ihr Planungsbogen wurde übermittelt und kann nicht mehr bearbeitet werden.
     </div>';
                 }
             }
@@ -237,13 +237,13 @@ if ($error) :
 <div class="nyp-form-section">
 
     <h3>
-        Project / Commission Data
+        Projekt- / Auftragsdaten
     </h3>
 
     <div class="nyp-form-row">
 
         <label>
-            Project Name *
+            Projektname *
         </label>
 
         <input
@@ -262,7 +262,7 @@ if ($error) :
     <div class="nyp-form-row">
 
         <label>
-            Studio Reference / Project ID
+            Studio-Referenz / Projekt-ID
         </label>
 
         <input
@@ -280,7 +280,7 @@ if ($error) :
     <div class="nyp-form-row">
 
         <label>
-            Studio Contact Person *
+            Ansprechpartner Studio *
         </label>
 
         <input
@@ -301,7 +301,7 @@ if ($error) :
 <div class="nyp-form-section">
 
     <h3>
-        Planning Category
+        Planungskategorie
     </h3>
 
 <?php
@@ -394,13 +394,13 @@ if (empty($selectedCategory)) {
 ?>
 
     <p class="nyp-section-description">
-        Select the planning category that best matches the project scope. NYP will review the submitted project before planning begins.
+        Wählen Sie die Planungskategorie, die am besten zum Projektumfang passt. NYP prüft das eingereichte Projekt, bevor die Planung beginnt.
     </p>
 
     <div class="nyp-form-row">
 
         <label>
-            Planning Category *
+            Planungskategorie *
         </label>
 
         <select
@@ -409,7 +409,7 @@ if (empty($selectedCategory)) {
         >
 
             <option value="">
-                Select Category
+                Kategorie auswählen
             </option>
 
             <option
@@ -419,7 +419,7 @@ if (empty($selectedCategory)) {
                     'basic'
                 ); ?>
             >
-                Basic Planning
+                Basisplanung
             </option>
 
             <option
@@ -429,7 +429,7 @@ if (empty($selectedCategory)) {
                     'professional'
                 ); ?>
             >
-                Professional Kitchen Design
+                Professionelle Küchenplanung
             </option>
 
             <option
@@ -439,7 +439,7 @@ if (empty($selectedCategory)) {
                     'premium'
                 ); ?>
             >
-                Premium Room Concept
+                Premium-Raumkonzept
             </option>
 
         </select>
@@ -449,7 +449,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Package Validation Confirmation *
+            Bestätigung der Paketprüfung *
         </label>
 
         <label class="nyp-checkbox-label">
@@ -467,7 +467,7 @@ if (empty($selectedCategory)) {
                 required
             >
 
-            I understand that NYP may review the submitted project scope before planning begins. If the selected category does not match the actual requirements, NYP may request an upgrade, reduce the planning scope, or pause the project until the scope is clarified.
+            Mir ist bewusst, dass NYP den eingereichten Projektumfang vor Beginn der Planung prüfen kann. Falls die gewählte Kategorie nicht den tatsächlichen Anforderungen entspricht, kann NYP ein Upgrade verlangen, den Planungsumfang reduzieren oder das Projekt bis zur Klärung des Umfangs pausieren.
 
         </label>
 
@@ -478,17 +478,17 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-section">
 
 <h3>
-    Room & Kitchen Layout
+    Raum- & Küchenlayout
 </h3>
 
 <p class="nyp-section-description">
-    Room dimensions should primarily be provided through the uploaded floor plan or dimensioned sketch. Additional notes can be added below.
+    Raummaße sollten in erster Linie über den hochgeladenen Grundriss oder die bemaßte Skizze angegeben werden. Zusätzliche Hinweise können unten ergänzt werden.
 </p>
 
 <div class="nyp-form-row">
 
     <label>
-        Kitchen Layout *
+        Küchenlayout *
     </label>
 
     <select
@@ -497,7 +497,7 @@ if (empty($selectedCategory)) {
     >
 
         <option value="">
-            Select Layout
+            Layout auswählen
         </option>
 
         <option value="single_wall"
@@ -506,7 +506,7 @@ if (empty($selectedCategory)) {
                 'single_wall'
             ); ?>
         >
-            Single wall kitchen
+            Einzeilige Küche
         </option>
 
         <option value="galley"
@@ -515,7 +515,7 @@ if (empty($selectedCategory)) {
                 'galley'
             ); ?>
         >
-            Galley / two-line kitchen
+            Zweizeilige Küche
         </option>
 
         <option value="l_shape"
@@ -524,7 +524,7 @@ if (empty($selectedCategory)) {
                 'l_shape'
             ); ?>
         >
-            L-shaped kitchen
+            L-förmige Küche
         </option>
 
         <option value="u_shape"
@@ -533,7 +533,7 @@ if (empty($selectedCategory)) {
                 'u_shape'
             ); ?>
         >
-            U-shaped kitchen
+            U-förmige Küche
         </option>
 
         <option value="island"
@@ -542,7 +542,7 @@ if (empty($selectedCategory)) {
                 'island'
             ); ?>
         >
-            Island kitchen
+            Kücheninsel
         </option>
 
         <option value="peninsula"
@@ -551,7 +551,7 @@ if (empty($selectedCategory)) {
                 'peninsula'
             ); ?>
         >
-            Peninsula kitchen
+            Halbinselküche
         </option>
 
         <option value="appliance_wall"
@@ -560,7 +560,7 @@ if (empty($selectedCategory)) {
                 'appliance_wall'
             ); ?>
         >
-            Kitchen with appliance wall
+            Küche mit Geräteschrankwand
         </option>
 
         <option value="open_plan"
@@ -569,7 +569,7 @@ if (empty($selectedCategory)) {
                 'open_plan'
             ); ?>
         >
-            Open-plan kitchen
+            Offene Küche
         </option>
 
         <option value="living_dining"
@@ -578,7 +578,7 @@ if (empty($selectedCategory)) {
                 'living_dining'
             ); ?>
         >
-            Kitchen-living-dining concept
+            Wohnküchen-Konzept
         </option>
 
         <option value="not_defined"
@@ -587,7 +587,7 @@ if (empty($selectedCategory)) {
                 'not_defined'
             ); ?>
         >
-            Not defined yet
+            Noch nicht festgelegt
         </option>
 
         <option value="other"
@@ -596,7 +596,7 @@ if (empty($selectedCategory)) {
                 'other'
             ); ?>
         >
-            Other / special layout
+            Sonstiges / spezielles Layout
         </option>
 
     </select>
@@ -606,7 +606,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Ceiling Height (mm)
+        Deckenhöhe (mm)
     </label>
 
     <input
@@ -626,7 +626,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Additional Room / Layout Notes
+        Zusätzliche Raum-/Layout-Hinweise
     </label>
 
     <textarea
@@ -651,17 +651,17 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-section">
 
     <h3>
-        Manufacturer / Program / Material Concept
+        Hersteller / Programm / Materialkonzept
     </h3>
 
     <p class="nyp-section-description">
-        Please provide the preferred manufacturer, collection, material direction and design concept.
+        Bitte geben Sie den bevorzugten Hersteller, das Programm, die Materialrichtung und das Designkonzept an.
     </p>
 
     <div class="nyp-form-row">
 
         <label>
-            Kitchen Manufacturer *
+            Küchenhersteller *
         </label>
 
         <select
@@ -670,7 +670,7 @@ if (empty($selectedCategory)) {
         >
 
             <option value="">
-                Select Manufacturer
+                Hersteller auswählen
             </option>
 
             <option value="nobilia"
@@ -688,7 +688,7 @@ if (empty($selectedCategory)) {
                     'schueller'
                 ); ?>
             >
-                Schueller
+                Schüller
             </option>
 
             <option value="nolte"
@@ -706,7 +706,7 @@ if (empty($selectedCategory)) {
                     'other'
                 ); ?>
             >
-                Other (only after prior confirmation by NYP)
+                Sonstiges (nur nach vorheriger Bestätigung durch NYP)
             </option>
 
         </select>
@@ -716,7 +716,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Product Line / Collection
+            Produktlinie / Kollektion
         </label>
 
         <input
@@ -727,7 +727,7 @@ if (empty($selectedCategory)) {
                     '_nyp_product_line'
                 )
             ); ?>"
-            placeholder="Example: Easytouch, Structura, Nova Lack..."
+            placeholder="Beispiel: Easytouch, Structura, Nova Lack..."
         >
 
     </div>
@@ -735,7 +735,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Handle / Handleless Preference
+            Griff- / Grifflos-Präferenz
         </label>
 
         <select
@@ -743,7 +743,7 @@ if (empty($selectedCategory)) {
         >
 
             <option value="">
-                Select
+                Auswählen
             </option>
 
             <option value="handleless"
@@ -754,7 +754,7 @@ if (empty($selectedCategory)) {
                     'handleless'
                 ); ?>
             >
-                Handleless
+                Grifflos
             </option>
 
             <option value="handles"
@@ -765,7 +765,7 @@ if (empty($selectedCategory)) {
                     'handles'
                 ); ?>
             >
-                Handles
+                Mit Griffen
             </option>
 
             <option value="mixed"
@@ -776,7 +776,7 @@ if (empty($selectedCategory)) {
                     'mixed'
                 ); ?>
             >
-                Mixed
+                Gemischt
             </option>
 
             <option value="no_preference"
@@ -787,7 +787,7 @@ if (empty($selectedCategory)) {
                     'no_preference'
                 ); ?>
             >
-                No Preference
+                Keine Präferenz
             </option>
 
         </select>
@@ -797,7 +797,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Color / Finish Concept
+            Farb- / Oberflächenkonzept
         </label>
 
         <textarea
@@ -814,7 +814,7 @@ if (empty($selectedCategory)) {
         ?></textarea>
 
         <small>
-            Example: Island in dark green, tall units in white, worktop in stone look.
+            Beispiel: Insel in Dunkelgrün, Hochschränke in Weiß, Arbeitsplatte in Steinoptik.
         </small>
 
     </div>
@@ -822,7 +822,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Special Manufacturer / Material Notes
+            Besondere Hinweise zu Hersteller / Material
         </label>
 
         <textarea
@@ -846,37 +846,37 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-section">
 
 <h3>
-    Worktop / Niche / Ergonomics
+    Arbeitsplatte / Nische / Ergonomie
 </h3>
 
 <div class="nyp-form-row">
 
     <label>
-        Worktop Material
+        Arbeitsplattenmaterial
     </label>
 
     <select name="worktop_material">
 
-        <option value="">Select Material</option>
+        <option value="">Material auswählen</option>
 
         <option value="laminate" <?php selected($this->meta('_nyp_worktop_material'),'laminate'); ?>>
-            Laminate
+            Laminat
         </option>
 
         <option value="compact_laminate" <?php selected($this->meta('_nyp_worktop_material'),'compact_laminate'); ?>>
-            Compact Laminate
+            Kompaktlaminat
         </option>
 
         <option value="quartz" <?php selected($this->meta('_nyp_worktop_material'),'quartz'); ?>>
-            Quartz
+            Quarz
         </option>
 
         <option value="granite" <?php selected($this->meta('_nyp_worktop_material'),'granite'); ?>>
-            Granite
+            Granit
         </option>
 
         <option value="ceramic" <?php selected($this->meta('_nyp_worktop_material'),'ceramic'); ?>>
-            Ceramic
+            Keramik
         </option>
 
         <option value="dekton" <?php selected($this->meta('_nyp_worktop_material'),'dekton'); ?>>
@@ -884,11 +884,11 @@ if (empty($selectedCategory)) {
         </option>
 
         <option value="wood" <?php selected($this->meta('_nyp_worktop_material'),'wood'); ?>>
-            Solid Wood
+            Massivholz
         </option>
 
         <option value="other" <?php selected($this->meta('_nyp_worktop_material'),'other'); ?>>
-            Other
+            Sonstiges
         </option>
 
     </select>
@@ -900,12 +900,12 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Worktop Thickness
+        Arbeitsplattenstärke
     </label>
 
     <select name="worktop_thickness">
 
-        <option value="">Select Thickness</option>
+        <option value="">Stärke auswählen</option>
 
         <option value="12mm" <?php selected($this->meta('_nyp_worktop_thickness'),'12mm'); ?>>12 mm</option>
 
@@ -919,7 +919,7 @@ if (empty($selectedCategory)) {
 
         <option value="60mm" <?php selected($this->meta('_nyp_worktop_thickness'),'60mm'); ?>>60 mm</option>
 
-        <option value="other" <?php selected($this->meta('_nyp_worktop_thickness'),'other'); ?>>Other</option>
+        <option value="other" <?php selected($this->meta('_nyp_worktop_thickness'),'other'); ?>>Sonstiges</option>
 
     </select>
 
@@ -928,7 +928,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Desired Work Height (mm)
+        Gewünschte Arbeitshöhe (mm)
     </label>
 
     <input
@@ -946,12 +946,12 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Corpus Height
+        Korpushöhe
     </label>
 
     <select name="corpus_height">
 
-        <option value="">Select Height</option>
+        <option value="">Höhe auswählen</option>
 
         <option value="720mm" <?php selected($this->meta('_nyp_corpus_height'),'720mm'); ?>>720 mm</option>
 
@@ -961,7 +961,7 @@ if (empty($selectedCategory)) {
 
         <option value="864mm" <?php selected($this->meta('_nyp_corpus_height'),'864mm'); ?>>864 mm</option>
 
-        <option value="other" <?php selected($this->meta('_nyp_corpus_height'),'other'); ?>>Other</option>
+        <option value="other" <?php selected($this->meta('_nyp_corpus_height'),'other'); ?>>Sonstiges</option>
 
     </select>
 
@@ -970,12 +970,12 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Plinth Height
+        Sockelhöhe
     </label>
 
     <select name="plinth_height">
 
-        <option value="">Select Height</option>
+        <option value="">Höhe auswählen</option>
 
         <option value="70mm" <?php selected($this->meta('_nyp_plinth_height'),'70mm'); ?>>70 mm</option>
 
@@ -985,7 +985,7 @@ if (empty($selectedCategory)) {
 
         <option value="200mm" <?php selected($this->meta('_nyp_plinth_height'),'200mm'); ?>>200 mm</option>
 
-        <option value="other" <?php selected($this->meta('_nyp_plinth_height'),'other'); ?>>Other</option>
+        <option value="other" <?php selected($this->meta('_nyp_plinth_height'),'other'); ?>>Sonstiges</option>
 
     </select>
 
@@ -994,39 +994,39 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Niche Cladding
+        Nischenverkleidung
     </label>
 
     <select name="niche_cladding">
 
-        <option value="">Select Niche Cladding</option>
+        <option value="">Nischenverkleidung auswählen</option>
 
         <option value="same_as_worktop" <?php selected($this->meta('_nyp_niche_cladding'),'same_as_worktop'); ?>>
-            Same as Worktop
+            Wie Arbeitsplatte
         </option>
 
         <option value="glass" <?php selected($this->meta('_nyp_niche_cladding'),'glass'); ?>>
-            Glass
+            Glas
         </option>
 
         <option value="ceramic" <?php selected($this->meta('_nyp_niche_cladding'),'ceramic'); ?>>
-            Ceramic
+            Keramik
         </option>
 
         <option value="compact_laminate" <?php selected($this->meta('_nyp_niche_cladding'),'compact_laminate'); ?>>
-            Compact Laminate
+            Kompaktlaminat
         </option>
 
         <option value="stone" <?php selected($this->meta('_nyp_niche_cladding'),'stone'); ?>>
-            Stone
+            Stein
         </option>
 
         <option value="painted_wall" <?php selected($this->meta('_nyp_niche_cladding'),'painted_wall'); ?>>
-            Painted Wall
+            Gestrichene Wand
         </option>
 
         <option value="other" <?php selected($this->meta('_nyp_niche_cladding'),'other'); ?>>
-            Other
+            Sonstiges
         </option>
 
     </select>
@@ -1036,7 +1036,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Front / Corpus Material
+        Front-/Korpusmaterial
     </label>
 
     <input
@@ -1054,7 +1054,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Worktop / Niche / Ergonomics Notes
+        Hinweise zu Arbeitsplatte / Nische / Ergonomie
     </label>
 
     <textarea
@@ -1079,17 +1079,17 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-section">
 
     <h3>
-        Appliances / Sink / Tap
+        Geräte / Spüle / Armatur
     </h3>
 
     <p class="nyp-section-description">
-        Please specify appliance preferences together with sink, tap and water system requirements.
+        Bitte geben Sie Ihre Gerätewünsche sowie Anforderungen an Spüle, Armatur und Wassersystem an.
     </p>
 
     <div class="nyp-form-row">
 
         <label>
-            Preferred Appliance Brand
+            Bevorzugte Gerätemarke
         </label>
 
         <input
@@ -1100,7 +1100,7 @@ if (empty($selectedCategory)) {
                     '_nyp_appliance_brand'
                 )
             ); ?>"
-            placeholder="e.g. Siemens, Bosch, Miele, Neff"
+            placeholder="z. B. Siemens, Bosch, Miele, Neff"
         >
 
     </div>
@@ -1108,7 +1108,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Cooktop
+            Kochfeld
         </label>
 
         <input
@@ -1126,7 +1126,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Oven
+            Backofen
         </label>
 
         <input
@@ -1144,7 +1144,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Microwave
+            Mikrowelle
         </label>
 
         <input
@@ -1162,7 +1162,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Refrigerator
+            Kühlschrank
         </label>
 
         <input
@@ -1180,7 +1180,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Freezer
+            Gefrierschrank
         </label>
 
         <input
@@ -1198,33 +1198,33 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Dishwasher
+            Geschirrspüler
         </label>
 
         <select name="dishwasher">
 
             <option value="">
-                Select
+                Auswählen
             </option>
 
             <option value="integrated">
-                Integrated dishwasher
+                Integrierter Geschirrspüler
             </option>
 
             <option value="existing">
-                Existing dishwasher to be planned in
+                Vorhandener Geschirrspüler soll eingeplant werden
             </option>
 
             <option value="none">
-                No dishwasher required
+                Kein Geschirrspüler erforderlich
             </option>
 
             <option value="raised">
-                Raised dishwasher requested
+                Erhöhter Geschirrspüler gewünscht
             </option>
 
             <option value="suggest">
-                Please suggest
+                Bitte vorschlagen
             </option>
 
         </select>
@@ -1234,7 +1234,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
         <label>
-            Extractor Hood
+            Dunstabzugshaube
         </label>
 
         <input
@@ -1252,7 +1252,7 @@ if (empty($selectedCategory)) {
     <div class="nyp-form-row">
 
     <label>
-        Sink Brand / Model
+        Spülenmarke / -modell
     </label>
 
     <input
@@ -1263,7 +1263,7 @@ if (empty($selectedCategory)) {
                 '_nyp_sink_model'
             )
         ); ?>"
-        placeholder="e.g. Blanco Subline"
+        placeholder="z. B. Blanco Subline"
     >
 
 </div>
@@ -1271,7 +1271,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Sink Color / Finish
+        Spülenfarbe / -oberfläche
     </label>
 
     <input
@@ -1289,7 +1289,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Tap Brand / Model
+        Armaturenmarke / -modell
     </label>
 
     <input
@@ -1300,7 +1300,7 @@ if (empty($selectedCategory)) {
                 '_nyp_tap_model'
             )
         ); ?>"
-        placeholder="e.g. Quooker Flex"
+        placeholder="z. B. Quooker Flex"
     >
 
 </div>
@@ -1308,7 +1308,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Tap Color / Finish
+        Armaturenfarbe / -oberfläche
     </label>
 
     <input
@@ -1326,7 +1326,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Special Tap / Water System Requirements
+        Besondere Anforderungen an Armatur / Wassersystem
     </label>
 
     <textarea
@@ -1347,7 +1347,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-row">
 
     <label>
-        Sink / Tap / Water System Notes
+        Hinweise zu Spüle / Armatur / Wassersystem
     </label>
 
     <textarea
@@ -1372,27 +1372,27 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-section">
 
     <h3>
-        Budget & Equipment Level
+        Budget & Ausstattungsniveau
     </h3>
 
     <p class="nyp-section-description">
 
-        Budget information is used only as planning orientation.
+        Die Budgetangabe dient ausschließlich zur Planungsorientierung.
 
-        NYP does not provide final price calculation or sales pricing.
+        NYP erstellt keine verbindliche Preiskalkulation oder Verkaufspreise.
 
     </p>
 
     <div class="nyp-form-row">
 
         <label>
-            Budget Range / Planning Orientation
+            Budgetrahmen / Planungsorientierung
         </label>
 
         <select name="budget_range">
 
             <option value="">
-                Select Budget Range
+                Budgetrahmen auswählen
             </option>
 
             <option
@@ -1404,7 +1404,7 @@ if (empty($selectedCategory)) {
                     'under_10000'
                 ); ?>
             >
-                Under €10,000
+                Unter 10.000 €
             </option>
 
             <option
@@ -1416,7 +1416,7 @@ if (empty($selectedCategory)) {
                     '10000_20000'
                 ); ?>
             >
-                €10,000 - €20,000
+                10.000 € – 20.000 €
             </option>
 
             <option
@@ -1428,7 +1428,7 @@ if (empty($selectedCategory)) {
                     '20000_30000'
                 ); ?>
             >
-                €20,000 - €30,000
+                20.000 € – 30.000 €
             </option>
 
             <option
@@ -1440,7 +1440,7 @@ if (empty($selectedCategory)) {
                     '30000_50000'
                 ); ?>
             >
-                €30,000 - €50,000
+                30.000 € – 50.000 €
             </option>
 
             <option
@@ -1452,7 +1452,7 @@ if (empty($selectedCategory)) {
                     '50000_plus'
                 ); ?>
             >
-                €50,000+
+                50.000 €+
             </option>
 
             <option
@@ -1464,7 +1464,7 @@ if (empty($selectedCategory)) {
                     'unknown'
                 ); ?>
             >
-                Not Yet Defined
+                Noch nicht festgelegt
             </option>
 
         </select>
@@ -1484,7 +1484,7 @@ $planningPriority = $this->meta(
 <div class="nyp-form-row">
 
 <label>
-    Planning Priority
+    Planungspriorität
 </label>
 
 <select name="planning_priority">
@@ -1496,7 +1496,7 @@ $planningPriority = $this->meta(
             ''
         ); ?>
     >
-        Select Priority
+        Priorität auswählen
     </option>
 
     <option
@@ -1506,7 +1506,7 @@ $planningPriority = $this->meta(
             'balanced'
         ); ?>
     >
-        Balanced Approach
+        Ausgewogener Ansatz
     </option>
 
     <option
@@ -1516,7 +1516,7 @@ $planningPriority = $this->meta(
             'design'
         ); ?>
     >
-        Design / Visual Impact
+        Design / Optische Wirkung
     </option>
 
     <option
@@ -1526,7 +1526,7 @@ $planningPriority = $this->meta(
             'storage'
         ); ?>
     >
-        Storage
+        Stauraum
     </option>
 
     <option
@@ -1536,7 +1536,7 @@ $planningPriority = $this->meta(
             'functionality'
         ); ?>
     >
-        Functionality / Workflow
+        Funktionalität / Arbeitsablauf
     </option>
 
     <option
@@ -1546,7 +1546,7 @@ $planningPriority = $this->meta(
             'budget'
         ); ?>
     >
-        Budget-Conscious Planning
+        Budgetbewusste Planung
     </option>
 
     <option
@@ -1556,7 +1556,7 @@ $planningPriority = $this->meta(
             'appliances'
         ); ?>
     >
-        Appliances
+        Geräte
     </option>
 
     <option
@@ -1566,7 +1566,7 @@ $planningPriority = $this->meta(
             'materials'
         ); ?>
     >
-        Materials
+        Materialien
     </option>
 
     <option
@@ -1576,7 +1576,7 @@ $planningPriority = $this->meta(
             'presentation'
         ); ?>
     >
-        Presentation / Sales Impact
+        Präsentation / Verkaufswirkung
     </option>
 
     <option
@@ -1586,7 +1586,7 @@ $planningPriority = $this->meta(
             'everyday_use'
         ); ?>
     >
-        Easy Everyday Use
+        Einfache Alltagstauglichkeit
     </option>
 
 </select>
@@ -1596,7 +1596,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            Budget / Equipment Notes
+            Hinweise zu Budget / Ausstattung
         </label>
 
         <textarea
@@ -1621,27 +1621,27 @@ $planningPriority = $this->meta(
 <div class="nyp-form-section">
 
     <h3>
-        Delivery Format
+        Liefer-/Ausgabeformat
     </h3>
 
     <p class="nyp-section-description">
 
-        Select the preferred delivery format.
+        Wählen Sie das gewünschte Lieferformat.
 
-        Renderings included in the selected package will be embedded in the PDF presentation unless otherwise requested.
+        Im gewählten Paket enthaltene Renderings werden in die PDF-Präsentation eingebettet, sofern nichts anderes gewünscht wird.
 
     </p>
 
     <div class="nyp-form-row">
 
         <label>
-            Delivery Format Required
+            Gewünschtes Lieferformat
         </label>
 
         <select name="delivery_format">
 
             <option value="">
-                Select Delivery Format
+                Lieferformat auswählen
             </option>
 
             <option
@@ -1653,7 +1653,7 @@ $planningPriority = $this->meta(
                     'pdf_only'
                 ); ?>
             >
-                PDF Presentation Only
+                Nur PDF-Präsentation
             </option>
 
             <option
@@ -1665,7 +1665,7 @@ $planningPriority = $this->meta(
                     'pdf_renders'
                 ); ?>
             >
-                PDF Presentation + Render Images
+                PDF-Präsentation + Renderbilder
             </option>
 
             <option
@@ -1677,7 +1677,7 @@ $planningPriority = $this->meta(
                     'pdf_drw'
                 ); ?>
             >
-                PDF Presentation + DRW File
+                PDF-Präsentation + DRW-Datei
             </option>
 
             <option
@@ -1689,7 +1689,7 @@ $planningPriority = $this->meta(
                     'pdf_renders_drw'
                 ); ?>
             >
-                PDF Presentation + Render Images + DRW File
+                PDF-Präsentation + Renderbilder + DRW-Datei
             </option>
 
             <option
@@ -1701,7 +1701,7 @@ $planningPriority = $this->meta(
                     'other'
                 ); ?>
             >
-                Other File Export (Requires NYP Confirmation)
+                Anderes Dateiformat (Bestätigung durch NYP erforderlich)
             </option>
 
             <option
@@ -1713,7 +1713,7 @@ $planningPriority = $this->meta(
                     'suggest'
                 ); ?>
             >
-                Please Suggest
+                Bitte vorschlagen
             </option>
 
         </select>
@@ -1723,7 +1723,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            Delivery Notes
+            Hinweise zur Lieferung
         </label>
 
         <textarea
@@ -1746,17 +1746,17 @@ $planningPriority = $this->meta(
 <div class="nyp-form-section">
 
     <h3>
-        Design Brief / Planning Goals
+        Designbrief / Planungsziele
     </h3>
 
     <p class="nyp-section-description">
-        Describe the overall design direction and planning objectives for this project.
+        Beschreiben Sie die grundsätzliche Gestaltungsrichtung und die Planungsziele für dieses Projekt.
     </p>
 
     <div class="nyp-form-row">
 
         <label>
-            Desired Design Concept / Overall Direction
+            Gewünschtes Designkonzept / Grundrichtung
         </label>
 
         <textarea
@@ -1777,49 +1777,49 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            Planning Priority
+            Planungspriorität
         </label>
 
         <select name="planning_priority">
 
             <option value="">
-                Select Priority
+                Priorität auswählen
             </option>
 
             <option value="balanced">
-                Balanced Approach
+                Ausgewogener Ansatz
             </option>
 
             <option value="design">
-                Design / Visual Impact
+                Design / Optische Wirkung
             </option>
 
             <option value="storage">
-                Storage
+                Stauraum
             </option>
 
             <option value="functionality">
-                Functionality / Workflow
+                Funktionalität / Arbeitsablauf
             </option>
 
             <option value="budget">
-                Budget-Conscious Planning
+                Budgetbewusste Planung
             </option>
 
             <option value="appliances">
-                Appliances
+                Geräte
             </option>
 
             <option value="materials">
-                Materials
+                Materialien
             </option>
 
             <option value="presentation">
-                Presentation / Sales Impact
+                Präsentation / Verkaufswirkung
             </option>
 
             <option value="everyday_use">
-                Easy Everyday Use
+                Einfache Alltagstauglichkeit
             </option>
 
         </select>
@@ -1829,7 +1829,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            Must-Have Features
+            Unverzichtbare Ausstattungsmerkmale
         </label>
 
         <textarea
@@ -1850,7 +1850,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            Nice-to-Have Features
+            Wünschenswerte Ausstattungsmerkmale
         </label>
 
         <textarea
@@ -1871,7 +1871,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            No-Gos / Exclusions
+            No-Gos / Ausschlüsse
         </label>
 
         <textarea
@@ -1892,7 +1892,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            Additional Planning Notes
+            Zusätzliche Planungshinweise
         </label>
 
         <textarea
@@ -1921,13 +1921,13 @@ $planningPriority = $this->meta(
     </h3>
 
     <p class="nyp-section-description">
-        Please upload all available project documents. A floor plan is required before the planning process can begin.
+        Bitte laden Sie alle verfügbaren Projektunterlagen hoch. Ein Grundriss ist erforderlich, bevor mit der Planung begonnen werden kann.
     </p>
 
     <div class="nyp-form-row">
 
         <label>
-        Floor Plan / Dimensioned Sketch *
+        Grundriss / bemaßte Skizze *
         </label>
 
         <input
@@ -1947,7 +1947,7 @@ $planningPriority = $this->meta(
 
 
         $this->renderUploadedFile(
-            'Current Floor Plan',
+            'Aktueller Grundriss',
             $this->meta(
                 '_nyp_floor_plan'
             ),
@@ -1957,7 +1957,7 @@ $planningPriority = $this->meta(
         ?>
 
         <small>
-        A dimensioned floor plan or clearly readable hand sketch is required.
+        Ein bemaßter Grundriss oder eine gut lesbare handgezeichnete Skizze ist erforderlich.
         </small>
 
     </div>
@@ -1965,7 +1965,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            Existing Kitchen Photos
+            Fotos der vorhandenen Küche
         </label>
 
         <input
@@ -1980,7 +1980,7 @@ $planningPriority = $this->meta(
         <?php
 
         $this->renderUploadedFiles(
-            'Uploaded Kitchen Photos',
+            'Hochgeladene Küchenfotos',
             (array) $this->meta(
                 '_nyp_kitchen_photos'
             ),
@@ -1990,7 +1990,7 @@ $planningPriority = $this->meta(
         ?>
 
         <small>
-            Upload photos of the existing room or kitchen.
+            Laden Sie Fotos des vorhandenen Raums bzw. der vorhandenen Küche hoch.
         </small>
 
     </div>
@@ -1998,7 +1998,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            Inspiration Images
+            Inspirationsbilder
         </label>
 
         <input
@@ -2013,7 +2013,7 @@ $planningPriority = $this->meta(
         <?php
 
         $this->renderUploadedFiles(
-            'Uploaded Inspiration Images',
+            'Hochgeladene Inspirationsbilder',
             (array) $this->meta(
                 '_nyp_inspiration_images'
             ),
@@ -2023,7 +2023,7 @@ $planningPriority = $this->meta(
         ?>
 
         <small>
-            Reference images that reflect the desired design style.
+            Referenzbilder, die den gewünschten Gestaltungsstil widerspiegeln.
         </small>
 
     </div>
@@ -2031,7 +2031,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-        Existing Planning / Sketches
+        Vorhandene Planung / Skizzen
         </label>
 
         <input
@@ -2045,7 +2045,7 @@ $planningPriority = $this->meta(
         <?php
 
         $this->renderUploadedFile(
-            'Current Planning Export',
+            'Aktueller Planungsexport',
             $this->meta(
                 '_nyp_planning_export'
             ),
@@ -2055,7 +2055,7 @@ $planningPriority = $this->meta(
         ?>
 
         <small>
-        Upload existing planning drafts, hand sketches, rough room sketches, screenshots, customer notes or similar documents.
+        Laden Sie vorhandene Planungsentwürfe, handgezeichnete Skizzen, grobe Raumskizzen, Screenshots, Kundenhinweise oder ähnliche Unterlagen hoch.
         </small>
 
     </div>
@@ -2063,7 +2063,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            Technical Documents
+            Technische Unterlagen
         </label>
 
         <input
@@ -2078,7 +2078,7 @@ $planningPriority = $this->meta(
         <?php
 
         $this->renderUploadedFiles(
-            'Uploaded Technical Documents',
+            'Hochgeladene technische Unterlagen',
             (array) $this->meta(
                 '_nyp_technical_documents'
             ),
@@ -2088,7 +2088,7 @@ $planningPriority = $this->meta(
         ?>
 
         <small>
-            Architectural plans, measurements, utility drawings, utility plans and technical specifications.
+            Baupläne, Maße, Anschlusszeichnungen, Ver- und Entsorgungspläne sowie technische Spezifikationen.
         </small>
 
     </div>
@@ -2096,7 +2096,7 @@ $planningPriority = $this->meta(
     <div class="nyp-form-row">
 
         <label>
-            Additional Attachments
+            Weitere Anhänge
         </label>
 
         <input
@@ -2110,7 +2110,7 @@ $planningPriority = $this->meta(
         <?php
 
         $this->renderUploadedFiles(
-            'Uploaded Additional Files',
+            'Hochgeladene weitere Dateien',
             (array) $this->meta(
                 '_nyp_additional_files'
             ),
@@ -2120,7 +2120,7 @@ $planningPriority = $this->meta(
         ?>
 
         <small>
-            Any additional files relevant to this project.
+            Weitere für dieses Projekt relevante Dateien.
         </small>
 
     </div>
@@ -2129,11 +2129,11 @@ $planningPriority = $this->meta(
 <div class="nyp-form-section">
 
     <h3>
-        Service Options
+        Serviceoptionen
     </h3>
 
     <p class="nyp-section-description">
-        Choose the planning service that best fits your project timeline. Standard Planning is included with your selected planning package. Express Planning provides priority processing and accelerated delivery.
+        Wählen Sie den Planungsservice, der am besten zu Ihrem Zeitplan passt. Die Standardplanung ist in Ihrem gewählten Planungspaket enthalten. Die Express-Planung bietet eine bevorzugte Bearbeitung und beschleunigte Lieferung.
     </p>
 
     <?php
@@ -2165,15 +2165,15 @@ $planningPriority = $this->meta(
             <span class="nyp-service-content">
 
                 <strong>
-                    Standard Planning
+                    Standardplanung
                 </strong>
 
                 <span class="nyp-service-price">
-                    Included
+                    Inbegriffen
                 </span>
 
                 <small>
-                    Standard planning schedule. Your project will enter the normal NYP planning queue after payment.
+                    Regulärer Planungsablauf. Ihr Projekt wird nach Zahlungseingang in die normale NYP-Planungswarteschlange aufgenommen.
                 </small>
 
             </span>
@@ -2195,15 +2195,15 @@ $planningPriority = $this->meta(
             <span class="nyp-service-content">
 
                 <strong>
-                    Express Planning
+                    Express-Planung
                 </strong>
 
                 <span class="nyp-service-price">
-                    + €400
+                    + 400 €
                 </span>
 
                 <small>
-                Priority overnight planning with accelerated processing. This upgrade is added to your order during checkout.
+                Bevorzugte Über-Nacht-Planung mit beschleunigter Bearbeitung. Dieses Upgrade wird Ihrer Bestellung im Checkout hinzugefügt.
                 </small>
 
             </span>
@@ -2218,11 +2218,11 @@ $planningPriority = $this->meta(
 <div class="nyp-form-section">
 
     <h3>
-        Confirmations
+        Bestätigungen
     </h3>
 
     <p class="nyp-section-description">
-        Please review and confirm the following statements before proceeding.
+        Bitte prüfen und bestätigen Sie die folgenden Aussagen, bevor Sie fortfahren.
     </p>
 
     <div class="nyp-checkbox-group">
@@ -2242,7 +2242,7 @@ $planningPriority = $this->meta(
                 required
             >
 
-            I confirm that all submitted measurements, dimensions and floor plans are accurate and complete to the best of my knowledge.
+            Ich bestätige, dass alle übermittelten Maße, Abmessungen und Grundrisse nach bestem Wissen korrekt und vollständig sind.
 
         </label>
 
@@ -2261,7 +2261,7 @@ $planningPriority = $this->meta(
                 required
             >
 
-            I understand that NYP may review the selected planning category before planning begins.
+            Mir ist bewusst, dass NYP die gewählte Planungskategorie vor Beginn der Planung prüfen kann.
 
         </label>
 
@@ -2280,7 +2280,7 @@ $planningPriority = $this->meta(
                 required
             >
 
-            I understand that NYP may request an upgrade, reduce the planning scope, or pause/cancel the project if the selected category does not match the actual project requirements.
+            Mir ist bewusst, dass NYP ein Upgrade verlangen, den Planungsumfang reduzieren oder das Projekt pausieren/stornieren kann, falls die gewählte Kategorie nicht den tatsächlichen Projektanforderungen entspricht.
 
         </label>
 
@@ -2299,7 +2299,7 @@ $planningPriority = $this->meta(
                 required
             >
 
-            I understand that planning quality depends on complete and accurate project information.
+            Mir ist bewusst, dass die Planungsqualität von vollständigen und korrekten Projektinformationen abhängt.
 
         </label>
 
@@ -2318,7 +2318,7 @@ $planningPriority = $this->meta(
                 required
             >
 
-            I understand that budget and equipment information is used only as planning guidance and does not represent final pricing.
+            Mir ist bewusst, dass Budget- und Ausstattungsangaben nur als Planungsorientierung dienen und keine endgültige Preisgestaltung darstellen.
 
         </label>
 
@@ -2337,7 +2337,7 @@ $planningPriority = $this->meta(
                 required
             >
 
-            I understand that NYP is not responsible for installation, construction work, site execution, final measurements, manufacturer ordering, assembly, or final order verification.
+            Mir ist bewusst, dass NYP nicht verantwortlich ist für Montage, Bauarbeiten, Ausführung vor Ort, finale Aufmaße, Herstellerbestellung, Zusammenbau oder die finale Bestellprüfung.
 
         </label>
 
@@ -2355,7 +2355,7 @@ $planningPriority = $this->meta(
         value="save_draft"
         class="button"
     >
-        Save Draft
+        Entwurf speichern
     </button>
 
     <button
@@ -2363,9 +2363,9 @@ $planningPriority = $this->meta(
         name="nyp_action"
         value="submit_brief"
         class="button button-primary"
-        onclick="return confirm('Are you sure you want to continue to checkout? You can still edit the Planning Brief before payment');"
+        onclick="return confirm('Möchten Sie wirklich zur Kasse fortfahren? Sie können den Planungsbogen vor der Zahlung weiterhin bearbeiten.');"
     >
-    Review & Continue to Checkout
+    Prüfen & weiter zur Kasse
     </button>
 
 </div>
@@ -2375,7 +2375,7 @@ $planningPriority = $this->meta(
     <div class="nyp-brief-submitted">
 
 <strong>
-    ✓ Planning Brief Submitted
+    ✓ Planungsbogen übermittelt
 </strong>
 
 <?php if ($submittedAt) : ?>
@@ -2383,14 +2383,14 @@ $planningPriority = $this->meta(
 <div class="nyp-submission-info">
 
     <strong>
-        Submitted:
+        Übermittelt am:
     </strong>
 
     <?php
 
     echo esc_html(
         wp_date(
-            'F j, Y g:i A',
+            'd.m.Y H:i',
             strtotime($submittedAt)
         )
     );
@@ -2402,8 +2402,8 @@ $planningPriority = $this->meta(
 <?php endif; ?>
 
 <p>
-    Your planning brief has been submitted successfully.
-    NYP will now review your submitted project data and selected planning category.
+    Ihr Planungsbogen wurde erfolgreich übermittelt.
+    NYP prüft nun Ihre übermittelten Projektdaten und die gewählte Planungskategorie.
 </p>
 
 </div>
@@ -2462,9 +2462,9 @@ $planningPriority = $this->meta(
     name="delete_file"
     value="<?php echo esc_attr($file); ?>"
     class="button button-small"
-    onclick="return confirm('Remove this file?');"
+    onclick="return confirm('Diese Datei entfernen?');"
 >
-    Remove
+    Entfernen
 </button>
     
                 <?php endif; ?>
@@ -2548,9 +2548,9 @@ $planningPriority = $this->meta(
     name="delete_file"
     value="<?php echo esc_attr($file); ?>"
     class="button button-small"
-    onclick="return confirm('Remove this file?');"
+    onclick="return confirm('Diese Datei entfernen?');"
 >
-    Remove
+    Entfernen
 </button>
     
     
