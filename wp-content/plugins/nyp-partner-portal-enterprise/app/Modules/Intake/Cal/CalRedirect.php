@@ -156,7 +156,7 @@ public function renderBooking(): string
 
 elementOrSelector:"#my-cal-inline",
 
-calLink:"nyp-kitchen-dev/express-kitchen-planning",
+calLink:"nyp-kitchen-design/nyp-planning-consultation",
 
 layout:"month_view",
 
