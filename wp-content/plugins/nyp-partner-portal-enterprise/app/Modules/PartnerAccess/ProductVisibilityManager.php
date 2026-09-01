@@ -62,7 +62,7 @@ class ProductVisibilityManager
         return sprintf(
             '<span class="nyp-price-hidden">%s</span>',
             esc_html__(
-                'Login as an approved partner to view pricing.',
+                'Melden Sie sich als freigeschalteter Partner an, um Preise und Planungsanfragen zu sehen.',
                 'nyp-partner-portal'
             )
         );
