@@ -17,22 +17,22 @@ class CustomerPlanningReceivedEmail extends WC_Email
         $this->customer_email = true;
 
         $this->title = __(
-            'Planning Received',
+            'Planungsanfrage eingegangen',
             'nyp'
         );
 
         $this->description = __(
-            'Sent to customers after payment has been received and their planning request is awaiting NYP review.',
+            'Wird an Partner gesendet, nachdem die Zahlung eingegangen ist und die Planungsanfrage auf die Prüfung durch NYP wartet.',
             'nyp'
         );
 
         $this->heading = __(
-            'We have received your planning request',
+            'Ihre Planungsanfrage ist bei uns eingegangen',
             'nyp'
         );
 
         $this->subject = __(
-            '[{site_title}] We have received your planning request (Order #{order_number})',
+            '[{site_title}] Ihre Planungsanfrage ist eingegangen (Bestellung #{order_number})',
             'nyp'
         );
 
@@ -58,17 +58,13 @@ class CustomerPlanningReceivedEmail extends WC_Email
     /**
      * Trigger the email.
      */
-    public function trigger(
-        int $orderId
-    ): void {
-
+    public function trigger(int $orderId): void
+    {
         if (!$orderId) {
             return;
         }
 
-        $this->object = wc_get_order(
-            $orderId
-        );
+        $this->object = wc_get_order($orderId);
 
         if (!$this->object instanceof WC_Order) {
             return;
@@ -146,7 +142,7 @@ class CustomerPlanningReceivedEmail extends WC_Email
     public function get_default_content(): string
     {
         return __(
-            'Thank you for your order. We have successfully received your payment and planning request. NYP will now review your submitted project data and selected planning category.',
+            'Vielen Dank für Ihre Bestellung. Wir haben Ihre Zahlung und Ihre Planungsanfrage erfolgreich erhalten. NYP Kitchen Design prüft nun Ihre eingereichten Projektunterlagen sowie die gewählte Planungskategorie.',
             'nyp'
         );
     }
