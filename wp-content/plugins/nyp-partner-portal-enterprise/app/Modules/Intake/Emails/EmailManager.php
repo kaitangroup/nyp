@@ -7,11 +7,14 @@ namespace NYP\Modules\Intake\Emails;
 use WC_Emails;
 use WC_Order;
 use NYP\Modules\Intake\Emails\CustomerPlanningReceivedEmail;
+use NYP\Modules\Intake\Emails\PartnerApprovedEmail;
 
 class EmailManager
 {
     public function register(): void
     {
+
+        (new PartnerApprovedEmail())->register();
         add_filter(
             'woocommerce_email_classes',
             [$this, 'registerEmailClasses']

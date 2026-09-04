@@ -94,21 +94,40 @@ class ApprovalManager
     }
 
     public function save_partner_status($user_id)
-    {
-        if (!current_user_can('edit_user', $user_id)) {
-            return;
-        }
+{
+    if (!current_user_can('edit_user', $user_id)) {
+        return;
+    }
 
-        if (!isset($_POST['nyp_partner_status'])) {
-            return;
-        }
+    if (!isset($_POST['nyp_partner_status'])) {
+        return;
+    }
 
-        update_user_meta(
-            $user_id,
-            'nyp_partner_status',
-            sanitize_text_field(
-                wp_unslash($_POST['nyp_partner_status'])
-            )
+    $old_status = get_user_meta(
+        $user_id,
+        'nyp_partner_status',
+        true
+    );
+
+    $new_status = sanitize_text_field(
+        wp_unslash($_POST['nyp_partner_status'])
+    );
+
+    update_user_meta(
+        $user_id,
+        'nyp_partner_status',
+        $new_status
+    );
+
+    // Send email only when changing to Approved
+    if (
+        $old_status !== 'approved' &&
+        $new_status === 'approved'
+    ) {
+        do_action(
+            'nyp_partner_approved',
+            $user_id
         );
     }
+}
 }

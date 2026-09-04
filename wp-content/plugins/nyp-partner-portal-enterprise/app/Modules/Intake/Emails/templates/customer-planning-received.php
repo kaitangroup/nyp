@@ -19,7 +19,7 @@ do_action(
     <?php
     printf(
         esc_html__(
-            'Hi %s,',
+            'Hallo %s,',
             'nyp'
         ),
         esc_html($order->get_billing_first_name())
@@ -29,28 +29,28 @@ do_action(
 
 <p>
     <?php esc_html_e(
-        'Thank you for choosing NYP Kitchen Design.',
+        'Vielen Dank, dass Sie sich für NYP Kitchen Design entschieden haben.',
         'nyp'
     ); ?>
 </p>
 
 <p>
     <?php esc_html_e(
-        'We have successfully received your payment and your planning request.',
+        'Wir haben Ihre Zahlung und Ihre Planungsanfrage erfolgreich erhalten.',
         'nyp'
     ); ?>
 </p>
 
 <p>
     <?php esc_html_e(
-        'Our planning team will now review your submission. Once the review is complete and the project is approved by NYP, we will schedule the planning process.',
+        'Unser Planungsteam prüft nun Ihre eingereichten Unterlagen. Nach erfolgreicher Prüfung wird Ihr Projekt freigegeben und der Planungsprozess gestartet.',
         'nyp'
     ); ?>
 </p>
 
 <h2>
     <?php esc_html_e(
-        'Order Details',
+        'Bestelldetails',
         'nyp'
     ); ?>
 </h2>
@@ -83,18 +83,18 @@ do_action(
 
 <p>
     <?php esc_html_e(
-        'If you have any questions, simply reply to this email and our team will be happy to assist you.',
+        'Wenn Sie Fragen zu Ihrer Planungsanfrage haben, antworten Sie einfach auf diese E-Mail. Unser Team hilft Ihnen gerne weiter.',
         'nyp'
     ); ?>
 </p>
 
 <p>
     <?php esc_html_e(
-        'Kind regards,',
+        'Mit freundlichen Grüßen,',
         'nyp'
     ); ?>
     <br>
-    <strong><?php bloginfo('name'); ?></strong>
+    <strong>NYP Kitchen Design</strong>
 </p>
 
 <?php
@@ -102,3 +102,4 @@ do_action(
     'woocommerce_email_footer',
     $email
 );
+?>
