@@ -38,7 +38,7 @@ class RegistrationForm
         if (is_user_logged_in()) {
             return '
                 <div class="nyp-notice nyp-notice-info">
-                    Sie sind bereits angemeldet.
+                    Sie sind bereits angemeldet. Bitte nutzen Sie den Partnerbereich, um Planungsleistungen auszuwählen oder bestehende Aufträge einzusehen.
                 </div>
             ';
         }

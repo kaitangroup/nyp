@@ -1372,7 +1372,7 @@ if (empty($selectedCategory)) {
 <div class="nyp-form-section">
 
     <h3>
-        Budget & Ausstattungsniveau
+        Ausstattungsniveau & Planungsrichtung
     </h3>
 
     <p class="nyp-section-description">
