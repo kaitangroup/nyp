@@ -419,7 +419,7 @@ if (empty($selectedCategory)) {
                     'basic'
                 ); ?>
             >
-                Basisplanung
+            Basic Kitchen Planning
             </option>
 
             <option
@@ -429,7 +429,7 @@ if (empty($selectedCategory)) {
                     'professional'
                 ); ?>
             >
-                Professionelle Küchenplanung
+            Professional Kitchen Design
             </option>
 
             <option
@@ -439,7 +439,7 @@ if (empty($selectedCategory)) {
                     'premium'
                 ); ?>
             >
-                Premium-Raumkonzept
+            Premium Room Concept
             </option>
 
         </select>
