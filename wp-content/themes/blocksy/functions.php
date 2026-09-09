@@ -21,3 +21,4 @@ add_filter('woocommerce_product_tabs', function ($tabs) {
     unset($tabs['reviews']);
     return $tabs;
 }, 98);
+
