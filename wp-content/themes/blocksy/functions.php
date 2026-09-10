@@ -22,3 +22,10 @@ add_filter('woocommerce_product_tabs', function ($tabs) {
     return $tabs;
 }, 98);
 
+add_filter(
+    'woocommerce_countries_tax_or_vat',
+    function ($label) {
+        return 'USt.';
+    }
+);
+
