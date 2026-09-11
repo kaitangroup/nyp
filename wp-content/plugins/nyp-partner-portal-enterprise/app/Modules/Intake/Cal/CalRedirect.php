@@ -66,11 +66,11 @@ public function renderBooking(): string
 
     <p>
 
-        Thank you for your purchase.
+    Vielen Dank für Ihre Bestellung.
 
-        Your Express Planning package has been activated.
+Ihr Express-Planungspaket wurde aktiviert.
 
-        Please select a convenient appointment time below.
+Bitte wählen Sie unten einen passenden Termin aus.
 
     </p>
 
